@@ -161,6 +161,45 @@ function JoinPage() {
       });
     }
   };
+  const refreshXToken = async () => {
+    if (!tokens?.refresh_token) {
+      console.log('No refresh token available');
+      return;
+    }
+    try {
+      const response = await fetch('https://api.iconluxury.today/api/v1/x-auth/refresh', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ refresh_token: tokens.refresh_token }),
+      });
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Failed to refresh token: ${response.status} - ${errorText}`);
+      }
+      const newTokens = await response.json();
+      setTokens(newTokens);
+      console.log('Refreshed tokens:', newTokens);
+      return newTokens.access_token;
+    } catch (error) {
+      console.error('Refresh token error:', error.message);
+      toast({
+        title: 'Refresh Token Error',
+        description: 'Failed to refresh X token.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (tokens?.access_token) {
+      const timeout = setTimeout(() => {
+        refreshXToken();
+      }, (tokens.expires_in - 300) * 1000); // Refresh 5 min before expiry
+      return () => clearTimeout(timeout);
+    }
+  }, [tokens]);
 
   return (
     <Box bg="gray.900" minH="100vh" color="white">
