@@ -9,9 +9,9 @@ const projectId = '8afd56846ecf625fdeab0de184097fb7';
 
 // Optional metadata for your app
 const metadata = {
-  name: 'My App',
-  description: 'My App Description',
-  url: 'https://myapp.com',
+  name: 'Luxury Verse',
+  description: 'Luxury Verse is a Web3 luxury lifestyle platform that connects users with exclusive luxury brands and experiences.',
+  url: 'https://iconluxury.today',
   icons: ['https://myapp.com/icon.png']
 };
 

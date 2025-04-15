@@ -16,10 +16,10 @@ import { Route as LayoutIndexImport } from './routes/_layout/index'
 import { Route as LayoutTermsImport } from './routes/_layout/terms'
 import { Route as LayoutPrivacyRequestImport } from './routes/_layout/privacy-request'
 import { Route as LayoutPrivacyImport } from './routes/_layout/privacy'
+import { Route as LayoutJoinImport } from './routes/_layout/join'
 import { Route as LayoutDoNotSellImport } from './routes/_layout/do-not-sell'
 import { Route as LayoutDemoRequestImport } from './routes/_layout/demo-request'
 import { Route as LayoutCookieImport } from './routes/_layout/cookie'
-import { Route as LayoutContactImport } from './routes/_layout/contact'
 import { Route as LayoutResourcesWebScrapingGuidesImport } from './routes/_layout/resources/web-scraping-guides'
 import { Route as LayoutResourcesSupportCenterImport } from './routes/_layout/resources/support-center'
 import { Route as LayoutResourcesFaqImport } from './routes/_layout/resources/faq'
@@ -58,6 +58,12 @@ const LayoutPrivacyRoute = LayoutPrivacyImport.update({
   getParentRoute: () => LayoutRoute,
 } as any)
 
+const LayoutJoinRoute = LayoutJoinImport.update({
+  id: '/join',
+  path: '/join',
+  getParentRoute: () => LayoutRoute,
+} as any)
+
 const LayoutDoNotSellRoute = LayoutDoNotSellImport.update({
   id: '/do-not-sell',
   path: '/do-not-sell',
@@ -73,12 +79,6 @@ const LayoutDemoRequestRoute = LayoutDemoRequestImport.update({
 const LayoutCookieRoute = LayoutCookieImport.update({
   id: '/cookie',
   path: '/cookie',
-  getParentRoute: () => LayoutRoute,
-} as any)
-
-const LayoutContactRoute = LayoutContactImport.update({
-  id: '/contact',
-  path: '/contact',
   getParentRoute: () => LayoutRoute,
 } as any)
 
@@ -132,13 +132,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutImport
       parentRoute: typeof rootRoute
     }
-    '/_layout/contact': {
-      id: '/_layout/contact'
-      path: '/contact'
-      fullPath: '/contact'
-      preLoaderRoute: typeof LayoutContactImport
-      parentRoute: typeof LayoutImport
-    }
     '/_layout/cookie': {
       id: '/_layout/cookie'
       path: '/cookie'
@@ -158,6 +151,13 @@ declare module '@tanstack/react-router' {
       path: '/do-not-sell'
       fullPath: '/do-not-sell'
       preLoaderRoute: typeof LayoutDoNotSellImport
+      parentRoute: typeof LayoutImport
+    }
+    '/_layout/join': {
+      id: '/_layout/join'
+      path: '/join'
+      fullPath: '/join'
+      preLoaderRoute: typeof LayoutJoinImport
       parentRoute: typeof LayoutImport
     }
     '/_layout/privacy': {
@@ -236,10 +236,10 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 interface LayoutRouteChildren {
-  LayoutContactRoute: typeof LayoutContactRoute
   LayoutCookieRoute: typeof LayoutCookieRoute
   LayoutDemoRequestRoute: typeof LayoutDemoRequestRoute
   LayoutDoNotSellRoute: typeof LayoutDoNotSellRoute
+  LayoutJoinRoute: typeof LayoutJoinRoute
   LayoutPrivacyRoute: typeof LayoutPrivacyRoute
   LayoutPrivacyRequestRoute: typeof LayoutPrivacyRequestRoute
   LayoutTermsRoute: typeof LayoutTermsRoute
@@ -253,10 +253,10 @@ interface LayoutRouteChildren {
 }
 
 const LayoutRouteChildren: LayoutRouteChildren = {
-  LayoutContactRoute: LayoutContactRoute,
   LayoutCookieRoute: LayoutCookieRoute,
   LayoutDemoRequestRoute: LayoutDemoRequestRoute,
   LayoutDoNotSellRoute: LayoutDoNotSellRoute,
+  LayoutJoinRoute: LayoutJoinRoute,
   LayoutPrivacyRoute: LayoutPrivacyRoute,
   LayoutPrivacyRequestRoute: LayoutPrivacyRequestRoute,
   LayoutTermsRoute: LayoutTermsRoute,
@@ -274,10 +274,10 @@ const LayoutRouteWithChildren =
 
 export interface FileRoutesByFullPath {
   '': typeof LayoutRouteWithChildren
-  '/contact': typeof LayoutContactRoute
   '/cookie': typeof LayoutCookieRoute
   '/demo-request': typeof LayoutDemoRequestRoute
   '/do-not-sell': typeof LayoutDoNotSellRoute
+  '/join': typeof LayoutJoinRoute
   '/privacy': typeof LayoutPrivacyRoute
   '/privacy-request': typeof LayoutPrivacyRequestRoute
   '/terms': typeof LayoutTermsRoute
@@ -291,10 +291,10 @@ export interface FileRoutesByFullPath {
 }
 
 export interface FileRoutesByTo {
-  '/contact': typeof LayoutContactRoute
   '/cookie': typeof LayoutCookieRoute
   '/demo-request': typeof LayoutDemoRequestRoute
   '/do-not-sell': typeof LayoutDoNotSellRoute
+  '/join': typeof LayoutJoinRoute
   '/privacy': typeof LayoutPrivacyRoute
   '/privacy-request': typeof LayoutPrivacyRequestRoute
   '/terms': typeof LayoutTermsRoute
@@ -310,10 +310,10 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/_layout': typeof LayoutRouteWithChildren
-  '/_layout/contact': typeof LayoutContactRoute
   '/_layout/cookie': typeof LayoutCookieRoute
   '/_layout/demo-request': typeof LayoutDemoRequestRoute
   '/_layout/do-not-sell': typeof LayoutDoNotSellRoute
+  '/_layout/join': typeof LayoutJoinRoute
   '/_layout/privacy': typeof LayoutPrivacyRoute
   '/_layout/privacy-request': typeof LayoutPrivacyRequestRoute
   '/_layout/terms': typeof LayoutTermsRoute
@@ -330,10 +330,10 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | ''
-    | '/contact'
     | '/cookie'
     | '/demo-request'
     | '/do-not-sell'
+    | '/join'
     | '/privacy'
     | '/privacy-request'
     | '/terms'
@@ -346,10 +346,10 @@ export interface FileRouteTypes {
     | '/resources/blogs/$path'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/contact'
     | '/cookie'
     | '/demo-request'
     | '/do-not-sell'
+    | '/join'
     | '/privacy'
     | '/privacy-request'
     | '/terms'
@@ -363,10 +363,10 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/_layout'
-    | '/_layout/contact'
     | '/_layout/cookie'
     | '/_layout/demo-request'
     | '/_layout/do-not-sell'
+    | '/_layout/join'
     | '/_layout/privacy'
     | '/_layout/privacy-request'
     | '/_layout/terms'
@@ -404,10 +404,10 @@ export const routeTree = rootRoute
     "/_layout": {
       "filePath": "_layout.tsx",
       "children": [
-        "/_layout/contact",
         "/_layout/cookie",
         "/_layout/demo-request",
         "/_layout/do-not-sell",
+        "/_layout/join",
         "/_layout/privacy",
         "/_layout/privacy-request",
         "/_layout/terms",
@@ -420,10 +420,6 @@ export const routeTree = rootRoute
         "/_layout/resources/blogs/$path"
       ]
     },
-    "/_layout/contact": {
-      "filePath": "_layout/contact.tsx",
-      "parent": "/_layout"
-    },
     "/_layout/cookie": {
       "filePath": "_layout/cookie.tsx",
       "parent": "/_layout"
@@ -434,6 +430,10 @@ export const routeTree = rootRoute
     },
     "/_layout/do-not-sell": {
       "filePath": "_layout/do-not-sell.tsx",
+      "parent": "/_layout"
+    },
+    "/_layout/join": {
+      "filePath": "_layout/join.tsx",
       "parent": "/_layout"
     },
     "/_layout/privacy": {
