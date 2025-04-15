@@ -13,8 +13,8 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Hardcoded fallback credentials (update with valid keys from X Developer Portal)
-CONSUMER_KEY: Optional[str] = 'nAqr3o1snDvNZYV9pzCiwXiwu'  # Replace with valid API Key
-CONSUMER_SECRET: Optional[str] = 'pPyWA12QAF2mbEHs28GhUIwga7oZFJ2xOakQ9maUMhIOAgDYpO'  # Replace with valid API Secret
+CONSUMER_KEY: Optional[str] = 'your_new_consumer_key_here'  # Replace with valid API Key
+CONSUMER_SECRET: Optional[str] = 'your_new_consumer_secret_here'  # Replace with valid API Secret
 
 # In-memory storage for tokens (replace with database in production)
 token_storage = {}
@@ -46,6 +46,7 @@ async def request_token(state: str = None):
         resource_owner_key = fetch_response.get('oauth_token')
         resource_owner_secret = fetch_response.get('oauth_token_secret')
         token_storage[resource_owner_key] = {"secret": resource_owner_secret, "state": state}
+        logger.debug(f"Stored token data for key {resource_owner_key}: {token_storage[resource_owner_key]}")
         authorization_url = oauth.authorization_url('https://api.twitter.com/oauth/authenticate')
         logger.info(f"Generated authorization URL for state {state}: {authorization_url}")
         return {"authorization_url": authorization_url}
@@ -71,6 +72,7 @@ async def x_auth_callback(oauth_token: str, oauth_verifier: str, state: str = No
 
     resource_owner_secret = token_data["secret"]
     stored_state = token_data.get("state")
+    logger.debug(f"Validating state: received {state}, stored {stored_state}")
     if state != stored_state:
         logger.error(f"State mismatch: received {state}, stored {stored_state}")
         return RedirectResponse(f"https://iconluxury.today/join?twitter=0&error=State%20mismatch&state={quote(state or '')}")
@@ -97,12 +99,15 @@ async def x_auth_callback(oauth_token: str, oauth_verifier: str, state: str = No
             "screen_name": screen_name
         }
         logger.warning("Using in-memory token storage; replace with database in production")
+        logger.debug(f"Stored user tokens for user_id {user_id}: {token_storage[user_id]}")
 
         # Clean up temporary token
         token_storage.pop(oauth_token, None)
+        logger.debug(f"Cleaned up token storage for oauth_token: {oauth_token}")
 
         # Redirect to frontend
         redirect_url = f"https://iconluxury.today/join?twitter=1&user_id={user_id}&state={quote(state or '')}"
+        logger.info(f"Redirecting to frontend: {redirect_url}")
         return RedirectResponse(redirect_url)
     except requests_oauthlib.oauth1_session.TokenRequestDenied as e:
         logger.error(f"Callback token request denied: {str(e)}")
