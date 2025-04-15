@@ -32,7 +32,7 @@ function JoinPage() {
   const [isEmailInvalid, setIsEmailInvalid] = useState(false);
   const [xProfile, setXProfile] = useState(null);
   const [userId, setUserId] = useState(null);
-  const [isAuthInitiating, setIsAuthInitiating] = useState(false); // Prevent multiple calls
+  const [isAuthInitiating, setIsAuthInitiating] = useState(false);
   const { user, setJoining, login } = useContext(AuthContext);
   const { address, isConnected } = useAccount();
 
@@ -45,10 +45,16 @@ function JoinPage() {
     }
     setIsAuthInitiating(true);
     try {
+      // Clear any stale state
+      sessionStorage.removeItem('oauth_state');
       const state = generateState();
       console.log('Generated state:', state);
       sessionStorage.setItem('oauth_state', state);
-      console.log('Stored state in sessionStorage:', sessionStorage.getItem('oauth_state'));
+      const storedState = sessionStorage.getItem('oauth_state');
+      console.log('Stored state in sessionStorage:', storedState);
+      if (storedState !== state) {
+        throw new Error('Failed to store state in sessionStorage');
+      }
       const response = await fetch(`https://api.iconluxury.today/api/v1/x-auth/request-token?state=${state}`, {
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include'
