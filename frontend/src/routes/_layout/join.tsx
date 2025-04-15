@@ -188,13 +188,6 @@ function JoinPage() {
               {!isConnected && <appkit-button />}
               {isConnected && (
                 <HStack spacing={4}>
-                  <Image
-                    src="https://via.placeholder.com/100" // Replace with https://iconluxury.today/assets/collectible.png
-                    alt="LuxuryVerse Collectible"
-                    boxSize="100px"
-                    objectFit="cover"
-                    borderRadius="md"
-                  />
                   <VStack align="start" spacing={1}>
                     <Text fontSize="sm" color="gray.400">
                       0.000 ETH
