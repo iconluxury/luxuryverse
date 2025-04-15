@@ -16,7 +16,7 @@ class XAuthRefreshRequest(BaseModel):
 async def exchange_x_auth_code(request: XAuthCodeRequest):
     print(f"Received code request: {request}")
     client_id = "N0p3ZG8yN3lWUFpWcUFXQjE4X206MTpjaQ"
-    client_secret = "lUJcdm90CTAnccrTq_evpwzxdZ-29wzNcregdiUNtOEolJuFNu"
+    client_secret = "ZQEQPMhYQBkMVurRS14OKWkFlTbaduEv6AIwAV7Ne3f7K0o4s3"
 
     if not request.code or not request.redirect_uri:
         raise HTTPException(status_code=400, detail="Missing code or redirect_uri")
@@ -67,7 +67,7 @@ async def exchange_x_auth_code(request: XAuthCodeRequest):
 async def refresh_x_auth_token(request: XAuthRefreshRequest):
     print(f"Received refresh request: {request}")
     client_id = "N0p3ZG8yN3lWUFpWcUFXQjE4X206MTpjaQ"
-    client_secret = "lUJcdm90CTAnccrTq_evpwzxdZ-29wzNcregdiUNtOEolJuFNu"
+    client_secret = "ZQEQPMhYQBkMVurRS14OKWkFlTbaduEv6AIwAV7Ne3f7K0o4s3"
 
     try:
         auth_string = f"{client_id}:{client_secret}"
