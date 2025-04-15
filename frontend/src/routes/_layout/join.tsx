@@ -29,12 +29,18 @@ function JoinPage() {
   const toast = useToast();
   const [email, setEmail] = useState('');
   const [isEmailInvalid, setIsEmailInvalid] = useState(false);
+  const [xProfile, setXProfile] = useState(null); // Store X profile data
   const { user, setJoining, login } = useContext(AuthContext);
   const { address, isConnected } = useAccount();
 
-  // Sync wallet connection with AuthContext
+  // OAuth 2.0 config
+  const clientId = 'N0p3ZG8yN3lWUFpWcUFXQjE4X206MTpjaQ';
+  const redirectUri = 'https://iconluxury.today/callback'; // Update with your domain
+  const xAuthUrl = `https://api.x.com/2/oauth2/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&scope=users.read%20follows.write&state=state&code_challenge=challenge&code_challenge_method=plain`;
+
+  // Sync wallet connection
   useEffect(() => {
-    setJoining(true); // Mark as joining
+    setJoining(true);
     if (isConnected && address && !user) {
       login({ address });
       toast({
@@ -47,6 +53,43 @@ function JoinPage() {
     }
   }, [isConnected, address, user, login, setJoining]);
 
+  // Handle X auth callback (simulated; requires backend)
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get('code');
+    if (code) {
+      // Exchange code for token (backend call)
+      const fetchXProfile = async () => {
+        try {
+          // Example: Backend endpoint to exchange code and fetch profile
+          const response = await fetch('https://your-backend.com/x-auth', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ code, redirectUri }),
+          });
+          const data = await response.json();
+          setXProfile(data); // e.g., { username, email, name }
+          toast({
+            title: 'X Profile Connected',
+            description: `Logged in as @${data.username}`,
+            status: 'success',
+            duration: 5000,
+            isClosable: true,
+          });
+        } catch (error) {
+          toast({
+            title: 'X Auth Error',
+            description: 'Failed to connect X profile.',
+            status: 'error',
+            duration: 5000,
+            isClosable: true,
+          });
+        }
+      };
+      fetchXProfile();
+    }
+  }, []);
+
   // Handle email subscription
   const handleEmailSubmit = async (e) => {
     e.preventDefault();
@@ -58,7 +101,12 @@ function JoinPage() {
     setIsEmailInvalid(false);
 
     try {
-      await OpenAPI.post('/subscribe', { email, walletAddress: address });
+      await OpenAPI.post('/subscribe', {
+        email,
+        walletAddress: address,
+        xUsername: xProfile?.username,
+        xProfile,
+      });
       toast({
         title: 'Subscribed',
         description: `Thank you for subscribing with ${email}!`,
@@ -67,7 +115,8 @@ function JoinPage() {
         isClosable: true,
       });
       setEmail('');
-      setJoining(false); // Join complete
+      setJoining(false);
+      login({ address, xUsername: xProfile?.username, xProfile });
     } catch (error) {
       toast({
         title: 'Subscription Error',
@@ -103,7 +152,7 @@ function JoinPage() {
               {isConnected && (
                 <HStack spacing={4}>
                   <Image
-                    src="https://via.placeholder.com/100" // Replace with your NFT image
+                    src="https://via.placeholder.com/100" // Replace with your collectible image
                     alt="LuxuryVerse Collectible"
                     boxSize="100px"
                     objectFit="cover"
@@ -128,7 +177,7 @@ function JoinPage() {
             </VStack>
           </Box>
 
-          {/* Step 2: Follow @LuxuryVerse */}
+          {/* Step 2: Follow @LuxuryVerse & X Auth */}
           <Box w="full">
             <Heading as="h2" size="lg" fontWeight="medium" mb={4}>
               2. Follow @LuxuryVerse
@@ -137,9 +186,8 @@ function JoinPage() {
               Stay updated on the latest drops and exclusive announcements by following us on X.
             </Text>
             <Button
-              as={Link}
-              href="https://x.com/LuxuryVerse"
-              isExternal
+              as="a"
+              href={xAuthUrl}
               bg="yellow.400"
               color="gray.900"
               _hover={{ bg: 'yellow.500' }}
@@ -148,8 +196,13 @@ function JoinPage() {
               py={3}
               fontWeight="medium"
             >
-              Follow on X
+              Connect with X
             </Button>
+            {xProfile && (
+              <Text fontSize="sm" mt={2} color="gray.500">
+                Connected as @{xProfile.username}
+              </Text>
+            )}
           </Box>
 
           {/* Step 3: Email Subscription */}

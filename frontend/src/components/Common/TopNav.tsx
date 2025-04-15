@@ -12,7 +12,7 @@ export const AuthContext = createContext({
 });
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null); // e.g., { address: "0x..." }
+  const [user, setUser] = useState(null); // e.g., { address, xUsername, xProfile }
   const [isJoining, setJoining] = useState(false);
 
   const login = async (userData) => {
@@ -55,7 +55,7 @@ export default function TopNav() {
     }
     return {
       text: 'Login',
-      onClick: () => navigate({ to: '/join' }), // Redirect to join
+      onClick: () => navigate({ to: '/join' }),
       bg: 'purple.300',
       color: 'gray.900',
     };
