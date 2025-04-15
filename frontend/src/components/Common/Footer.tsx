@@ -1,4 +1,4 @@
-// Footer.tsx
+import React from 'react';
 import {
   Box,
   Flex,
@@ -19,17 +19,61 @@ const Footer = () => {
           align={{ base: "center", md: "flex-start" }}
           mb={8}
           textAlign={{ base: "center", md: "left" }}
+          gap={{ base: 8, md: 4 }}
         >
-          {/* Company Information */}
-          <Box mb={{ base: 8, md: 0 }} maxW={{ base: "100%", md: "400px" }}>
+          {/* Left Section: Company Info and Explore */}
+          <Flex
+            direction={{ base: "column", md: "row" }}
+            gap={{ base: 8, md: 12 }}
+            align={{ base: "center", md: "flex-start" }}
+            flex="2"
+          >
+            {/* Company Information */}
+            <Box maxW={{ base: "100%", md: "400px" }}>
+              <Heading as="h4" size="md" mb={4}>
+                <Link href="https://luxuryverse.com" _hover={{ textDecoration: "none", color: "red.600" }}>
+                  LuxuryVerse
+                </Link>
+              </Heading>
+              <Text color="gray.300" mb={4}>
+                Redefining luxury through innovation, authenticity, and global connectivity. Join us in shaping the future of exclusivity.
+              </Text>
+            </Box>
+
+            {/* Explore Links */}
+            <Box>
+              <Heading as="h4" size="md" mb={4}>
+                Explore
+              </Heading>
+              <HStack wrap="wrap" spacing={4} justify={{ base: "center", md: "flex-start" }}>
+                <Link href="/" color="gray.300" _hover={{ color: "red.600" }}>
+                  Home
+                </Link>
+                <Link href="/roadmap" color="gray.300" _hover={{ color: "red.600" }}>
+                  Roadmap
+                </Link>
+                <Link href="/authenticity" color="gray.300" _hover={{ color: "red.600" }}>
+                  Authenticity
+                </Link>
+                <Link href="/faq" color="gray.300" _hover={{ color: "red.600" }}>
+                  FAQ
+                </Link>
+                <Link href="/contact" color="gray.300" _hover={{ color: "red.600" }}>
+                  Contact
+                </Link>
+              </HStack>
+            </Box>
+          </Flex>
+
+          {/* Right Section: Contact (Email and Address) */}
+          <Box
+            textAlign={{ base: "center", md: "left" }}
+            flex="1"
+            minW={{ base: "100%", md: "200px" }}
+          >
             <Heading as="h4" size="md" mb={4}>
-              <Link href="https://luxuryverse.com" _hover={{ textDecoration: "none", color: "red.600" }}>
-                LuxuryVerse
-              </Link>
+              Contact
             </Heading>
-            <Text color="gray.300" mb={4}>
-              Redefining luxury through innovation, authenticity, and global connectivity. Join us in shaping the future of exclusivity.
-            </Text>
             <Text color="gray.300" mb={2}>
               <strong>Email:</strong>{" "}
               <Link href="mailto:info@luxuryverse.com" _hover={{ color: "red.600" }}>
@@ -39,30 +83,6 @@ const Footer = () => {
             <Text color="gray.300">
               <strong>Address:</strong> 599 Broadway, New York, NY 10012, USA
             </Text>
-          </Box>
-
-          {/* Explore Links */}
-          <Box>
-            <Heading as="h4" size="md" mb={4}>
-              Explore
-            </Heading>
-            <HStack wrap="wrap" spacing={4} justify={{ base: "center", md: "flex-start" }}>
-              <Link href="/" color="gray.300" _hover={{ color: "red.600" }}>
-                Home
-              </Link>
-              <Link href="/roadmap" color="gray.300" _hover={{ color: "red.600" }}>
-                Roadmap
-              </Link>
-              <Link href="/authenticity" color="gray.300" _hover={{ color: "red.600" }}>
-                Authenticity
-              </Link>
-              <Link href="/faq" color="gray.300" _hover={{ color: "red.600" }}>
-                FAQ
-              </Link>
-              <Link href="/contact" color="gray.300" _hover={{ color: "red.600" }}>
-                Contact
-              </Link>
-            </HStack>
           </Box>
         </Flex>
 
