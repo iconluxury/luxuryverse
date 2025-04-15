@@ -54,6 +54,11 @@ function JoinPage() {
   }, [isConnected, address, user, login, setJoining, toast]);
 
   // Handle X auth callback
+  const clientId = 'N0p3ZG8yN3lWUFpWcUFXQjE4X206MTpjaQ';
+  const redirectUri = 'https://api.iconluxury.today/api/v1/x-auth';
+  const xAuthUrl = `https://api.x.com/2/oauth2/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&scope=users.read&state=state&code_challenge=challenge&code_challenge_method=plain`;
+
+  // Handle X auth callback
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
@@ -75,10 +80,12 @@ function JoinPage() {
     if (code && state === 'state') {
       const fetchXProfile = async () => {
         try {
-          const response = await fetch('https://apis.iconluxury.today/x-auth', {
+          const payload = { code, redirectUri, codeVerifier: 'challenge' };
+          console.log('Sending to /x-auth:', payload); // Debug
+          const response = await fetch('https://api.iconluxury.today/api/v1/x-auth/', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ code, redirectUri }),
+            body: JSON.stringify(payload),
           });
           if (!response.ok) {
             const errorText = await response.text();
