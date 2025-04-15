@@ -2,9 +2,14 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 import httpx
 import base64
-import os
+import logging
+from tenacity import retry, stop_after_attempt, wait_fixed
 
 router = APIRouter(prefix="/x-auth", tags=["x-auth"])
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 class XAuthCodeRequest(BaseModel):
     code: str
@@ -15,88 +20,124 @@ class XAuthRefreshRequest(BaseModel):
 
 @router.post("/code")
 async def exchange_x_auth_code(request: XAuthCodeRequest):
-    print(f"Received code request: {request}")
+    logger.info(f"Received code request: {request.dict()}")
     client_id = "N0p3ZG8yN3lWUFpWcUFXQjE4X206MTpjaQ"
-    client_secret = "yyu688sapOxgzLyCRONhNx5GDbRPosnrWviWVuoA-_kpKKRcIm"
-
-    if not client_secret:
-        raise HTTPException(status_code=500, detail="Client secret not configured")
+    client_secret = "yyu688sapOxgzLyCRONhNx5GDbRPosnrWviWVuoA-_kpKKRcIm"  # Hardcoded for now; move to env for production
 
     if not request.code or not request.redirect_uri:
+        logger.error("Missing code or redirect_uri in request")
         raise HTTPException(status_code=400, detail="Missing code or redirect_uri")
 
     try:
         auth_string = f"{client_id}:{client_secret}"
         auth_encoded = base64.b64encode(auth_string.encode()).decode()
 
-        async with httpx.AsyncClient() as client:
-            token_response = await client.post(
-                "https://api.x.com/2/oauth2/token",
-                headers={
-                    "Content-Type": "application/x-www-form-urlencoded",
-                    "Authorization": f"Basic {auth_encoded}",
-                },
-                data={
-                    "code": request.code,
-                    "grant_type": "authorization_code",
-                    "client_id": client_id,
-                    "redirect_uri": request.redirect_uri,
-                },
-            )
-            if token_response.status_code != 200:
-                raise HTTPException(
-                    status_code=400,
-                    detail=f"Token exchange failed: {token_response.text}",
+        @retry(stop=stop_after_attempt(3), wait=wait_fixed(2))
+        async def fetch_token():
+            async with httpx.AsyncClient() as client:
+                response = await client.post(
+                    "https://api.x.com/2/oauth2/token",
+                    headers={
+                        "Content-Type": "application/x-www-form-urlencoded",
+                        "Authorization": f"Basic {auth_encoded}",
+                    },
+                    data={
+                        "code": request.code,
+                        "grant_type": "authorization_code",
+                        "client_id": client_id,
+                        "redirect_uri": request.redirect_uri,
+                    },
                 )
-            token_data = token_response.json()
-            access_token = token_data["access_token"]
+                return response
 
-            profile_response = await client.get(
-                "https://api.x.com/2/users/me?user.fields=username,name,profile_image_url",
-                headers={"Authorization": f"Bearer {access_token}"},
+        token_response = await fetch_token()
+        if token_response.status_code != 200:
+            logger.error(f"Token exchange failed: {token_response.text}")
+            raise HTTPException(
+                status_code=400,
+                detail=f"Token exchange failed: {token_response.text}",
             )
-            if profile_response.status_code != 200:
-                raise HTTPException(
-                    status_code=400,
-                    detail=f"Profile fetch failed: {profile_response.text}",
+        token_data = token_response.json()
+        access_token = token_data["access_token"]
+        logger.info("Token exchange successful")
+
+        @retry(stop=stop_after_attempt(3), wait=wait_fixed(2))
+        async def fetch_profile():
+            async with httpx.AsyncClient() as client:
+                response = await client.get(
+                    "https://api.x.com/2/users/me?user.fields=username,name,profile_image_url",
+                    headers={"Authorization": f"Bearer {access_token}"},
                 )
-            return {
-                "profile": profile_response.json()["data"],
-                "tokens": token_data
-            }
+                return response
+
+        profile_response = await fetch_profile()
+        if profile_response.status_code != 200:
+            logger.error(f"Profile fetch failed: {profile_response.text}")
+            raise HTTPException(
+                status_code=400,
+                detail=f"Profile fetch failed: {profile_response.text}",
+            )
+        logger.info("Profile fetch successful")
+
+        return {
+            "profile": profile_response.json()["data"],
+            "tokens": token_data
+        }
+    except httpx.HTTPStatusError as e:
+        logger.error(f"HTTP error during X auth: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"X auth HTTP error: {str(e)}")
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"X auth error: {str(e)}")
+        logger.error(f"Unexpected error during X auth: {str(e)}")
+        # Fallback response
+        return {
+            "status": "error",
+            "message": "Authentication failed; please try again later",
+            "details": str(e)
+        }
 
 @router.post("/refresh")
 async def refresh_x_auth_token(request: XAuthRefreshRequest):
-    print(f"Received refresh request: {request}")
+    logger.info(f"Received refresh request: {request.dict()}")
     client_id = "N0p3ZG8yN3lWUFpWcUFXQjE4X206MTpjaQ"
-    client_secret = "yyu688sapOxgzLyCRONhNx5GDbRPosnrWviWVuoA-_kpKKRcIm"
-
-    if not client_secret:
-        raise HTTPException(status_code=500, detail="Client secret not configured")
+    client_secret = "yyu688sapOxgzLyCRONhNx5GDbRPosnrWviWVuoA-_kpKKRcIm"  # Hardcoded for now; move to env for production
 
     try:
         auth_string = f"{client_id}:{client_secret}"
         auth_encoded = base64.b64encode(auth_string.encode()).decode()
 
-        async with httpx.AsyncClient() as client:
-            token_response = await client.post(
-                "https://api.x.com/2/oauth2/token",
-                headers={
-                    "Content-Type": "application/x-www-form-urlencoded",
-                    "Authorization": f"Basic {auth_encoded}",
-                },
-                data={
-                    "refresh_token": request.refresh_token,
-                    "grant_type": "refresh_token",
-                },
-            )
-            if token_response.status_code != 200:
-                raise HTTPException(
-                    status_code=400,
-                    detail=f"Refresh token failed: {token_response.text}",
+        @retry(stop=stop_after_attempt(3), wait=wait_fixed(2))
+        async def fetch_refresh_token():
+            async with httpx.AsyncClient() as client:
+                response = await client.post(
+                    "https://api.x.com/2/oauth2/token",
+                    headers={
+                        "Content-Type": "application/x-www-form-urlencoded",
+                        "Authorization": f"Basic {auth_encoded}",
+                    },
+                    data={
+                        "refresh_token": request.refresh_token,
+                        "grant_type": "refresh_token",
+                    },
                 )
-            return token_response.json()
+                return response
+
+        token_response = await fetch_refresh_token()
+        if token_response.status_code != 200:
+            logger.error(f"Refresh token failed: {token_response.text}")
+            raise HTTPException(
+                status_code=400,
+                detail=f"Refresh token failed: {token_response.text}",
+            )
+        logger.info("Refresh token successful")
+        return token_response.json()
+    except httpx.HTTPStatusError as e:
+        logger.error(f"HTTP error during refresh: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Refresh token HTTP error: {str(e)}")
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Refresh token error: {str(e)}")
+        logger.error(f"Unexpected error during refresh: {str(e)}")
+        # Fallback response
+        return {
+            "status": "error",
+            "message": "Token refresh failed; please re-authenticate",
+            "details": str(e)
+        }
