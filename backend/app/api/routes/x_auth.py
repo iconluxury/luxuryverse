@@ -105,4 +105,51 @@ async def exchange_x_auth_code(request: XAuthCodeRequest):
 async def refresh_x_auth_token(request: XAuthRefreshRequest):
     logger.info(f"Received refresh request: {request.dict()}")
     client_id = "N0p3ZG8yN3lWUFpWcUFXQjE4X206MTpjaQ"
-    client_secret = "yyu688sapOxgzLyCRONhNx5GDbRPosnrWviWVuoA-_kpKKRcIm"  # Hardcoded as fallback
+    client_secret = "yyu688sapOxgzLyCRONhNx5GDbRPosnrWviWVuoA-_kpKKRcIm"  # Hardcoded as fallback; move to env for production
+
+    try:
+        auth_string = f"{client_id}:{client_secret}"
+        auth_encoded = base64.b64encode(auth_string.encode()).decode()
+
+        @retry(stop=stop_after_attempt(3), wait=wait_fixed(2))
+        async def fetch_refresh_token():
+            async with httpx.AsyncClient(timeout=10.0) as client:
+                response = await client.post(
+                    "https://api.x.com/2/oauth2/token",
+                    headers={
+                        "Content-Type": "application/x-www-form-urlencoded",
+                        "Authorization": f"Basic {auth_encoded}",
+                    },
+                    data={
+                        "refresh_token": request.refresh_token,
+                        "grant_type": "refresh_token",
+                    },
+                )
+                return response
+
+        token_response = await fetch_refresh_token()
+        if token_response.status_code != 200:
+            logger.error(f"Refresh token failed: {token_response.status_code} - {token_response.text}")
+            raise HTTPException(
+                status_code=400,
+                detail=f"Refresh token failed: {token_response.text}",
+            )
+        logger.info("Refresh token successful")
+        return token_response.json()
+    except httpx.HTTPStatusError as e:
+        logger.error(f"HTTP error during refresh: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Refresh token HTTP error: {str(e)}")
+    except httpx.RequestError as e:
+        logger.error(f"Network error during refresh: {str(e)}")
+        return {
+            "status": "error",
+            "message": "Token refresh failed due to network issue; please try again",
+            "details": str(e)
+        }
+    except Exception as e:
+        logger.error(f"Unexpected error during refresh: {str(e)}")
+        return {
+            "status": "error",
+            "message": "Token refresh failed; please re-authenticate",
+            "details": str(e)
+        }
