@@ -16,7 +16,6 @@ import {
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useAppKit } from "@reown/appkit/react";
-
 import axios from "axios";
 import Footer from "@/components/Common/Footer";
 
@@ -47,18 +46,11 @@ function Home() {
     minutes: 0,
     seconds: 0,
   });
-  const { open } = useAppKit();
-  const { address, isConnected } = useAppKit();
-  const { signMessageAsync } = useAppKit();
+  const { open, address, isConnected, signMessageAsync } = useAppKit();
 
-  // Countdown logic
+  // Countdown logic for September 5, 2024 launch
   useEffect(() => {
     const targetDate = new Date("2024-09-05T00:00:00Z").getTime();
-    const now = new Date().getTime();
-    if (now >= targetDate) {
-      setCountdown({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-      return;
-    }
     const interval = setInterval(() => {
       const now = new Date().getTime();
       const distance = targetDate - now;
@@ -76,7 +68,7 @@ function Home() {
     return () => clearInterval(interval);
   }, []);
 
-  // Fetch collections
+  // Fetch collections from the API
   useEffect(() => {
     setIsLoading(true);
     axios
@@ -91,7 +83,7 @@ function Home() {
       });
   }, []);
 
-  // Wallet authentication
+  // Handle wallet authentication
   const handleConnect = async () => {
     try {
       await open();
@@ -103,7 +95,6 @@ function Home() {
           signature,
           message,
         });
-        console.log("Authenticated:", response.data);
         localStorage.setItem("access_token", response.data.access_token);
       }
     } catch (err) {
@@ -297,7 +288,7 @@ function Home() {
                 apparel, and accessories from the world’s most prestigious brands.
               </AccordionPanel>
             </AccordionItem>
-            {/* ... other FAQ items ... */}
+            {/* Add more FAQ items as needed */}
           </Accordion>
           <Button as={Link} to="/faq" colorScheme="purple" variant="outline">
             See All FAQ
@@ -324,6 +315,8 @@ function Home() {
           </Flex>
         </VStack>
       </Box>
+
+      {/* Footer */}
     <Footer />
     </Box>
   );
