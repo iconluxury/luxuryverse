@@ -18,6 +18,7 @@ import { useEffect, useState } from "react";
 import { useAppKit } from "@reown/appkit/react";
 
 import axios from "axios";
+import Footer from "@/components/Common/Footer";
 
 export const Route = createFileRoute("/_layout/")({
   component: Home,
@@ -323,25 +324,7 @@ function Home() {
           </Flex>
         </VStack>
       </Box>
-
-      {/* Footer */}
-      <Box py={8} bg="gray.800" textAlign="center">
-        <Text>Copyright © 2024 LuxuryVerse. All rights reserved.</Text>
-        <Flex justify="center" gap={4} mt={4}>
-          <Button as={Link} to="/roadmap" variant="ghost" colorScheme="purple">
-            Roadmap
-          </Button>
-          <Button as={Link} to="/authenticity" variant="ghost" colorScheme="purple">
-            Authenticity
-          </Button>
-          <Button as={Link} to="/faq" variant="ghost" colorScheme="purple">
-            FAQ
-          </Button>
-          <Button as={Link} to="/contact" variant="ghost" colorScheme="purple">
-            Contact
-          </Button>
-        </Flex>
-      </Box>
+    <Footer />
     </Box>
   );
 }
