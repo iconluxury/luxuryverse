@@ -17,7 +17,8 @@ function AuthComplete() {
     const twitter = urlParams.get('twitter');
     const userId = urlParams.get('user_id');
     const error = urlParams.get('error');
-    const receivedState = urlParams.get('state');
+
+    console.log('Auth-complete received:', { twitter, userId, error });
 
     if (error) {
       console.error('OAuth error:', error);
@@ -28,14 +29,12 @@ function AuthComplete() {
         duration: 5000,
         isClosable: true,
       });
-      sessionStorage.removeItem('oauth_state');
       navigate({ to: '/join' });
+      setIsProcessing(false);
       return;
     }
 
-    const storedState = sessionStorage.getItem('oauth_state');
-    console.log('Callback received:', { twitter, userId, receivedState, storedState });
-    if (twitter === '1' && userId && receivedState === storedState) {
+    if (twitter === '1' && userId) {
       const fetchXProfile = async (retryCount = 3) => {
         try {
           console.log('Fetching user details for user_id:', userId);
@@ -57,13 +56,6 @@ function AuthComplete() {
           const data = await response.json();
           sessionStorage.setItem('x_profile', JSON.stringify(data));
           sessionStorage.setItem('x_user_id', userId);
-          toast({
-            title: 'X Profile Connected',
-            description: `Logged in as @${data.username}`,
-            status: 'success',
-            duration: 5000,
-            isClosable: true,
-          });
           navigate({ to: '/join' });
         } catch (error) {
           console.error('X Auth Error:', error);
@@ -76,24 +68,19 @@ function AuthComplete() {
           });
           navigate({ to: '/join' });
         } finally {
-          sessionStorage.removeItem('oauth_state');
           setIsProcessing(false);
         }
       };
       fetchXProfile();
-    } else if (twitter === '1' && userId && receivedState !== storedState) {
-      console.error('OAuth error: State mismatch', { receivedState, storedState });
+    } else {
+      console.error('Invalid auth-complete parameters:', { twitter, userId });
       toast({
         title: 'X Auth Error',
-        description: 'State mismatch during authentication. Please try again.',
+        description: 'Invalid authentication parameters. Please try again.',
         status: 'error',
         duration: 5000,
         isClosable: true,
       });
-      sessionStorage.removeItem('oauth_state');
-      navigate({ to: '/join' });
-      setIsProcessing(false);
-    } else {
       navigate({ to: '/join' });
       setIsProcessing(false);
     }
