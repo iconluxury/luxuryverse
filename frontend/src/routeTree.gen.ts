@@ -16,7 +16,6 @@ import { Route as LayoutIndexImport } from './routes/_layout/index'
 import { Route as LayoutTermsImport } from './routes/_layout/terms'
 import { Route as LayoutPrivacyRequestImport } from './routes/_layout/privacy-request'
 import { Route as LayoutPrivacyImport } from './routes/_layout/privacy'
-import { Route as LayoutPricingImport } from './routes/_layout/pricing'
 import { Route as LayoutDemoRequestImport } from './routes/_layout/demo-request'
 import { Route as LayoutCookieImport } from './routes/_layout/cookie'
 import { Route as LayoutContactImport } from './routes/_layout/contact'
@@ -55,12 +54,6 @@ const LayoutPrivacyRequestRoute = LayoutPrivacyRequestImport.update({
 const LayoutPrivacyRoute = LayoutPrivacyImport.update({
   id: '/privacy',
   path: '/privacy',
-  getParentRoute: () => LayoutRoute,
-} as any)
-
-const LayoutPricingRoute = LayoutPricingImport.update({
-  id: '/pricing',
-  path: '/pricing',
   getParentRoute: () => LayoutRoute,
 } as any)
 
@@ -153,13 +146,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutDemoRequestImport
       parentRoute: typeof LayoutImport
     }
-    '/_layout/pricing': {
-      id: '/_layout/pricing'
-      path: '/pricing'
-      fullPath: '/pricing'
-      preLoaderRoute: typeof LayoutPricingImport
-      parentRoute: typeof LayoutImport
-    }
     '/_layout/privacy': {
       id: '/_layout/privacy'
       path: '/privacy'
@@ -239,7 +225,6 @@ interface LayoutRouteChildren {
   LayoutContactRoute: typeof LayoutContactRoute
   LayoutCookieRoute: typeof LayoutCookieRoute
   LayoutDemoRequestRoute: typeof LayoutDemoRequestRoute
-  LayoutPricingRoute: typeof LayoutPricingRoute
   LayoutPrivacyRoute: typeof LayoutPrivacyRoute
   LayoutPrivacyRequestRoute: typeof LayoutPrivacyRequestRoute
   LayoutTermsRoute: typeof LayoutTermsRoute
@@ -256,7 +241,6 @@ const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutContactRoute: LayoutContactRoute,
   LayoutCookieRoute: LayoutCookieRoute,
   LayoutDemoRequestRoute: LayoutDemoRequestRoute,
-  LayoutPricingRoute: LayoutPricingRoute,
   LayoutPrivacyRoute: LayoutPrivacyRoute,
   LayoutPrivacyRequestRoute: LayoutPrivacyRequestRoute,
   LayoutTermsRoute: LayoutTermsRoute,
@@ -277,7 +261,6 @@ export interface FileRoutesByFullPath {
   '/contact': typeof LayoutContactRoute
   '/cookie': typeof LayoutCookieRoute
   '/demo-request': typeof LayoutDemoRequestRoute
-  '/pricing': typeof LayoutPricingRoute
   '/privacy': typeof LayoutPrivacyRoute
   '/privacy-request': typeof LayoutPrivacyRequestRoute
   '/terms': typeof LayoutTermsRoute
@@ -294,7 +277,6 @@ export interface FileRoutesByTo {
   '/contact': typeof LayoutContactRoute
   '/cookie': typeof LayoutCookieRoute
   '/demo-request': typeof LayoutDemoRequestRoute
-  '/pricing': typeof LayoutPricingRoute
   '/privacy': typeof LayoutPrivacyRoute
   '/privacy-request': typeof LayoutPrivacyRequestRoute
   '/terms': typeof LayoutTermsRoute
@@ -313,7 +295,6 @@ export interface FileRoutesById {
   '/_layout/contact': typeof LayoutContactRoute
   '/_layout/cookie': typeof LayoutCookieRoute
   '/_layout/demo-request': typeof LayoutDemoRequestRoute
-  '/_layout/pricing': typeof LayoutPricingRoute
   '/_layout/privacy': typeof LayoutPrivacyRoute
   '/_layout/privacy-request': typeof LayoutPrivacyRequestRoute
   '/_layout/terms': typeof LayoutTermsRoute
@@ -333,7 +314,6 @@ export interface FileRouteTypes {
     | '/contact'
     | '/cookie'
     | '/demo-request'
-    | '/pricing'
     | '/privacy'
     | '/privacy-request'
     | '/terms'
@@ -349,7 +329,6 @@ export interface FileRouteTypes {
     | '/contact'
     | '/cookie'
     | '/demo-request'
-    | '/pricing'
     | '/privacy'
     | '/privacy-request'
     | '/terms'
@@ -366,7 +345,6 @@ export interface FileRouteTypes {
     | '/_layout/contact'
     | '/_layout/cookie'
     | '/_layout/demo-request'
-    | '/_layout/pricing'
     | '/_layout/privacy'
     | '/_layout/privacy-request'
     | '/_layout/terms'
@@ -407,7 +385,6 @@ export const routeTree = rootRoute
         "/_layout/contact",
         "/_layout/cookie",
         "/_layout/demo-request",
-        "/_layout/pricing",
         "/_layout/privacy",
         "/_layout/privacy-request",
         "/_layout/terms",
@@ -430,10 +407,6 @@ export const routeTree = rootRoute
     },
     "/_layout/demo-request": {
       "filePath": "_layout/demo-request.tsx",
-      "parent": "/_layout"
-    },
-    "/_layout/pricing": {
-      "filePath": "_layout/pricing.tsx",
       "parent": "/_layout"
     },
     "/_layout/privacy": {
