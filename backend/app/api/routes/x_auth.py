@@ -22,14 +22,20 @@ token_storage = {}
 class XAuthRefreshRequest(BaseModel):
     user_id: str
 
+@router.get("/health")
+async def health_check():
+    """Health check endpoint to verify service is running."""
+    return {"status": "ok"}
+
 @router.get("/request-token")
 async def request_token(state: str = None):
     """Initiate OAuth 1.0a by fetching a request token."""
+    logger.info(f"Request-token called with state: {state}")
     if not CONSUMER_KEY or not CONSUMER_SECRET:
         logger.error("Missing consumer key or secret")
         raise HTTPException(status_code=500, detail="Server configuration error: Missing OAuth credentials")
 
-    callback_uri = f"https://api.iconluxury.today/api/v1/x-auth/callback?state={quote(state or '')}"
+    callback_uri = "https://api.iconluxury.today/api/v1/x-auth/callback"  # Static callback URL
     oauth = requests_oauthlib.OAuth1Session(
         client_key=CONSUMER_KEY,
         client_secret=CONSUMER_SECRET,
@@ -39,13 +45,13 @@ async def request_token(state: str = None):
         fetch_response = oauth.fetch_request_token('https://api.twitter.com/oauth/request_token')
         resource_owner_key = fetch_response.get('oauth_token')
         resource_owner_secret = fetch_response.get('oauth_token_secret')
-        token_storage[resource_owner_key] = resource_owner_secret
+        token_storage[resource_owner_key] = {"secret": resource_owner_secret, "state": state}
         authorization_url = oauth.authorization_url('https://api.twitter.com/oauth/authenticate')
         logger.info(f"Generated authorization URL for state {state}: {authorization_url}")
         return {"authorization_url": authorization_url}
     except requests_oauthlib.oauth1_session.TokenRequestDenied as e:
         logger.error(f"Token request denied: {str(e)}")
-        raise HTTPException(status_code=401, detail=f"Authentication failed: Invalid consumer credentials")
+        raise HTTPException(status_code=401, detail=f"Authentication failed: {str(e)}")
     except Exception as e:
         logger.error(f"Error fetching request token: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Failed to fetch request token: {str(e)}")
@@ -53,14 +59,21 @@ async def request_token(state: str = None):
 @router.get("/callback")
 async def x_auth_callback(oauth_token: str, oauth_verifier: str, state: str = None):
     """Handle OAuth 1.0a callback with oauth_token and oauth_verifier."""
+    logger.info(f"Callback received with oauth_token: {oauth_token}, state: {state}")
     if not CONSUMER_KEY or not CONSUMER_SECRET:
         logger.error("Missing consumer key or secret")
         raise HTTPException(status_code=500, detail="Server configuration error: Missing OAuth credentials")
 
-    resource_owner_secret = token_storage.get(oauth_token)
-    if not resource_owner_secret:
+    token_data = token_storage.get(oauth_token)
+    if not token_data or "secret" not in token_data:
         logger.error(f"No stored resource_owner_secret for oauth_token: {oauth_token}")
         return RedirectResponse(f"https://iconluxury.today/join?twitter=0&error=Invalid%20oauth_token&state={quote(state or '')}")
+
+    resource_owner_secret = token_data["secret"]
+    stored_state = token_data.get("state")
+    if state != stored_state:
+        logger.error(f"State mismatch: received {state}, stored {stored_state}")
+        return RedirectResponse(f"https://iconluxury.today/join?twitter=0&error=State%20mismatch&state={quote(state or '')}")
 
     oauth = requests_oauthlib.OAuth1Session(
         CONSUMER_KEY,
@@ -101,6 +114,7 @@ async def x_auth_callback(oauth_token: str, oauth_verifier: str, state: str = No
 @router.get("/user/{user_id}")
 async def get_user_details(user_id: str, include_email: bool = Query(default=True)):
     """Fetch user details for the given user_id using stored tokens."""
+    logger.info(f"Fetching user details for user_id: {user_id}")
     token_data = token_storage.get(user_id)
     if not token_data:
         logger.error(f"No tokens found for user_id: {user_id}")
@@ -130,12 +144,12 @@ async def get_user_details(user_id: str, include_email: bool = Query(default=Tru
         return {
             "id": user_data.get("id_str"),
             "name": user_data.get("name"),
-            "username": user_data.get("screen_name"),  # Match frontend expectation
+            "username": user_data.get("screen_name"),
             "location": user_data.get("location"),
             "description": user_data.get("description"),
             "url": user_data.get("url"),
             "profile_image_url": user_data.get("profile_image_url_https"),
-            "email": user_data.get("email")  # May be None
+            "email": user_data.get("email")
         }
     except requests_oauthlib.oauth1_session.TokenRequestDenied as e:
         logger.error(f"User details token error: {str(e)}")
