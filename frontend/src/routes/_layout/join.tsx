@@ -31,7 +31,7 @@ function JoinPage() {
   const [email, setEmail] = useState('');
   const [isEmailInvalid, setIsEmailInvalid] = useState(false);
   const [xProfile, setXProfile] = useState(null);
-  const [tokens, setTokens] = useState(null); // Store tokens
+  const [tokens, setTokens] = useState(null);
   const { user, setJoining, login } = useContext(AuthContext);
   const { address, isConnected } = useAccount();
 
@@ -39,7 +39,6 @@ function JoinPage() {
   const redirectUri = 'https://api.iconluxury.today/api/v1/x-auth';
   const state = Math.random().toString(36).substring(2);
   const xAuthUrl = `https://api.x.com/2/oauth2/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&scope=users.read%20offline.access&state=${state}`;
-
   useEffect(() => {
     setJoining(true);
     if (isConnected && address && !user) {
@@ -116,51 +115,6 @@ function JoinPage() {
     }
   }, [toast, state]);
 
-  // Handle email subscription
-  const handleEmailSubmit = async (e) => {
-    e.preventDefault();
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      setIsEmailInvalid(true);
-      return;
-    }
-    setIsEmailInvalid(false);
-
-    try {
-      // Call backend /subscribe endpoint
-      const response = await fetch('https://apis.iconluxury.today/subscribe', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email,
-          walletAddress: address,
-          xUsername: xProfile?.username,
-          xProfile,
-        }),
-      });
-      if (!response.ok) {
-        throw new Error('Failed to subscribe');
-      }
-      toast({
-        title: 'Subscribed',
-        description: `Thank you for subscribing with ${email}!`,
-        status: 'success',
-        duration: 5000,
-        isClosable: true,
-      });
-      setEmail('');
-      setJoining(false);
-      login({ address, xUsername: xProfile?.username, xProfile });
-    } catch (error) {
-      toast({
-        title: 'Subscription Error',
-        description: `Failed to subscribe: ${error.message}`,
-        status: 'error',
-        duration: 5000,
-        isClosable: true,
-      });
-    }
-  };
   const refreshXToken = async () => {
     if (!tokens?.refresh_token) {
       console.log('No refresh token available');
@@ -196,10 +150,54 @@ function JoinPage() {
     if (tokens?.access_token) {
       const timeout = setTimeout(() => {
         refreshXToken();
-      }, (tokens.expires_in - 300) * 1000); // Refresh 5 min before expiry
+      }, (tokens.expires_in - 300) * 1000);
       return () => clearTimeout(timeout);
     }
   }, [tokens]);
+
+  const handleEmailSubmit = async (e) => {
+    e.preventDefault();
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setIsEmailInvalid(true);
+      return;
+    }
+    setIsEmailInvalid(false);
+
+    try {
+      const response = await fetch('https://api.iconluxury.today/api/v1/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          walletAddress: address,
+          xUsername: xProfile?.username,
+          xProfile,
+        }),
+      });
+      if (!response.ok) {
+        throw new Error('Failed to subscribe');
+      }
+      toast({
+        title: 'Subscribed',
+        description: `Thank you for subscribing with ${email}!`,
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      });
+      setEmail('');
+      setJoining(false);
+      login({ address, xUsername: xProfile?.username, xProfile });
+    } catch (error) {
+      toast({
+        title: 'Subscription Error',
+        description: `Failed to subscribe: ${error.message}`,
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+  };
 
   return (
     <Box bg="gray.900" minH="100vh" color="white">
@@ -212,7 +210,6 @@ function JoinPage() {
             Step into a world of exclusive digital collectibles and luxury experiences. Follow these steps to join LuxuryVerse.
           </Text>
 
-          {/* Step 1: Connect Wallet */}
           <Box w="full">
             <Heading as="h2" size={['md', 'lg']} fontWeight="medium" mb={4}>
               1. Connect Your Wallet
@@ -243,7 +240,6 @@ function JoinPage() {
             </VStack>
           </Box>
 
-          {/* Step 2: Follow @LuxuryVerse & X Auth */}
           <Box w="full">
             <Heading as="h2" size={['md', 'lg']} fontWeight="medium" mb={4}>
               2. Follow @LuxuryVerse
@@ -281,7 +277,6 @@ function JoinPage() {
             )}
           </Box>
 
-          {/* Step 3: Email Subscription */}
           <Box w="full">
             <Heading as="h2" size={['md', 'lg']} fontWeight="medium" mb={4}>
               3. Sign Up for Notifications
@@ -323,7 +318,6 @@ function JoinPage() {
             </form>
           </Box>
 
-          {/* Additional Info */}
           <Box w="full">
             <Text fontSize={['sm', 'md']} color="gray.400">
               For more details, see our{' '}
