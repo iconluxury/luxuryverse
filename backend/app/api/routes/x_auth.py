@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException
+from fastapi.responses import RedirectResponse
 from pydantic import BaseModel
 import httpx
 import base64
@@ -17,6 +18,9 @@ class XAuthCodeRequest(BaseModel):
 
 class XAuthRefreshRequest(BaseModel):
     refresh_token: str
+
+# In-memory storage for tokens (replace with database in production)
+token_storage = {}
 
 @router.post("/code")
 async def exchange_x_auth_code(request: XAuthCodeRequest):
@@ -79,27 +83,21 @@ async def exchange_x_auth_code(request: XAuthCodeRequest):
             )
         logger.info("Profile fetch successful")
 
-        return {
-            "profile": profile_response.json()["data"],
-            "tokens": token_data
-        }
+        # Store tokens temporarily (use user_id as key)
+        user_id = profile_response.json()["data"]["id"]
+        token_storage[user_id] = token_data
+
+        # Redirect to frontend
+        return RedirectResponse(f"https://iconluxury.today/join?twitter=1&user_id={user_id}")
     except httpx.HTTPStatusError as e:
         logger.error(f"HTTP error during X auth: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"X auth HTTP error: {str(e)}")
+        return RedirectResponse(f"https://iconluxury.today/join?twitter=0&error={str(e)}")
     except httpx.RequestError as e:
         logger.error(f"Network error during X auth: {str(e)}")
-        return {
-            "status": "error",
-            "message": "Authentication failed due to network issue; please try again",
-            "details": str(e)
-        }
+        return RedirectResponse(f"https://iconluxury.today/join?twitter=0&error=Network%20issue")
     except Exception as e:
         logger.error(f"Unexpected error during X auth: {str(e)}")
-        return {
-            "status": "error",
-            "message": "Authentication failed; please try again later",
-            "details": str(e)
-        }
+        return RedirectResponse(f"https://iconluxury.today/join?twitter=0&error=Authentication%20failed")
 
 @router.post("/refresh")
 async def refresh_x_auth_token(request: XAuthRefreshRequest):
@@ -141,15 +139,45 @@ async def refresh_x_auth_token(request: XAuthRefreshRequest):
         raise HTTPException(status_code=500, detail=f"Refresh token HTTP error: {str(e)}")
     except httpx.RequestError as e:
         logger.error(f"Network error during refresh: {str(e)}")
-        return {
-            "status": "error",
-            "message": "Token refresh failed due to network issue; please try again",
-            "details": str(e)
-        }
+        raise HTTPException(status_code=500, detail=f"Network error during refresh: {str(e)}")
     except Exception as e:
         logger.error(f"Unexpected error during refresh: {str(e)}")
-        return {
-            "status": "error",
-            "message": "Token refresh failed; please re-authenticate",
-            "details": str(e)
-        }
+        raise HTTPException(status_code=500, detail=f"Unexpected error during refresh: {str(e)}")
+
+@router.get("/user/{user_id}")
+async def get_user_details(user_id: str):
+    """Fetch user details for the given user_id using stored tokens."""
+    token_data = token_storage.get(user_id)
+    if not token_data:
+        logger.error(f"No tokens found for user_id: {user_id}")
+        raise HTTPException(status_code=404, detail="User tokens not found")
+
+    access_token = token_data["access_token"]
+    try:
+        @retry(stop=stop_after_attempt(3), wait=wait_fixed(2))
+        async def fetch_profile():
+            async with httpx.AsyncClient(timeout=10.0) as client:
+                response = await client.get(
+                    "https://api.x.com/2/users/me?user.fields=username,name,profile_image_url",
+                    headers={"Authorization": f"Bearer {access_token}"},
+                )
+                return response
+
+        profile_response = await fetch_profile()
+        if profile_response.status_code != 200:
+            logger.error(f"Profile fetch failed: {profile_response.status_code} - {profile_response.text}")
+            raise HTTPException(
+                status_code=400,
+                detail=f"Profile fetch failed: {profile_response.text}",
+            )
+        logger.info("Profile fetch successful")
+        return profile_response.json()["data"]
+    except httpx.HTTPStatusError as e:
+        logger.error(f"HTTP error fetching user details: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"HTTP error fetching user details: {str(e)}")
+    except httpx.RequestError as e:
+        logger.error(f"Network error fetching user details: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Network error fetching user details: {str(e)}")
+    except Exception as e:
+        logger.error(f"Unexpected error fetching user details: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Unexpected error fetching user details: {str(e)}")

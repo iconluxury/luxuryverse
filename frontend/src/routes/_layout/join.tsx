@@ -31,14 +31,12 @@ function JoinPage() {
   const [email, setEmail] = useState('');
   const [isEmailInvalid, setIsEmailInvalid] = useState(false);
   const [xProfile, setXProfile] = useState(null);
-  const [tokens, setTokens] = useState(null);
+  const [userId, setUserId] = useState(null);
   const { user, setJoining, login } = useContext(AuthContext);
   const { address, isConnected } = useAccount();
 
-  const clientId = 'N0p3ZG8yN3lWUFpWcUFXQjE4X206MTpjaQ';
-  const redirectUri = 'https://api.iconluxury.today/api/v1/x-auth';
   const stateRef = useRef(Math.random().toString(36).substring(2));
-  const xAuthUrl = `https://api.x.com/2/oauth2/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&scope=users.read%20offline.access&state=${stateRef.current}`;
+  const xAuthUrl = `https://api.iconluxury.today/api/v1/request-token?state=${stateRef.current}`;
 
   useEffect(() => {
     setJoining(true);
@@ -56,15 +54,16 @@ function JoinPage() {
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    const code = urlParams.get('code');
-    const receivedState = urlParams.get('state');
+    const twitter = urlParams.get('twitter');
+    const userId = urlParams.get('user_id');
     const error = urlParams.get('error');
+    const receivedState = urlParams.get('state');
 
     if (error) {
       console.error('OAuth error:', error);
       toast({
         title: 'X Auth Error',
-        description: 'Failed to connect X profile. Please try again.',
+        description: `Failed to connect X profile: ${error}`,
         status: 'error',
         duration: 5000,
         isClosable: true,
@@ -73,36 +72,25 @@ function JoinPage() {
       return;
     }
 
-    if (code && receivedState === stateRef.current) {
-      const fetchXProfile = async (retryCount = 3) => {
+    if (twitter === '1' && userId && receivedState === stateRef.current) {
+      const fetchXProfile = async () => {
         try {
-          console.log('OAuth params:', { code, state: receivedState });
-          if (!code) {
-            throw new Error('No code provided in redirect');
-          }
-          const payload = { code, redirectUri };
-          console.log('Sending to /x-auth/code:', payload);
-          const response = await fetch('https://api.iconluxury.today/api/v1/x-auth/code', {
-            method: 'POST',
+          console.log('Fetching user details for user_id:', userId);
+          const response = await fetch(`https://api.iconluxury.today/api/v1/x-auth/user/${userId}`, {
+            method: 'GET',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload),
           });
           if (!response.ok) {
             const errorText = await response.text();
-            console.error('Fetch error response:', errorText);
-            if (retryCount > 0 && response.status >= 500) {
-              console.log(`Retrying... attempts left: ${retryCount}`);
-              await new Promise(resolve => setTimeout(resolve, 2000));
-              return fetchXProfile(retryCount - 1);
-            }
+            console.error('Fetch user error:', errorText);
             throw new Error(`Failed to fetch X profile: ${response.status} - ${errorText}`);
           }
           const data = await response.json();
-          setXProfile(data.profile);
-          setTokens(data.tokens);
+          setXProfile(data);
+          setUserId(userId);
           toast({
             title: 'X Profile Connected',
-            description: `Logged in as @${data.profile.username}`,
+            description: `Logged in as @${data.username}`,
             status: 'success',
             duration: 5000,
             isClosable: true,
@@ -122,53 +110,6 @@ function JoinPage() {
       fetchXProfile();
     }
   }, [toast]);
-
-  const refreshXToken = async (retryCount = 3) => {
-    if (!tokens?.refresh_token) {
-      console.log('No refresh token available');
-      return;
-    }
-    try {
-      console.log('Refreshing token:', tokens.refresh_token);
-      const response = await fetch('https://api.iconluxury.today/api/v1/x-auth/refresh', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ refresh_token: tokens.refresh_token }),
-      });
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('Refresh error response:', errorText);
-        if (retryCount > 0 && response.status >= 500) {
-          console.log(`Retrying refresh... attempts left: ${retryCount}`);
-          await new Promise(resolve => setTimeout(resolve, 2000));
-          return refreshXToken(retryCount - 1);
-        }
-        throw new Error(`Failed to refresh token: ${response.status} - ${errorText}`);
-      }
-      const newTokens = await response.json();
-      setTokens(newTokens);
-      console.log('Refreshed tokens:', newTokens);
-      return newTokens.access_token;
-    } catch (error) {
-      console.error('Refresh token error:', error);
-      toast({
-        title: 'Refresh Token Error',
-        description: 'Failed to refresh X token.',
-        status: 'error',
-        duration: 5000,
-        isClosable: true,
-      });
-    }
-  };
-
-  useEffect(() => {
-    if (tokens?.access_token) {
-      const timeout = setTimeout(() => {
-        refreshXToken();
-      }, (tokens.expires_in - 300) * 1000);
-      return () => clearTimeout(timeout);
-    }
-  }, [tokens]);
 
   const handleEmailSubmit = async (e) => {
     e.preventDefault();
