@@ -12,7 +12,7 @@ router = APIRouter(prefix="/x-auth", tags=["x-auth"])
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-
+# Hardcoded fallback credentials (update with valid keys from X Developer Portal)
 # Hardcoded fallback credentials (update with valid keys from X Developer Portal)
 CONSUMER_KEY: Optional[str] = 'nAqr3o1snDvNZYV9pzCiwXiwu'  # Replace with valid API Key
 CONSUMER_SECRET: Optional[str] = 'pPyWA12QAF2mbEHs28GhUIwga7oZFJ2xOakQ9maUMhIOAgDYpO'  # Replace with valid API Secret
@@ -69,14 +69,14 @@ async def x_auth_callback(oauth_token: str, oauth_verifier: str, state: str = No
     token_data = token_storage.get(oauth_token)
     if not token_data or "secret" not in token_data:
         logger.error(f"No stored resource_owner_secret for oauth_token: {oauth_token}")
-        return RedirectResponse(f"https://iconluxury.today/join?twitter=0&error=Invalid%20oauth_token&state={quote(state or '')}")
+        return RedirectResponse(f"https://iconluxury.today/auth-complete?twitter=0&error=Invalid%20oauth_token&state={quote(state or '')}")
 
     resource_owner_secret = token_data["secret"]
     stored_state = token_data.get("state")
     logger.debug(f"Validating state: received {state}, stored {stored_state}")
     if state != stored_state:
         logger.error(f"State mismatch: received {state}, stored {stored_state}")
-        return RedirectResponse(f"https://iconluxury.today/join?twitter=0&error=State%20mismatch&state={quote(state or '')}")
+        return RedirectResponse(f"https://iconluxury.today/auth-complete?twitter=0&error=State%20mismatch&state={quote(state or '')}")
 
     oauth = requests_oauthlib.OAuth1Session(
         CONSUMER_KEY,
@@ -107,15 +107,15 @@ async def x_auth_callback(oauth_token: str, oauth_verifier: str, state: str = No
         logger.debug(f"Cleaned up token storage for oauth_token: {oauth_token}")
 
         # Redirect to frontend
-        redirect_url = f"https://iconluxury.today/join?twitter=1&user_id={user_id}&state={quote(state or '')}"
+        redirect_url = f"https://iconluxury.today/auth-complete?twitter=1&user_id={user_id}&state={quote(state or '')}"
         logger.info(f"Redirecting to frontend: {redirect_url}")
         return RedirectResponse(redirect_url)
     except requests_oauthlib.oauth1_session.TokenRequestDenied as e:
         logger.error(f"Callback token request denied: {str(e)}")
-        return RedirectResponse(f"https://iconluxury.today/join?twitter=0&error=Authentication%20failed&state={quote(state or '')}")
+        return RedirectResponse(f"https://iconluxury.today/auth-complete?twitter=0&error=Authentication%20failed&state={quote(state or '')}")
     except Exception as e:
         logger.error(f"Error in callback: {str(e)}")
-        return RedirectResponse(f"https://iconluxury.today/join?twitter=0&error={quote(str(e))}&state={quote(state or '')}")
+        return RedirectResponse(f"https://iconluxury.today/auth-complete?twitter=0&error={quote(str(e))}&state={quote(state or '')}")
 
 @router.get("/user/{user_id}")
 async def get_user_details(user_id: str, include_email: bool = Query(default=True)):
