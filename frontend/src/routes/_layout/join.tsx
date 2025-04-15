@@ -33,11 +33,6 @@ function JoinPage() {
   const [xProfile, setXProfile] = useState(null);
   const { user, setJoining, login } = useContext(AuthContext);
   const { address, isConnected } = useAccount();
-
-  // OAuth 2.0 config
-  const clientId = 'N0p3ZG8yN3lWUFpWcUFXQjE4X206MTpjaQ';
-  const redirectUri = 'https://api.iconluxury.today/api/v1/x-auth';
-  const xAuthUrl = `https://api.x.com/2/oauth2/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&scope=users.read&state=state`;
   // Sync wallet connection
   useEffect(() => {
     setJoining(true);
