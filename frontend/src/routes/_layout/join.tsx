@@ -83,7 +83,7 @@ function JoinPage() {
             throw new Error('No code provided in redirect');
           }
           const payload = { code, redirectUri };
-          console.log('Sending to /x-auth:', payload);
+          console.log('Sending to /x-auth:', payload); // Debug
           const response = await fetch('https://api.iconluxury.today/api/v1/x-auth/', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
