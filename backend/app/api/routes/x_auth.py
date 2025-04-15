@@ -1,18 +1,22 @@
+# File: backend/app/api/routes/x_auth.py
 from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
 import httpx
 import base64
 
 router = APIRouter(prefix="/x-auth", tags=["x-auth"])
 
+class XAuthRequest(BaseModel):
+    code: str
+    redirect_uri: str
+    code_verifier: str | None = None
+
 @router.post("/")
-async def exchange_x_auth_code(data: dict):
-    code = data.get("code")
-    redirect_uri = data.get("redirect_uri")
+async def exchange_x_auth_code(request: XAuthRequest):
     client_id = "N0p3ZG8yN3lWUFpWcUFXQjE4X206MTpjaQ"
-    client_secret = 'SRDX4gnbXblA1hkWajWQad5GI7tcixCmPrcQYwlGZRTcW-RJVE' 
+    client_secret = "SRDX4gnbXblA1hkWajWQad5GI7tcixCmPrcQYwlGZRTcW-RJVE"
 
-
-    if not code or not redirect_uri:
+    if not request.code or not request.redirect_uri:
         raise HTTPException(status_code=400, detail="Missing code or redirect_uri")
 
     try:
@@ -28,11 +32,11 @@ async def exchange_x_auth_code(data: dict):
                     "Authorization": f"Basic {auth_encoded}",
                 },
                 data={
-                    "code": code,
+                    "code": request.code,
                     "grant_type": "authorization_code",
                     "client_id": client_id,
-                    "redirect_uri": redirect_uri,
-                    "code_verifier": "challenge",
+                    "redirect_uri": request.redirect_uri,
+                    "code_verifier": request.code_verifier or "challenge",
                 },
             )
             if token_response.status_code != 200:
