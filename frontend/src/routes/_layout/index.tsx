@@ -131,7 +131,7 @@ function Home() {
           <Text fontSize={{ base: "lg", md: "xl" }} opacity={0.9}>
             Authenticated luxury goods, fully verified on the blockchain
           </Text>
-          <Button
+          {/* <Button
             size="lg"
             colorScheme="purple"
             bgGradient="linear(to-r, purple.500, pink.500)"
@@ -142,7 +142,7 @@ function Home() {
             px={12}
           >
             Join The Waitlist
-          </Button>
+          </Button> */}
           <Flex gap={8} flexWrap="nowrap" overflowX="auto" mt={12} pb={2}>
             <Image
               src="/images/balmain.jpg"

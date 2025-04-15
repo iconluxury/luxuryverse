@@ -31,10 +31,7 @@ function JoinPage() {
   const [email, setEmail] = useState('');
   const [isEmailInvalid, setIsEmailInvalid] = useState(false);
   const [xProfile, setXProfile] = useState(null);
-  const [tokens, setTokens] = useState(() => {
-    const stored = sessionStorage.getItem('x_tokens');
-    return stored ? JSON.parse(stored) : null;
-  });
+  const [tokens, setTokens] = useState(null);
   const { user, setJoining, login } = useContext(AuthContext);
   const { address, isConnected } = useAccount();
 
@@ -64,6 +61,7 @@ function JoinPage() {
     const error = urlParams.get('error');
 
     if (error) {
+      console.error('OAuth error:', error);
       toast({
         title: 'X Auth Error',
         description: 'Failed to connect X profile. Please try again.',
@@ -102,7 +100,6 @@ function JoinPage() {
           const data = await response.json();
           setXProfile(data.profile);
           setTokens(data.tokens);
-          sessionStorage.setItem('x_tokens', JSON.stringify(data.tokens));
           toast({
             title: 'X Profile Connected',
             description: `Logged in as @${data.profile.username}`,
@@ -150,7 +147,6 @@ function JoinPage() {
       }
       const newTokens = await response.json();
       setTokens(newTokens);
-      sessionStorage.setItem('x_tokens', JSON.stringify(newTokens));
       console.log('Refreshed tokens:', newTokens);
       return newTokens.access_token;
     } catch (error) {
@@ -196,6 +192,7 @@ function JoinPage() {
       });
       if (!response.ok) {
         const errorText = await response.text();
+        console.error('Subscribe error response:', errorText);
         throw new Error(`Failed to subscribe: ${response.status} - ${errorText}`);
       }
       toast({
