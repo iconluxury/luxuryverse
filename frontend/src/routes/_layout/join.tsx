@@ -40,7 +40,7 @@ function JoinPage() {
   const initiateXAuth = async () => {
     try {
       const state = generateState();
-      sessionStorage.setItem('oauth_state', state); // Store state
+      sessionStorage.setItem('oauth_state', state);
       const response = await fetch(`https://api.iconluxury.today/api/v1/x-auth/request-token?state=${state}`, {
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include'
@@ -61,6 +61,7 @@ function JoinPage() {
         duration: 5000,
         isClosable: true,
       });
+      sessionStorage.removeItem('oauth_state');
     }
   };
 
