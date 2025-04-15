@@ -1,6 +1,6 @@
 // /src/client/core/appkit.ts
 import { createAppKit } from '@reown/appkit/react';
-import { mainnet, arbitrum } from '@reown/appkit/networks';
+import { mainnet } from '@reown/appkit/networks';
 import { WagmiAdapter } from '@reown/appkit-adapter-wagmi';
 import { QueryClient } from '@tanstack/react-query';
 
@@ -20,14 +20,14 @@ const queryClient = new QueryClient();
 
 // Create the Wagmi adapter
 const wagmiAdapter = new WagmiAdapter({
-  networks: [mainnet, arbitrum], // Specify your supported networks
+  networks: [mainnet], // Specify your supported networks
   projectId
 });
 
 // Initialize AppKit
 createAppKit({
   adapters: [wagmiAdapter],
-  networks: [mainnet, arbitrum],
+  networks: [mainnet],
   metadata,
   projectId,
   features: {
