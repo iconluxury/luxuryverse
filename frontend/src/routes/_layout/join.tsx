@@ -17,7 +17,7 @@ import {
 } from '@chakra-ui/react';
 import Footer from '../../components/Common/Footer';
 import theme from '../../theme';
-import { useState, useContext, useEffect } from 'react';
+import { useState, useContext, useEffect, useRef } from 'react';
 import { useAccount } from 'wagmi';
 import { AuthContext } from '../../components/Common/TopNav';
 import { OpenAPI } from '../../client';
@@ -37,8 +37,9 @@ function JoinPage() {
 
   const clientId = 'N0p3ZG8yN3lWUFpWcUFXQjE4X206MTpjaQ';
   const redirectUri = 'https://api.iconluxury.today/api/v1/x-auth';
-  const state = Math.random().toString(36).substring(2);
-  const xAuthUrl = `https://api.x.com/2/oauth2/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&scope=users.read%20offline.access&state=${state}`;
+  const stateRef = useRef(Math.random().toString(36).substring(2));
+  const xAuthUrl = `https://api.x.com/2/oauth2/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&scope=users.read%20offline.access&state=${stateRef.current}`;
+
   useEffect(() => {
     setJoining(true);
     if (isConnected && address && !user) {
@@ -71,49 +72,51 @@ function JoinPage() {
       return;
     }
 
-    if (code && receivedState === state) {
-      const fetchXProfile = async () => {
-        try {
-          console.log('OAuth params:', { code, state: receivedState });
-          if (!code) {
-            throw new Error('No code provided in redirect');
-          }
-          const payload = { code, redirectUri };
-          console.log('Sending to /x-auth/code:', payload);
-          const response = await fetch('https://api.iconluxury.today/api/v1/x-auth/code', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload),
-          });
-          if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(`Failed to fetch X profile: ${response.status} - ${errorText}`);
-          }
-          const data = await response.json();
-          setXProfile(data.profile);
-          setTokens(data.tokens);
-          toast({
-            title: 'X Profile Connected',
-            description: `Logged in as @${data.profile.username}`,
-            status: 'success',
-            duration: 5000,
-            isClosable: true,
-          });
-        } catch (error) {
-          console.error('X Auth Error:', error);
-          toast({
-            title: 'X Auth Error',
-            description: `Failed to connect X profile: ${error.message}`,
-            status: 'error',
-            duration: 5000,
-            isClosable: true,
-          });
-        }
-        window.history.replaceState({}, document.title, window.location.pathname);
-      };
-      fetchXProfile();
+    if (code && receivedState === stateRef.current) {
+      fetchXProfile(code);
     }
-  }, [toast, state]);
+  }, [toast]);
+
+  const fetchXProfile = async (code) => {
+    try {
+      console.log('OAuth params:', { code, state: stateRef.current });
+      if (!code) {
+        throw new Error('No code provided in redirect');
+      }
+      const payload = { code, redirectUri };
+      console.log('Sending to /x-auth/code:', payload);
+      const response = await fetch('https://api.iconluxury.today/api/v1/x-auth/code', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Fetch error response:', errorText);
+        throw new Error(`Failed to fetch X profile: ${response.status} - ${errorText}`);
+      }
+      const data = await response.json();
+      setXProfile(data.profile);
+      setTokens(data.tokens);
+      toast({
+        title: 'X Profile Connected',
+        description: `Logged in as @${data.profile.username}`,
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      });
+    } catch (error) {
+      console.error('X Auth Error:', error);
+      toast({
+        title: 'X Auth Error',
+        description: `Failed to connect X profile: ${error.message}`,
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+    window.history.replaceState({}, document.title, window.location.pathname);
+  };
 
   const refreshXToken = async () => {
     if (!tokens?.refresh_token) {
