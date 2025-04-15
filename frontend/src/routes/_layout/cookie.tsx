@@ -40,7 +40,7 @@ function CookiePolicyPage() {
           <Box w="full">
             <Text fontSize="lg" mb={4}>
               This Cookie Policy explains how Roaming Proxy ("we," "us," or "our") uses cookies and similar 
-              technologies to recognize you when you visit our website at roamingproxy.com ("Website"). 
+              technologies to recognize you when you visit our website at luxuryverse.com ("Website"). 
               It explains what these technologies are and why we use them, as well as your rights to control our use of them.
             </Text>
             <Text fontSize="lg">
@@ -430,7 +430,7 @@ function CookiePolicyPage() {
             <Text fontSize="md" mt={4}>
             California residents can also opt out of targeted advertising cookies at{" "}
             <Link href="/do-not-sell" color="red.500" textDecoration="underline">
-              roamingproxy.com/do-not-sell
+              luxuryverse.com/do-not-sell
             </Link>.
 </Text>
           </Box>
@@ -599,7 +599,7 @@ function CookiePolicyPage() {
               If you have any questions about our use of cookies or this Cookie Policy, please contact us at:
             </Text>
             <VStack align="start" spacing={2} pl={4}>
-              <Text><strong>Email:</strong> privacy@roamingproxy.com</Text>
+              <Text><strong>Email:</strong> privacy@luxuryverse.com</Text>
               <Text><strong>Address:</strong> 99 Wall St Suite 5660, New York, NY 10005, USA</Text>
               <Text><strong>Phone:</strong> +1 (855) 440-2242</Text>
               <Text><strong>Support Hours:</strong> Monday to Friday, 9:00 AM to 5:00 PM EST</Text>
@@ -607,7 +607,7 @@ function CookiePolicyPage() {
             <Text fontSize="md" mt={4}>
               For urgent privacy concerns or cookie-related issues, please contact our dedicated privacy team via email. 
               We aim to respond to all inquiries within 48 hours during business days. For formal privacy requests, such as data access or 
-              deletion requests, please use our dedicated form available at <Link color="red.500" href="https://roamingproxy.com/privacy-request">roamingproxy.com/privacy-request</Link>.
+              deletion requests, please use our dedicated form available at <Link color="red.500" href="https://luxuryverse.com/privacy-request">luxuryverse.com/privacy-request</Link>.
             </Text>
           </Box>
         </VStack>

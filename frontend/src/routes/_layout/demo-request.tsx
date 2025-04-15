@@ -56,7 +56,7 @@ function RequestDemoPage() {
 
     try {
       // To this (with absolute URL):
-      const response = await fetch('https://apis.roamingproxy.com/api/v1/utils/demo-request/', {
+      const response = await fetch('https://apis.luxuryverse.com/api/v1/utils/demo-request/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
