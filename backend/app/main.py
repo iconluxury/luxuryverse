@@ -21,7 +21,7 @@ app = FastAPI(
 )
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://roamingproxy.com"],  # Specify your frontend origin
+    allow_origins=["https://iconluxury.today"],  # Specify your frontend origin
     # allow_origins=["*"],  # Allow all origins
     allow_credentials=True,
     allow_methods=["GET", "POST", "PATCH", "OPTIONS"],  # Add PATCH

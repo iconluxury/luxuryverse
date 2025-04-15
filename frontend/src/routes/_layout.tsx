@@ -12,7 +12,7 @@ export const Route = createFileRoute("/_layout")({
 
 function Layout() {
   const [consentGiven, setConsentGiven] = useState(
-    document.cookie.includes("roamingproxy-consent=true")
+    document.cookie.includes("luxuryverse-consent=true")
   );
   const [gtagLoaded, setGtagLoaded] = useState(!!window.gtag);
 
@@ -31,7 +31,7 @@ function Layout() {
 
   useEffect(() => {
     const handleConsentChange = () => {
-      const granted = document.cookie.includes("roamingproxy-consent=true");
+      const granted = document.cookie.includes("luxuryverse-consent=true");
       if (granted !== consentGiven) {
         setConsentGiven(granted);
       }
@@ -57,7 +57,7 @@ function Layout() {
           location="bottom"
           buttonText="Accept All"
           declineButtonText="Decline"
-          cookieName="roamingproxy-consent"
+          cookieName="luxuryverse-consent"
           enableDeclineButton
           style={{
             background: theme.colors.gray[800] || "#1F2937",
@@ -95,7 +95,7 @@ function Layout() {
               console.log("Consent updated, sending page view");
               window.gtag("event", "page_view", {
                 page_path: window.location.pathname,
-                send_to: "G-X7X57Z2WXP",
+                send_to: "G-8322NRFMV3",
               });
             } else {
               console.error("gtag not loaded yet");

@@ -355,7 +355,7 @@ const TopNav = () => {
                   <Button as={RouterLink} to="https://buy.stripe.com/4gwg1C2by9Cs2Ry6op" colorScheme="red" variant="solid" size="sm">
                     Start Free Trial
                   </Button>
-                  <Button as={RouterLink} to="https://cloud.roamingproxy.com/login" variant="outline" colorScheme="red" size="sm">
+                  <Button as={RouterLink} to="https://cloud.luxuryverse.com/login" variant="outline" colorScheme="red" size="sm">
                     Login
                   </Button>
                 </Flex>
@@ -418,7 +418,7 @@ const TopNav = () => {
                 </Button>
                 <Button
                   as={RouterLink}
-                  to="https://cloud.roamingproxy.com/login"
+                  to="https://cloud.luxuryverse.com/login"
                   variant="outline"
                   colorScheme="red"
                   size="sm"

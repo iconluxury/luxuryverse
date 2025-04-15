@@ -99,7 +99,7 @@ const Overview: React.FC<OverviewProps> = ({ endpointId }) => {
     setError(null);
     try {
       const response = await fetch(
-        "https://s3.us-east-1.amazonaws.com/roamingproxy.com/endpoint-overview.json",
+        "https://s3.us-east-1.amazonaws.com/luxuryverse.com/endpoint-overview.json",
         { cache: "no-store" }
       );
       if (!response.ok) {

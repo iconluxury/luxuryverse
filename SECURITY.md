@@ -14,7 +14,7 @@ You are encouraged to write tests for your application and update your versions 
 
 If you think you found a vulnerability, and even if you are not sure about it, please report it right away by sending an email to: security@roamingproxy.com Please try to be as explicit as possible, describing all the steps and example code to reproduce the security issue.
 
-Our support team ([@thedataproxy](https://x.com/thedataproxy)) will review it thoroughly and get back to you.
+Our support team ([@luxuryverse](https://x.com/luxuryverse)) will review it thoroughly and get back to you.
 
 ## Public Discussions
 

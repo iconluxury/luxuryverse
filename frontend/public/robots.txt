@@ -25,4 +25,4 @@ Disallow: /privacy-request
 Disallow: /report
 
 # Sitemap
-Sitemap: https://roamingproxy.com/sitemap.xml
+Sitemap: https://iconluxury.today/sitemap.xml
