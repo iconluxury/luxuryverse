@@ -31,9 +31,15 @@ function JoinPage() {
   const [email, setEmail] = useState('');
   const [isEmailInvalid, setIsEmailInvalid] = useState(false);
   const [xProfile, setXProfile] = useState(null);
+  const [tokens, setTokens] = useState(null); // Store tokens
   const { user, setJoining, login } = useContext(AuthContext);
   const { address, isConnected } = useAccount();
-  // Sync wallet connection
+
+  const clientId = 'N0p3ZG8yN3lWUFpWcUFXQjE4X206MTpjaQ';
+  const redirectUri = 'https://api.iconluxury.today/api/v1/x-auth';
+  const state = Math.random().toString(36).substring(2);
+  const xAuthUrl = `https://api.x.com/2/oauth2/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&scope=users.read%20offline.access&state=${state}`;
+
   useEffect(() => {
     setJoining(true);
     if (isConnected && address && !user) {
@@ -48,16 +54,10 @@ function JoinPage() {
     }
   }, [isConnected, address, user, login, setJoining, toast]);
 
-  // Handle X auth callback
-  const clientId = 'N0p3ZG8yN3lWUFpWcUFXQjE4X206MTpjaQ';
-  const redirectUri = 'https://api.iconluxury.today/api/v1/x-auth';
-  const state = Math.random().toString(36).substring(2); // Random for security
-  const xAuthUrl = `https://api.x.com/2/oauth2/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&scope=users.read%20offline.access&state=${state}`;
-  // Handle X auth callback
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
-    const state = urlParams.get('state');
+    const receivedState = urlParams.get('state');
     const error = urlParams.get('error');
 
     if (error) {
@@ -72,23 +72,16 @@ function JoinPage() {
       return;
     }
 
-    if (code && state === 'state') {
+    if (code && receivedState === state) {
       const fetchXProfile = async () => {
         try {
-          const urlParams = new URLSearchParams(window.location.search);
-          const code = urlParams.get('code');
-          const state = urlParams.get('state');
-          console.log('OAuth params:', { code, state }); // Debug
+          console.log('OAuth params:', { code, state: receivedState });
           if (!code) {
             throw new Error('No code provided in redirect');
           }
-          if (state !== 'state') {
-            throw new Error('Invalid state parameter');
-          }
-          const redirectUri = 'https://api.iconluxury.today/api/v1/x-auth';
           const payload = { code, redirectUri };
-          console.log('Sending to /x-auth:', payload); // Debug
-          const response = await fetch('https://api.iconluxury.today/api/v1/x-auth/', {
+          console.log('Sending to /x-auth/code:', payload);
+          const response = await fetch('https://api.iconluxury.today/api/v1/x-auth/code', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload),
@@ -98,15 +91,17 @@ function JoinPage() {
             throw new Error(`Failed to fetch X profile: ${response.status} - ${errorText}`);
           }
           const data = await response.json();
-          setXProfile(data);
+          setXProfile(data.profile);
+          setTokens(data.tokens);
           toast({
             title: 'X Profile Connected',
-            description: `Logged in as @${data.username}`,
+            description: `Logged in as @${data.profile.username}`,
             status: 'success',
             duration: 5000,
             isClosable: true,
           });
         } catch (error) {
+          console.error('X Auth Error:', error);
           toast({
             title: 'X Auth Error',
             description: `Failed to connect X profile: ${error.message}`,
@@ -119,7 +114,7 @@ function JoinPage() {
       };
       fetchXProfile();
     }
-  }, [toast]);
+  }, [toast, state]);
 
   // Handle email subscription
   const handleEmailSubmit = async (e) => {
