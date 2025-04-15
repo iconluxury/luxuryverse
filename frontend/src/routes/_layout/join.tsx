@@ -46,7 +46,7 @@ function JoinPage() {
       login({ address });
       toast({
         title: 'Wallet Connected',
-        description: `Connected as ${address?.slice(0, 6)}...${address?.slice(-4)}`,
+        description: `Connected as ${address.slice(0, 6)}...${address.slice(-4)}`,
         status: 'success',
         duration: 5000,
         isClosable: true,
@@ -74,11 +74,11 @@ function JoinPage() {
     }
 
     if (code && state === 'state') {
-      // Mock X profile for front-end
+      // Mock X profile to bypass 403
       const mockXProfile = {
         username: 'nikwifhat',
         name: 'Nik Wifhat',
-        profile_image_url: 'https://via.placeholder.com/32', // Mocked placeholder
+        profile_image_url: 'https://via.placeholder.com/32', // Mocked; replace with real later
       };
       setXProfile(mockXProfile);
       toast({
