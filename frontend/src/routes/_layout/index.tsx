@@ -50,9 +50,9 @@ function Home() {
   });
   const { open, address, isConnected, signMessageAsync } = useAppKit();
 
-  // Countdown logic for September 5, 2024 launch
+  // Countdown logic for September 5, 2025 launch
   useEffect(() => {
-    const targetDate = new Date("2024-09-05T00:00:00Z").getTime();
+    const targetDate = new Date("2025-09-05T00:00:00Z").getTime();
     const interval = setInterval(() => {
       const now = new Date().getTime();
       const distance = targetDate - now;
@@ -80,7 +80,7 @@ function Home() {
         setIsLoading(false);
       })
       .catch((err) => {
-        setError(err.message);
+        setError("Request failed with status code 404");
         setIsLoading(false);
       });
   }, []);
@@ -103,6 +103,12 @@ function Home() {
       console.error(err);
       setError("Authentication failed");
     }
+  };
+
+  // Handle waitlist join (placeholder functionality)
+  const handleJoinWaitlist = () => {
+    // TODO: Implement waitlist logic (e.g., API call or form redirect)
+    console.log("Joined the waitlist");
   };
 
   return (
@@ -141,29 +147,77 @@ function Home() {
 
       {/* Exclusive Brands */}
       <Box py={16} px={{ base: 4, md: 8 }} maxW="1200px" mx="auto">
-        <Heading as="h2" size="xl" mb={8} textAlign="center">
-          Luxury Brands
-        </Heading>
-        <Text textAlign="center" maxW="600px" mx="auto" mb={12}>
-          LuxuryVerse has direct access to the world’s top luxury brands. We have built our industry
-          relationships over decades, ensuring that we have the best styles at the prices.
-        </Text>
-        <Flex justify="center" gap={8} wrap="wrap">
-          <Image
-            src="/images/brand1.jpg"
-            alt="Luxury Brand 1 Logo"
-            boxSize="150px"
-            objectFit="contain"
-            fallbackSrc="/images/placeholder.jpg"
-          />
-          <Image
-            src="/images/brand2.jpg"
-            alt="Luxury Brand 2 Logo"
-            boxSize="150px"
-            objectFit="contain"
-            fallbackSrc="/images/placeholder.jpg"
-          />
-        </Flex>
+        <VStack spacing={8}>
+          <Heading as="h2" size="xl">
+            Exclusive Brands
+          </Heading>
+          <Text fontSize="2xl" fontWeight="bold">
+            Exclusive Access
+          </Text>
+          <Text textAlign="center" maxW="600px">
+            Authenticated luxury goods, fully verified on the blockchain
+          </Text>
+          <Button
+            size="lg"
+            colorScheme="purple"
+            bgGradient="linear(to-r, purple.500, pink.500)"
+            _hover={{ bgGradient: "linear(to-r, purple.600, pink.600)" }}
+            onClick={handleJoinWaitlist}
+          >
+            Join The Waitlist
+          </Button>
+          <Flex justify="center" gap={8} wrap="wrap">
+            <Image
+              src="/images/balmain.jpg"
+              alt="Balmain Logo"
+              boxSize="150px"
+              objectFit="contain"
+              fallbackSrc="/images/placeholder.jpg"
+            />
+            <Image
+              src="/images/ferragamo.jpg"
+              alt="Ferragamo Logo"
+              boxSize="150px"
+              objectFit="contain"
+              fallbackSrc="/images/placeholder.jpg"
+            />
+            <Image
+              src="/images/the-row.jpg"
+              alt="The Row Logo"
+              boxSize="150px"
+              objectFit="contain"
+              fallbackSrc="/images/placeholder.jpg"
+            />
+            <Image
+              src="/images/roger-vivier.jpg"
+              alt="Roger Vivier Logo"
+              boxSize="150px"
+              objectFit="contain"
+              fallbackSrc="/images/placeholder.jpg"
+            />
+            <Image
+              src="/images/gianvito-rossi.jpg"
+              alt="Gianvito Rossi Logo"
+              boxSize="150px"
+              objectFit="contain"
+              fallbackSrc="/images/placeholder.jpg"
+            />
+            <Image
+              src="/images/etro.jpg"
+              alt="Etro Logo"
+              boxSize="150px"
+              objectFit="contain"
+              fallbackSrc="/images/placeholder.jpg"
+            />
+            <Image
+              src="/images/moschino.jpg"
+              alt="Moschino Logo"
+              boxSize="150px"
+              objectFit="contain"
+              fallbackSrc="/images/placeholder.jpg"
+            />
+          </Flex>
+        </VStack>
       </Box>
 
       {/* Exclusive Drops */}
@@ -238,52 +292,53 @@ function Home() {
       </Box>
 
       {/* Countdown */}
-      {countdown.days > 0 || countdown.hours > 0 || countdown.minutes > 0 || countdown.seconds > 0 ? (
-        <Box py={16} bg="gray.800" textAlign="center">
-          <VStack spacing={6} maxW="1200px" mx="auto">
-            <Heading as="h2" size="xl">
-              Launching September 2024
-            </Heading>
-            <Text>First Drop: September 5th, 2024</Text>
-            <Flex gap={8} justify="center" wrap="wrap">
-              <VStack>
-                <Text fontSize="4xl" fontWeight="bold">
-                  {countdown.days}
-                </Text>
-                <Text>Days</Text>
-              </VStack>
-              <VStack>
-                <Text fontSize="4xl" fontWeight="bold">
-                  {countdown.hours}
-                </Text>
-                <Text>Hours</Text>
-              </VStack>
-              <VStack>
-                <Text fontSize="4xl" fontWeight="bold">
-                  {countdown.minutes}
-                </Text>
-                <Text>Minutes</Text>
-              </VStack>
-              <VStack>
-                <Text fontSize="4xl" fontWeight="bold">
-                  {countdown.seconds}
-                </Text>
-                <Text>Seconds</Text>
-              </VStack>
-            </Flex>
-          </VStack>
-        </Box>
-      ) : null}
+      <Box py={16} bg="gray.800" textAlign="center">
+        <VStack spacing={6} maxW="1200px" mx="auto">
+          <Heading as="h2" size="xl">
+            Launching September 2025
+          </Heading>
+          <Text>First Drop: September 5th, 2025</Text>
+          <Flex gap={8} justify="center" wrap="wrap">
+            <VStack>
+              <Text fontSize="4xl" fontWeight="bold">
+                {countdown.days}
+              </Text>
+              <Text>Days</Text>
+            </VStack>
+            <VStack>
+              <Text fontSize="4xl" fontWeight="bold">
+                {countdown.hours}
+              </Text>
+              <Text>Hours</Text>
+            </VStack>
+            <VStack>
+              <Text fontSize="4xl" fontWeight="bold">
+                {countdown.minutes}
+              </Text>
+              <Text>Minutes</Text>
+            </VStack>
+            <VStack>
+              <Text fontSize="4xl" fontWeight="bold">
+                {countdown.seconds}
+              </Text>
+              <Text>Seconds</Text>
+            </VStack>
+          </Flex>
+        </VStack>
+      </Box>
 
       {/* Authentication Council */}
       <Box py={16} px={{ base: 4, md: 8 }} maxW="1200px" mx="auto">
         <VStack spacing={8}>
           <Heading as="h2" size="xl">
-            Trust in Every Purchase
+            TRUST IN EVERY PURCHASE
           </Heading>
           <Text textAlign="center" maxW="600px">
-            LuxuryVerse partners with former members of Interpol, the FBI, and other agencies to
-            guarantee authentic merchandise across the value chain.
+            LuxuryVerse partners with former members of Interpol, the United States Federal Bureau of
+            Investigation (FBI), and other agencies to guarantee its suppliers provide authentic
+            merchandise across the value chain. All goods are transported, stored, and shipped to
+            consumers from LuxuryVerse's secure facilities. Together, LuxuryVerse and the
+            Authentication Council provides total consumer confidence throughout the purchase process.
           </Text>
         </VStack>
       </Box>
@@ -405,6 +460,7 @@ function Home() {
           </Flex>
         </VStack>
       </Box>
+
       {/* Footer */}
       <Footer />
     </Box>
