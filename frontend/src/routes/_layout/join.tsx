@@ -11,12 +11,15 @@ import {
   FormErrorMessage,
   Link,
   useToast,
+  Image,
+  HStack,
 } from '@chakra-ui/react';
 import Footer from '../../components/Common/Footer';
 import theme from '../../theme';
 import { useState, useContext, useEffect } from 'react';
 import { useAccount } from 'wagmi';
 import { AuthContext } from '../../components/Common/TopNav';
+import { OpenAPI } from '../../client';
 
 export const Route = createFileRoute('/_layout/join')({
   component: JoinPage,
@@ -31,7 +34,7 @@ function JoinPage() {
 
   // Sync wallet connection with AuthContext
   useEffect(() => {
-    setJoining(true); // Mark as joining when on this page
+    setJoining(true); // Mark as joining
     if (isConnected && address && !user) {
       login({ address });
       toast({
@@ -55,8 +58,7 @@ function JoinPage() {
     setIsEmailInvalid(false);
 
     try {
-      // Send to backend (using OpenAPI client from index.tsx)
-      // Example: await OpenAPI.post('/subscribe', { email, address });
+      await OpenAPI.post('/subscribe', { email, walletAddress: address });
       toast({
         title: 'Subscribed',
         description: `Thank you for subscribing with ${email}!`,
@@ -65,7 +67,7 @@ function JoinPage() {
         isClosable: true,
       });
       setEmail('');
-      setJoining(false); // Join process complete
+      setJoining(false); // Join complete
     } catch (error) {
       toast({
         title: 'Subscription Error',
@@ -96,15 +98,34 @@ function JoinPage() {
             <Text fontSize="md" mb={4} color="gray.400">
               Connect your crypto wallet for seamless access to LuxuryVerse collectibles.
             </Text>
-            <appkit-button />
-            <Text fontSize="sm" mt={2} color="gray.500">
-              {isConnected
-                ? `Connected: ${address?.slice(0, 6)}...${address?.slice(-4)}`
-                : 'No wallet connected'}
-            </Text>
-            <Text fontSize="sm" mt={2} color="red.300">
-              Warning: Always verify you’re on luxuryverse.com before connecting your wallet.
-            </Text>
+            <VStack align="start" spacing={4}>
+              {!isConnected && <appkit-button />}
+              {isConnected && (
+                <HStack spacing={4}>
+                  <Image
+                    src="https://via.placeholder.com/100" // Replace with your NFT image
+                    alt="LuxuryVerse Collectible"
+                    boxSize="100px"
+                    objectFit="cover"
+                    borderRadius="md"
+                  />
+                  <VStack align="start" spacing={1}>
+                    <Text fontSize="sm" color="gray.400">
+                      0.000 ETH
+                    </Text>
+                    <Text fontSize="sm" color="gray.400">
+                      {`${address.slice(0, 4)}...${address.slice(-6)}`}
+                    </Text>
+                    <Text fontSize="sm" color="gray.500">
+                      Connected: {`${address.slice(0, 6)}...${address.slice(-4)}`}
+                    </Text>
+                  </VStack>
+                </HStack>
+              )}
+              <Text fontSize="sm" mt={2} color="red.300">
+                Warning: Always verify you’re on luxuryverse.com before connecting your wallet.
+              </Text>
+            </VStack>
           </Box>
 
           {/* Step 2: Follow @LuxuryVerse */}
