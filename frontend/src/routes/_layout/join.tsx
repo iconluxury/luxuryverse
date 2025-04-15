@@ -82,6 +82,10 @@ function JoinPage() {
           if (!code) {
             throw new Error('No code provided in redirect');
           }
+          if (state !== 'state') {
+            throw new Error('Invalid state parameter');
+          }
+          const redirectUri = 'https://api.iconluxury.today/api/v1/x-auth';
           const payload = { code, redirectUri };
           console.log('Sending to /x-auth:', payload); // Debug
           const response = await fetch('https://api.iconluxury.today/api/v1/x-auth/', {
