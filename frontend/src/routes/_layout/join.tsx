@@ -73,50 +73,49 @@ function JoinPage() {
     }
 
     if (code && receivedState === stateRef.current) {
-      fetchXProfile(code);
+      const fetchXProfile = async () => {
+        try {
+          console.log('OAuth params:', { code, state: receivedState });
+          if (!code) {
+            throw new Error('No code provided in redirect');
+          }
+          const payload = { code, redirectUri };
+          console.log('Sending to /x-auth/code:', payload);
+          const response = await fetch('https://api.iconluxury.today/api/v1/x-auth/code', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+          });
+          if (!response.ok) {
+            const errorText = await response.text();
+            console.error('Fetch error response:', errorText);
+            throw new Error(`Failed to fetch X profile: ${response.status} - ${errorText}`);
+          }
+          const data = await response.json();
+          setXProfile(data.profile);
+          setTokens(data.tokens);
+          toast({
+            title: 'X Profile Connected',
+            description: `Logged in as @${data.profile.username}`,
+            status: 'success',
+            duration: 5000,
+            isClosable: true,
+          });
+        } catch (error) {
+          console.error('X Auth Error:', error);
+          toast({
+            title: 'X Auth Error',
+            description: `Failed to connect X profile: ${error.message}`,
+            status: 'error',
+            duration: 5000,
+            isClosable: true,
+          });
+        }
+        window.history.replaceState({}, document.title, window.location.pathname);
+      };
+      fetchXProfile();
     }
   }, [toast]);
-
-  const fetchXProfile = async (code) => {
-    try {
-      console.log('OAuth params:', { code, state: stateRef.current });
-      if (!code) {
-        throw new Error('No code provided in redirect');
-      }
-      const payload = { code, redirectUri };
-      console.log('Sending to /x-auth/code:', payload);
-      const response = await fetch('https://api.iconluxury.today/api/v1/x-auth/code', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('Fetch error response:', errorText);
-        throw new Error(`Failed to fetch X profile: ${response.status} - ${errorText}`);
-      }
-      const data = await response.json();
-      setXProfile(data.profile);
-      setTokens(data.tokens);
-      toast({
-        title: 'X Profile Connected',
-        description: `Logged in as @${data.profile.username}`,
-        status: 'success',
-        duration: 5000,
-        isClosable: true,
-      });
-    } catch (error) {
-      console.error('X Auth Error:', error);
-      toast({
-        title: 'X Auth Error',
-        description: `Failed to connect X profile: ${error.message}`,
-        status: 'error',
-        duration: 5000,
-        isClosable: true,
-      });
-    }
-    window.history.replaceState({}, document.title, window.location.pathname);
-  };
 
   const refreshXToken = async () => {
     if (!tokens?.refresh_token) {
@@ -131,6 +130,7 @@ function JoinPage() {
       });
       if (!response.ok) {
         const errorText = await response.text();
+        console.error('Refresh error response:', errorText);
         throw new Error(`Failed to refresh token: ${response.status} - ${errorText}`);
       }
       const newTokens = await response.json();
@@ -138,7 +138,7 @@ function JoinPage() {
       console.log('Refreshed tokens:', newTokens);
       return newTokens.access_token;
     } catch (error) {
-      console.error('Refresh token error:', error.message);
+      console.error('Refresh token error:', error);
       toast({
         title: 'Refresh Token Error',
         description: 'Failed to refresh X token.',
@@ -179,7 +179,8 @@ function JoinPage() {
         }),
       });
       if (!response.ok) {
-        throw new Error('Failed to subscribe');
+        const errorText = await response.text();
+        throw new Error(`Failed to subscribe: ${response.status} - ${errorText}`);
       }
       toast({
         title: 'Subscribed',
@@ -192,6 +193,7 @@ function JoinPage() {
       setJoining(false);
       login({ address, xUsername: xProfile?.username, xProfile });
     } catch (error) {
+      console.error('Subscription error:', error);
       toast({
         title: 'Subscription Error',
         description: `Failed to subscribe: ${error.message}`,
