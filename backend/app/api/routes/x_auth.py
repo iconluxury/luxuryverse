@@ -22,7 +22,7 @@ class XAuthRefreshRequest(BaseModel):
 async def exchange_x_auth_code(request: XAuthCodeRequest):
     logger.info(f"Received code request: {request.dict()}")
     client_id = "N0p3ZG8yN3lWUFpWcUFXQjE4X206MTpjaQ"
-    client_secret = "yyu688sapOxgzLyCRONhNx5GDbRPosnrWviWVuoA-_kpKKRcIm"  # Hardcoded for now; move to env for production
+    client_secret = "yyu688sapOxgzLyCRONhNx5GDbRPosnrWviWVuoA-_kpKKRcIm"  # Hardcoded as fallback; move to env for production
 
     if not request.code or not request.redirect_uri:
         logger.error("Missing code or redirect_uri in request")
@@ -34,7 +34,7 @@ async def exchange_x_auth_code(request: XAuthCodeRequest):
 
         @retry(stop=stop_after_attempt(3), wait=wait_fixed(2))
         async def fetch_token():
-            async with httpx.AsyncClient() as client:
+            async with httpx.AsyncClient(timeout=10.0) as client:
                 response = await client.post(
                     "https://api.x.com/2/oauth2/token",
                     headers={
@@ -52,7 +52,7 @@ async def exchange_x_auth_code(request: XAuthCodeRequest):
 
         token_response = await fetch_token()
         if token_response.status_code != 200:
-            logger.error(f"Token exchange failed: {token_response.text}")
+            logger.error(f"Token exchange failed: {token_response.status_code} - {token_response.text}")
             raise HTTPException(
                 status_code=400,
                 detail=f"Token exchange failed: {token_response.text}",
@@ -63,7 +63,7 @@ async def exchange_x_auth_code(request: XAuthCodeRequest):
 
         @retry(stop=stop_after_attempt(3), wait=wait_fixed(2))
         async def fetch_profile():
-            async with httpx.AsyncClient() as client:
+            async with httpx.AsyncClient(timeout=10.0) as client:
                 response = await client.get(
                     "https://api.x.com/2/users/me?user.fields=username,name,profile_image_url",
                     headers={"Authorization": f"Bearer {access_token}"},
@@ -72,7 +72,7 @@ async def exchange_x_auth_code(request: XAuthCodeRequest):
 
         profile_response = await fetch_profile()
         if profile_response.status_code != 200:
-            logger.error(f"Profile fetch failed: {profile_response.text}")
+            logger.error(f"Profile fetch failed: {profile_response.status_code} - {profile_response.text}")
             raise HTTPException(
                 status_code=400,
                 detail=f"Profile fetch failed: {profile_response.text}",
@@ -86,9 +86,15 @@ async def exchange_x_auth_code(request: XAuthCodeRequest):
     except httpx.HTTPStatusError as e:
         logger.error(f"HTTP error during X auth: {str(e)}")
         raise HTTPException(status_code=500, detail=f"X auth HTTP error: {str(e)}")
+    except httpx.RequestError as e:
+        logger.error(f"Network error during X auth: {str(e)}")
+        return {
+            "status": "error",
+            "message": "Authentication failed due to network issue; please try again",
+            "details": str(e)
+        }
     except Exception as e:
         logger.error(f"Unexpected error during X auth: {str(e)}")
-        # Fallback response
         return {
             "status": "error",
             "message": "Authentication failed; please try again later",
@@ -99,45 +105,4 @@ async def exchange_x_auth_code(request: XAuthCodeRequest):
 async def refresh_x_auth_token(request: XAuthRefreshRequest):
     logger.info(f"Received refresh request: {request.dict()}")
     client_id = "N0p3ZG8yN3lWUFpWcUFXQjE4X206MTpjaQ"
-    client_secret = "yyu688sapOxgzLyCRONhNx5GDbRPosnrWviWVuoA-_kpKKRcIm"  # Hardcoded for now; move to env for production
-
-    try:
-        auth_string = f"{client_id}:{client_secret}"
-        auth_encoded = base64.b64encode(auth_string.encode()).decode()
-
-        @retry(stop=stop_after_attempt(3), wait=wait_fixed(2))
-        async def fetch_refresh_token():
-            async with httpx.AsyncClient() as client:
-                response = await client.post(
-                    "https://api.x.com/2/oauth2/token",
-                    headers={
-                        "Content-Type": "application/x-www-form-urlencoded",
-                        "Authorization": f"Basic {auth_encoded}",
-                    },
-                    data={
-                        "refresh_token": request.refresh_token,
-                        "grant_type": "refresh_token",
-                    },
-                )
-                return response
-
-        token_response = await fetch_refresh_token()
-        if token_response.status_code != 200:
-            logger.error(f"Refresh token failed: {token_response.text}")
-            raise HTTPException(
-                status_code=400,
-                detail=f"Refresh token failed: {token_response.text}",
-            )
-        logger.info("Refresh token successful")
-        return token_response.json()
-    except httpx.HTTPStatusError as e:
-        logger.error(f"HTTP error during refresh: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Refresh token HTTP error: {str(e)}")
-    except Exception as e:
-        logger.error(f"Unexpected error during refresh: {str(e)}")
-        # Fallback response
-        return {
-            "status": "error",
-            "message": "Token refresh failed; please re-authenticate",
-            "details": str(e)
-        }
+    client_secret = "yyu688sapOxgzLyCRONhNx5GDbRPosnrWviWVuoA-_kpKKRcIm"  # Hardcoded as fallback
