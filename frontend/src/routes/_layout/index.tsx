@@ -19,10 +19,12 @@ import { useAppKit } from "@reown/appkit/react";
 import axios from "axios";
 import Footer from "@/components/Common/Footer";
 
+// Define the route
 export const Route = createFileRoute("/_layout/")({
   component: Home,
 });
 
+// TypeScript interfaces
 interface Product {
   id: string;
   title: string;
@@ -120,15 +122,20 @@ function Home() {
           <Text fontSize={{ base: "lg", md: "xl" }} opacity={0.9}>
             LuxuryVerse offers exclusive access to the world’s top luxury brands, guaranteed authentic.
           </Text>
-          <Button
-            size="lg"
-            colorScheme="purple"
-            bgGradient="linear(to-r, purple.500, pink.500)"
-            _hover={{ bgGradient: "linear(to-r, purple.600, pink.600)" }}
-            onClick={handleConnect}
-          >
-            {isConnected ? "Connected" : "Connect Wallet"}
-          </Button>
+          <Flex gap={4}>
+            <Button
+              size="lg"
+              colorScheme="purple"
+              bgGradient="linear(to-r, purple.500, pink.500)"
+              _hover={{ bgGradient: "linear(to-r, purple.600, pink.600)" }}
+              onClick={handleConnect}
+            >
+              {isConnected ? "Connected" : "Connect Wallet"}
+            </Button>
+            <Button as={Link} to="/login" size="lg" colorScheme="purple" variant="outline">
+              Login
+            </Button>
+          </Flex>
         </VStack>
       </Box>
 
@@ -142,8 +149,20 @@ function Home() {
           relationships over decades, ensuring that we have the best styles at the prices.
         </Text>
         <Flex justify="center" gap={8} wrap="wrap">
-          <Image src="/images/brand1.jpg" alt="Brand 1" boxSize="150px" objectFit="contain" />
-          <Image src="/images/brand2.jpg" alt="Brand 2" boxSize="150px" objectFit="contain" />
+          <Image
+            src="/images/brand1.jpg"
+            alt="Luxury Brand 1 Logo"
+            boxSize="150px"
+            objectFit="contain"
+            fallbackSrc="/images/placeholder.jpg"
+          />
+          <Image
+            src="/images/brand2.jpg"
+            alt="Luxury Brand 2 Logo"
+            boxSize="150px"
+            objectFit="contain"
+            fallbackSrc="/images/placeholder.jpg"
+          />
         </Flex>
       </Box>
 
@@ -182,7 +201,7 @@ function Home() {
                   >
                     <Image
                       src={product.thumbnail}
-                      alt={product.title}
+                      alt={`${product.title} Image`}
                       borderRadius="md"
                       objectFit="cover"
                       h="200px"
@@ -288,7 +307,78 @@ function Home() {
                 apparel, and accessories from the world’s most prestigious brands.
               </AccordionPanel>
             </AccordionItem>
-            {/* Add more FAQ items as needed */}
+            <AccordionItem>
+              <AccordionButton>
+                <Box flex="1" textAlign="left">
+                  How often are your drops?
+                </Box>
+                <AccordionIcon />
+              </AccordionButton>
+              <AccordionPanel>
+                Drops occur weekly, announced one day in advance on X, with plans to move to daily
+                drops in the future.
+              </AccordionPanel>
+            </AccordionItem>
+            <AccordionItem>
+              <AccordionButton>
+                <Box flex="1" textAlign="left">
+                  How do I know your products are authentic?
+                </Box>
+                <AccordionIcon />
+              </AccordionButton>
+              <AccordionPanel>
+                All products are 100% authentic, verified on the blockchain, and backed by the
+                Authentication Council, comprising former FBI and Interpol agents.
+              </AccordionPanel>
+            </AccordionItem>
+            <AccordionItem>
+              <AccordionButton>
+                <Box flex="1" textAlign="left">
+                  What payment options do you accept?
+                </Box>
+                <AccordionIcon />
+              </AccordionButton>
+              <AccordionPanel>
+                We accept cryptocurrency payments via wallet authentication, with additional methods
+                to be announced.
+              </AccordionPanel>
+            </AccordionItem>
+            <AccordionItem>
+              <AccordionButton>
+                <Box flex="1" textAlign="left">
+                  Do you offer international shipping?
+                </Box>
+                <AccordionIcon />
+              </AccordionButton>
+              <AccordionPanel>
+                Yes, we offer international shipping from our secure facilities, with details
+                provided at checkout.
+              </AccordionPanel>
+            </AccordionItem>
+            <AccordionItem>
+              <AccordionButton>
+                <Box flex="1" textAlign="left">
+                  How can I track my order?
+                </Box>
+                <AccordionIcon />
+              </AccordionButton>
+              <AccordionPanel>
+                Once shipped, you’ll receive a tracking link via email to monitor your order’s
+                progress.
+              </AccordionPanel>
+            </AccordionItem>
+            <AccordionItem>
+              <AccordionButton>
+                <Box flex="1" textAlign="left">
+                  How can I contact customer service?
+                </Box>
+                <AccordionIcon />
+              </AccordionButton>
+              <AccordionPanel>
+                Reach us at info@example.com, example.mail@hum.com, or call +0989 7876 9865 9 or
+                +(090) 8765 86543 85.
+              </AccordionPanel>
+            </AccordionItem>
           </Accordion>
           <Button as={Link} to="/faq" colorScheme="purple" variant="outline">
             See All FAQ
@@ -315,9 +405,10 @@ function Home() {
           </Flex>
         </VStack>
       </Box>
-
       {/* Footer */}
-    <Footer />
+      <Footer />
     </Box>
   );
 }
+
+export default Home;
