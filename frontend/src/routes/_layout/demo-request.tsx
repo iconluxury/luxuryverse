@@ -221,7 +221,7 @@ function RequestDemoPage() {
                   isChecked={consentChecked}
                   onChange={(e) => setConsentChecked(e.target.checked)}
                 >
-                  I agree to receive communications about Roaming Proxy services. I understand that my information will be processed in accordance with the 
+                  I agree to receive communications about luxury verse services. I understand that my information will be processed in accordance with the 
                   <Button as="a" href="/privacy" variant="link" color="red.500" mx={1}>Privacy Policy</Button>.
                 </Checkbox>
               </FormControl>

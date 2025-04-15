@@ -221,7 +221,7 @@ function PrivacyRequestPage() {
                     onChange={setDeletionReason}
                   >
                     <Stack direction="column" spacing={2}>
-                      <Radio value="1">I no longer wish to use Roaming Proxy services</Radio>
+                      <Radio value="1">I no longer wish to use luxury verse services</Radio>
                       <Radio value="2">I'm concerned about my privacy</Radio>
                       <Radio value="3">I didn't authorize the collection of my data</Radio>
                       <Radio value="4">Other reason (please specify below)</Radio>
@@ -306,7 +306,7 @@ function PrivacyRequestPage() {
                   isChecked={consentChecked}
                   onChange={(e) => setConsentChecked(e.target.checked)}
                 >
-                  I understand that Roaming Proxy will use the information provided in this form to verify my identity and respond 
+                  I understand that luxury verse will use the information provided in this form to verify my identity and respond 
                   to my request. The information will be processed in accordance with the 
                   <Button variant="link" color="red.500" mx={1}>Privacy Policy</Button>
                   and retained as required by law.
