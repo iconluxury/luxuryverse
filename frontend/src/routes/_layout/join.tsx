@@ -36,8 +36,6 @@ function JoinPage() {
   const { user, setJoining, login } = useContext(AuthContext);
   const { address, isConnected } = useAccount();
 
-  const generateState = () => Math.random().toString(36).substring(2);
-
   const initiateXAuth = useCallback(async () => {
     if (isAuthInitiating) {
       console.log('X Auth already initiating, skipping');
@@ -45,18 +43,9 @@ function JoinPage() {
     }
     setIsAuthInitiating(true);
     try {
-      sessionStorage.removeItem('oauth_state');
       sessionStorage.removeItem('x_profile');
       sessionStorage.removeItem('x_user_id');
-      const state = generateState();
-      console.log('Generated state:', state);
-      sessionStorage.setItem('oauth_state', state);
-      const storedState = sessionStorage.getItem('oauth_state');
-      console.log('Stored state in sessionStorage:', storedState);
-      if (storedState !== state) {
-        throw new Error('Failed to store state in sessionStorage');
-      }
-      const response = await fetch(`https://api.iconluxury.today/api/v1/x-auth/request-token?state=${state}`, {
+      const response = await fetch(`https://api.iconluxury.today/api/v1/x-auth/request-token`, {
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include'
       });
@@ -77,7 +66,6 @@ function JoinPage() {
         duration: 5000,
         isClosable: true,
       });
-      sessionStorage.removeItem('oauth_state');
     } finally {
       setIsAuthInitiating(false);
     }
