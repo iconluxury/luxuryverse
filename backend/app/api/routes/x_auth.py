@@ -1,10 +1,9 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Query
 from fastapi.responses import RedirectResponse
 from pydantic import BaseModel
-import httpx
-import base64
+import requests_oauthlib
 import logging
-from tenacity import retry, stop_after_attempt, wait_fixed
+from typing import Optional
 
 router = APIRouter(prefix="/x-auth", tags=["x-auth"])
 
@@ -12,172 +11,139 @@ router = APIRouter(prefix="/x-auth", tags=["x-auth"])
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-class XAuthCodeRequest(BaseModel):
-    code: str
-    redirect_uri: str
-
-class XAuthRefreshRequest(BaseModel):
-    refresh_token: str
+# Hardcoded fallback credentials (use env vars in production)
+CONSUMER_KEY: Optional[str] = 'nAqr3o1snDvNZYV9pzCiwXiwu'
+CONSUMER_SECRET: Optional[str] = 'pPyWA12QAF2mbEHs28GhUIwga7oZFJ2xOakQ9maUMhIOAgDYpO'
 
 # In-memory storage for tokens (replace with database in production)
 token_storage = {}
 
-@router.post("/code")
-async def exchange_x_auth_code(request: XAuthCodeRequest):
-    logger.info(f"Received code request: {request.dict()}")
-    client_id = "N0p3ZG8yN3lWUFpWcUFXQjE4X206MTpjaQ"
-    client_secret = "yyu688sapOxgzLyCRONhNx5GDbRPosnrWviWVuoA-_kpKKRcIm"  # Hardcoded as fallback; move to env for production
+class XAuthRefreshRequest(BaseModel):
+    user_id: str
 
-    if not request.code or not request.redirect_uri:
-        logger.error("Missing code or redirect_uri in request")
-        raise HTTPException(status_code=400, detail="Missing code or redirect_uri")
+@router.get("/request-token")
+async def request_token(state: str = None):
+    """Initiate OAuth 1.0a by fetching a request token."""
+    if not CONSUMER_KEY or not CONSUMER_SECRET:
+        logger.error("Missing consumer key or secret")
+        raise HTTPException(status_code=500, detail="Server configuration error: Missing OAuth credentials")
 
+    callback_uri = f"https://api.iconluxury.today/api/v1/x-auth/callback?state={state}" if state else "https://api.iconluxury.today/api/v1/x-auth/callback"
+    oauth = requests_oauthlib.OAuth1Session(
+        client_key=CONSUMER_KEY,
+        client_secret=CONSUMER_SECRET,
+        callback_uri=callback_uri
+    )
     try:
-        auth_string = f"{client_id}:{client_secret}"
-        auth_encoded = base64.b64encode(auth_string.encode()).decode()
+        fetch_response = oauth.fetch_request_token('https://api.twitter.com/oauth/request_token')
+        resource_owner_key = fetch_response.get('oauth_token')
+        resource_owner_secret = fetch_response.get('oauth_token_secret')
+        token_storage[resource_owner_key] = resource_owner_secret
+        authorization_url = oauth.authorization_url('https://api.twitter.com/oauth/authenticate')
+        logger.info(f"Generated authorization URL: {authorization_url}")
+        return {"authorization_url": authorization_url}
+    except Exception as e:
+        logger.error(f"Error fetching request token: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to fetch request token: {str(e)}")
 
-        @retry(stop=stop_after_attempt(3), wait=wait_fixed(2))
-        async def fetch_token():
-            async with httpx.AsyncClient(timeout=10.0) as client:
-                response = await client.post(
-                    "https://api.x.com/2/oauth2/token",
-                    headers={
-                        "Content-Type": "application/x-www-form-urlencoded",
-                        "Authorization": f"Basic {auth_encoded}",
-                    },
-                    data={
-                        "code": request.code,
-                        "grant_type": "authorization_code",
-                        "client_id": client_id,
-                        "redirect_uri": request.redirect_uri,
-                    },
-                )
-                return response
+@router.get("/callback")
+async def x_auth_callback(oauth_token: str, oauth_verifier: str, state: str = None):
+    """Handle OAuth 1.0a callback with oauth_token and oauth_verifier."""
+    if not CONSUMER_KEY or not CONSUMER_SECRET:
+        logger.error("Missing consumer key or secret")
+        raise HTTPException(status_code=500, detail="Server configuration error: Missing OAuth credentials")
 
-        token_response = await fetch_token()
-        if token_response.status_code != 200:
-            logger.error(f"Token exchange failed: {token_response.status_code} - {token_response.text}")
-            raise HTTPException(
-                status_code=400,
-                detail=f"Token exchange failed: {token_response.text}",
-            )
-        token_data = token_response.json()
-        access_token = token_data["access_token"]
-        logger.info("Token exchange successful")
+    resource_owner_secret = token_storage.get(oauth_token)
+    if not resource_owner_secret:
+        logger.error(f"No stored resource_owner_secret for oauth_token: {oauth_token}")
+        return RedirectResponse(f"https://iconluxury.today/join?twitter=0&error=Invalid%20oauth_token")
 
-        @retry(stop=stop_after_attempt(3), wait=wait_fixed(2))
-        async def fetch_profile():
-            async with httpx.AsyncClient(timeout=10.0) as client:
-                response = await client.get(
-                    "https://api.x.com/2/users/me?user.fields=username,name,profile_image_url",
-                    headers={"Authorization": f"Bearer {access_token}"},
-                )
-                return response
+    oauth = requests_oauthlib.OAuth1Session(
+        CONSUMER_KEY,
+        client_secret=CONSUMER_SECRET,
+        resource_owner_key=oauth_token,
+        resource_owner_secret=resource_owner_secret,
+        verifier=oauth_verifier
+    )
+    try:
+        tokens = oauth.fetch_access_token('https://api.twitter.com/oauth/access_token')
+        access_token = tokens['oauth_token']
+        access_token_secret = tokens['oauth_token_secret']
+        user_id = tokens.get('user_id')
+        screen_name = tokens.get('screen_name')
+        logger.info(f"Access token fetched for user: {screen_name}")
 
-        profile_response = await fetch_profile()
-        if profile_response.status_code != 200:
-            logger.error(f"Profile fetch failed: {profile_response.status_code} - {profile_response.text}")
-            raise HTTPException(
-                status_code=400,
-                detail=f"Profile fetch failed: {profile_response.text}",
-            )
-        logger.info("Profile fetch successful")
+        # Store tokens
+        token_storage[user_id] = {
+            "access_token": access_token,
+            "access_token_secret": access_token_secret,
+            "screen_name": screen_name
+        }
 
-        # Store tokens temporarily (use user_id as key)
-        user_id = profile_response.json()["data"]["id"]
-        token_storage[user_id] = token_data
+        # Clean up temporary token
+        token_storage.pop(oauth_token, None)
 
         # Redirect to frontend
-        return RedirectResponse(f"https://iconluxury.today/join?twitter=1&user_id={user_id}")
-    except httpx.HTTPStatusError as e:
-        logger.error(f"HTTP error during X auth: {str(e)}")
+        redirect_url = f"https://iconluxury.today/join?twitter=1&user_id={user_id}&state={state}" if state else f"https://iconluxury.today/join?twitter=1&user_id={user_id}"
+        return RedirectResponse(redirect_url)
+    except Exception as e:
+        logger.error(f"Error in callback: {str(e)}")
         return RedirectResponse(f"https://iconluxury.today/join?twitter=0&error={str(e)}")
-    except httpx.RequestError as e:
-        logger.error(f"Network error during X auth: {str(e)}")
-        return RedirectResponse(f"https://iconluxury.today/join?twitter=0&error=Network%20issue")
-    except Exception as e:
-        logger.error(f"Unexpected error during X auth: {str(e)}")
-        return RedirectResponse(f"https://iconluxury.today/join?twitter=0&error=Authentication%20failed")
-
-@router.post("/refresh")
-async def refresh_x_auth_token(request: XAuthRefreshRequest):
-    logger.info(f"Received refresh request: {request.dict()}")
-    client_id = "N0p3ZG8yN3lWUFpWcUFXQjE4X206MTpjaQ"
-    client_secret = "yyu688sapOxgzLyCRONhNx5GDbRPosnrWviWVuoA-_kpKKRcIm"  # Hardcoded as fallback; move to env for production
-
-    try:
-        auth_string = f"{client_id}:{client_secret}"
-        auth_encoded = base64.b64encode(auth_string.encode()).decode()
-
-        @retry(stop=stop_after_attempt(3), wait=wait_fixed(2))
-        async def fetch_refresh_token():
-            async with httpx.AsyncClient(timeout=10.0) as client:
-                response = await client.post(
-                    "https://api.x.com/2/oauth2/token",
-                    headers={
-                        "Content-Type": "application/x-www-form-urlencoded",
-                        "Authorization": f"Basic {auth_encoded}",
-                    },
-                    data={
-                        "refresh_token": request.refresh_token,
-                        "grant_type": "refresh_token",
-                    },
-                )
-                return response
-
-        token_response = await fetch_refresh_token()
-        if token_response.status_code != 200:
-            logger.error(f"Refresh token failed: {token_response.status_code} - {token_response.text}")
-            raise HTTPException(
-                status_code=400,
-                detail=f"Refresh token failed: {token_response.text}",
-            )
-        logger.info("Refresh token successful")
-        return token_response.json()
-    except httpx.HTTPStatusError as e:
-        logger.error(f"HTTP error during refresh: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Refresh token HTTP error: {str(e)}")
-    except httpx.RequestError as e:
-        logger.error(f"Network error during refresh: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Network error during refresh: {str(e)}")
-    except Exception as e:
-        logger.error(f"Unexpected error during refresh: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Unexpected error during refresh: {str(e)}")
 
 @router.get("/user/{user_id}")
-async def get_user_details(user_id: str):
+async def get_user_details(user_id: str, include_email: bool = Query(default=True)):
     """Fetch user details for the given user_id using stored tokens."""
     token_data = token_storage.get(user_id)
     if not token_data:
         logger.error(f"No tokens found for user_id: {user_id}")
         raise HTTPException(status_code=404, detail="User tokens not found")
 
-    access_token = token_data["access_token"]
+    oauth = requests_oauthlib.OAuth1Session(
+        CONSUMER_KEY,
+        client_secret=CONSUMER_SECRET,
+        resource_owner_key=token_data["access_token"],
+        resource_owner_secret=token_data["access_token_secret"]
+    )
+    params = {
+        "include_email": "true" if include_email else "false",
+        "skip_status": "true",
+        "include_entities": "true"
+    }
     try:
-        @retry(stop=stop_after_attempt(3), wait=wait_fixed(2))
-        async def fetch_profile():
-            async with httpx.AsyncClient(timeout=10.0) as client:
-                response = await client.get(
-                    "https://api.x.com/2/users/me?user.fields=username,name,profile_image_url",
-                    headers={"Authorization": f"Bearer {access_token}"},
-                )
-                return response
-
-        profile_response = await fetch_profile()
-        if profile_response.status_code != 200:
-            logger.error(f"Profile fetch failed: {profile_response.status_code} - {profile_response.text}")
+        response = oauth.get("https://api.twitter.com/1.1/account/verify_credentials.json", params=params)
+        if response.status_code != 200:
+            logger.error(f"User details fetch failed: {response.status_code} - {response.text}")
             raise HTTPException(
-                status_code=400,
-                detail=f"Profile fetch failed: {profile_response.text}",
+                status_code=response.status_code,
+                detail=f"User details fetch failed: {response.text}"
             )
-        logger.info("Profile fetch successful")
-        return profile_response.json()["data"]
-    except httpx.HTTPStatusError as e:
-        logger.error(f"HTTP error fetching user details: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"HTTP error fetching user details: {str(e)}")
-    except httpx.RequestError as e:
-        logger.error(f"Network error fetching user details: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Network error fetching user details: {str(e)}")
+        user_data = response.json()
+        logger.info(f"User details fetched for user_id: {user_id}")
+        return {
+            "id": user_data.get("id_str"),
+            "name": user_data.get("name"),
+            "username": user_data.get("screen_name"),  # Match OAuth 2.0 field
+            "location": user_data.get("location"),
+            "description": user_data.get("description"),
+            "url": user_data.get("url"),
+            "profile_image_url": user_data.get("profile_image_url_https"),
+            "email": user_data.get("email")
+        }
     except Exception as e:
-        logger.error(f"Unexpected error fetching user details: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Unexpected error fetching user details: {str(e)}")
+        logger.error(f"Error fetching user details: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error fetching user details: {str(e)}")
+
+@router.post("/refresh")
+async def refresh_x_auth_token(request: XAuthRefreshRequest):
+    """Placeholder for token refresh (OAuth 1.0a tokens typically don't expire)."""
+    logger.info(f"Received refresh request for user_id: {request.user_id}")
+    token_data = token_storage.get(request.user_id)
+    if not token_data:
+        logger.error(f"No tokens found for user_id: {request.user_id}")
+        raise HTTPException(status_code=404, detail="User tokens not found")
+    # OAuth 1.0a tokens are long-lived; return stored tokens
+    return {
+        "access_token": token_data["access_token"],
+        "access_token_secret": token_data["access_token_secret"],
+        "screen_name": token_data["screen_name"]
+    }
