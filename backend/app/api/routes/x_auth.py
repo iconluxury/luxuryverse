@@ -12,9 +12,10 @@ router = APIRouter(prefix="/x-auth", tags=["x-auth"])
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
 # Hardcoded fallback credentials (update with valid keys from X Developer Portal)
-CONSUMER_KEY: Optional[str] = 'your_new_consumer_key_here'  # Replace with valid API Key
-CONSUMER_SECRET: Optional[str] = 'your_new_consumer_secret_here'  # Replace with valid API Secret
+CONSUMER_KEY: Optional[str] = 'nAqr3o1snDvNZYV9pzCiwXiwu'  # Replace with valid API Key
+CONSUMER_SECRET: Optional[str] = 'pPyWA12QAF2mbEHs28GhUIwga7oZFJ2xOakQ9maUMhIOAgDYpO'  # Replace with valid API Secret
 
 # In-memory storage for tokens (replace with database in production)
 token_storage = {}
