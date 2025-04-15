@@ -31,7 +31,10 @@ function JoinPage() {
   const [email, setEmail] = useState('');
   const [isEmailInvalid, setIsEmailInvalid] = useState(false);
   const [xProfile, setXProfile] = useState(null);
-  const [tokens, setTokens] = useState(null);
+  const [tokens, setTokens] = useState(() => {
+    const stored = sessionStorage.getItem('x_tokens');
+    return stored ? JSON.parse(stored) : null;
+  });
   const { user, setJoining, login } = useContext(AuthContext);
   const { address, isConnected } = useAccount();
 
@@ -73,7 +76,7 @@ function JoinPage() {
     }
 
     if (code && receivedState === stateRef.current) {
-      const fetchXProfile = async () => {
+      const fetchXProfile = async (retryCount = 3) => {
         try {
           console.log('OAuth params:', { code, state: receivedState });
           if (!code) {
@@ -89,11 +92,17 @@ function JoinPage() {
           if (!response.ok) {
             const errorText = await response.text();
             console.error('Fetch error response:', errorText);
+            if (retryCount > 0 && response.status >= 500) {
+              console.log(`Retrying... attempts left: ${retryCount}`);
+              await new Promise(resolve => setTimeout(resolve, 2000));
+              return fetchXProfile(retryCount - 1);
+            }
             throw new Error(`Failed to fetch X profile: ${response.status} - ${errorText}`);
           }
           const data = await response.json();
           setXProfile(data.profile);
           setTokens(data.tokens);
+          sessionStorage.setItem('x_tokens', JSON.stringify(data.tokens));
           toast({
             title: 'X Profile Connected',
             description: `Logged in as @${data.profile.username}`,
@@ -117,12 +126,13 @@ function JoinPage() {
     }
   }, [toast]);
 
-  const refreshXToken = async () => {
+  const refreshXToken = async (retryCount = 3) => {
     if (!tokens?.refresh_token) {
       console.log('No refresh token available');
       return;
     }
     try {
+      console.log('Refreshing token:', tokens.refresh_token);
       const response = await fetch('https://api.iconluxury.today/api/v1/x-auth/refresh', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -131,10 +141,16 @@ function JoinPage() {
       if (!response.ok) {
         const errorText = await response.text();
         console.error('Refresh error response:', errorText);
+        if (retryCount > 0 && response.status >= 500) {
+          console.log(`Retrying refresh... attempts left: ${retryCount}`);
+          await new Promise(resolve => setTimeout(resolve, 2000));
+          return refreshXToken(retryCount - 1);
+        }
         throw new Error(`Failed to refresh token: ${response.status} - ${errorText}`);
       }
       const newTokens = await response.json();
       setTokens(newTokens);
+      sessionStorage.setItem('x_tokens', JSON.stringify(newTokens));
       console.log('Refreshed tokens:', newTokens);
       return newTokens.access_token;
     } catch (error) {
