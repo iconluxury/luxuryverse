@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException
 import httpx
 import base64
+
 router = APIRouter(prefix="/x-auth", tags=["x-auth"])
 
 @router.post("/")
@@ -9,6 +10,10 @@ async def exchange_x_auth_code(data: dict):
     redirect_uri = data.get("redirect_uri")
     client_id = "N0p3ZG8yN3lWUFpWcUFXQjE4X206MTpjaQ"
     client_secret = 'SRDX4gnbXblA1hkWajWQad5GI7tcixCmPrcQYwlGZRTcW-RJVE' 
+
+
+    if not code or not redirect_uri:
+        raise HTTPException(status_code=400, detail="Missing code or redirect_uri")
 
     try:
         # Encode client_id:client_secret for Basic Auth

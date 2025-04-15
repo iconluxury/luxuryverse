@@ -54,7 +54,7 @@ function JoinPage() {
     }
   }, [isConnected, address, user, login, setJoining, toast]);
 
-  // Mock X auth callback
+  // Handle X auth callback
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
@@ -74,24 +74,6 @@ function JoinPage() {
     }
 
     if (code && state === 'state') {
-      // Mock X profile to bypass 403 errors
-      const mockXProfile = {
-        username: 'nikwifhat',
-        name: 'Nik Wifhat',
-        profile_image_url: 'https://via.placeholder.com/32',
-      };
-      setXProfile(mockXProfile);
-      toast({
-        title: 'X Profile Connected',
-        description: `Logged in as @${mockXProfile.username}`,
-        status: 'success',
-        duration: 5000,
-        isClosable: true,
-      });
-      window.history.replaceState({}, document.title, window.location.pathname);
-
-      // For backend integration
-      /*
       const fetchXProfile = async () => {
         try {
           const response = await fetch('https://apis.iconluxury.today/x-auth', {
@@ -100,7 +82,8 @@ function JoinPage() {
             body: JSON.stringify({ code, redirectUri }),
           });
           if (!response.ok) {
-            throw new Error('Failed to fetch X profile');
+            const errorText = await response.text();
+            throw new Error(`Failed to fetch X profile: ${response.status} - ${errorText}`);
           }
           const data = await response.json();
           setXProfile(data);
@@ -114,15 +97,15 @@ function JoinPage() {
         } catch (error) {
           toast({
             title: 'X Auth Error',
-            description: 'Failed to connect X profile.',
+            description: `Failed to connect X profile: ${error.message}`,
             status: 'error',
             duration: 5000,
             isClosable: true,
           });
         }
+        window.history.replaceState({}, document.title, window.location.pathname);
       };
       fetchXProfile();
-      */
     }
   }, [toast]);
 
@@ -137,13 +120,20 @@ function JoinPage() {
     setIsEmailInvalid(false);
 
     try {
-      // Mock backend call
-      console.log('Mock API /subscribe:', {
-        email,
-        walletAddress: address,
-        xUsername: xProfile?.username,
-        xProfile,
+      // Call backend /subscribe endpoint
+      const response = await fetch('https://apis.iconluxury.today/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          walletAddress: address,
+          xUsername: xProfile?.username,
+          xProfile,
+        }),
       });
+      if (!response.ok) {
+        throw new Error('Failed to subscribe');
+      }
       toast({
         title: 'Subscribed',
         description: `Thank you for subscribing with ${email}!`,
@@ -157,7 +147,7 @@ function JoinPage() {
     } catch (error) {
       toast({
         title: 'Subscription Error',
-        description: 'Failed to subscribe. Please try again.',
+        description: `Failed to subscribe: ${error.message}`,
         status: 'error',
         duration: 5000,
         isClosable: true,
@@ -188,13 +178,6 @@ function JoinPage() {
               {!isConnected && <appkit-button />}
               {isConnected && (
                 <HStack spacing={4}>
-                  {/* <Image
-                    src="https://via.placeholder.com/100" // Replace with https://iconluxury.today/assets/collectible.png
-                    alt="LuxuryVerse Collectible"
-                    boxSize="100px"
-                    objectFit="cover"
-                    borderRadius="md"
-                  /> */}
                   <VStack align="start" spacing={1}>
                     <Text fontSize="sm" color="gray.400">
                       0.000 ETH
@@ -240,12 +223,6 @@ function JoinPage() {
             </Tooltip>
             {xProfile && (
               <HStack mt={2} spacing={2}>
-                <Image
-                  src={xProfile.profile_image_url}
-                  alt="X Profile"
-                  boxSize="32px"
-                  borderRadius="full"
-                />
                 <VStack align="start" spacing={0}>
                   <Text fontSize="sm" color="gray.500">
                     Connected as @{xProfile.username}
