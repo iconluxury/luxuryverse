@@ -373,8 +373,6 @@ function PrivacyRequestPage() {
             
             <VStack align="start" spacing={2} pl={4} mb={4}>
               <Text><strong>Email:</strong> privacy@luxuryverse.com</Text>
-              <Text><strong>Phone:</strong> +1 (855) 440-2242</Text>
-              <Text><strong>Hours:</strong> Monday to Friday, 9:00 AM to 5:00 PM EST</Text>
             </VStack>
             
             <Text fontSize="md">

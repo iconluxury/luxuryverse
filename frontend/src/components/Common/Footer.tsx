@@ -37,7 +37,7 @@ const Footer = () => {
               </Link>
             </Text>
             <Text color="gray.300">
-              <strong>Address:</strong> 99 Wall St Suite 5660, New York, NY 10005, USA
+              <strong>Address:</strong> 599 Broadway, New York, NY 10012, USA
             </Text>
           </Box>
 
@@ -78,7 +78,7 @@ const Footer = () => {
           textAlign={{ base: "center", md: "left" }}
         >
           <Text color="gray.400" fontSize="sm">
-            © 2024{" "}
+            © 2025{" "}
             <Link href="https://luxuryverse.com" color="gray.200" _hover={{ color: "red.600" }}>
               LuxuryVerse
             </Link>
