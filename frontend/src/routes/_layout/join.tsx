@@ -46,6 +46,8 @@ function JoinPage() {
     setIsAuthInitiating(true);
     try {
       sessionStorage.removeItem('oauth_state');
+      sessionStorage.removeItem('x_profile');
+      sessionStorage.removeItem('x_user_id');
       const state = generateState();
       console.log('Generated state:', state);
       sessionStorage.setItem('oauth_state', state);
@@ -92,6 +94,36 @@ function JoinPage() {
         duration: 5000,
         isClosable: true,
       });
+    }
+
+    // Check for stored profile from auth-complete
+    const storedProfile = sessionStorage.getItem('x_profile');
+    const storedUserId = sessionStorage.getItem('x_user_id');
+    if (storedProfile && storedUserId) {
+      try {
+        const profile = JSON.parse(storedProfile);
+        setXProfile(profile);
+        setUserId(storedUserId);
+        toast({
+          title: 'X Profile Connected',
+          description: `Logged in as @${profile.username}`,
+          status: 'success',
+          duration: 5000,
+          isClosable: true,
+        });
+        // Clean up stored data after use
+        sessionStorage.removeItem('x_profile');
+        sessionStorage.removeItem('x_user_id');
+      } catch (error) {
+        console.error('Error parsing stored profile:', error);
+        toast({
+          title: 'X Auth Error',
+          description: 'Failed to load X profile. Please try again.',
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        });
+      }
     }
   }, [isConnected, address, user, login, setJoining, toast]);
 
