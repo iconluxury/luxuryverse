@@ -90,5 +90,5 @@ function AuthComplete() {
     return <Box>Loading...</Box>;
   }
 
-  return null; // Redirect handles navigation
+  return null;
 }
