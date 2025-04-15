@@ -1,11 +1,11 @@
-import React from 'react';
+// Footer.tsx
 import {
   Box,
   Flex,
   Heading,
   Text,
   Link,
-  VStack,
+  HStack,
 } from "@chakra-ui/react";
 
 const Footer = () => {
@@ -21,13 +21,13 @@ const Footer = () => {
           textAlign={{ base: "center", md: "left" }}
         >
           {/* Company Information */}
-          <Box mb={{ base: 8, md: 0 }}>
+          <Box mb={{ base: 8, md: 0 }} maxW={{ base: "100%", md: "400px" }}>
             <Heading as="h4" size="md" mb={4}>
               <Link href="https://luxuryverse.com" _hover={{ textDecoration: "none", color: "red.600" }}>
                 LuxuryVerse
               </Link>
             </Heading>
-            <Text color="gray.300" mb={4} maxW="400px">
+            <Text color="gray.300" mb={4}>
               Redefining luxury through innovation, authenticity, and global connectivity. Join us in shaping the future of exclusivity.
             </Text>
             <Text color="gray.300" mb={2}>
@@ -41,12 +41,12 @@ const Footer = () => {
             </Text>
           </Box>
 
-          {/* Navigation Links */}
+          {/* Explore Links */}
           <Box>
             <Heading as="h4" size="md" mb={4}>
               Explore
             </Heading>
-            <VStack align={{ base: "center", md: "flex-start" }} spacing={2}>
+            <HStack wrap="wrap" spacing={4} justify={{ base: "center", md: "flex-start" }}>
               <Link href="/" color="gray.300" _hover={{ color: "red.600" }}>
                 Home
               </Link>
@@ -62,11 +62,11 @@ const Footer = () => {
               <Link href="/contact" color="gray.300" _hover={{ color: "red.600" }}>
                 Contact
               </Link>
-            </VStack>
+            </HStack>
           </Box>
         </Flex>
 
-        {/* Bottom Footer - Copyright and Legal */}
+        {/* Bottom Footer - Copyright and Legal Links */}
         <Flex
           justify="space-between"
           align="center"
@@ -84,8 +84,8 @@ const Footer = () => {
             </Link>
             . All rights reserved.
           </Text>
-          <Flex
-            gap={4}
+          <HStack
+            spacing={4}
             flexWrap="wrap"
             justify={{ base: "center", md: "flex-end" }}
           >
@@ -101,7 +101,7 @@ const Footer = () => {
             <Link href="/do-not-sell" color="gray.400" fontSize="sm" _hover={{ color: "red.600" }}>
               Do Not Sell My Personal Information
             </Link>
-          </Flex>
+          </HStack>
         </Flex>
       </Box>
     </Box>
