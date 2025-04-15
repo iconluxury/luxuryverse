@@ -75,8 +75,15 @@ function JoinPage() {
     if (code && state === 'state') {
       const fetchXProfile = async () => {
         try {
-          const payload = { code, redirectUri, codeVerifier: 'challenge' };
-          console.log('Sending to /x-auth:', payload); // Debug
+          const urlParams = new URLSearchParams(window.location.search);
+          const code = urlParams.get('code');
+          const state = urlParams.get('state');
+          console.log('OAuth params:', { code, state }); // Debug
+          if (!code) {
+            throw new Error('No code provided in redirect');
+          }
+          const payload = { code, redirectUri };
+          console.log('Sending to /x-auth:', payload);
           const response = await fetch('https://api.iconluxury.today/api/v1/x-auth/', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
