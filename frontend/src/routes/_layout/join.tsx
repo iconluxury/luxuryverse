@@ -17,7 +17,7 @@ import {
 } from '@chakra-ui/react';
 import Footer from '../../components/Common/Footer';
 import theme from '../../theme';
-import { useState, useContext, useEffect } from 'react';
+import { useState, useContext, useEffect, useCallback } from 'react';
 import { useAccount } from 'wagmi';
 import { AuthContext } from '../../components/Common/TopNav';
 import { OpenAPI } from '../../client';
@@ -32,15 +32,23 @@ function JoinPage() {
   const [isEmailInvalid, setIsEmailInvalid] = useState(false);
   const [xProfile, setXProfile] = useState(null);
   const [userId, setUserId] = useState(null);
+  const [isAuthInitiating, setIsAuthInitiating] = useState(false); // Prevent multiple calls
   const { user, setJoining, login } = useContext(AuthContext);
   const { address, isConnected } = useAccount();
 
   const generateState = () => Math.random().toString(36).substring(2);
 
-  const initiateXAuth = async () => {
+  const initiateXAuth = useCallback(async () => {
+    if (isAuthInitiating) {
+      console.log('X Auth already initiating, skipping');
+      return;
+    }
+    setIsAuthInitiating(true);
     try {
       const state = generateState();
+      console.log('Generated state:', state);
       sessionStorage.setItem('oauth_state', state);
+      console.log('Stored state in sessionStorage:', sessionStorage.getItem('oauth_state'));
       const response = await fetch(`https://api.iconluxury.today/api/v1/x-auth/request-token?state=${state}`, {
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include'
@@ -51,6 +59,7 @@ function JoinPage() {
         throw new Error(`Failed to fetch request token: ${response.status} - ${errorText}`);
       }
       const data = await response.json();
+      console.log('Redirecting to authorization URL:', data.authorization_url);
       window.location.href = data.authorization_url;
     } catch (error) {
       console.error('X Auth Initiation Error:', error);
@@ -62,8 +71,10 @@ function JoinPage() {
         isClosable: true,
       });
       sessionStorage.removeItem('oauth_state');
+    } finally {
+      setIsAuthInitiating(false);
     }
-  };
+  }, [isAuthInitiating]);
 
   useEffect(() => {
     setJoining(true);
@@ -101,6 +112,7 @@ function JoinPage() {
     }
 
     const storedState = sessionStorage.getItem('oauth_state');
+    console.log('Callback received:', { twitter, userId, receivedState, storedState });
     if (twitter === '1' && userId && receivedState === storedState) {
       const fetchXProfile = async (retryCount = 3) => {
         try {
