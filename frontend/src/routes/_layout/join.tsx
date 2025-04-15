@@ -36,7 +36,7 @@ function JoinPage() {
   const { address, isConnected } = useAccount();
 
   const stateRef = useRef(Math.random().toString(36).substring(2));
-  const xAuthUrl = `https://api.iconluxury.today/api/v1/request-token?state=${stateRef.current}`;
+  const xAuthUrl = `https://api.iconluxury.today/api/v1/x-auth/request-token?state=${stateRef.current}`;
 
   useEffect(() => {
     setJoining(true);
@@ -214,7 +214,7 @@ function JoinPage() {
                 color="gray.900"
                 _hover={{ bg: 'yellow.500' }}
                 borderRadius="md"
-                px={6}
+                px={6>
                 py={3}
                 fontWeight="medium"
                 isDisabled={!isConnected}
