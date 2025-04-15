@@ -54,7 +54,7 @@ function JoinPage() {
     }
   }, [isConnected, address, user, login, setJoining, toast]);
 
-  // Mock X auth callback
+  // Mock X auth callback to avoid 403
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
@@ -74,11 +74,11 @@ function JoinPage() {
     }
 
     if (code && state === 'state') {
-      // Mock X profile to bypass 403
+      // Mock X profile to bypass api.x.com calls
       const mockXProfile = {
         username: 'nikwifhat',
         name: 'Nik Wifhat',
-        profile_image_url: 'https://via.placeholder.com/32', // Mocked; replace with real later
+        profile_image_url: 'https://via.placeholder.com/32', // Mocked; replace later
       };
       setXProfile(mockXProfile);
       toast({
