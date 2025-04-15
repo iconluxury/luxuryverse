@@ -4,6 +4,7 @@ from pydantic import BaseModel
 import requests_oauthlib
 import logging
 from typing import Optional
+from urllib.parse import quote
 
 router = APIRouter(prefix="/x-auth", tags=["x-auth"])
 
@@ -28,7 +29,7 @@ async def request_token(state: str = None):
         logger.error("Missing consumer key or secret")
         raise HTTPException(status_code=500, detail="Server configuration error: Missing OAuth credentials")
 
-    callback_uri = f"https://api.iconluxury.today/api/v1/x-auth/callback?state={state}" if state else "https://api.iconluxury.today/api/v1/x-auth/callback"
+    callback_uri = f"https://api.iconluxury.today/api/v1/x-auth/callback?state={quote(state or '')}"
     oauth = requests_oauthlib.OAuth1Session(
         client_key=CONSUMER_KEY,
         client_secret=CONSUMER_SECRET,
@@ -40,8 +41,11 @@ async def request_token(state: str = None):
         resource_owner_secret = fetch_response.get('oauth_token_secret')
         token_storage[resource_owner_key] = resource_owner_secret
         authorization_url = oauth.authorization_url('https://api.twitter.com/oauth/authenticate')
-        logger.info(f"Generated authorization URL: {authorization_url}")
+        logger.info(f"Generated authorization URL for state {state}: {authorization_url}")
         return {"authorization_url": authorization_url}
+    except requests_oauthlib.oauth1_session.TokenRequestDenied as e:
+        logger.error(f"Token request denied: {str(e)}")
+        raise HTTPException(status_code=401, detail=f"Authentication failed: Invalid consumer credentials")
     except Exception as e:
         logger.error(f"Error fetching request token: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Failed to fetch request token: {str(e)}")
@@ -56,7 +60,7 @@ async def x_auth_callback(oauth_token: str, oauth_verifier: str, state: str = No
     resource_owner_secret = token_storage.get(oauth_token)
     if not resource_owner_secret:
         logger.error(f"No stored resource_owner_secret for oauth_token: {oauth_token}")
-        return RedirectResponse(f"https://iconluxury.today/join?twitter=0&error=Invalid%20oauth_token")
+        return RedirectResponse(f"https://iconluxury.today/join?twitter=0&error=Invalid%20oauth_token&state={quote(state or '')}")
 
     oauth = requests_oauthlib.OAuth1Session(
         CONSUMER_KEY,
@@ -79,16 +83,20 @@ async def x_auth_callback(oauth_token: str, oauth_verifier: str, state: str = No
             "access_token_secret": access_token_secret,
             "screen_name": screen_name
         }
+        logger.warning("Using in-memory token storage; replace with database in production")
 
         # Clean up temporary token
         token_storage.pop(oauth_token, None)
 
         # Redirect to frontend
-        redirect_url = f"https://iconluxury.today/join?twitter=1&user_id={user_id}&state={state}" if state else f"https://iconluxury.today/join?twitter=1&user_id={user_id}"
+        redirect_url = f"https://iconluxury.today/join?twitter=1&user_id={user_id}&state={quote(state or '')}"
         return RedirectResponse(redirect_url)
+    except requests_oauthlib.oauth1_session.TokenRequestDenied as e:
+        logger.error(f"Callback token request denied: {str(e)}")
+        return RedirectResponse(f"https://iconluxury.today/join?twitter=0&error=Authentication%20failed&state={quote(state or '')}")
     except Exception as e:
         logger.error(f"Error in callback: {str(e)}")
-        return RedirectResponse(f"https://iconluxury.today/join?twitter=0&error={str(e)}")
+        return RedirectResponse(f"https://iconluxury.today/join?twitter=0&error={quote(str(e))}&state={quote(state or '')}")
 
 @router.get("/user/{user_id}")
 async def get_user_details(user_id: str, include_email: bool = Query(default=True)):
@@ -122,26 +130,28 @@ async def get_user_details(user_id: str, include_email: bool = Query(default=Tru
         return {
             "id": user_data.get("id_str"),
             "name": user_data.get("name"),
-            "username": user_data.get("screen_name"),  # Match OAuth 2.0 field
+            "username": user_data.get("screen_name"),  # Match frontend expectation
             "location": user_data.get("location"),
             "description": user_data.get("description"),
             "url": user_data.get("url"),
             "profile_image_url": user_data.get("profile_image_url_https"),
-            "email": user_data.get("email")
+            "email": user_data.get("email")  # May be None
         }
+    except requests_oauthlib.oauth1_session.TokenRequestDenied as e:
+        logger.error(f"User details token error: {str(e)}")
+        raise HTTPException(status_code=401, detail=f"Authentication failed: {str(e)}")
     except Exception as e:
         logger.error(f"Error fetching user details: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Error fetching user details: {str(e)}")
 
 @router.post("/refresh")
 async def refresh_x_auth_token(request: XAuthRefreshRequest):
-    """Placeholder for token refresh (OAuth 1.0a tokens typically don't expire)."""
+    """Return stored OAuth 1.0a tokens (long-lived, no refresh needed)."""
     logger.info(f"Received refresh request for user_id: {request.user_id}")
     token_data = token_storage.get(request.user_id)
     if not token_data:
         logger.error(f"No tokens found for user_id: {request.user_id}")
         raise HTTPException(status_code=404, detail="User tokens not found")
-    # OAuth 1.0a tokens are long-lived; return stored tokens
     return {
         "access_token": token_data["access_token"],
         "access_token_secret": token_data["access_token_secret"],

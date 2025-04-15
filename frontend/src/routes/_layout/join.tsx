@@ -36,7 +36,27 @@ function JoinPage() {
   const { address, isConnected } = useAccount();
 
   const stateRef = useRef(Math.random().toString(36).substring(2));
-  const xAuthUrl = `https://api.iconluxury.today/api/v1/x-auth/request-token?state=${stateRef.current}`;
+
+  const initiateXAuth = async () => {
+    try {
+      const response = await fetch(`https://api.iconluxury.today/api/v1/x-auth/request-token?state=${stateRef.current}`);
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Failed to fetch request token: ${response.status} - ${errorText}`);
+      }
+      const data = await response.json();
+      window.location.href = data.authorization_url;
+    } catch (error) {
+      console.error('X Auth Initiation Error:', error);
+      toast({
+        title: 'X Auth Error',
+        description: `Failed to initiate X authentication: ${error.message}`,
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+  };
 
   useEffect(() => {
     setJoining(true);
@@ -73,7 +93,7 @@ function JoinPage() {
     }
 
     if (twitter === '1' && userId && receivedState === stateRef.current) {
-      const fetchXProfile = async () => {
+      const fetchXProfile = async (retryCount = 3) => {
         try {
           console.log('Fetching user details for user_id:', userId);
           const response = await fetch(`https://api.iconluxury.today/api/v1/x-auth/user/${userId}`, {
@@ -83,6 +103,11 @@ function JoinPage() {
           if (!response.ok) {
             const errorText = await response.text();
             console.error('Fetch user error:', errorText);
+            if (retryCount > 0 && response.status >= 500) {
+              console.log(`Retrying... attempts left: ${retryCount}`);
+              await new Promise(resolve => setTimeout(resolve, 2000));
+              return fetchXProfile(retryCount - 1);
+            }
             throw new Error(`Failed to fetch X profile: ${response.status} - ${errorText}`);
           }
           const data = await response.json();
@@ -208,13 +233,12 @@ function JoinPage() {
             </Text>
             <Tooltip label="Connect your X account to follow @LuxuryVerse">
               <Button
-                as="a"
-                href={xAuthUrl}
+                onClick={initiateXAuth}
                 bg="yellow.400"
                 color="gray.900"
                 _hover={{ bg: 'yellow.500' }}
                 borderRadius="md"
-                px={6>
+                px={6}
                 py={3}
                 fontWeight="medium"
                 isDisabled={!isConnected}
