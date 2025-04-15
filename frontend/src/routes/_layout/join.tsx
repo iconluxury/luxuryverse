@@ -113,6 +113,22 @@ function JoinPage() {
         });
       }
     }
+
+    // Handle malformed URLs
+    const urlParams = new URLSearchParams(window.location.search);
+    const twitter = urlParams.get('twitter');
+    const error = urlParams.get('error');
+    if (twitter || error) {
+      console.error('Invalid join parameters:', { twitter, error });
+      toast({
+        title: 'X Auth Error',
+        description: error || 'Invalid authentication parameters. Please try again.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
+      window.history.replaceState({}, document.title, '/join');
+    }
   }, [isConnected, address, user, login, setJoining, toast]);
 
   const handleEmailSubmit = async (e) => {
