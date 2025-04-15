@@ -51,8 +51,8 @@ function JoinPage() {
   // Handle X auth callback
   const clientId = 'N0p3ZG8yN3lWUFpWcUFXQjE4X206MTpjaQ';
   const redirectUri = 'https://api.iconluxury.today/api/v1/x-auth';
-  const xAuthUrl = `https://api.x.com/2/oauth2/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&scope=users.read&state=state&code_challenge=challenge&code_challenge_method=plain`;
-
+  const state = Math.random().toString(36).substring(2); // Random for security
+  const xAuthUrl = `https://api.x.com/2/oauth2/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&scope=users.read%20offline.access&state=${state}`;
   // Handle X auth callback
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
