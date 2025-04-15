@@ -1,4 +1,4 @@
-import { Flex, Heading, Button } from "@chakra-ui/react";
+import { Flex, Heading } from "@chakra-ui/react";
 import { Link } from "@tanstack/react-router";
 
 export default function TopNav() {
@@ -13,16 +13,23 @@ export default function TopNav() {
       <Heading size="md" color="purple.300">
         <Link to="/">LuxuryVerse</Link>
       </Heading>
-      <Flex gap={4}>
-        <Button as={Link} to="/" variant="ghost" colorScheme="purple">
+      <Flex gap={4} alignItems="center">
+        <Link to="/" style={{ color: "white", textDecoration: "none" }}>
           Home
-        </Button>
-        <Button as={Link} to="/shop" variant="ghost" colorScheme="purple">
-          Shop
-        </Button>
-        <Button as={Link} to="/about" variant="ghost" colorScheme="purple">
-          About
-        </Button>
+        </Link>
+        <Link to="/roadmap" style={{ color: "white", textDecoration: "none" }}>
+          Roadmap
+        </Link>
+        <Link to="/authenticity" style={{ color: "white", textDecoration: "none" }}>
+          Authenticity
+        </Link>
+        <Link to="/faq" style={{ color: "white", textDecoration: "none" }}>
+          FAQ
+        </Link>
+        <Link to="/contact" style={{ color: "white", textDecoration: "none" }}>
+          Contact
+        </Link>
+        <appkit-button />
       </Flex>
     </Flex>
   );

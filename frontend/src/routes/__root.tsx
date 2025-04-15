@@ -25,7 +25,7 @@ export const Route = createRootRoute({
   component: () => (
     <>
       <Outlet />
-      <Suspense>
+      <Suspense fallback={<div>Loading devtools...</div>}>
         <TanStackDevtools />
       </Suspense>
     </>
