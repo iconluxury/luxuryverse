@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 import httpx
 import base64
+import os
 
 router = APIRouter(prefix="/x-auth", tags=["x-auth"])
 
@@ -16,7 +17,10 @@ class XAuthRefreshRequest(BaseModel):
 async def exchange_x_auth_code(request: XAuthCodeRequest):
     print(f"Received code request: {request}")
     client_id = "N0p3ZG8yN3lWUFpWcUFXQjE4X206MTpjaQ"
-    client_secret = "ZQEQPMhYQBkMVurRS14OKWkFlTbaduEv6AIwAV7Ne3f7K0o4s3"
+    client_secret = "yyu688sapOxgzLyCRONhNx5GDbRPosnrWviWVuoA-_kpKKRcIm"
+
+    if not client_secret:
+        raise HTTPException(status_code=500, detail="Client secret not configured")
 
     if not request.code or not request.redirect_uri:
         raise HTTPException(status_code=400, detail="Missing code or redirect_uri")
@@ -67,7 +71,10 @@ async def exchange_x_auth_code(request: XAuthCodeRequest):
 async def refresh_x_auth_token(request: XAuthRefreshRequest):
     print(f"Received refresh request: {request}")
     client_id = "N0p3ZG8yN3lWUFpWcUFXQjE4X206MTpjaQ"
-    client_secret = "ZQEQPMhYQBkMVurRS14OKWkFlTbaduEv6AIwAV7Ne3f7K0o4s3"
+    client_secret = "yyu688sapOxgzLyCRONhNx5GDbRPosnrWviWVuoA-_kpKKRcIm"
+
+    if not client_secret:
+        raise HTTPException(status_code=500, detail="Client secret not configured")
 
     try:
         auth_string = f"{client_id}:{client_secret}"
