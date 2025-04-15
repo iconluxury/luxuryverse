@@ -30,7 +30,7 @@ function JoinPage() {
   const toast = useToast();
   const [email, setEmail] = useState('');
   const [isEmailInvalid, setIsEmailInvalid] = useState(false);
-  const [xProfile, setXProfile] = useState(null); // Mocked X profile
+  const [xProfile, setXProfile] = useState(null);
   const { user, setJoining, login } = useContext(AuthContext);
   const { address, isConnected } = useAccount();
 
@@ -54,7 +54,7 @@ function JoinPage() {
     }
   }, [isConnected, address, user, login, setJoining, toast]);
 
-  // Mock X auth callback to avoid 403
+  // Mock X auth callback
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
@@ -74,11 +74,11 @@ function JoinPage() {
     }
 
     if (code && state === 'state') {
-      // Mock X profile to bypass api.x.com calls
+      // Mock X profile
       const mockXProfile = {
         username: 'nikwifhat',
         name: 'Nik Wifhat',
-        profile_image_url: 'https://via.placeholder.com/32', // Mocked; replace later
+        profile_image_url: 'https://via.placeholder.com/32',
       };
       setXProfile(mockXProfile);
       toast({
@@ -89,6 +89,40 @@ function JoinPage() {
         isClosable: true,
       });
       window.history.replaceState({}, document.title, window.location.pathname);
+
+      // For backend integration
+      /*
+      const fetchXProfile = async () => {
+        try {
+          const response = await fetch('https://apis.iconluxury.today/x-auth', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ code, redirectUri }),
+          });
+          if (!response.ok) {
+            throw new Error('Failed to fetch X profile');
+          }
+          const data = await response.json();
+          setXProfile(data);
+          toast({
+            title: 'X Profile Connected',
+            description: `Logged in as @${data.username}`,
+            status: 'success',
+            duration: 5000,
+            isClosable: true,
+          });
+        } catch (error) {
+          toast({
+            title: 'X Auth Error',
+            description: 'Failed to connect X profile.',
+            status: 'error',
+            duration: 5000,
+            isClosable: true,
+          });
+        }
+      };
+      fetchXProfile();
+      */
     }
   }, [toast]);
 
