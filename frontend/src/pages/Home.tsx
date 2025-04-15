@@ -1,11 +1,7 @@
-import { Box, Button, Grid, Heading, Image, Text, VStack } from "@chakra-ui/react";
-import { createFileRoute } from "@tanstack/react-router";
+import { Box, Button, Flex, Grid, Heading, Image, Text, VStack } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
-export const Route = createFileRoute("/_layout/")({
-  component: Home,
-});
-
+// Define product and collection interfaces
 interface Product {
   id: string;
   title: string;
@@ -19,22 +15,41 @@ interface Collection {
   products: Product[];
 }
 
-function Home() {
-  const [collections, setCollections] = useState<Collection[]>([]);
-  const [error, setError] = useState<string | null>(null);
+// Mock data (replace with your backend API calls)
+const mockCollections: Collection[] = [
+  {
+    id: "col1",
+    title: "Luxury Watches",
+    products: [
+      { id: "p1", title: "Gold Chronograph", thumbnail: "/images/watch1.jpg", price: "0.5 ETH" },
+      { id: "p2", title: "Diamond Quartz", thumbnail: "/images/watch2.jpg", price: "0.7 ETH" },
+    ],
+  },
+  {
+    id: "col2",
+    title: "Designer Bags",
+    products: [
+      { id: "p3", title: "Leather Tote", thumbnail: "/images/bag1.jpg", price: "0.3 ETH" },
+      { id: "p4", title: "Velvet Clutch", thumbnail: "/images/bag2.jpg", price: "0.2 ETH" },
+    ],
+  },
+];
 
+const Home = () => {
+  const [collections, setCollections] = useState<Collection[]>([]);
+
+  // Simulate fetching data (replace with your API call)
   useEffect(() => {
-    fetch("http://localhost:8000/api/v1/collections")
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to fetch collections");
-        return res.json();
-      })
-      .then((data: Collection[]) => setCollections(data))
-      .catch((err) => setError(err.message));
+    // Example: fetch from your backend
+    // fetch('/api/collections')
+    //   .then(res => res.json())
+    //   .then(data => setCollections(data))
+    //   .catch(err => console.error(err));
+    setCollections(mockCollections); // Mock for now
   }, []);
 
   return (
-    <Box>
+    <Box bg="gray.900" color="white" minH="100vh">
       {/* Hero Section */}
       <Box
         bgImage="url('/images/hero-bg.jpg')"
@@ -66,16 +81,12 @@ function Home() {
         </VStack>
       </Box>
 
-      {/* Featured Collections */}
+      {/* Featured Products Section */}
       <Box py={16} px={{ base: 4, md: 8 }} maxW="1200px" mx="auto">
         <Heading as="h2" size="xl" mb={8} textAlign="center">
           Featured Collections
         </Heading>
-        {error ? (
-          <Text textAlign="center" color="red.300">
-            {error}
-          </Text>
-        ) : collections.length === 0 ? (
+        {collections.length === 0 ? (
           <Text textAlign="center" color="gray.400">
             Loading collections...
           </Text>
@@ -104,9 +115,7 @@ function Home() {
                     w="100%"
                     fallbackSrc="/images/placeholder.jpg"
                   />
-                  <Text fontSize="lg" fontWeight="bold">
-                    {product.title}
-                  </Text>
+                  <Text fontSize="lg" fontWeight="bold">{product.title}</Text>
                   <Text color="purple.300">{product.price}</Text>
                   <Button
                     size="sm"
@@ -125,4 +134,39 @@ function Home() {
       </Box>
     </Box>
   );
-}
+};
+
+// Wrapper Component (Nav and Footer)
+const Wrapper = ({ children }: { children: React.ReactNode }) => (
+  <Box>
+    {/* Navigation */}
+    <Flex
+      as="nav"
+      bg="gray.800"
+      p={4}
+      justify="space-between"
+      align="center"
+      px={{ base: 4, md: 8 }}
+    >
+      <Heading size="md" color="purple.300">LuxuryVerse</Heading>
+      <Flex gap={4}>
+        <Button variant="ghost" colorScheme="purple">Home</Button>
+        <Button variant="ghost" colorScheme="purple">Shop</Button>
+        <Button variant="ghost" colorScheme="purple">About</Button>
+      </Flex>
+    </Flex>
+    {children}
+    {/* Footer */}
+    <Box as="footer" bg="gray.800" py={8} textAlign="center">
+      <Text>© 2025 LuxuryVerse. All rights reserved.</Text>
+    </Box>
+  </Box>
+);
+
+const HomePage = () => (
+  <Wrapper>
+    <Home />
+  </Wrapper>
+);
+
+export default HomePage;

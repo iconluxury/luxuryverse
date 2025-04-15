@@ -1,53 +1,54 @@
 import { extendTheme, ThemeConfig } from "@chakra-ui/react";
 
 const config: ThemeConfig = {
-  initialColorMode: "light", // Changed to light mode as the default
+  initialColorMode: "dark",
   useSystemColorMode: false,
 };
 
 const theme = extendTheme({
   config,
-  styles: {
-    global: () => ({
-      "html, body": {
-        fontFamily: '"Figtree", sans-serif',
-        lineHeight: "1.7",
-        bg: "gray.50", // Hardcoded light gray background for light mode
-        color: "gray.800", // Hardcoded dark text for readability in light mode
-      },
-    }),
+  fonts: {
+    heading: "'Figtree', sans-serif",
+    body: "'Figtree', sans-serif",
   },
   colors: {
-    ui: {
-      main: "#8B0000", // Red as the primary accent color
-      secondary: "#FFA500", // Orange for secondary elements (or "#FFFF00" for yellow if preferred)
-      success: "#38A169", // Green for success states
-      danger: "#E53E3E", // Red for errors (unchanged)
-      light: "#FFFFFF", // White for backgrounds
-      dark: "#1A202C", // Dark background for dark mode (unchanged)
-      darkSlate: "#2D3748", // Darker gray for contrast
-      dim: "#A0AEC0", // Muted gray for secondary text (unchanged)
+    gray: {
+      50: "#F7FAFC",
+      100: "#EDF2F7",
+      200: "#E2E8F0",
+      300: "#CBD5E0",
+      400: "#A0AEC0",
+      500: "#718096",
+      600: "#4A5568",
+      700: "#2D3748",
+      800: "#1A202C",
+      900: "#171923",
+    },
+    purple: {
+      300: "#B794F4",
+      400: "#9F7AEA",
+      500: "#805AD5",
+      600: "#6B46C1",
+      700: "#553C9A",
+    },
+    pink: {
+      300: "#FBB6CE",
+      400: "#F687B3",
+      500: "#ED64A6",
+      600: "#D53F8C",
     },
   },
   components: {
     Heading: {
-      baseStyle: (props) => ({
-        color: props.colorMode === "dark" ? "gray.100" : "gray.900",
-      }),
+      baseStyle: {
+        fontWeight: "extrabold",
+        color: "white",
+      },
     },
     Text: {
-      baseStyle: (props) => ({
-        color: props.colorMode === "dark" ? "gray.200" : "gray.700", // Darker text for light mode readability
-      }),
-    },
-    Code: {
-      baseStyle: (props) => ({
-        bg: props.colorMode === "dark" ? "gray.700" : "gray.100", // Light background for light mode
-        color: props.colorMode === "dark" ? "gray.100" : "gray.800", // Dark text in light mode
-        fontSize: "sm",
-        p: 3,
-        borderRadius: "md",
-      }),
+      baseStyle: {
+        color: "gray.300",
+      },
     },
     Button: {
       baseStyle: {
@@ -55,95 +56,29 @@ const theme = extendTheme({
         borderRadius: "md",
       },
       variants: {
-        primary: {
-          backgroundColor: "ui.main", // Teal accent
-          color: "ui.light", // White text
+        solid: {
+          bg: "purple.500",
+          color: "white",
           _hover: {
-            backgroundColor: "#234E52", // Darker teal on hover
-          },
-          _disabled: {
-            backgroundColor: "ui.main",
-            opacity: 0.6,
+            bg: "purple.600",
           },
         },
-        danger: {
-          backgroundColor: "ui.danger", // Red (unchanged)
-          color: "ui.light", // White text
+        outline: {
+          borderColor: "purple.500",
+          color: "purple.500",
           _hover: {
-            backgroundColor: "#E32727", // Darker red (unchanged)
-          },
-        },
-      },
-      defaultProps: {
-        variant: "primary",
-      },
-    },
-    Tabs: {
-      variants: {
-        subtle: {
-          tab: {
-            color: "ui.dim",
-            _selected: {
-              color: "ui.main", // Teal for selected tab
-              fontWeight: "bold",
-              borderBottomColor: "ui.main", // Teal underline
-              borderBottomWidth: "2px",
-            },
-            _hover: {
-              color: "ui.secondary", // Light teal on hover
-            },
+            bg: "purple.500",
+            color: "white",
           },
         },
       },
     },
-    Toast: {
-      baseStyle: {
-        container: {
-          bg: "white", // Bright white background (unchanged)
-          color: "gray.100", // Dark text (unchanged)
-          borderRadius: "md",
-          boxShadow: "lg",
-          padding: "16px",
-          position: "absolute",
-          top: "20px",
-          transform: "translateX(-50%)", // Adjust for centering
-          minWidth: "300px",
-          maxWidth: "90%",
-        },
-      },
-      variants: {
-        error: {
-          container: {
-            bg: "red.100", // Light red for error
-            color: "red.900",
-            border: "1px solid",
-            borderColor: "red.300",
-          },
-        },
-        success: {
-          container: {
-            bg: "green.100", // Light green for success
-            color: "green.900",
-            border: "1px solid",
-            borderColor: "green.300",
-          },
-        },
-        info: {
-          container: {
-            bg: "red.100", // Light red for info
-            color: "red.900",
-            border: "1px solid",
-            borderColor: "red.300",
-          },
-        },
-        warning: {
-          container: {
-            bg: "yellow.100", // Light yellow for warning
-            color: "yellow.900",
-            border: "1px solid",
-            borderColor: "yellow.300",
-          },
-        },
+  },
+  styles: {
+    global: {
+      "html, body": {
+        bg: "gray.900",
+        color: "white",
       },
     },
   },

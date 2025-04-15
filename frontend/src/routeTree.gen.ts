@@ -14,53 +14,17 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as LayoutImport } from './routes/_layout'
 import { Route as LayoutIndexImport } from './routes/_layout/index'
 import { Route as LayoutTermsImport } from './routes/_layout/terms'
-import { Route as LayoutReportImport } from './routes/_layout/report'
 import { Route as LayoutPrivacyRequestImport } from './routes/_layout/privacy-request'
 import { Route as LayoutPrivacyImport } from './routes/_layout/privacy'
 import { Route as LayoutPricingImport } from './routes/_layout/pricing'
-import { Route as LayoutDoNotSellImport } from './routes/_layout/do-not-sell'
 import { Route as LayoutDemoRequestImport } from './routes/_layout/demo-request'
 import { Route as LayoutCookieImport } from './routes/_layout/cookie'
-import { Route as LayoutContactSalesImport } from './routes/_layout/contact-sales'
 import { Route as LayoutContactImport } from './routes/_layout/contact'
-import { Route as LayoutComplianceImport } from './routes/_layout/compliance'
-import { Route as LayoutUseCasesTravelFareAggregationImport } from './routes/_layout/use-cases/travel-fare-aggregation'
-import { Route as LayoutUseCasesSocialMediaMonitoringImport } from './routes/_layout/use-cases/social-media-monitoring'
-import { Route as LayoutUseCasesRealEstateDataScrapingImport } from './routes/_layout/use-cases/real-estate-data-scraping'
-import { Route as LayoutUseCasesProductDataExtractionImport } from './routes/_layout/use-cases/product-data-extraction'
-import { Route as LayoutUseCasesNewsAggregationImport } from './routes/_layout/use-cases/news-aggregation'
-import { Route as LayoutUseCasesFinancialDataCollectionImport } from './routes/_layout/use-cases/financial-data-collection'
-import { Route as LayoutUseCasesEcommercePriceMonitoringImport } from './routes/_layout/use-cases/ecommerce-price-monitoring'
-import { Route as LayoutUseCasesCompetitorAnalysisImport } from './routes/_layout/use-cases/competitor-analysis'
-import { Route as LayoutToolsUserAgentsImport } from './routes/_layout/tools/user-agents'
-import { Route as LayoutToolsSocks5ProxyImport } from './routes/_layout/tools/socks5-proxy'
-import { Route as LayoutToolsSchedulerImport } from './routes/_layout/tools/scheduler'
-import { Route as LayoutToolsRotatingProxyImport } from './routes/_layout/tools/rotating-proxy'
-import { Route as LayoutToolsProxyDashboardImport } from './routes/_layout/tools/proxy-dashboard'
-import { Route as LayoutToolsHttpsProxyImport } from './routes/_layout/tools/https-proxy'
-import { Route as LayoutToolsHtmlScraperImport } from './routes/_layout/tools/html-scraper'
-import { Route as LayoutToolsApiScraperImport } from './routes/_layout/tools/api-scraper'
-import { Route as LayoutSolutionsTrainingAiImport } from './routes/_layout/solutions/training-ai'
-import { Route as LayoutSolutionsSeoMonitoringImport } from './routes/_layout/solutions/seo-monitoring'
-import { Route as LayoutSolutionsPriceMonitoringImport } from './routes/_layout/solutions/price-monitoring'
-import { Route as LayoutSolutionsMarketResearchImport } from './routes/_layout/solutions/market-research'
-import { Route as LayoutSolutionsLeadGenerationImport } from './routes/_layout/solutions/lead-generation'
-import { Route as LayoutSolutionsEnterpriseImport } from './routes/_layout/solutions/enterprise'
-import { Route as LayoutSolutionsContentAggregationImport } from './routes/_layout/solutions/content-aggregation'
 import { Route as LayoutResourcesWebScrapingGuidesImport } from './routes/_layout/resources/web-scraping-guides'
 import { Route as LayoutResourcesSupportCenterImport } from './routes/_layout/resources/support-center'
 import { Route as LayoutResourcesFaqImport } from './routes/_layout/resources/faq'
 import { Route as LayoutResourcesCodeExamplesImport } from './routes/_layout/resources/code-examples'
 import { Route as LayoutResourcesBlogImport } from './routes/_layout/resources/blog'
-import { Route as LayoutNetworkStatusImport } from './routes/_layout/network/status'
-import { Route as LayoutNetworkSouthAmericaImport } from './routes/_layout/network/south-america'
-import { Route as LayoutNetworkSecurityImport } from './routes/_layout/network/security'
-import { Route as LayoutNetworkProxyTypesImport } from './routes/_layout/network/proxy-types'
-import { Route as LayoutNetworkNorthAmericaImport } from './routes/_layout/network/north-america'
-import { Route as LayoutNetworkMiddleEastImport } from './routes/_layout/network/middle-east'
-import { Route as LayoutNetworkLocationsImport } from './routes/_layout/network/locations'
-import { Route as LayoutNetworkEuropeImport } from './routes/_layout/network/europe'
-import { Route as LayoutNetworkAsiaPacificImport } from './routes/_layout/network/asia-pacific'
 import { Route as LayoutResourcesBlogsPathImport } from './routes/_layout/resources/blogs/$path'
 
 // Create/Update Routes
@@ -82,12 +46,6 @@ const LayoutTermsRoute = LayoutTermsImport.update({
   getParentRoute: () => LayoutRoute,
 } as any)
 
-const LayoutReportRoute = LayoutReportImport.update({
-  id: '/report',
-  path: '/report',
-  getParentRoute: () => LayoutRoute,
-} as any)
-
 const LayoutPrivacyRequestRoute = LayoutPrivacyRequestImport.update({
   id: '/privacy-request',
   path: '/privacy-request',
@@ -106,12 +64,6 @@ const LayoutPricingRoute = LayoutPricingImport.update({
   getParentRoute: () => LayoutRoute,
 } as any)
 
-const LayoutDoNotSellRoute = LayoutDoNotSellImport.update({
-  id: '/do-not-sell',
-  path: '/do-not-sell',
-  getParentRoute: () => LayoutRoute,
-} as any)
-
 const LayoutDemoRequestRoute = LayoutDemoRequestImport.update({
   id: '/demo-request',
   path: '/demo-request',
@@ -124,174 +76,11 @@ const LayoutCookieRoute = LayoutCookieImport.update({
   getParentRoute: () => LayoutRoute,
 } as any)
 
-const LayoutContactSalesRoute = LayoutContactSalesImport.update({
-  id: '/contact-sales',
-  path: '/contact-sales',
-  getParentRoute: () => LayoutRoute,
-} as any)
-
 const LayoutContactRoute = LayoutContactImport.update({
   id: '/contact',
   path: '/contact',
   getParentRoute: () => LayoutRoute,
 } as any)
-
-const LayoutComplianceRoute = LayoutComplianceImport.update({
-  id: '/compliance',
-  path: '/compliance',
-  getParentRoute: () => LayoutRoute,
-} as any)
-
-const LayoutUseCasesTravelFareAggregationRoute =
-  LayoutUseCasesTravelFareAggregationImport.update({
-    id: '/use-cases/travel-fare-aggregation',
-    path: '/use-cases/travel-fare-aggregation',
-    getParentRoute: () => LayoutRoute,
-  } as any)
-
-const LayoutUseCasesSocialMediaMonitoringRoute =
-  LayoutUseCasesSocialMediaMonitoringImport.update({
-    id: '/use-cases/social-media-monitoring',
-    path: '/use-cases/social-media-monitoring',
-    getParentRoute: () => LayoutRoute,
-  } as any)
-
-const LayoutUseCasesRealEstateDataScrapingRoute =
-  LayoutUseCasesRealEstateDataScrapingImport.update({
-    id: '/use-cases/real-estate-data-scraping',
-    path: '/use-cases/real-estate-data-scraping',
-    getParentRoute: () => LayoutRoute,
-  } as any)
-
-const LayoutUseCasesProductDataExtractionRoute =
-  LayoutUseCasesProductDataExtractionImport.update({
-    id: '/use-cases/product-data-extraction',
-    path: '/use-cases/product-data-extraction',
-    getParentRoute: () => LayoutRoute,
-  } as any)
-
-const LayoutUseCasesNewsAggregationRoute =
-  LayoutUseCasesNewsAggregationImport.update({
-    id: '/use-cases/news-aggregation',
-    path: '/use-cases/news-aggregation',
-    getParentRoute: () => LayoutRoute,
-  } as any)
-
-const LayoutUseCasesFinancialDataCollectionRoute =
-  LayoutUseCasesFinancialDataCollectionImport.update({
-    id: '/use-cases/financial-data-collection',
-    path: '/use-cases/financial-data-collection',
-    getParentRoute: () => LayoutRoute,
-  } as any)
-
-const LayoutUseCasesEcommercePriceMonitoringRoute =
-  LayoutUseCasesEcommercePriceMonitoringImport.update({
-    id: '/use-cases/ecommerce-price-monitoring',
-    path: '/use-cases/ecommerce-price-monitoring',
-    getParentRoute: () => LayoutRoute,
-  } as any)
-
-const LayoutUseCasesCompetitorAnalysisRoute =
-  LayoutUseCasesCompetitorAnalysisImport.update({
-    id: '/use-cases/competitor-analysis',
-    path: '/use-cases/competitor-analysis',
-    getParentRoute: () => LayoutRoute,
-  } as any)
-
-const LayoutToolsUserAgentsRoute = LayoutToolsUserAgentsImport.update({
-  id: '/tools/user-agents',
-  path: '/tools/user-agents',
-  getParentRoute: () => LayoutRoute,
-} as any)
-
-const LayoutToolsSocks5ProxyRoute = LayoutToolsSocks5ProxyImport.update({
-  id: '/tools/socks5-proxy',
-  path: '/tools/socks5-proxy',
-  getParentRoute: () => LayoutRoute,
-} as any)
-
-const LayoutToolsSchedulerRoute = LayoutToolsSchedulerImport.update({
-  id: '/tools/scheduler',
-  path: '/tools/scheduler',
-  getParentRoute: () => LayoutRoute,
-} as any)
-
-const LayoutToolsRotatingProxyRoute = LayoutToolsRotatingProxyImport.update({
-  id: '/tools/rotating-proxy',
-  path: '/tools/rotating-proxy',
-  getParentRoute: () => LayoutRoute,
-} as any)
-
-const LayoutToolsProxyDashboardRoute = LayoutToolsProxyDashboardImport.update({
-  id: '/tools/proxy-dashboard',
-  path: '/tools/proxy-dashboard',
-  getParentRoute: () => LayoutRoute,
-} as any)
-
-const LayoutToolsHttpsProxyRoute = LayoutToolsHttpsProxyImport.update({
-  id: '/tools/https-proxy',
-  path: '/tools/https-proxy',
-  getParentRoute: () => LayoutRoute,
-} as any)
-
-const LayoutToolsHtmlScraperRoute = LayoutToolsHtmlScraperImport.update({
-  id: '/tools/html-scraper',
-  path: '/tools/html-scraper',
-  getParentRoute: () => LayoutRoute,
-} as any)
-
-const LayoutToolsApiScraperRoute = LayoutToolsApiScraperImport.update({
-  id: '/tools/api-scraper',
-  path: '/tools/api-scraper',
-  getParentRoute: () => LayoutRoute,
-} as any)
-
-const LayoutSolutionsTrainingAiRoute = LayoutSolutionsTrainingAiImport.update({
-  id: '/solutions/training-ai',
-  path: '/solutions/training-ai',
-  getParentRoute: () => LayoutRoute,
-} as any)
-
-const LayoutSolutionsSeoMonitoringRoute =
-  LayoutSolutionsSeoMonitoringImport.update({
-    id: '/solutions/seo-monitoring',
-    path: '/solutions/seo-monitoring',
-    getParentRoute: () => LayoutRoute,
-  } as any)
-
-const LayoutSolutionsPriceMonitoringRoute =
-  LayoutSolutionsPriceMonitoringImport.update({
-    id: '/solutions/price-monitoring',
-    path: '/solutions/price-monitoring',
-    getParentRoute: () => LayoutRoute,
-  } as any)
-
-const LayoutSolutionsMarketResearchRoute =
-  LayoutSolutionsMarketResearchImport.update({
-    id: '/solutions/market-research',
-    path: '/solutions/market-research',
-    getParentRoute: () => LayoutRoute,
-  } as any)
-
-const LayoutSolutionsLeadGenerationRoute =
-  LayoutSolutionsLeadGenerationImport.update({
-    id: '/solutions/lead-generation',
-    path: '/solutions/lead-generation',
-    getParentRoute: () => LayoutRoute,
-  } as any)
-
-const LayoutSolutionsEnterpriseRoute = LayoutSolutionsEnterpriseImport.update({
-  id: '/solutions/enterprise',
-  path: '/solutions/enterprise',
-  getParentRoute: () => LayoutRoute,
-} as any)
-
-const LayoutSolutionsContentAggregationRoute =
-  LayoutSolutionsContentAggregationImport.update({
-    id: '/solutions/content-aggregation',
-    path: '/solutions/content-aggregation',
-    getParentRoute: () => LayoutRoute,
-  } as any)
 
 const LayoutResourcesWebScrapingGuidesRoute =
   LayoutResourcesWebScrapingGuidesImport.update({
@@ -326,60 +115,6 @@ const LayoutResourcesBlogRoute = LayoutResourcesBlogImport.update({
   getParentRoute: () => LayoutRoute,
 } as any)
 
-const LayoutNetworkStatusRoute = LayoutNetworkStatusImport.update({
-  id: '/network/status',
-  path: '/network/status',
-  getParentRoute: () => LayoutRoute,
-} as any)
-
-const LayoutNetworkSouthAmericaRoute = LayoutNetworkSouthAmericaImport.update({
-  id: '/network/south-america',
-  path: '/network/south-america',
-  getParentRoute: () => LayoutRoute,
-} as any)
-
-const LayoutNetworkSecurityRoute = LayoutNetworkSecurityImport.update({
-  id: '/network/security',
-  path: '/network/security',
-  getParentRoute: () => LayoutRoute,
-} as any)
-
-const LayoutNetworkProxyTypesRoute = LayoutNetworkProxyTypesImport.update({
-  id: '/network/proxy-types',
-  path: '/network/proxy-types',
-  getParentRoute: () => LayoutRoute,
-} as any)
-
-const LayoutNetworkNorthAmericaRoute = LayoutNetworkNorthAmericaImport.update({
-  id: '/network/north-america',
-  path: '/network/north-america',
-  getParentRoute: () => LayoutRoute,
-} as any)
-
-const LayoutNetworkMiddleEastRoute = LayoutNetworkMiddleEastImport.update({
-  id: '/network/middle-east',
-  path: '/network/middle-east',
-  getParentRoute: () => LayoutRoute,
-} as any)
-
-const LayoutNetworkLocationsRoute = LayoutNetworkLocationsImport.update({
-  id: '/network/locations',
-  path: '/network/locations',
-  getParentRoute: () => LayoutRoute,
-} as any)
-
-const LayoutNetworkEuropeRoute = LayoutNetworkEuropeImport.update({
-  id: '/network/europe',
-  path: '/network/europe',
-  getParentRoute: () => LayoutRoute,
-} as any)
-
-const LayoutNetworkAsiaPacificRoute = LayoutNetworkAsiaPacificImport.update({
-  id: '/network/asia-pacific',
-  path: '/network/asia-pacific',
-  getParentRoute: () => LayoutRoute,
-} as any)
-
 const LayoutResourcesBlogsPathRoute = LayoutResourcesBlogsPathImport.update({
   id: '/resources/blogs/$path',
   path: '/resources/blogs/$path',
@@ -397,25 +132,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutImport
       parentRoute: typeof rootRoute
     }
-    '/_layout/compliance': {
-      id: '/_layout/compliance'
-      path: '/compliance'
-      fullPath: '/compliance'
-      preLoaderRoute: typeof LayoutComplianceImport
-      parentRoute: typeof LayoutImport
-    }
     '/_layout/contact': {
       id: '/_layout/contact'
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof LayoutContactImport
-      parentRoute: typeof LayoutImport
-    }
-    '/_layout/contact-sales': {
-      id: '/_layout/contact-sales'
-      path: '/contact-sales'
-      fullPath: '/contact-sales'
-      preLoaderRoute: typeof LayoutContactSalesImport
       parentRoute: typeof LayoutImport
     }
     '/_layout/cookie': {
@@ -430,13 +151,6 @@ declare module '@tanstack/react-router' {
       path: '/demo-request'
       fullPath: '/demo-request'
       preLoaderRoute: typeof LayoutDemoRequestImport
-      parentRoute: typeof LayoutImport
-    }
-    '/_layout/do-not-sell': {
-      id: '/_layout/do-not-sell'
-      path: '/do-not-sell'
-      fullPath: '/do-not-sell'
-      preLoaderRoute: typeof LayoutDoNotSellImport
       parentRoute: typeof LayoutImport
     }
     '/_layout/pricing': {
@@ -460,13 +174,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutPrivacyRequestImport
       parentRoute: typeof LayoutImport
     }
-    '/_layout/report': {
-      id: '/_layout/report'
-      path: '/report'
-      fullPath: '/report'
-      preLoaderRoute: typeof LayoutReportImport
-      parentRoute: typeof LayoutImport
-    }
     '/_layout/terms': {
       id: '/_layout/terms'
       path: '/terms'
@@ -479,69 +186,6 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof LayoutIndexImport
-      parentRoute: typeof LayoutImport
-    }
-    '/_layout/network/asia-pacific': {
-      id: '/_layout/network/asia-pacific'
-      path: '/network/asia-pacific'
-      fullPath: '/network/asia-pacific'
-      preLoaderRoute: typeof LayoutNetworkAsiaPacificImport
-      parentRoute: typeof LayoutImport
-    }
-    '/_layout/network/europe': {
-      id: '/_layout/network/europe'
-      path: '/network/europe'
-      fullPath: '/network/europe'
-      preLoaderRoute: typeof LayoutNetworkEuropeImport
-      parentRoute: typeof LayoutImport
-    }
-    '/_layout/network/locations': {
-      id: '/_layout/network/locations'
-      path: '/network/locations'
-      fullPath: '/network/locations'
-      preLoaderRoute: typeof LayoutNetworkLocationsImport
-      parentRoute: typeof LayoutImport
-    }
-    '/_layout/network/middle-east': {
-      id: '/_layout/network/middle-east'
-      path: '/network/middle-east'
-      fullPath: '/network/middle-east'
-      preLoaderRoute: typeof LayoutNetworkMiddleEastImport
-      parentRoute: typeof LayoutImport
-    }
-    '/_layout/network/north-america': {
-      id: '/_layout/network/north-america'
-      path: '/network/north-america'
-      fullPath: '/network/north-america'
-      preLoaderRoute: typeof LayoutNetworkNorthAmericaImport
-      parentRoute: typeof LayoutImport
-    }
-    '/_layout/network/proxy-types': {
-      id: '/_layout/network/proxy-types'
-      path: '/network/proxy-types'
-      fullPath: '/network/proxy-types'
-      preLoaderRoute: typeof LayoutNetworkProxyTypesImport
-      parentRoute: typeof LayoutImport
-    }
-    '/_layout/network/security': {
-      id: '/_layout/network/security'
-      path: '/network/security'
-      fullPath: '/network/security'
-      preLoaderRoute: typeof LayoutNetworkSecurityImport
-      parentRoute: typeof LayoutImport
-    }
-    '/_layout/network/south-america': {
-      id: '/_layout/network/south-america'
-      path: '/network/south-america'
-      fullPath: '/network/south-america'
-      preLoaderRoute: typeof LayoutNetworkSouthAmericaImport
-      parentRoute: typeof LayoutImport
-    }
-    '/_layout/network/status': {
-      id: '/_layout/network/status'
-      path: '/network/status'
-      fullPath: '/network/status'
-      preLoaderRoute: typeof LayoutNetworkStatusImport
       parentRoute: typeof LayoutImport
     }
     '/_layout/resources/blog': {
@@ -579,167 +223,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutResourcesWebScrapingGuidesImport
       parentRoute: typeof LayoutImport
     }
-    '/_layout/solutions/content-aggregation': {
-      id: '/_layout/solutions/content-aggregation'
-      path: '/solutions/content-aggregation'
-      fullPath: '/solutions/content-aggregation'
-      preLoaderRoute: typeof LayoutSolutionsContentAggregationImport
-      parentRoute: typeof LayoutImport
-    }
-    '/_layout/solutions/enterprise': {
-      id: '/_layout/solutions/enterprise'
-      path: '/solutions/enterprise'
-      fullPath: '/solutions/enterprise'
-      preLoaderRoute: typeof LayoutSolutionsEnterpriseImport
-      parentRoute: typeof LayoutImport
-    }
-    '/_layout/solutions/lead-generation': {
-      id: '/_layout/solutions/lead-generation'
-      path: '/solutions/lead-generation'
-      fullPath: '/solutions/lead-generation'
-      preLoaderRoute: typeof LayoutSolutionsLeadGenerationImport
-      parentRoute: typeof LayoutImport
-    }
-    '/_layout/solutions/market-research': {
-      id: '/_layout/solutions/market-research'
-      path: '/solutions/market-research'
-      fullPath: '/solutions/market-research'
-      preLoaderRoute: typeof LayoutSolutionsMarketResearchImport
-      parentRoute: typeof LayoutImport
-    }
-    '/_layout/solutions/price-monitoring': {
-      id: '/_layout/solutions/price-monitoring'
-      path: '/solutions/price-monitoring'
-      fullPath: '/solutions/price-monitoring'
-      preLoaderRoute: typeof LayoutSolutionsPriceMonitoringImport
-      parentRoute: typeof LayoutImport
-    }
-    '/_layout/solutions/seo-monitoring': {
-      id: '/_layout/solutions/seo-monitoring'
-      path: '/solutions/seo-monitoring'
-      fullPath: '/solutions/seo-monitoring'
-      preLoaderRoute: typeof LayoutSolutionsSeoMonitoringImport
-      parentRoute: typeof LayoutImport
-    }
-    '/_layout/solutions/training-ai': {
-      id: '/_layout/solutions/training-ai'
-      path: '/solutions/training-ai'
-      fullPath: '/solutions/training-ai'
-      preLoaderRoute: typeof LayoutSolutionsTrainingAiImport
-      parentRoute: typeof LayoutImport
-    }
-    '/_layout/tools/api-scraper': {
-      id: '/_layout/tools/api-scraper'
-      path: '/tools/api-scraper'
-      fullPath: '/tools/api-scraper'
-      preLoaderRoute: typeof LayoutToolsApiScraperImport
-      parentRoute: typeof LayoutImport
-    }
-    '/_layout/tools/html-scraper': {
-      id: '/_layout/tools/html-scraper'
-      path: '/tools/html-scraper'
-      fullPath: '/tools/html-scraper'
-      preLoaderRoute: typeof LayoutToolsHtmlScraperImport
-      parentRoute: typeof LayoutImport
-    }
-    '/_layout/tools/https-proxy': {
-      id: '/_layout/tools/https-proxy'
-      path: '/tools/https-proxy'
-      fullPath: '/tools/https-proxy'
-      preLoaderRoute: typeof LayoutToolsHttpsProxyImport
-      parentRoute: typeof LayoutImport
-    }
-    '/_layout/tools/proxy-dashboard': {
-      id: '/_layout/tools/proxy-dashboard'
-      path: '/tools/proxy-dashboard'
-      fullPath: '/tools/proxy-dashboard'
-      preLoaderRoute: typeof LayoutToolsProxyDashboardImport
-      parentRoute: typeof LayoutImport
-    }
-    '/_layout/tools/rotating-proxy': {
-      id: '/_layout/tools/rotating-proxy'
-      path: '/tools/rotating-proxy'
-      fullPath: '/tools/rotating-proxy'
-      preLoaderRoute: typeof LayoutToolsRotatingProxyImport
-      parentRoute: typeof LayoutImport
-    }
-    '/_layout/tools/scheduler': {
-      id: '/_layout/tools/scheduler'
-      path: '/tools/scheduler'
-      fullPath: '/tools/scheduler'
-      preLoaderRoute: typeof LayoutToolsSchedulerImport
-      parentRoute: typeof LayoutImport
-    }
-    '/_layout/tools/socks5-proxy': {
-      id: '/_layout/tools/socks5-proxy'
-      path: '/tools/socks5-proxy'
-      fullPath: '/tools/socks5-proxy'
-      preLoaderRoute: typeof LayoutToolsSocks5ProxyImport
-      parentRoute: typeof LayoutImport
-    }
-    '/_layout/tools/user-agents': {
-      id: '/_layout/tools/user-agents'
-      path: '/tools/user-agents'
-      fullPath: '/tools/user-agents'
-      preLoaderRoute: typeof LayoutToolsUserAgentsImport
-      parentRoute: typeof LayoutImport
-    }
-    '/_layout/use-cases/competitor-analysis': {
-      id: '/_layout/use-cases/competitor-analysis'
-      path: '/use-cases/competitor-analysis'
-      fullPath: '/use-cases/competitor-analysis'
-      preLoaderRoute: typeof LayoutUseCasesCompetitorAnalysisImport
-      parentRoute: typeof LayoutImport
-    }
-    '/_layout/use-cases/ecommerce-price-monitoring': {
-      id: '/_layout/use-cases/ecommerce-price-monitoring'
-      path: '/use-cases/ecommerce-price-monitoring'
-      fullPath: '/use-cases/ecommerce-price-monitoring'
-      preLoaderRoute: typeof LayoutUseCasesEcommercePriceMonitoringImport
-      parentRoute: typeof LayoutImport
-    }
-    '/_layout/use-cases/financial-data-collection': {
-      id: '/_layout/use-cases/financial-data-collection'
-      path: '/use-cases/financial-data-collection'
-      fullPath: '/use-cases/financial-data-collection'
-      preLoaderRoute: typeof LayoutUseCasesFinancialDataCollectionImport
-      parentRoute: typeof LayoutImport
-    }
-    '/_layout/use-cases/news-aggregation': {
-      id: '/_layout/use-cases/news-aggregation'
-      path: '/use-cases/news-aggregation'
-      fullPath: '/use-cases/news-aggregation'
-      preLoaderRoute: typeof LayoutUseCasesNewsAggregationImport
-      parentRoute: typeof LayoutImport
-    }
-    '/_layout/use-cases/product-data-extraction': {
-      id: '/_layout/use-cases/product-data-extraction'
-      path: '/use-cases/product-data-extraction'
-      fullPath: '/use-cases/product-data-extraction'
-      preLoaderRoute: typeof LayoutUseCasesProductDataExtractionImport
-      parentRoute: typeof LayoutImport
-    }
-    '/_layout/use-cases/real-estate-data-scraping': {
-      id: '/_layout/use-cases/real-estate-data-scraping'
-      path: '/use-cases/real-estate-data-scraping'
-      fullPath: '/use-cases/real-estate-data-scraping'
-      preLoaderRoute: typeof LayoutUseCasesRealEstateDataScrapingImport
-      parentRoute: typeof LayoutImport
-    }
-    '/_layout/use-cases/social-media-monitoring': {
-      id: '/_layout/use-cases/social-media-monitoring'
-      path: '/use-cases/social-media-monitoring'
-      fullPath: '/use-cases/social-media-monitoring'
-      preLoaderRoute: typeof LayoutUseCasesSocialMediaMonitoringImport
-      parentRoute: typeof LayoutImport
-    }
-    '/_layout/use-cases/travel-fare-aggregation': {
-      id: '/_layout/use-cases/travel-fare-aggregation'
-      path: '/use-cases/travel-fare-aggregation'
-      fullPath: '/use-cases/travel-fare-aggregation'
-      preLoaderRoute: typeof LayoutUseCasesTravelFareAggregationImport
-      parentRoute: typeof LayoutImport
-    }
     '/_layout/resources/blogs/$path': {
       id: '/_layout/resources/blogs/$path'
       path: '/resources/blogs/$path'
@@ -753,115 +236,36 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 interface LayoutRouteChildren {
-  LayoutComplianceRoute: typeof LayoutComplianceRoute
   LayoutContactRoute: typeof LayoutContactRoute
-  LayoutContactSalesRoute: typeof LayoutContactSalesRoute
   LayoutCookieRoute: typeof LayoutCookieRoute
   LayoutDemoRequestRoute: typeof LayoutDemoRequestRoute
-  LayoutDoNotSellRoute: typeof LayoutDoNotSellRoute
   LayoutPricingRoute: typeof LayoutPricingRoute
   LayoutPrivacyRoute: typeof LayoutPrivacyRoute
   LayoutPrivacyRequestRoute: typeof LayoutPrivacyRequestRoute
-  LayoutReportRoute: typeof LayoutReportRoute
   LayoutTermsRoute: typeof LayoutTermsRoute
   LayoutIndexRoute: typeof LayoutIndexRoute
-  LayoutNetworkAsiaPacificRoute: typeof LayoutNetworkAsiaPacificRoute
-  LayoutNetworkEuropeRoute: typeof LayoutNetworkEuropeRoute
-  LayoutNetworkLocationsRoute: typeof LayoutNetworkLocationsRoute
-  LayoutNetworkMiddleEastRoute: typeof LayoutNetworkMiddleEastRoute
-  LayoutNetworkNorthAmericaRoute: typeof LayoutNetworkNorthAmericaRoute
-  LayoutNetworkProxyTypesRoute: typeof LayoutNetworkProxyTypesRoute
-  LayoutNetworkSecurityRoute: typeof LayoutNetworkSecurityRoute
-  LayoutNetworkSouthAmericaRoute: typeof LayoutNetworkSouthAmericaRoute
-  LayoutNetworkStatusRoute: typeof LayoutNetworkStatusRoute
   LayoutResourcesBlogRoute: typeof LayoutResourcesBlogRoute
   LayoutResourcesCodeExamplesRoute: typeof LayoutResourcesCodeExamplesRoute
   LayoutResourcesFaqRoute: typeof LayoutResourcesFaqRoute
   LayoutResourcesSupportCenterRoute: typeof LayoutResourcesSupportCenterRoute
   LayoutResourcesWebScrapingGuidesRoute: typeof LayoutResourcesWebScrapingGuidesRoute
-  LayoutSolutionsContentAggregationRoute: typeof LayoutSolutionsContentAggregationRoute
-  LayoutSolutionsEnterpriseRoute: typeof LayoutSolutionsEnterpriseRoute
-  LayoutSolutionsLeadGenerationRoute: typeof LayoutSolutionsLeadGenerationRoute
-  LayoutSolutionsMarketResearchRoute: typeof LayoutSolutionsMarketResearchRoute
-  LayoutSolutionsPriceMonitoringRoute: typeof LayoutSolutionsPriceMonitoringRoute
-  LayoutSolutionsSeoMonitoringRoute: typeof LayoutSolutionsSeoMonitoringRoute
-  LayoutSolutionsTrainingAiRoute: typeof LayoutSolutionsTrainingAiRoute
-  LayoutToolsApiScraperRoute: typeof LayoutToolsApiScraperRoute
-  LayoutToolsHtmlScraperRoute: typeof LayoutToolsHtmlScraperRoute
-  LayoutToolsHttpsProxyRoute: typeof LayoutToolsHttpsProxyRoute
-  LayoutToolsProxyDashboardRoute: typeof LayoutToolsProxyDashboardRoute
-  LayoutToolsRotatingProxyRoute: typeof LayoutToolsRotatingProxyRoute
-  LayoutToolsSchedulerRoute: typeof LayoutToolsSchedulerRoute
-  LayoutToolsSocks5ProxyRoute: typeof LayoutToolsSocks5ProxyRoute
-  LayoutToolsUserAgentsRoute: typeof LayoutToolsUserAgentsRoute
-  LayoutUseCasesCompetitorAnalysisRoute: typeof LayoutUseCasesCompetitorAnalysisRoute
-  LayoutUseCasesEcommercePriceMonitoringRoute: typeof LayoutUseCasesEcommercePriceMonitoringRoute
-  LayoutUseCasesFinancialDataCollectionRoute: typeof LayoutUseCasesFinancialDataCollectionRoute
-  LayoutUseCasesNewsAggregationRoute: typeof LayoutUseCasesNewsAggregationRoute
-  LayoutUseCasesProductDataExtractionRoute: typeof LayoutUseCasesProductDataExtractionRoute
-  LayoutUseCasesRealEstateDataScrapingRoute: typeof LayoutUseCasesRealEstateDataScrapingRoute
-  LayoutUseCasesSocialMediaMonitoringRoute: typeof LayoutUseCasesSocialMediaMonitoringRoute
-  LayoutUseCasesTravelFareAggregationRoute: typeof LayoutUseCasesTravelFareAggregationRoute
   LayoutResourcesBlogsPathRoute: typeof LayoutResourcesBlogsPathRoute
 }
 
 const LayoutRouteChildren: LayoutRouteChildren = {
-  LayoutComplianceRoute: LayoutComplianceRoute,
   LayoutContactRoute: LayoutContactRoute,
-  LayoutContactSalesRoute: LayoutContactSalesRoute,
   LayoutCookieRoute: LayoutCookieRoute,
   LayoutDemoRequestRoute: LayoutDemoRequestRoute,
-  LayoutDoNotSellRoute: LayoutDoNotSellRoute,
   LayoutPricingRoute: LayoutPricingRoute,
   LayoutPrivacyRoute: LayoutPrivacyRoute,
   LayoutPrivacyRequestRoute: LayoutPrivacyRequestRoute,
-  LayoutReportRoute: LayoutReportRoute,
   LayoutTermsRoute: LayoutTermsRoute,
   LayoutIndexRoute: LayoutIndexRoute,
-  LayoutNetworkAsiaPacificRoute: LayoutNetworkAsiaPacificRoute,
-  LayoutNetworkEuropeRoute: LayoutNetworkEuropeRoute,
-  LayoutNetworkLocationsRoute: LayoutNetworkLocationsRoute,
-  LayoutNetworkMiddleEastRoute: LayoutNetworkMiddleEastRoute,
-  LayoutNetworkNorthAmericaRoute: LayoutNetworkNorthAmericaRoute,
-  LayoutNetworkProxyTypesRoute: LayoutNetworkProxyTypesRoute,
-  LayoutNetworkSecurityRoute: LayoutNetworkSecurityRoute,
-  LayoutNetworkSouthAmericaRoute: LayoutNetworkSouthAmericaRoute,
-  LayoutNetworkStatusRoute: LayoutNetworkStatusRoute,
   LayoutResourcesBlogRoute: LayoutResourcesBlogRoute,
   LayoutResourcesCodeExamplesRoute: LayoutResourcesCodeExamplesRoute,
   LayoutResourcesFaqRoute: LayoutResourcesFaqRoute,
   LayoutResourcesSupportCenterRoute: LayoutResourcesSupportCenterRoute,
   LayoutResourcesWebScrapingGuidesRoute: LayoutResourcesWebScrapingGuidesRoute,
-  LayoutSolutionsContentAggregationRoute:
-    LayoutSolutionsContentAggregationRoute,
-  LayoutSolutionsEnterpriseRoute: LayoutSolutionsEnterpriseRoute,
-  LayoutSolutionsLeadGenerationRoute: LayoutSolutionsLeadGenerationRoute,
-  LayoutSolutionsMarketResearchRoute: LayoutSolutionsMarketResearchRoute,
-  LayoutSolutionsPriceMonitoringRoute: LayoutSolutionsPriceMonitoringRoute,
-  LayoutSolutionsSeoMonitoringRoute: LayoutSolutionsSeoMonitoringRoute,
-  LayoutSolutionsTrainingAiRoute: LayoutSolutionsTrainingAiRoute,
-  LayoutToolsApiScraperRoute: LayoutToolsApiScraperRoute,
-  LayoutToolsHtmlScraperRoute: LayoutToolsHtmlScraperRoute,
-  LayoutToolsHttpsProxyRoute: LayoutToolsHttpsProxyRoute,
-  LayoutToolsProxyDashboardRoute: LayoutToolsProxyDashboardRoute,
-  LayoutToolsRotatingProxyRoute: LayoutToolsRotatingProxyRoute,
-  LayoutToolsSchedulerRoute: LayoutToolsSchedulerRoute,
-  LayoutToolsSocks5ProxyRoute: LayoutToolsSocks5ProxyRoute,
-  LayoutToolsUserAgentsRoute: LayoutToolsUserAgentsRoute,
-  LayoutUseCasesCompetitorAnalysisRoute: LayoutUseCasesCompetitorAnalysisRoute,
-  LayoutUseCasesEcommercePriceMonitoringRoute:
-    LayoutUseCasesEcommercePriceMonitoringRoute,
-  LayoutUseCasesFinancialDataCollectionRoute:
-    LayoutUseCasesFinancialDataCollectionRoute,
-  LayoutUseCasesNewsAggregationRoute: LayoutUseCasesNewsAggregationRoute,
-  LayoutUseCasesProductDataExtractionRoute:
-    LayoutUseCasesProductDataExtractionRoute,
-  LayoutUseCasesRealEstateDataScrapingRoute:
-    LayoutUseCasesRealEstateDataScrapingRoute,
-  LayoutUseCasesSocialMediaMonitoringRoute:
-    LayoutUseCasesSocialMediaMonitoringRoute,
-  LayoutUseCasesTravelFareAggregationRoute:
-    LayoutUseCasesTravelFareAggregationRoute,
   LayoutResourcesBlogsPathRoute: LayoutResourcesBlogsPathRoute,
 }
 
@@ -870,163 +274,55 @@ const LayoutRouteWithChildren =
 
 export interface FileRoutesByFullPath {
   '': typeof LayoutRouteWithChildren
-  '/compliance': typeof LayoutComplianceRoute
   '/contact': typeof LayoutContactRoute
-  '/contact-sales': typeof LayoutContactSalesRoute
   '/cookie': typeof LayoutCookieRoute
   '/demo-request': typeof LayoutDemoRequestRoute
-  '/do-not-sell': typeof LayoutDoNotSellRoute
   '/pricing': typeof LayoutPricingRoute
   '/privacy': typeof LayoutPrivacyRoute
   '/privacy-request': typeof LayoutPrivacyRequestRoute
-  '/report': typeof LayoutReportRoute
   '/terms': typeof LayoutTermsRoute
   '/': typeof LayoutIndexRoute
-  '/network/asia-pacific': typeof LayoutNetworkAsiaPacificRoute
-  '/network/europe': typeof LayoutNetworkEuropeRoute
-  '/network/locations': typeof LayoutNetworkLocationsRoute
-  '/network/middle-east': typeof LayoutNetworkMiddleEastRoute
-  '/network/north-america': typeof LayoutNetworkNorthAmericaRoute
-  '/network/proxy-types': typeof LayoutNetworkProxyTypesRoute
-  '/network/security': typeof LayoutNetworkSecurityRoute
-  '/network/south-america': typeof LayoutNetworkSouthAmericaRoute
-  '/network/status': typeof LayoutNetworkStatusRoute
   '/resources/blog': typeof LayoutResourcesBlogRoute
   '/resources/code-examples': typeof LayoutResourcesCodeExamplesRoute
   '/resources/faq': typeof LayoutResourcesFaqRoute
   '/resources/support-center': typeof LayoutResourcesSupportCenterRoute
   '/resources/web-scraping-guides': typeof LayoutResourcesWebScrapingGuidesRoute
-  '/solutions/content-aggregation': typeof LayoutSolutionsContentAggregationRoute
-  '/solutions/enterprise': typeof LayoutSolutionsEnterpriseRoute
-  '/solutions/lead-generation': typeof LayoutSolutionsLeadGenerationRoute
-  '/solutions/market-research': typeof LayoutSolutionsMarketResearchRoute
-  '/solutions/price-monitoring': typeof LayoutSolutionsPriceMonitoringRoute
-  '/solutions/seo-monitoring': typeof LayoutSolutionsSeoMonitoringRoute
-  '/solutions/training-ai': typeof LayoutSolutionsTrainingAiRoute
-  '/tools/api-scraper': typeof LayoutToolsApiScraperRoute
-  '/tools/html-scraper': typeof LayoutToolsHtmlScraperRoute
-  '/tools/https-proxy': typeof LayoutToolsHttpsProxyRoute
-  '/tools/proxy-dashboard': typeof LayoutToolsProxyDashboardRoute
-  '/tools/rotating-proxy': typeof LayoutToolsRotatingProxyRoute
-  '/tools/scheduler': typeof LayoutToolsSchedulerRoute
-  '/tools/socks5-proxy': typeof LayoutToolsSocks5ProxyRoute
-  '/tools/user-agents': typeof LayoutToolsUserAgentsRoute
-  '/use-cases/competitor-analysis': typeof LayoutUseCasesCompetitorAnalysisRoute
-  '/use-cases/ecommerce-price-monitoring': typeof LayoutUseCasesEcommercePriceMonitoringRoute
-  '/use-cases/financial-data-collection': typeof LayoutUseCasesFinancialDataCollectionRoute
-  '/use-cases/news-aggregation': typeof LayoutUseCasesNewsAggregationRoute
-  '/use-cases/product-data-extraction': typeof LayoutUseCasesProductDataExtractionRoute
-  '/use-cases/real-estate-data-scraping': typeof LayoutUseCasesRealEstateDataScrapingRoute
-  '/use-cases/social-media-monitoring': typeof LayoutUseCasesSocialMediaMonitoringRoute
-  '/use-cases/travel-fare-aggregation': typeof LayoutUseCasesTravelFareAggregationRoute
   '/resources/blogs/$path': typeof LayoutResourcesBlogsPathRoute
 }
 
 export interface FileRoutesByTo {
-  '/compliance': typeof LayoutComplianceRoute
   '/contact': typeof LayoutContactRoute
-  '/contact-sales': typeof LayoutContactSalesRoute
   '/cookie': typeof LayoutCookieRoute
   '/demo-request': typeof LayoutDemoRequestRoute
-  '/do-not-sell': typeof LayoutDoNotSellRoute
   '/pricing': typeof LayoutPricingRoute
   '/privacy': typeof LayoutPrivacyRoute
   '/privacy-request': typeof LayoutPrivacyRequestRoute
-  '/report': typeof LayoutReportRoute
   '/terms': typeof LayoutTermsRoute
   '/': typeof LayoutIndexRoute
-  '/network/asia-pacific': typeof LayoutNetworkAsiaPacificRoute
-  '/network/europe': typeof LayoutNetworkEuropeRoute
-  '/network/locations': typeof LayoutNetworkLocationsRoute
-  '/network/middle-east': typeof LayoutNetworkMiddleEastRoute
-  '/network/north-america': typeof LayoutNetworkNorthAmericaRoute
-  '/network/proxy-types': typeof LayoutNetworkProxyTypesRoute
-  '/network/security': typeof LayoutNetworkSecurityRoute
-  '/network/south-america': typeof LayoutNetworkSouthAmericaRoute
-  '/network/status': typeof LayoutNetworkStatusRoute
   '/resources/blog': typeof LayoutResourcesBlogRoute
   '/resources/code-examples': typeof LayoutResourcesCodeExamplesRoute
   '/resources/faq': typeof LayoutResourcesFaqRoute
   '/resources/support-center': typeof LayoutResourcesSupportCenterRoute
   '/resources/web-scraping-guides': typeof LayoutResourcesWebScrapingGuidesRoute
-  '/solutions/content-aggregation': typeof LayoutSolutionsContentAggregationRoute
-  '/solutions/enterprise': typeof LayoutSolutionsEnterpriseRoute
-  '/solutions/lead-generation': typeof LayoutSolutionsLeadGenerationRoute
-  '/solutions/market-research': typeof LayoutSolutionsMarketResearchRoute
-  '/solutions/price-monitoring': typeof LayoutSolutionsPriceMonitoringRoute
-  '/solutions/seo-monitoring': typeof LayoutSolutionsSeoMonitoringRoute
-  '/solutions/training-ai': typeof LayoutSolutionsTrainingAiRoute
-  '/tools/api-scraper': typeof LayoutToolsApiScraperRoute
-  '/tools/html-scraper': typeof LayoutToolsHtmlScraperRoute
-  '/tools/https-proxy': typeof LayoutToolsHttpsProxyRoute
-  '/tools/proxy-dashboard': typeof LayoutToolsProxyDashboardRoute
-  '/tools/rotating-proxy': typeof LayoutToolsRotatingProxyRoute
-  '/tools/scheduler': typeof LayoutToolsSchedulerRoute
-  '/tools/socks5-proxy': typeof LayoutToolsSocks5ProxyRoute
-  '/tools/user-agents': typeof LayoutToolsUserAgentsRoute
-  '/use-cases/competitor-analysis': typeof LayoutUseCasesCompetitorAnalysisRoute
-  '/use-cases/ecommerce-price-monitoring': typeof LayoutUseCasesEcommercePriceMonitoringRoute
-  '/use-cases/financial-data-collection': typeof LayoutUseCasesFinancialDataCollectionRoute
-  '/use-cases/news-aggregation': typeof LayoutUseCasesNewsAggregationRoute
-  '/use-cases/product-data-extraction': typeof LayoutUseCasesProductDataExtractionRoute
-  '/use-cases/real-estate-data-scraping': typeof LayoutUseCasesRealEstateDataScrapingRoute
-  '/use-cases/social-media-monitoring': typeof LayoutUseCasesSocialMediaMonitoringRoute
-  '/use-cases/travel-fare-aggregation': typeof LayoutUseCasesTravelFareAggregationRoute
   '/resources/blogs/$path': typeof LayoutResourcesBlogsPathRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/_layout': typeof LayoutRouteWithChildren
-  '/_layout/compliance': typeof LayoutComplianceRoute
   '/_layout/contact': typeof LayoutContactRoute
-  '/_layout/contact-sales': typeof LayoutContactSalesRoute
   '/_layout/cookie': typeof LayoutCookieRoute
   '/_layout/demo-request': typeof LayoutDemoRequestRoute
-  '/_layout/do-not-sell': typeof LayoutDoNotSellRoute
   '/_layout/pricing': typeof LayoutPricingRoute
   '/_layout/privacy': typeof LayoutPrivacyRoute
   '/_layout/privacy-request': typeof LayoutPrivacyRequestRoute
-  '/_layout/report': typeof LayoutReportRoute
   '/_layout/terms': typeof LayoutTermsRoute
   '/_layout/': typeof LayoutIndexRoute
-  '/_layout/network/asia-pacific': typeof LayoutNetworkAsiaPacificRoute
-  '/_layout/network/europe': typeof LayoutNetworkEuropeRoute
-  '/_layout/network/locations': typeof LayoutNetworkLocationsRoute
-  '/_layout/network/middle-east': typeof LayoutNetworkMiddleEastRoute
-  '/_layout/network/north-america': typeof LayoutNetworkNorthAmericaRoute
-  '/_layout/network/proxy-types': typeof LayoutNetworkProxyTypesRoute
-  '/_layout/network/security': typeof LayoutNetworkSecurityRoute
-  '/_layout/network/south-america': typeof LayoutNetworkSouthAmericaRoute
-  '/_layout/network/status': typeof LayoutNetworkStatusRoute
   '/_layout/resources/blog': typeof LayoutResourcesBlogRoute
   '/_layout/resources/code-examples': typeof LayoutResourcesCodeExamplesRoute
   '/_layout/resources/faq': typeof LayoutResourcesFaqRoute
   '/_layout/resources/support-center': typeof LayoutResourcesSupportCenterRoute
   '/_layout/resources/web-scraping-guides': typeof LayoutResourcesWebScrapingGuidesRoute
-  '/_layout/solutions/content-aggregation': typeof LayoutSolutionsContentAggregationRoute
-  '/_layout/solutions/enterprise': typeof LayoutSolutionsEnterpriseRoute
-  '/_layout/solutions/lead-generation': typeof LayoutSolutionsLeadGenerationRoute
-  '/_layout/solutions/market-research': typeof LayoutSolutionsMarketResearchRoute
-  '/_layout/solutions/price-monitoring': typeof LayoutSolutionsPriceMonitoringRoute
-  '/_layout/solutions/seo-monitoring': typeof LayoutSolutionsSeoMonitoringRoute
-  '/_layout/solutions/training-ai': typeof LayoutSolutionsTrainingAiRoute
-  '/_layout/tools/api-scraper': typeof LayoutToolsApiScraperRoute
-  '/_layout/tools/html-scraper': typeof LayoutToolsHtmlScraperRoute
-  '/_layout/tools/https-proxy': typeof LayoutToolsHttpsProxyRoute
-  '/_layout/tools/proxy-dashboard': typeof LayoutToolsProxyDashboardRoute
-  '/_layout/tools/rotating-proxy': typeof LayoutToolsRotatingProxyRoute
-  '/_layout/tools/scheduler': typeof LayoutToolsSchedulerRoute
-  '/_layout/tools/socks5-proxy': typeof LayoutToolsSocks5ProxyRoute
-  '/_layout/tools/user-agents': typeof LayoutToolsUserAgentsRoute
-  '/_layout/use-cases/competitor-analysis': typeof LayoutUseCasesCompetitorAnalysisRoute
-  '/_layout/use-cases/ecommerce-price-monitoring': typeof LayoutUseCasesEcommercePriceMonitoringRoute
-  '/_layout/use-cases/financial-data-collection': typeof LayoutUseCasesFinancialDataCollectionRoute
-  '/_layout/use-cases/news-aggregation': typeof LayoutUseCasesNewsAggregationRoute
-  '/_layout/use-cases/product-data-extraction': typeof LayoutUseCasesProductDataExtractionRoute
-  '/_layout/use-cases/real-estate-data-scraping': typeof LayoutUseCasesRealEstateDataScrapingRoute
-  '/_layout/use-cases/social-media-monitoring': typeof LayoutUseCasesSocialMediaMonitoringRoute
-  '/_layout/use-cases/travel-fare-aggregation': typeof LayoutUseCasesTravelFareAggregationRoute
   '/_layout/resources/blogs/$path': typeof LayoutResourcesBlogsPathRoute
 }
 
@@ -1034,160 +330,52 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | ''
-    | '/compliance'
     | '/contact'
-    | '/contact-sales'
     | '/cookie'
     | '/demo-request'
-    | '/do-not-sell'
     | '/pricing'
     | '/privacy'
     | '/privacy-request'
-    | '/report'
     | '/terms'
     | '/'
-    | '/network/asia-pacific'
-    | '/network/europe'
-    | '/network/locations'
-    | '/network/middle-east'
-    | '/network/north-america'
-    | '/network/proxy-types'
-    | '/network/security'
-    | '/network/south-america'
-    | '/network/status'
     | '/resources/blog'
     | '/resources/code-examples'
     | '/resources/faq'
     | '/resources/support-center'
     | '/resources/web-scraping-guides'
-    | '/solutions/content-aggregation'
-    | '/solutions/enterprise'
-    | '/solutions/lead-generation'
-    | '/solutions/market-research'
-    | '/solutions/price-monitoring'
-    | '/solutions/seo-monitoring'
-    | '/solutions/training-ai'
-    | '/tools/api-scraper'
-    | '/tools/html-scraper'
-    | '/tools/https-proxy'
-    | '/tools/proxy-dashboard'
-    | '/tools/rotating-proxy'
-    | '/tools/scheduler'
-    | '/tools/socks5-proxy'
-    | '/tools/user-agents'
-    | '/use-cases/competitor-analysis'
-    | '/use-cases/ecommerce-price-monitoring'
-    | '/use-cases/financial-data-collection'
-    | '/use-cases/news-aggregation'
-    | '/use-cases/product-data-extraction'
-    | '/use-cases/real-estate-data-scraping'
-    | '/use-cases/social-media-monitoring'
-    | '/use-cases/travel-fare-aggregation'
     | '/resources/blogs/$path'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/compliance'
     | '/contact'
-    | '/contact-sales'
     | '/cookie'
     | '/demo-request'
-    | '/do-not-sell'
     | '/pricing'
     | '/privacy'
     | '/privacy-request'
-    | '/report'
     | '/terms'
     | '/'
-    | '/network/asia-pacific'
-    | '/network/europe'
-    | '/network/locations'
-    | '/network/middle-east'
-    | '/network/north-america'
-    | '/network/proxy-types'
-    | '/network/security'
-    | '/network/south-america'
-    | '/network/status'
     | '/resources/blog'
     | '/resources/code-examples'
     | '/resources/faq'
     | '/resources/support-center'
     | '/resources/web-scraping-guides'
-    | '/solutions/content-aggregation'
-    | '/solutions/enterprise'
-    | '/solutions/lead-generation'
-    | '/solutions/market-research'
-    | '/solutions/price-monitoring'
-    | '/solutions/seo-monitoring'
-    | '/solutions/training-ai'
-    | '/tools/api-scraper'
-    | '/tools/html-scraper'
-    | '/tools/https-proxy'
-    | '/tools/proxy-dashboard'
-    | '/tools/rotating-proxy'
-    | '/tools/scheduler'
-    | '/tools/socks5-proxy'
-    | '/tools/user-agents'
-    | '/use-cases/competitor-analysis'
-    | '/use-cases/ecommerce-price-monitoring'
-    | '/use-cases/financial-data-collection'
-    | '/use-cases/news-aggregation'
-    | '/use-cases/product-data-extraction'
-    | '/use-cases/real-estate-data-scraping'
-    | '/use-cases/social-media-monitoring'
-    | '/use-cases/travel-fare-aggregation'
     | '/resources/blogs/$path'
   id:
     | '__root__'
     | '/_layout'
-    | '/_layout/compliance'
     | '/_layout/contact'
-    | '/_layout/contact-sales'
     | '/_layout/cookie'
     | '/_layout/demo-request'
-    | '/_layout/do-not-sell'
     | '/_layout/pricing'
     | '/_layout/privacy'
     | '/_layout/privacy-request'
-    | '/_layout/report'
     | '/_layout/terms'
     | '/_layout/'
-    | '/_layout/network/asia-pacific'
-    | '/_layout/network/europe'
-    | '/_layout/network/locations'
-    | '/_layout/network/middle-east'
-    | '/_layout/network/north-america'
-    | '/_layout/network/proxy-types'
-    | '/_layout/network/security'
-    | '/_layout/network/south-america'
-    | '/_layout/network/status'
     | '/_layout/resources/blog'
     | '/_layout/resources/code-examples'
     | '/_layout/resources/faq'
     | '/_layout/resources/support-center'
     | '/_layout/resources/web-scraping-guides'
-    | '/_layout/solutions/content-aggregation'
-    | '/_layout/solutions/enterprise'
-    | '/_layout/solutions/lead-generation'
-    | '/_layout/solutions/market-research'
-    | '/_layout/solutions/price-monitoring'
-    | '/_layout/solutions/seo-monitoring'
-    | '/_layout/solutions/training-ai'
-    | '/_layout/tools/api-scraper'
-    | '/_layout/tools/html-scraper'
-    | '/_layout/tools/https-proxy'
-    | '/_layout/tools/proxy-dashboard'
-    | '/_layout/tools/rotating-proxy'
-    | '/_layout/tools/scheduler'
-    | '/_layout/tools/socks5-proxy'
-    | '/_layout/tools/user-agents'
-    | '/_layout/use-cases/competitor-analysis'
-    | '/_layout/use-cases/ecommerce-price-monitoring'
-    | '/_layout/use-cases/financial-data-collection'
-    | '/_layout/use-cases/news-aggregation'
-    | '/_layout/use-cases/product-data-extraction'
-    | '/_layout/use-cases/real-estate-data-scraping'
-    | '/_layout/use-cases/social-media-monitoring'
-    | '/_layout/use-cases/travel-fare-aggregation'
     | '/_layout/resources/blogs/$path'
   fileRoutesById: FileRoutesById
 }
@@ -1216,68 +404,24 @@ export const routeTree = rootRoute
     "/_layout": {
       "filePath": "_layout.tsx",
       "children": [
-        "/_layout/compliance",
         "/_layout/contact",
-        "/_layout/contact-sales",
         "/_layout/cookie",
         "/_layout/demo-request",
-        "/_layout/do-not-sell",
         "/_layout/pricing",
         "/_layout/privacy",
         "/_layout/privacy-request",
-        "/_layout/report",
         "/_layout/terms",
         "/_layout/",
-        "/_layout/network/asia-pacific",
-        "/_layout/network/europe",
-        "/_layout/network/locations",
-        "/_layout/network/middle-east",
-        "/_layout/network/north-america",
-        "/_layout/network/proxy-types",
-        "/_layout/network/security",
-        "/_layout/network/south-america",
-        "/_layout/network/status",
         "/_layout/resources/blog",
         "/_layout/resources/code-examples",
         "/_layout/resources/faq",
         "/_layout/resources/support-center",
         "/_layout/resources/web-scraping-guides",
-        "/_layout/solutions/content-aggregation",
-        "/_layout/solutions/enterprise",
-        "/_layout/solutions/lead-generation",
-        "/_layout/solutions/market-research",
-        "/_layout/solutions/price-monitoring",
-        "/_layout/solutions/seo-monitoring",
-        "/_layout/solutions/training-ai",
-        "/_layout/tools/api-scraper",
-        "/_layout/tools/html-scraper",
-        "/_layout/tools/https-proxy",
-        "/_layout/tools/proxy-dashboard",
-        "/_layout/tools/rotating-proxy",
-        "/_layout/tools/scheduler",
-        "/_layout/tools/socks5-proxy",
-        "/_layout/tools/user-agents",
-        "/_layout/use-cases/competitor-analysis",
-        "/_layout/use-cases/ecommerce-price-monitoring",
-        "/_layout/use-cases/financial-data-collection",
-        "/_layout/use-cases/news-aggregation",
-        "/_layout/use-cases/product-data-extraction",
-        "/_layout/use-cases/real-estate-data-scraping",
-        "/_layout/use-cases/social-media-monitoring",
-        "/_layout/use-cases/travel-fare-aggregation",
         "/_layout/resources/blogs/$path"
       ]
     },
-    "/_layout/compliance": {
-      "filePath": "_layout/compliance.tsx",
-      "parent": "/_layout"
-    },
     "/_layout/contact": {
       "filePath": "_layout/contact.tsx",
-      "parent": "/_layout"
-    },
-    "/_layout/contact-sales": {
-      "filePath": "_layout/contact-sales.tsx",
       "parent": "/_layout"
     },
     "/_layout/cookie": {
@@ -1286,10 +430,6 @@ export const routeTree = rootRoute
     },
     "/_layout/demo-request": {
       "filePath": "_layout/demo-request.tsx",
-      "parent": "/_layout"
-    },
-    "/_layout/do-not-sell": {
-      "filePath": "_layout/do-not-sell.tsx",
       "parent": "/_layout"
     },
     "/_layout/pricing": {
@@ -1304,52 +444,12 @@ export const routeTree = rootRoute
       "filePath": "_layout/privacy-request.tsx",
       "parent": "/_layout"
     },
-    "/_layout/report": {
-      "filePath": "_layout/report.tsx",
-      "parent": "/_layout"
-    },
     "/_layout/terms": {
       "filePath": "_layout/terms.tsx",
       "parent": "/_layout"
     },
     "/_layout/": {
       "filePath": "_layout/index.tsx",
-      "parent": "/_layout"
-    },
-    "/_layout/network/asia-pacific": {
-      "filePath": "_layout/network/asia-pacific.tsx",
-      "parent": "/_layout"
-    },
-    "/_layout/network/europe": {
-      "filePath": "_layout/network/europe.tsx",
-      "parent": "/_layout"
-    },
-    "/_layout/network/locations": {
-      "filePath": "_layout/network/locations.tsx",
-      "parent": "/_layout"
-    },
-    "/_layout/network/middle-east": {
-      "filePath": "_layout/network/middle-east.tsx",
-      "parent": "/_layout"
-    },
-    "/_layout/network/north-america": {
-      "filePath": "_layout/network/north-america.tsx",
-      "parent": "/_layout"
-    },
-    "/_layout/network/proxy-types": {
-      "filePath": "_layout/network/proxy-types.tsx",
-      "parent": "/_layout"
-    },
-    "/_layout/network/security": {
-      "filePath": "_layout/network/security.tsx",
-      "parent": "/_layout"
-    },
-    "/_layout/network/south-america": {
-      "filePath": "_layout/network/south-america.tsx",
-      "parent": "/_layout"
-    },
-    "/_layout/network/status": {
-      "filePath": "_layout/network/status.tsx",
       "parent": "/_layout"
     },
     "/_layout/resources/blog": {
@@ -1370,98 +470,6 @@ export const routeTree = rootRoute
     },
     "/_layout/resources/web-scraping-guides": {
       "filePath": "_layout/resources/web-scraping-guides.tsx",
-      "parent": "/_layout"
-    },
-    "/_layout/solutions/content-aggregation": {
-      "filePath": "_layout/solutions/content-aggregation.tsx",
-      "parent": "/_layout"
-    },
-    "/_layout/solutions/enterprise": {
-      "filePath": "_layout/solutions/enterprise.tsx",
-      "parent": "/_layout"
-    },
-    "/_layout/solutions/lead-generation": {
-      "filePath": "_layout/solutions/lead-generation.tsx",
-      "parent": "/_layout"
-    },
-    "/_layout/solutions/market-research": {
-      "filePath": "_layout/solutions/market-research.tsx",
-      "parent": "/_layout"
-    },
-    "/_layout/solutions/price-monitoring": {
-      "filePath": "_layout/solutions/price-monitoring.tsx",
-      "parent": "/_layout"
-    },
-    "/_layout/solutions/seo-monitoring": {
-      "filePath": "_layout/solutions/seo-monitoring.tsx",
-      "parent": "/_layout"
-    },
-    "/_layout/solutions/training-ai": {
-      "filePath": "_layout/solutions/training-ai.tsx",
-      "parent": "/_layout"
-    },
-    "/_layout/tools/api-scraper": {
-      "filePath": "_layout/tools/api-scraper.tsx",
-      "parent": "/_layout"
-    },
-    "/_layout/tools/html-scraper": {
-      "filePath": "_layout/tools/html-scraper.tsx",
-      "parent": "/_layout"
-    },
-    "/_layout/tools/https-proxy": {
-      "filePath": "_layout/tools/https-proxy.tsx",
-      "parent": "/_layout"
-    },
-    "/_layout/tools/proxy-dashboard": {
-      "filePath": "_layout/tools/proxy-dashboard.tsx",
-      "parent": "/_layout"
-    },
-    "/_layout/tools/rotating-proxy": {
-      "filePath": "_layout/tools/rotating-proxy.tsx",
-      "parent": "/_layout"
-    },
-    "/_layout/tools/scheduler": {
-      "filePath": "_layout/tools/scheduler.tsx",
-      "parent": "/_layout"
-    },
-    "/_layout/tools/socks5-proxy": {
-      "filePath": "_layout/tools/socks5-proxy.tsx",
-      "parent": "/_layout"
-    },
-    "/_layout/tools/user-agents": {
-      "filePath": "_layout/tools/user-agents.tsx",
-      "parent": "/_layout"
-    },
-    "/_layout/use-cases/competitor-analysis": {
-      "filePath": "_layout/use-cases/competitor-analysis.tsx",
-      "parent": "/_layout"
-    },
-    "/_layout/use-cases/ecommerce-price-monitoring": {
-      "filePath": "_layout/use-cases/ecommerce-price-monitoring.tsx",
-      "parent": "/_layout"
-    },
-    "/_layout/use-cases/financial-data-collection": {
-      "filePath": "_layout/use-cases/financial-data-collection.tsx",
-      "parent": "/_layout"
-    },
-    "/_layout/use-cases/news-aggregation": {
-      "filePath": "_layout/use-cases/news-aggregation.tsx",
-      "parent": "/_layout"
-    },
-    "/_layout/use-cases/product-data-extraction": {
-      "filePath": "_layout/use-cases/product-data-extraction.tsx",
-      "parent": "/_layout"
-    },
-    "/_layout/use-cases/real-estate-data-scraping": {
-      "filePath": "_layout/use-cases/real-estate-data-scraping.tsx",
-      "parent": "/_layout"
-    },
-    "/_layout/use-cases/social-media-monitoring": {
-      "filePath": "_layout/use-cases/social-media-monitoring.tsx",
-      "parent": "/_layout"
-    },
-    "/_layout/use-cases/travel-fare-aggregation": {
-      "filePath": "_layout/use-cases/travel-fare-aggregation.tsx",
       "parent": "/_layout"
     },
     "/_layout/resources/blogs/$path": {

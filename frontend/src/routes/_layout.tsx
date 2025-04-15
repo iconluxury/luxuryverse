@@ -120,15 +120,24 @@ function Layout() {
           }}
         >
           We use cookies to enhance your experience, analyze usage, and deliver ads. Learn more in our{" "}
-          <Link to="/cookie" style={{ color: theme.colors.red[500] || "#EF4444", textDecoration: "underline" }}>
+          <Link
+            to="/cookie"
+            style={{ color: theme.colors.red[500] || "#EF4444", textDecoration: "underline" }}
+          >
             Cookie Policy
           </Link>
           ,{" "}
-          <Link to="/privacy" style={{ color: theme.colors.red[500] || "#EF4444", textDecoration: "underline" }}>
+          <Link
+            to="/privacy"
+            style={{ color: theme.colors.red[500] || "#EF4444", textDecoration: "underline" }}
+          >
             Privacy Policy
           </Link>
           , or{" "}
-          <Link to="/terms" style={{ color: theme.colors.red[500] || "#EF4444", textDecoration: "underline" }}>
+          <Link
+            to="/terms"
+            style={{ color: theme.colors.red[500] || "#EF4444", textDecoration: "underline" }}
+          >
             Terms
           </Link>
           .
