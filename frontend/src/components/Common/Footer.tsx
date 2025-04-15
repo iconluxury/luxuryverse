@@ -46,9 +46,6 @@ const Footer = () => {
                 Explore
               </Heading>
               <HStack wrap="wrap" spacing={4} justify={{ base: "center", md: "flex-start" }}>
-                <Link href="/" color="gray.300" _hover={{ color: "red.600" }}>
-                  Home
-                </Link>
                 <Link href="/roadmap" color="gray.300" _hover={{ color: "red.600" }}>
                   Roadmap
                 </Link>
