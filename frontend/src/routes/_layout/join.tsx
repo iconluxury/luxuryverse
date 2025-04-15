@@ -36,7 +36,7 @@ function JoinPage() {
 
   // OAuth 2.0 config
   const clientId = 'N0p3ZG8yN3lWUFpWcUFXQjE4X206MTpjaQ';
-  const redirectUri = 'https://iconluxury.today/callback';
+  const redirectUri = 'https://psychic-space-goldfish-4jjjw7wp967xfqqj9-8000.app.github.dev/callback';
   const xAuthUrl = `https://api.x.com/2/oauth2/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&scope=users.read%20follows.write&state=state&code_challenge=challenge&code_challenge_method=plain`;
 
   // Sync wallet connection
