@@ -12,9 +12,9 @@ router = APIRouter(prefix="/x-auth", tags=["x-auth"])
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Hardcoded fallback credentials (use env vars in production)
-CONSUMER_KEY: Optional[str] = 'nAqr3o1snDvNZYV9pzCiwXiwu'
-CONSUMER_SECRET: Optional[str] = 'pPyWA12QAF2mbEHs28GhUIwga7oZFJ2xOakQ9maUMhIOAgDYpO'
+# Hardcoded fallback credentials (update with valid keys from X Developer Portal)
+CONSUMER_KEY: Optional[str] = 'nAqr3o1snDvNZYV9pzCiwXiwu'  # Replace with valid API Key
+CONSUMER_SECRET: Optional[str] = 'pPyWA12QAF2mbEHs28GhUIwga7oZFJ2xOakQ9maUMhIOAgDYpO'  # Replace with valid API Secret
 
 # In-memory storage for tokens (replace with database in production)
 token_storage = {}
@@ -35,7 +35,7 @@ async def request_token(state: str = None):
         logger.error("Missing consumer key or secret")
         raise HTTPException(status_code=500, detail="Server configuration error: Missing OAuth credentials")
 
-    callback_uri = "https://api.iconluxury.today/api/v1/x-auth/callback"  # Static callback URL
+    callback_uri = "https://api.iconluxury.today/api/v1/x-auth/callback"
     oauth = requests_oauthlib.OAuth1Session(
         client_key=CONSUMER_KEY,
         client_secret=CONSUMER_SECRET,
