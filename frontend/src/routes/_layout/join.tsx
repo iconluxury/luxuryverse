@@ -17,7 +17,7 @@ import {
 } from '@chakra-ui/react';
 import Footer from '../../components/Common/Footer';
 import theme from '../../theme';
-import { useState, useContext, useEffect, useRef } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { useAccount } from 'wagmi';
 import { AuthContext } from '../../components/Common/TopNav';
 import { OpenAPI } from '../../client';
@@ -35,13 +35,19 @@ function JoinPage() {
   const { user, setJoining, login } = useContext(AuthContext);
   const { address, isConnected } = useAccount();
 
-  const stateRef = useRef(Math.random().toString(36).substring(2));
+  const generateState = () => Math.random().toString(36).substring(2);
 
   const initiateXAuth = async () => {
     try {
-      const response = await fetch(`https://api.iconluxury.today/api/v1/x-auth/request-token?state=${stateRef.current}`);
+      const state = generateState();
+      sessionStorage.setItem('oauth_state', state); // Store state
+      const response = await fetch(`https://api.iconluxury.today/api/v1/x-auth/request-token?state=${state}`, {
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include'
+      });
       if (!response.ok) {
         const errorText = await response.text();
+        console.error('Request token response:', errorText);
         throw new Error(`Failed to fetch request token: ${response.status} - ${errorText}`);
       }
       const data = await response.json();
@@ -88,17 +94,20 @@ function JoinPage() {
         duration: 5000,
         isClosable: true,
       });
+      sessionStorage.removeItem('oauth_state');
       window.history.replaceState({}, document.title, window.location.pathname);
       return;
     }
 
-    if (twitter === '1' && userId && receivedState === stateRef.current) {
+    const storedState = sessionStorage.getItem('oauth_state');
+    if (twitter === '1' && userId && receivedState === storedState) {
       const fetchXProfile = async (retryCount = 3) => {
         try {
           console.log('Fetching user details for user_id:', userId);
           const response = await fetch(`https://api.iconluxury.today/api/v1/x-auth/user/${userId}`, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
+            credentials: 'include'
           });
           if (!response.ok) {
             const errorText = await response.text();
@@ -130,9 +139,21 @@ function JoinPage() {
             isClosable: true,
           });
         }
+        sessionStorage.removeItem('oauth_state');
         window.history.replaceState({}, document.title, window.location.pathname);
       };
       fetchXProfile();
+    } else if (twitter === '1' && userId && receivedState !== storedState) {
+      console.error('OAuth error: State mismatch', { receivedState, storedState });
+      toast({
+        title: 'X Auth Error',
+        description: 'State mismatch during authentication. Please try again.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
+      sessionStorage.removeItem('oauth_state');
+      window.history.replaceState({}, document.title, window.location.pathname);
     }
   }, [toast]);
 
