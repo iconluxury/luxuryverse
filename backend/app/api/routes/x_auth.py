@@ -13,7 +13,7 @@ class XAuthRequest(BaseModel):
 async def exchange_x_auth_code(request: XAuthRequest):
     print(f"Received request: {request}")  # Debug
     client_id = "N0p3ZG8yN3lWUFpWcUFXQjE4X206MTpjaQ"
-    client_secret = "SRDX4gnbXblA1hkWajWQad5GI7tcixCmPrcQYwlGZRTcW-RJVE"
+    client_secret = "lUJcdm90CTAnccrTq_evpwzxdZ-29wzNcregdiUNtOEolJuFNu"
 
     if not request.code or not request.redirect_uri:
         raise HTTPException(status_code=400, detail="Missing code or redirect_uri")
