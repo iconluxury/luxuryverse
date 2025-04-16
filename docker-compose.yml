@@ -72,7 +72,7 @@ services:
       - POSTGRES_PORT=${POSTGRES_PORT}
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER?Variable not set}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD? CAPITALIZED Variable not set}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD?Variable not set}
       - SENTRY_DSN=${SENTRY_DSN}
 
   backend:
@@ -108,7 +108,7 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD?Variable not set}
       - SENTRY_DSN=${SENTRY_DSN}
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/v1/utils/health-check/"]
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/utils/health-check/"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -118,9 +118,13 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=traefik-public"
       - "traefik.constraint-label=traefik-public"
+      # Updated API HTTP Router to use /api path prefix
       - "traefik.http.routers.api-http.rule=Host(`iconluxury.today`) && PathPrefix(`/api`)"
       - "traefik.http.routers.api-http.entrypoints=http"
       - "traefik.http.services.api-service.loadbalancer.server.port=8000"
+      # Optional: Strip the /api prefix when forwarding to the backend
+      - "traefik.http.routers.api-http.middlewares=api-stripprefix"
+      - "traefik.http.middlewares.api-stripprefix.stripprefix.prefixes=/api"
 
   frontend:
     image: "${DOCKER_IMAGE_FRONTEND?Variable not set}:${TAG-latest}"
@@ -136,7 +140,6 @@ services:
       - NGINX_PROXY_BUFFER_SIZE=128k
       - NGINX_PROXY_BUFFERS=4 256k
       - NGINX_LARGE_CLIENT_HEADER_BUFFERS=4 16k
-      - REACT_APP_API_BASE_URL=https://iconluxury.today
     labels:
       - traefik.enable=true
       - traefik.docker.network=traefik-public
