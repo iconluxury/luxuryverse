@@ -163,7 +163,7 @@ function JoinPage() {
         <p><strong>X Profile ID:</strong> ${userId || 'N/A'}</p>
         <p><strong>Wallet Address:</strong> ${address || 'N/A'}</p>
       `;
-      const response = await fetch('https://api.iconluxury.today/api/v1/send-email', {
+      const response = await fetch('https://api.iconluxury.today/api/v1/utils/send-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
