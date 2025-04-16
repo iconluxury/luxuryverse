@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import List
-from shopify_config import wrapper
+from app.core.shopify_config import wrapper
 import logging
 
 # Configure logging
