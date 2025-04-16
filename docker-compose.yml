@@ -144,7 +144,7 @@ services:
       - NGINX_PROXY_BUFFER_SIZE=128k
       - NGINX_PROXY_BUFFERS=4 256k
       - NGINX_LARGE_CLIENT_HEADER_BUFFERS=4 16k
-      - REACT_APP_API_BASE_URL=https://iconluxury.today
+      - API_BASE_URL=https://iconluxury.today
     labels:
       - traefik.enable=true
       - traefik.docker.network=traefik-public
