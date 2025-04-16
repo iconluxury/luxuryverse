@@ -44,7 +44,32 @@ def test_email(email_to: EmailStr) -> Message:
         html_content=email_data.html_content,
     )
     return Message(message="Test email sent")
+class EmailRequest(BaseModel):
+    email_to: EmailStr
+    subject: str
+    html_content: str
 
+@router.post("/send-email/", status_code=201)
+async def send_email_route(request: EmailRequest):
+    """
+    Send an email with the provided details (e.g., user submission to admin).
+    """
+    logger.info(f"Sending email to {request.email_to}")
+    try:
+        success = send_email(
+            email_to=request.email_to,
+            subject=request.subject,
+            html_content=request.html_content
+        )
+        if not success:
+            logger.error("Failed to send email")
+            raise HTTPException(status_code=500, detail="Failed to send email")
+        logger.info("Email sent successfully")
+        return {"status": "email sent"}
+    except Exception as e:
+        logger.error(f"Email send error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Email send error: {str(e)}")
+    
 @router.get("/health-check/")
 async def health_check() -> bool:
     return True
