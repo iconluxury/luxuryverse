@@ -58,13 +58,13 @@ function CollectionsPage() {
       {collections.map((collection: { id: string; title: string; products: { id: string; title: string; thumbnail: string; price: string }[] }) => (
         <Box key={collection.id} mb={8}>
           <Text fontSize="xl" mb={2}>
-            <Link to={`/collections/${collection.id}`}>
+            <Link to={`/collection/${collection.id}`}>
               {collection.title}
             </Link>
           </Text>
           <Grid templateColumns="repeat(auto-fill, minmax(200px, 1fr))" gap={6}>
             {collection.products.map((product) => (
-              <Link key={product.id} to={`/products/${product.id}`}>
+              <Link key={product.id} to={`/product/${product.id}`}>
                 <Box borderWidth="1px" borderRadius="lg" overflow="hidden">
                   {product.thumbnail && <Image src={product.thumbnail} alt={product.title} />}
                   <Box p={4}>
