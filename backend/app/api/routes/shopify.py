@@ -21,10 +21,13 @@ class Product(BaseModel):
     title: str
     thumbnail: str
     price: str
+    variants: List[str] = []  # Added for variant titles
 
 class Collection(BaseModel):
     id: str
     title: str
+    description: str
+    image: str
     products: List[Product]
 
 @products_router.get("/", response_model=List[Product])
@@ -33,7 +36,7 @@ async def get_products():
     Fetch a list of products from Shopify.
     """
     try:
-        products = wrapper.list_products(limit=5)  # Reduced limit to avoid rate limits
+        products = wrapper.list_products(limit=5)
         result = []
         for product in products:
             variants = product.get("variants", [])
@@ -45,7 +48,8 @@ async def get_products():
                     id=str(product["id"]),
                     title=product["title"],
                     thumbnail=product["images"][0]["src"] if product.get("images") else "",
-                    price=price
+                    price=price,
+                    variants=[v["title"] for v in variants]
                 )
             )
         return result
@@ -70,7 +74,8 @@ async def get_product(product_id: str):
             id=str(product["id"]),
             title=product["title"],
             thumbnail=product["images"][0]["src"] if product.get("images") else "",
-            price=price
+            price=price,
+            variants=[v["title"] for v in variants]
         )
     except Exception as e:
         logger.error(f"Failed to fetch product {product_id}: {e}")
@@ -82,15 +87,12 @@ async def get_collections():
     Fetch collections and their associated products from Shopify.
     """
     try:
-        collections = wrapper.list_collections(limit=3, collection_type="all")  # Reduced limit to avoid rate limits
+        collections = wrapper.list_collections(limit=3, collection_type="all")
         result = []
         for collection, collection_type in collections:
-            # Fetch full collection details
             try:
                 collection_details = wrapper.get_collection_details(collection["id"], collection_type=collection_type)
-                # Fetch product IDs from collection
-                collection_products = wrapper.list_collection_products(collection["id"], limit=3)  # Reduced limit
-                # Fetch full product details for each product
+                collection_products = wrapper.list_collection_products(collection["id"], limit=3)
                 products = []
                 for prod in collection_products:
                     try:
@@ -104,7 +106,8 @@ async def get_collections():
                                 id=str(full_product["id"]),
                                 title=full_product["title"],
                                 thumbnail=full_product["images"][0]["src"] if full_product.get("images") else "",
-                                price=price
+                                price=price,
+                                variants=[v["title"] for v in variants]
                             )
                         )
                     except requests.RequestException as e:
@@ -113,6 +116,8 @@ async def get_collections():
                     Collection(
                         id=str(collection_details["id"]),
                         title=collection_details["title"],
+                        description=collection_details.get("body_html", "No description"),
+                        image=collection_details.get("image", {}).get("src", ""),
                         products=products
                     )
                 )
@@ -122,6 +127,52 @@ async def get_collections():
     except Exception as e:
         logger.error(f"Failed to fetch collections: {e}")
         raise HTTPException(status_code=500, detail="Failed to fetch collections")
+
+@collections_router.get("/{collection_id}", response_model=Collection)
+async def get_collection(collection_id: str):
+    """
+    Fetch a single collection by ID from Shopify.
+    """
+    try:
+        # Try as custom collection first
+        try:
+            collection_details = wrapper.get_collection_details(int(collection_id), collection_type="custom")
+        except requests.RequestException as e:
+            # Fallback to smart collection
+            collection_details = wrapper.get_collection_details(int(collection_id), collection_type="smart")
+        
+        collection_products = wrapper.list_collection_products(int(collection_id), limit=10)
+        products = []
+        for prod in collection_products:
+            try:
+                full_product = wrapper.get_product_details(prod["id"])
+                variants = full_product.get("variants", [])
+                price = f"${variants[0]['price']}" if variants and len(variants) > 0 else "Contact for price"
+                if not variants:
+                    logger.warning(f"Product {full_product['id']} in collection {collection_id} has no variants")
+                products.append(
+                    Product(
+                        id=str(full_product["id"]),
+                        title=full_product["title"],
+                        thumbnail=full_product["images"][0]["src"] if full_product.get("images") else "",
+                        price=price,
+                        variants=[v["title"] for v in variants]
+                    )
+                )
+            except requests.RequestException as e:
+                logger.warning(f"Failed to fetch details for product {prod['id']} in collection {collection_id}: {e}")
+        return Collection(
+            id=str(collection_details["id"]),
+            title=collection_details["title"],
+            description=collection_details.get("body_html", "No description"),
+            image=collection_details.get("image", {}).get("src", ""),
+            products=products
+        )
+    except Exception as e:
+        logger.error(f"Failed to fetch collection {collection_id}: {e}")
+        if isinstance(e, requests.RequestException) and e.response and e.response.status_code == 404:
+            raise HTTPException(status_code=404, detail="Collection not found")
+        raise HTTPException(status_code=500, detail=f"Failed to fetch collection {collection_id}")
 
 # Include sub-routers in the main Shopify router
 shopify_router.include_router(products_router)
