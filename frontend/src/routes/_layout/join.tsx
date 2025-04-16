@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import {
   Box,
   Heading,
@@ -39,12 +39,12 @@ export const Route = createFileRoute('/_layout/join')({
 
 function JoinPage() {
   const toast = useToast();
+  const navigate = useNavigate(); // Added for navigation
   const [email, setEmail] = useState('');
   const [isEmailInvalid, setIsEmailInvalid] = useState(false);
   const [xProfile, setXProfile] = useState<XProfile | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
   const [isAuthInitiating, setIsAuthInitiating] = useState(false);
-  // CHANGED: Added isXConnected to disable button after connection
   const [isXConnected, setIsXConnected] = useState(false);
   const { user, setJoining, login } = useContext(AuthContext);
   const { address, isConnected } = useAccount();
@@ -105,7 +105,6 @@ function JoinPage() {
         const profile: XProfile = JSON.parse(storedProfile);
         setXProfile(profile);
         setUserId(storedUserId);
-        // CHANGED: Set isXConnected to true when profile loads
         setIsXConnected(true);
         toast({
           title: 'X Profile Connected',
@@ -185,6 +184,8 @@ function JoinPage() {
         isClosable: true,
       });
       setEmail('');
+      // Redirect to collections after successful submission
+      navigate({ to: '/collections' });
     } catch (error: any) {
       console.error('Email submission error:', error);
       toast({
@@ -246,7 +247,6 @@ function JoinPage() {
               Connect your X account to follow @LuxuryVerse and create your collectible profile.
             </Text>
             <Tooltip label={isXConnected ? 'X Profile Connected' : 'Connect your X account to follow @LuxuryVerse'}>
-              {/* CHANGED: Disabled button after connection with isXConnected */}
               <Button
                 onClick={initiateXAuth}
                 bg="yellow.400"
