@@ -26,7 +26,6 @@ function ProductsPage() {
               'Accept': 'application/json',
               'Content-Type': 'application/json',
             },
-            credentials: 'omit', // Avoid cookies to simplify CORS
           });
           
           clearTimeout(timeoutId);
