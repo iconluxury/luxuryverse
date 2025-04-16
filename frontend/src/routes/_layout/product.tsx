@@ -9,8 +9,10 @@ export const Route = createFileRoute('/_layout/product')({
 function ProductsPage() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const API_BASE_URL = process.env.API_BASE_URL || 'https://iconluxury.today';
+  const [error, setError] = useState(null);
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://iconluxury.today';
+
+  console.debug(`API_BASE_URL set to: ${API_BASE_URL}`);
 
   useEffect(() => {
     const fetchProducts = async (retryCount = 6, delay = 2000) => {
@@ -18,7 +20,7 @@ function ProductsPage() {
         try {
           console.debug(`Attempt ${attempt}: Fetching products from ${API_BASE_URL}/api/v1/products`);
           const controller = new AbortController();
-          const timeoutId = setTimeout(() => controller.abort(), 30000); // 30s timeout
+          const timeoutId = setTimeout(() => controller.abort(), 30000);
 
           const response = await fetch(`${API_BASE_URL}/api/v1/products`, {
             signal: controller.signal,
@@ -35,11 +37,13 @@ function ProductsPage() {
           console.debug(`Response status: ${response.status}, ok: ${response.ok}, headers: ${JSON.stringify(headers)}`);
 
           if (!response.ok) {
-            if (response.status === 502) {
-              throw new Error('Server error (502 Bad Gateway). The backend may be down or misconfigured.');
+            const text = await response.text();
+            console.error(`Non-OK response: ${text.slice(0, 200)}`);
+            if (response.status === 404) {
+              throw new Error('API endpoint not found. Check backend routes.');
             }
-            if (response.status === 0) {
-              throw new Error('No response received. Possible CORS policy block or network issue.');
+            if (response.status === 502) {
+              throw new Error('Server error (502 Bad Gateway).');
             }
             throw new Error(`HTTP error! status: ${response.status}`);
           }
@@ -49,22 +53,22 @@ function ProductsPage() {
           setProducts(data);
           setError(null);
           break;
-        } catch (err: any) {
+        } catch (err) {
           let errorMessage = err.message || 'Unknown error';
           if (err.name === 'AbortError') {
-              errorMessage = 'Request timed out after 30s.';
+            errorMessage = 'Request timed out after 30s.';
           } else if (err.message.includes('Failed to fetch')) {
-              errorMessage = 'Unable to connect: Possible DNS, CORS, or server issue.';
-          } else if (err.message.includes('ERR_NAME_NOT_RESOLVED')) {
-              errorMessage = 'DNS error: iconluxury.today could not be resolved.';
+            errorMessage = 'Unable to connect: Possible DNS, CORS, or server issue.';
+          } else if (err.message.includes('Unexpected token')) {
+            errorMessage = 'Invalid JSON response: Received HTML instead of JSON.';
           }
-          console.error(`Attempt ${attempt} failed: ${errorMessage}`, err);
+          console.error(`Attempt ${attempt} failed: ${errorMessage}`, err, { stack: err.stack });
           if (attempt === retryCount) {
-              setError(`Failed to load products: ${errorMessage}`);
+            setError(`Failed to load products: ${errorMessage}`);
           } else {
-              await new Promise(resolve => setTimeout(resolve, delay * attempt));
+            await new Promise(resolve => setTimeout(resolve, delay * attempt));
           }
-      } finally {
+        } finally {
           if (attempt === retryCount || !error) {
             setLoading(false);
           }
@@ -113,7 +117,7 @@ function ProductsPage() {
         Go to Collections
       </Link>
       <Grid templateColumns="repeat(auto-fill, minmax(200px, 1fr))" gap={6}>
-        {products.map((product: { id: string; title: string; thumbnail: string; price: string }) => (
+        {products.map((product) => (
           <Link key={product.id} to={`/product/${product.id}`}>
             <Box borderWidth="1px" borderRadius="lg" overflow="hidden" bg="white" color="gray.900">
               {product.thumbnail ? (
