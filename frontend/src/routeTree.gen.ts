@@ -24,8 +24,8 @@ import { Route as LayoutCookieImport } from './routes/_layout/cookie'
 import { Route as LayoutCollectionsImport } from './routes/_layout/collections'
 import { Route as LayoutAuthCompleteImport } from './routes/_layout/auth-complete'
 import { Route as LayoutResourcesBlogImport } from './routes/_layout/resources/blog'
-import { Route as LayoutProductProductDetailsImport } from './routes/_layout/product/ProductDetails'
-import { Route as LayoutCollectionCollectionDetailsImport } from './routes/_layout/collection/CollectionDetails'
+import { Route as LayoutProductsProductDetailsImport } from './routes/_layout/products/ProductDetails'
+import { Route as LayoutCollectionsCollectionDetailsImport } from './routes/_layout/collections/CollectionDetails'
 import { Route as LayoutResourcesBlogsPathImport } from './routes/_layout/resources/blogs/$path'
 
 // Create/Update Routes
@@ -107,18 +107,18 @@ const LayoutResourcesBlogRoute = LayoutResourcesBlogImport.update({
   getParentRoute: () => LayoutRoute,
 } as any)
 
-const LayoutProductProductDetailsRoute =
-  LayoutProductProductDetailsImport.update({
-    id: '/ProductDetails',
-    path: '/ProductDetails',
-    getParentRoute: () => LayoutProductRoute,
+const LayoutProductsProductDetailsRoute =
+  LayoutProductsProductDetailsImport.update({
+    id: '/products/ProductDetails',
+    path: '/products/ProductDetails',
+    getParentRoute: () => LayoutRoute,
   } as any)
 
-const LayoutCollectionCollectionDetailsRoute =
-  LayoutCollectionCollectionDetailsImport.update({
-    id: '/collection/CollectionDetails',
-    path: '/collection/CollectionDetails',
-    getParentRoute: () => LayoutRoute,
+const LayoutCollectionsCollectionDetailsRoute =
+  LayoutCollectionsCollectionDetailsImport.update({
+    id: '/CollectionDetails',
+    path: '/CollectionDetails',
+    getParentRoute: () => LayoutCollectionsRoute,
   } as any)
 
 const LayoutResourcesBlogsPathRoute = LayoutResourcesBlogsPathImport.update({
@@ -215,19 +215,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutIndexImport
       parentRoute: typeof LayoutImport
     }
-    '/_layout/collection/CollectionDetails': {
-      id: '/_layout/collection/CollectionDetails'
-      path: '/collection/CollectionDetails'
-      fullPath: '/collection/CollectionDetails'
-      preLoaderRoute: typeof LayoutCollectionCollectionDetailsImport
-      parentRoute: typeof LayoutImport
+    '/_layout/collections/CollectionDetails': {
+      id: '/_layout/collections/CollectionDetails'
+      path: '/CollectionDetails'
+      fullPath: '/collections/CollectionDetails'
+      preLoaderRoute: typeof LayoutCollectionsCollectionDetailsImport
+      parentRoute: typeof LayoutCollectionsImport
     }
-    '/_layout/product/ProductDetails': {
-      id: '/_layout/product/ProductDetails'
-      path: '/ProductDetails'
-      fullPath: '/product/ProductDetails'
-      preLoaderRoute: typeof LayoutProductProductDetailsImport
-      parentRoute: typeof LayoutProductImport
+    '/_layout/products/ProductDetails': {
+      id: '/_layout/products/ProductDetails'
+      path: '/products/ProductDetails'
+      fullPath: '/products/ProductDetails'
+      preLoaderRoute: typeof LayoutProductsProductDetailsImport
+      parentRoute: typeof LayoutImport
     }
     '/_layout/resources/blog': {
       id: '/_layout/resources/blog'
@@ -248,49 +248,48 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
-interface LayoutProductRouteChildren {
-  LayoutProductProductDetailsRoute: typeof LayoutProductProductDetailsRoute
+interface LayoutCollectionsRouteChildren {
+  LayoutCollectionsCollectionDetailsRoute: typeof LayoutCollectionsCollectionDetailsRoute
 }
 
-const LayoutProductRouteChildren: LayoutProductRouteChildren = {
-  LayoutProductProductDetailsRoute: LayoutProductProductDetailsRoute,
+const LayoutCollectionsRouteChildren: LayoutCollectionsRouteChildren = {
+  LayoutCollectionsCollectionDetailsRoute:
+    LayoutCollectionsCollectionDetailsRoute,
 }
 
-const LayoutProductRouteWithChildren = LayoutProductRoute._addFileChildren(
-  LayoutProductRouteChildren,
-)
+const LayoutCollectionsRouteWithChildren =
+  LayoutCollectionsRoute._addFileChildren(LayoutCollectionsRouteChildren)
 
 interface LayoutRouteChildren {
   LayoutAuthCompleteRoute: typeof LayoutAuthCompleteRoute
-  LayoutCollectionsRoute: typeof LayoutCollectionsRoute
+  LayoutCollectionsRoute: typeof LayoutCollectionsRouteWithChildren
   LayoutCookieRoute: typeof LayoutCookieRoute
   LayoutDemoRequestRoute: typeof LayoutDemoRequestRoute
   LayoutDoNotSellRoute: typeof LayoutDoNotSellRoute
   LayoutJoinRoute: typeof LayoutJoinRoute
   LayoutPrivacyRoute: typeof LayoutPrivacyRoute
   LayoutPrivacyRequestRoute: typeof LayoutPrivacyRequestRoute
-  LayoutProductRoute: typeof LayoutProductRouteWithChildren
+  LayoutProductRoute: typeof LayoutProductRoute
   LayoutTermsRoute: typeof LayoutTermsRoute
   LayoutIndexRoute: typeof LayoutIndexRoute
-  LayoutCollectionCollectionDetailsRoute: typeof LayoutCollectionCollectionDetailsRoute
+  LayoutProductsProductDetailsRoute: typeof LayoutProductsProductDetailsRoute
   LayoutResourcesBlogRoute: typeof LayoutResourcesBlogRoute
   LayoutResourcesBlogsPathRoute: typeof LayoutResourcesBlogsPathRoute
 }
 
 const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutAuthCompleteRoute: LayoutAuthCompleteRoute,
-  LayoutCollectionsRoute: LayoutCollectionsRoute,
+  LayoutCollectionsRoute: LayoutCollectionsRouteWithChildren,
   LayoutCookieRoute: LayoutCookieRoute,
   LayoutDemoRequestRoute: LayoutDemoRequestRoute,
   LayoutDoNotSellRoute: LayoutDoNotSellRoute,
   LayoutJoinRoute: LayoutJoinRoute,
   LayoutPrivacyRoute: LayoutPrivacyRoute,
   LayoutPrivacyRequestRoute: LayoutPrivacyRequestRoute,
-  LayoutProductRoute: LayoutProductRouteWithChildren,
+  LayoutProductRoute: LayoutProductRoute,
   LayoutTermsRoute: LayoutTermsRoute,
   LayoutIndexRoute: LayoutIndexRoute,
-  LayoutCollectionCollectionDetailsRoute:
-    LayoutCollectionCollectionDetailsRoute,
+  LayoutProductsProductDetailsRoute: LayoutProductsProductDetailsRoute,
   LayoutResourcesBlogRoute: LayoutResourcesBlogRoute,
   LayoutResourcesBlogsPathRoute: LayoutResourcesBlogsPathRoute,
 }
@@ -301,36 +300,36 @@ const LayoutRouteWithChildren =
 export interface FileRoutesByFullPath {
   '': typeof LayoutRouteWithChildren
   '/auth-complete': typeof LayoutAuthCompleteRoute
-  '/collections': typeof LayoutCollectionsRoute
+  '/collections': typeof LayoutCollectionsRouteWithChildren
   '/cookie': typeof LayoutCookieRoute
   '/demo-request': typeof LayoutDemoRequestRoute
   '/do-not-sell': typeof LayoutDoNotSellRoute
   '/join': typeof LayoutJoinRoute
   '/privacy': typeof LayoutPrivacyRoute
   '/privacy-request': typeof LayoutPrivacyRequestRoute
-  '/product': typeof LayoutProductRouteWithChildren
+  '/product': typeof LayoutProductRoute
   '/terms': typeof LayoutTermsRoute
   '/': typeof LayoutIndexRoute
-  '/collection/CollectionDetails': typeof LayoutCollectionCollectionDetailsRoute
-  '/product/ProductDetails': typeof LayoutProductProductDetailsRoute
+  '/collections/CollectionDetails': typeof LayoutCollectionsCollectionDetailsRoute
+  '/products/ProductDetails': typeof LayoutProductsProductDetailsRoute
   '/resources/blog': typeof LayoutResourcesBlogRoute
   '/resources/blogs/$path': typeof LayoutResourcesBlogsPathRoute
 }
 
 export interface FileRoutesByTo {
   '/auth-complete': typeof LayoutAuthCompleteRoute
-  '/collections': typeof LayoutCollectionsRoute
+  '/collections': typeof LayoutCollectionsRouteWithChildren
   '/cookie': typeof LayoutCookieRoute
   '/demo-request': typeof LayoutDemoRequestRoute
   '/do-not-sell': typeof LayoutDoNotSellRoute
   '/join': typeof LayoutJoinRoute
   '/privacy': typeof LayoutPrivacyRoute
   '/privacy-request': typeof LayoutPrivacyRequestRoute
-  '/product': typeof LayoutProductRouteWithChildren
+  '/product': typeof LayoutProductRoute
   '/terms': typeof LayoutTermsRoute
   '/': typeof LayoutIndexRoute
-  '/collection/CollectionDetails': typeof LayoutCollectionCollectionDetailsRoute
-  '/product/ProductDetails': typeof LayoutProductProductDetailsRoute
+  '/collections/CollectionDetails': typeof LayoutCollectionsCollectionDetailsRoute
+  '/products/ProductDetails': typeof LayoutProductsProductDetailsRoute
   '/resources/blog': typeof LayoutResourcesBlogRoute
   '/resources/blogs/$path': typeof LayoutResourcesBlogsPathRoute
 }
@@ -339,18 +338,18 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/_layout': typeof LayoutRouteWithChildren
   '/_layout/auth-complete': typeof LayoutAuthCompleteRoute
-  '/_layout/collections': typeof LayoutCollectionsRoute
+  '/_layout/collections': typeof LayoutCollectionsRouteWithChildren
   '/_layout/cookie': typeof LayoutCookieRoute
   '/_layout/demo-request': typeof LayoutDemoRequestRoute
   '/_layout/do-not-sell': typeof LayoutDoNotSellRoute
   '/_layout/join': typeof LayoutJoinRoute
   '/_layout/privacy': typeof LayoutPrivacyRoute
   '/_layout/privacy-request': typeof LayoutPrivacyRequestRoute
-  '/_layout/product': typeof LayoutProductRouteWithChildren
+  '/_layout/product': typeof LayoutProductRoute
   '/_layout/terms': typeof LayoutTermsRoute
   '/_layout/': typeof LayoutIndexRoute
-  '/_layout/collection/CollectionDetails': typeof LayoutCollectionCollectionDetailsRoute
-  '/_layout/product/ProductDetails': typeof LayoutProductProductDetailsRoute
+  '/_layout/collections/CollectionDetails': typeof LayoutCollectionsCollectionDetailsRoute
+  '/_layout/products/ProductDetails': typeof LayoutProductsProductDetailsRoute
   '/_layout/resources/blog': typeof LayoutResourcesBlogRoute
   '/_layout/resources/blogs/$path': typeof LayoutResourcesBlogsPathRoute
 }
@@ -370,8 +369,8 @@ export interface FileRouteTypes {
     | '/product'
     | '/terms'
     | '/'
-    | '/collection/CollectionDetails'
-    | '/product/ProductDetails'
+    | '/collections/CollectionDetails'
+    | '/products/ProductDetails'
     | '/resources/blog'
     | '/resources/blogs/$path'
   fileRoutesByTo: FileRoutesByTo
@@ -387,8 +386,8 @@ export interface FileRouteTypes {
     | '/product'
     | '/terms'
     | '/'
-    | '/collection/CollectionDetails'
-    | '/product/ProductDetails'
+    | '/collections/CollectionDetails'
+    | '/products/ProductDetails'
     | '/resources/blog'
     | '/resources/blogs/$path'
   id:
@@ -405,8 +404,8 @@ export interface FileRouteTypes {
     | '/_layout/product'
     | '/_layout/terms'
     | '/_layout/'
-    | '/_layout/collection/CollectionDetails'
-    | '/_layout/product/ProductDetails'
+    | '/_layout/collections/CollectionDetails'
+    | '/_layout/products/ProductDetails'
     | '/_layout/resources/blog'
     | '/_layout/resources/blogs/$path'
   fileRoutesById: FileRoutesById
@@ -447,7 +446,7 @@ export const routeTree = rootRoute
         "/_layout/product",
         "/_layout/terms",
         "/_layout/",
-        "/_layout/collection/CollectionDetails",
+        "/_layout/products/ProductDetails",
         "/_layout/resources/blog",
         "/_layout/resources/blogs/$path"
       ]
@@ -458,7 +457,10 @@ export const routeTree = rootRoute
     },
     "/_layout/collections": {
       "filePath": "_layout/collections.tsx",
-      "parent": "/_layout"
+      "parent": "/_layout",
+      "children": [
+        "/_layout/collections/CollectionDetails"
+      ]
     },
     "/_layout/cookie": {
       "filePath": "_layout/cookie.tsx",
@@ -486,10 +488,7 @@ export const routeTree = rootRoute
     },
     "/_layout/product": {
       "filePath": "_layout/product.tsx",
-      "parent": "/_layout",
-      "children": [
-        "/_layout/product/ProductDetails"
-      ]
+      "parent": "/_layout"
     },
     "/_layout/terms": {
       "filePath": "_layout/terms.tsx",
@@ -499,13 +498,13 @@ export const routeTree = rootRoute
       "filePath": "_layout/index.tsx",
       "parent": "/_layout"
     },
-    "/_layout/collection/CollectionDetails": {
-      "filePath": "_layout/collection/CollectionDetails.tsx",
-      "parent": "/_layout"
+    "/_layout/collections/CollectionDetails": {
+      "filePath": "_layout/collections/CollectionDetails.tsx",
+      "parent": "/_layout/collections"
     },
-    "/_layout/product/ProductDetails": {
-      "filePath": "_layout/product/ProductDetails.tsx",
-      "parent": "/_layout/product"
+    "/_layout/products/ProductDetails": {
+      "filePath": "_layout/products/ProductDetails.tsx",
+      "parent": "/_layout"
     },
     "/_layout/resources/blog": {
       "filePath": "_layout/resources/blog.tsx",

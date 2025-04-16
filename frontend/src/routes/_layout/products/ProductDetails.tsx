@@ -4,7 +4,7 @@ import { createFileRoute, useParams, Link } from "@tanstack/react-router";
 import { TimeIcon } from "@chakra-ui/icons";
 import Footer from "../../../components/Common/Footer";
 
-export const Route = createFileRoute('/_layout/products/$id')({
+export const Route = createFileRoute('/_layout/products/ProductDetails')({
   component: ProductDetails,
 });
 
