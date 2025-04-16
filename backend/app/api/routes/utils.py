@@ -11,7 +11,7 @@ from datetime import datetime
 
 import uuid
 
-router = APIRouter(prefix="/utils", tags=["utils"])
+router = APIRouter()
 
 logger = logging.getLogger(__name__)
 
