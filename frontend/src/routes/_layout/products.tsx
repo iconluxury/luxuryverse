@@ -10,31 +10,40 @@ function ProductsPage() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const API_BASE_URL =  'https://api.iconluxury.today';
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://api.iconluxury.today';
 
   useEffect(() => {
-    const fetchProducts = async (retryCount = 5, delay = 2000) => {
+    const fetchProducts = async (retryCount = 6, delay = 2000) => {
       for (let attempt = 1; attempt <= retryCount; attempt++) {
         try {
           console.debug(`Attempt ${attempt}: Fetching products from ${API_BASE_URL}/api/v1/products`);
           const controller = new AbortController();
-          const timeoutId = setTimeout(() => controller.abort(), 20000);
-          
+          const timeoutId = setTimeout(() => controller.abort(), 30000); // 30s timeout
+
           const response = await fetch(`${API_BASE_URL}/api/v1/products`, {
             signal: controller.signal,
+            method: 'GET',
             headers: {
               'Accept': 'application/json',
               'Content-Type': 'application/json',
             },
+            credentials: 'omit',
           });
-          
+
           clearTimeout(timeoutId);
-          console.debug(`Response status: ${response.status}, ok: ${response.ok}`);
-          
+          const headers = Object.fromEntries(response.headers.entries());
+          console.debug(`Response status: ${response.status}, ok: ${response.ok}, headers: ${JSON.stringify(headers)}`);
+
           if (!response.ok) {
+            if (response.status === 502) {
+              throw new Error('Server error (502 Bad Gateway). The backend may be down or misconfigured.');
+            }
+            if (response.status === 0) {
+              throw new Error('No response received. Possible CORS policy block or network issue.');
+            }
             throw new Error(`HTTP error! status: ${response.status}`);
           }
-          
+
           const data = await response.json();
           console.debug(`Fetched ${data.length} products`);
           setProducts(data);
@@ -44,10 +53,13 @@ function ProductsPage() {
           const errorMessage = `Attempt ${attempt} failed: ${err.message || 'Unknown error'}`;
           console.error(errorMessage);
           if (err.name === 'AbortError') {
-            console.error('Fetch aborted due to timeout');
+            err.message = 'Request timed out after 30s. Please check the backend server status or your network.';
+          }
+          if (err.message.includes('Failed to fetch')) {
+            err.message = 'Unable to connect: Possible CORS issue, server downtime, or network error. Check console for details.';
           }
           if (attempt === retryCount) {
-            setError(`Failed to load products: ${err.message || 'Network error (possible CORS or server issue)'}`);
+            setError(`Failed to load products: ${err.message || 'Unable to connect to the server.'}`);
           } else {
             await new Promise(resolve => setTimeout(resolve, delay * attempt));
           }
@@ -75,9 +87,10 @@ function ProductsPage() {
       <Box textAlign="center" py={16} color="red.500">
         <Text fontSize="lg">{error}</Text>
         <Text fontSize="sm" mt={2}>
-          Please check your network connection, ensure the backend is running, or try again later.
-          <br />
-          If the issue persists, contact support@iconluxury.today.
+          Please check your network connection, ensure the backend is running, or contact{' '}
+          <a href="mailto:support@iconluxury.today" style={{ color: '#3182CE' }}>
+            support@iconluxury.today
+          </a>.
         </Text>
         <Button
           mt={4}
