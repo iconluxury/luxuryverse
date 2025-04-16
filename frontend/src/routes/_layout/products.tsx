@@ -13,30 +13,42 @@ function ProductsPage() {
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://api.iconluxury.today';
 
   useEffect(() => {
-    const fetchProducts = async (retryCount = 3, delay = 2000) => {
+    const fetchProducts = async (retryCount = 5, delay = 2000) => {
       for (let attempt = 1; attempt <= retryCount; attempt++) {
         try {
+          console.debug(`Attempt ${attempt}: Fetching products from ${API_BASE_URL}/api/v1/products`);
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 20000);
+          
           const response = await fetch(`${API_BASE_URL}/api/v1/products`, {
-            timeout: 15000, // Increased timeout
+            signal: controller.signal,
             headers: {
               'Accept': 'application/json',
+              'Content-Type': 'application/json',
             },
+            credentials: 'omit', // Avoid cookies to simplify CORS
           });
-          if (response.status === 0) {
-            throw new Error('Network error: No response received');
-          }
+          
+          clearTimeout(timeoutId);
+          console.debug(`Response status: ${response.status}, ok: ${response.ok}`);
+          
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
           }
+          
           const data = await response.json();
+          console.debug(`Fetched ${data.length} products`);
           setProducts(data);
           setError(null);
           break;
-        } catch (err) {
-          const errorMessage = `Attempt ${attempt} failed: ${(err as Error).message}`;
+        } catch (err: any) {
+          const errorMessage = `Attempt ${attempt} failed: ${err.message || 'Unknown error'}`;
           console.error(errorMessage);
+          if (err.name === 'AbortError') {
+            console.error('Fetch aborted due to timeout');
+          }
           if (attempt === retryCount) {
-            setError(`Failed to load products: ${(err as Error).message}`);
+            setError(`Failed to load products: ${err.message || 'Network error (possible CORS or server issue)'}`);
           } else {
             await new Promise(resolve => setTimeout(resolve, delay * attempt));
           }
@@ -65,6 +77,8 @@ function ProductsPage() {
         <Text fontSize="lg">{error}</Text>
         <Text fontSize="sm" mt={2}>
           Please check your network connection, ensure the backend is running, or try again later.
+          <br />
+          If the issue persists, contact support@iconluxury.today.
         </Text>
         <Button
           mt={4}
