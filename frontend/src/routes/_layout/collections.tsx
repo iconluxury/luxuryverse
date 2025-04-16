@@ -10,7 +10,7 @@ function CollectionsPage() {
   const [collections, setCollections] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const API_BASE_URL = process.env.API_BASE_URL || 'https://api.iconluxury.today';
+  const API_BASE_URL = process.env.API_BASE_URL || 'https://iconluxury.today';
 
   useEffect(() => {
     const fetchCollections = async (retryCount = 6, delay = 2000) => {
