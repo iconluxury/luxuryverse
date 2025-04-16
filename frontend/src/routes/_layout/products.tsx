@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Box, Text, Image, Grid } from '@chakra-ui/react';
+import { Box, Text, Image, Grid, Spinner, Flex } from '@chakra-ui/react';
 import { createFileRoute, Link } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/_layout/products')({
@@ -31,11 +31,22 @@ function ProductsPage() {
   }, []);
 
   if (loading) {
-    return <Box>Loading...</Box>;
+    return (
+      <Flex justify="center" align="center" minH="100vh">
+        <Spinner size="xl" color="red.500" />
+      </Flex>
+    );
   }
 
   if (error) {
-    return <Box color="red.500">{error}</Box>;
+    return (
+      <Box textAlign="center" py={16} color="red.500">
+        <Text fontSize="lg">{error}</Text>
+        <Text fontSize="sm" mt={2}>
+          Please check if the backend server is running or try again later.
+        </Text>
+      </Box>
+    );
   }
 
   return (
@@ -46,13 +57,15 @@ function ProductsPage() {
       </Link>
       <Grid templateColumns="repeat(auto-fill, minmax(200px, 1fr))" gap={6}>
         {products.map((product: { id: string; title: string; thumbnail: string; price: string }) => (
-          <Box key={product.id} borderWidth="1px" borderRadius="lg" overflow="hidden">
-            {product.thumbnail && <Image src={product.thumbnail} alt={product.title} />}
-            <Box p={4}>
-              <Text fontWeight="bold">{product.title}</Text>
-              <Text>{product.price}</Text>
+          <Link key={product.id} to={`/products/${product.id}`}>
+            <Box borderWidth="1px" borderRadius="lg" overflow="hidden">
+              {product.thumbnail && <Image src={product.thumbnail} alt={product.title} />}
+              <Box p={4}>
+                <Text fontWeight="bold">{product.title}</Text>
+                <Text>{product.price}</Text>
+              </Box>
             </Box>
-          </Box>
+          </Link>
         ))}
       </Grid>
     </Box>
