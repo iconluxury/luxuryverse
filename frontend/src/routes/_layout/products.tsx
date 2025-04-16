@@ -10,7 +10,7 @@ function ProductsPage() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const API_BASE_URL = 'https://api.iconluxury.today'; // Configurable API URL
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://api.iconluxury.today';
 
   useEffect(() => {
     const fetchProducts = async (retryCount = 3, delay = 1000) => {
@@ -41,7 +41,7 @@ function ProductsPage() {
     };
 
     fetchProducts();
-  }, [error]);
+  }, []);
 
   if (loading) {
     return (
