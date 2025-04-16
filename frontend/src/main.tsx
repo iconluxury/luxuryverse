@@ -11,7 +11,7 @@ import { WagmiProvider } from 'wagmi';
 import { AuthProvider } from './components/Common/TopNav';
 import { wagmiConfig, queryClient } from './client/core/appkit';
 
-OpenAPI.BASE = 'https://apis.iconluxury.today';
+OpenAPI.BASE = 'https://iconluxury.today';
 OpenAPI.TOKEN = async () => localStorage.getItem('access_token') || '';
 
 const router = createRouter({ routeTree });
