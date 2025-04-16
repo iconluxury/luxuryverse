@@ -25,11 +25,11 @@ function ProductsPage() {
 
       for (let attempt = 1; attempt <= retryCount; attempt++) {
         try {
-          logDebug(`Attempt ${attempt}: Fetching products from ${API_BASE_URL}/api/v1/products?page=${page}`);
+          logDebug(`Attempt ${attempt}: Fetching products from ${API_BASE_URL}/api/v1/products`);
           const controller = new AbortController();
           const timeoutId = setTimeout(() => controller.abort(), 15000);
 
-          const response = await fetch(`${API_BASE_URL}/api/v1/products?page=${page}&limit=20`, {
+          const response = await fetch(`${API_BASE_URL}/api/v1/products`, {
             signal: controller.signal,
             method: 'GET',
             headers: {
