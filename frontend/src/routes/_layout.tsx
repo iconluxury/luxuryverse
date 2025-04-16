@@ -55,15 +55,15 @@ function Layout() {
       {!consentGiven && (
         <CookieConsent
           location="top"
-          buttonText="Accept"
-          declineButtonText="Decline"
+          buttonText="Yes, I accept"
+          declineButtonText="No, I decline"
           cookieName="luxuryverse-consent"
           enableDeclineButton
           style={{
             background: theme.colors.gray[800] || "#1F2937",
             color: theme.colors.white || "#FFFFFF",
-            padding: "16px",
-            fontSize: "14px",
+            padding: "8px",
+            fontSize: "12px",
             zIndex: 9999,
           }}
           buttonStyle={{
