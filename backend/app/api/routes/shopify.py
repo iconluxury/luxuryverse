@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-from typing import List
+from typing import List, Optional
 from app.core.shopify_config import wrapper
 import logging
 import requests
@@ -27,7 +27,7 @@ class Product(BaseModel):
 class Collection(BaseModel):
     id: str
     title: str
-    description: str
+    description: Optional[str] = ""  # Allow None, default to empty string
     image: str
     products: List[Product]
 
@@ -53,6 +53,7 @@ async def get_products():
                     variants=[v["title"] for v in variants]
                 )
             )
+        logger.info(f"Fetched {len(result)} products")
         return result
     except Exception as e:
         logger.error(f"Failed to fetch products: {e}")
@@ -71,13 +72,15 @@ async def get_product(product_id: str):
         price = f"${variants[0]['price']}" if variants and len(variants) > 0 else "Contact for price"
         if not variants:
             logger.warning(f"Product {product['id']} has no variants")
-        return Product(
+        result = Product(
             id=str(product["id"]),
             title=product["title"],
             thumbnail=product["images"][0]["src"] if product.get("images") else "",
             price=price,
             variants=[v["title"] for v in variants]
         )
+        logger.info(f"Fetched product {product_id}")
+        return result
     except Exception as e:
         logger.error(f"Failed to fetch product {product_id}: {e}")
         raise HTTPException(status_code=500, detail=f"Failed to fetch product {product_id}")
@@ -120,13 +123,14 @@ async def get_collections():
                     Collection(
                         id=str(collection_details["id"]),
                         title=collection_details["title"],
-                        description=collection_details.get("body_html", "No description"),
+                        description=collection_details.get("body_html", "") or "",  # Ensure string
                         image=collection_details.get("image", {}).get("src", ""),
                         products=products
                     )
                 )
             except requests.RequestException as e:
                 logger.warning(f"Failed to fetch details for collection {collection['id']}: {e}")
+        logger.info(f"Fetched {len(result)} collections")
         return result
     except Exception as e:
         logger.error(f"Failed to fetch collections: {e}")
@@ -163,13 +167,15 @@ async def get_collection(collection_id: str):
                 )
             except requests.RequestException as e:
                 logger.warning(f"Failed to fetch details for product {prod['id']} in collection {collection_id}: {e}")
-        return Collection(
+        result = Collection(
             id=str(collection_details["id"]),
             title=collection_details["title"],
-            description=collection_details.get("body_html", "No description"),
+            description=collection_details.get("body_html", "") or "",  # Ensure string
             image=collection_details.get("image", {}).get("src", ""),
             products=products
         )
+        logger.info(f"Fetched collection {collection_id}")
+        return result
     except Exception as e:
         logger.error(f"Failed to fetch collection {collection_id}: {e}")
         if isinstance(e, requests.RequestException) and e.response and e.response.status_code == 404:
