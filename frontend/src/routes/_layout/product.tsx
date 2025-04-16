@@ -113,7 +113,7 @@ function ProductsPage() {
       </Link>
       <Grid templateColumns="repeat(auto-fill, minmax(200px, 1fr))" gap={6}>
         {products.map((product: { id: string; title: string; thumbnail: string; price: string }) => (
-          <Link key={product.id} to={`/products/${product.id}`}>
+          <Link key={product.id} to={`/product/${product.id}`}>
             <Box borderWidth="1px" borderRadius="lg" overflow="hidden" bg="white" color="gray.900">
               {product.thumbnail ? (
                 <Image src={product.thumbnail} alt={product.title} />

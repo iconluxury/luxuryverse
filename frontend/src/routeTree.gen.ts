@@ -14,7 +14,7 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as LayoutImport } from './routes/_layout'
 import { Route as LayoutIndexImport } from './routes/_layout/index'
 import { Route as LayoutTermsImport } from './routes/_layout/terms'
-import { Route as LayoutProductsImport } from './routes/_layout/product'
+import { Route as LayoutProductImport } from './routes/_layout/product'
 import { Route as LayoutPrivacyRequestImport } from './routes/_layout/privacy-request'
 import { Route as LayoutPrivacyImport } from './routes/_layout/privacy'
 import { Route as LayoutJoinImport } from './routes/_layout/join'
@@ -47,9 +47,9 @@ const LayoutTermsRoute = LayoutTermsImport.update({
   getParentRoute: () => LayoutRoute,
 } as any)
 
-const LayoutProductsRoute = LayoutProductsImport.update({
-  id: '/products',
-  path: '/products',
+const LayoutProductRoute = LayoutProductImport.update({
+  id: '/product',
+  path: '/product',
   getParentRoute: () => LayoutRoute,
 } as any)
 
@@ -109,9 +109,9 @@ const LayoutResourcesBlogRoute = LayoutResourcesBlogImport.update({
 
 const LayoutProductProductDetailsRoute =
   LayoutProductProductDetailsImport.update({
-    id: '/product/ProductDetails',
-    path: '/product/ProductDetails',
-    getParentRoute: () => LayoutRoute,
+    id: '/ProductDetails',
+    path: '/ProductDetails',
+    getParentRoute: () => LayoutProductRoute,
   } as any)
 
 const LayoutCollectionCollectionDetailsRoute =
@@ -194,11 +194,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutPrivacyRequestImport
       parentRoute: typeof LayoutImport
     }
-    '/_layout/products': {
-      id: '/_layout/products'
-      path: '/products'
-      fullPath: '/products'
-      preLoaderRoute: typeof LayoutProductsImport
+    '/_layout/product': {
+      id: '/_layout/product'
+      path: '/product'
+      fullPath: '/product'
+      preLoaderRoute: typeof LayoutProductImport
       parentRoute: typeof LayoutImport
     }
     '/_layout/terms': {
@@ -224,10 +224,10 @@ declare module '@tanstack/react-router' {
     }
     '/_layout/product/ProductDetails': {
       id: '/_layout/product/ProductDetails'
-      path: '/product/ProductDetails'
+      path: '/ProductDetails'
       fullPath: '/product/ProductDetails'
       preLoaderRoute: typeof LayoutProductProductDetailsImport
-      parentRoute: typeof LayoutImport
+      parentRoute: typeof LayoutProductImport
     }
     '/_layout/resources/blog': {
       id: '/_layout/resources/blog'
@@ -248,6 +248,18 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
+interface LayoutProductRouteChildren {
+  LayoutProductProductDetailsRoute: typeof LayoutProductProductDetailsRoute
+}
+
+const LayoutProductRouteChildren: LayoutProductRouteChildren = {
+  LayoutProductProductDetailsRoute: LayoutProductProductDetailsRoute,
+}
+
+const LayoutProductRouteWithChildren = LayoutProductRoute._addFileChildren(
+  LayoutProductRouteChildren,
+)
+
 interface LayoutRouteChildren {
   LayoutAuthCompleteRoute: typeof LayoutAuthCompleteRoute
   LayoutCollectionsRoute: typeof LayoutCollectionsRoute
@@ -257,11 +269,10 @@ interface LayoutRouteChildren {
   LayoutJoinRoute: typeof LayoutJoinRoute
   LayoutPrivacyRoute: typeof LayoutPrivacyRoute
   LayoutPrivacyRequestRoute: typeof LayoutPrivacyRequestRoute
-  LayoutProductsRoute: typeof LayoutProductsRoute
+  LayoutProductRoute: typeof LayoutProductRouteWithChildren
   LayoutTermsRoute: typeof LayoutTermsRoute
   LayoutIndexRoute: typeof LayoutIndexRoute
   LayoutCollectionCollectionDetailsRoute: typeof LayoutCollectionCollectionDetailsRoute
-  LayoutProductProductDetailsRoute: typeof LayoutProductProductDetailsRoute
   LayoutResourcesBlogRoute: typeof LayoutResourcesBlogRoute
   LayoutResourcesBlogsPathRoute: typeof LayoutResourcesBlogsPathRoute
 }
@@ -275,12 +286,11 @@ const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutJoinRoute: LayoutJoinRoute,
   LayoutPrivacyRoute: LayoutPrivacyRoute,
   LayoutPrivacyRequestRoute: LayoutPrivacyRequestRoute,
-  LayoutProductsRoute: LayoutProductsRoute,
+  LayoutProductRoute: LayoutProductRouteWithChildren,
   LayoutTermsRoute: LayoutTermsRoute,
   LayoutIndexRoute: LayoutIndexRoute,
   LayoutCollectionCollectionDetailsRoute:
     LayoutCollectionCollectionDetailsRoute,
-  LayoutProductProductDetailsRoute: LayoutProductProductDetailsRoute,
   LayoutResourcesBlogRoute: LayoutResourcesBlogRoute,
   LayoutResourcesBlogsPathRoute: LayoutResourcesBlogsPathRoute,
 }
@@ -298,7 +308,7 @@ export interface FileRoutesByFullPath {
   '/join': typeof LayoutJoinRoute
   '/privacy': typeof LayoutPrivacyRoute
   '/privacy-request': typeof LayoutPrivacyRequestRoute
-  '/products': typeof LayoutProductsRoute
+  '/product': typeof LayoutProductRouteWithChildren
   '/terms': typeof LayoutTermsRoute
   '/': typeof LayoutIndexRoute
   '/collection/CollectionDetails': typeof LayoutCollectionCollectionDetailsRoute
@@ -316,7 +326,7 @@ export interface FileRoutesByTo {
   '/join': typeof LayoutJoinRoute
   '/privacy': typeof LayoutPrivacyRoute
   '/privacy-request': typeof LayoutPrivacyRequestRoute
-  '/products': typeof LayoutProductsRoute
+  '/product': typeof LayoutProductRouteWithChildren
   '/terms': typeof LayoutTermsRoute
   '/': typeof LayoutIndexRoute
   '/collection/CollectionDetails': typeof LayoutCollectionCollectionDetailsRoute
@@ -336,7 +346,7 @@ export interface FileRoutesById {
   '/_layout/join': typeof LayoutJoinRoute
   '/_layout/privacy': typeof LayoutPrivacyRoute
   '/_layout/privacy-request': typeof LayoutPrivacyRequestRoute
-  '/_layout/products': typeof LayoutProductsRoute
+  '/_layout/product': typeof LayoutProductRouteWithChildren
   '/_layout/terms': typeof LayoutTermsRoute
   '/_layout/': typeof LayoutIndexRoute
   '/_layout/collection/CollectionDetails': typeof LayoutCollectionCollectionDetailsRoute
@@ -357,7 +367,7 @@ export interface FileRouteTypes {
     | '/join'
     | '/privacy'
     | '/privacy-request'
-    | '/products'
+    | '/product'
     | '/terms'
     | '/'
     | '/collection/CollectionDetails'
@@ -374,7 +384,7 @@ export interface FileRouteTypes {
     | '/join'
     | '/privacy'
     | '/privacy-request'
-    | '/products'
+    | '/product'
     | '/terms'
     | '/'
     | '/collection/CollectionDetails'
@@ -392,7 +402,7 @@ export interface FileRouteTypes {
     | '/_layout/join'
     | '/_layout/privacy'
     | '/_layout/privacy-request'
-    | '/_layout/products'
+    | '/_layout/product'
     | '/_layout/terms'
     | '/_layout/'
     | '/_layout/collection/CollectionDetails'
@@ -434,11 +444,10 @@ export const routeTree = rootRoute
         "/_layout/join",
         "/_layout/privacy",
         "/_layout/privacy-request",
-        "/_layout/products",
+        "/_layout/product",
         "/_layout/terms",
         "/_layout/",
         "/_layout/collection/CollectionDetails",
-        "/_layout/product/ProductDetails",
         "/_layout/resources/blog",
         "/_layout/resources/blogs/$path"
       ]
@@ -475,9 +484,12 @@ export const routeTree = rootRoute
       "filePath": "_layout/privacy-request.tsx",
       "parent": "/_layout"
     },
-    "/_layout/products": {
-      "filePath": "_layout/products.tsx",
-      "parent": "/_layout"
+    "/_layout/product": {
+      "filePath": "_layout/product.tsx",
+      "parent": "/_layout",
+      "children": [
+        "/_layout/product/ProductDetails"
+      ]
     },
     "/_layout/terms": {
       "filePath": "_layout/terms.tsx",
@@ -493,7 +505,7 @@ export const routeTree = rootRoute
     },
     "/_layout/product/ProductDetails": {
       "filePath": "_layout/product/ProductDetails.tsx",
-      "parent": "/_layout"
+      "parent": "/_layout/product"
     },
     "/_layout/resources/blog": {
       "filePath": "_layout/resources/blog.tsx",
