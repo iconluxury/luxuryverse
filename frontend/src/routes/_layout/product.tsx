@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Box, Text, Image, Grid, Spinner, Flex, Button } from '@chakra-ui/react';
 import { createFileRoute, Link } from '@tanstack/react-router';
 
-export const Route = createFileRoute('/_layout/products')({
+export const Route = createFileRoute('/_layout/product')({
   component: ProductsPage,
 });
 
