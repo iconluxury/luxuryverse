@@ -156,13 +156,15 @@ function JoinPage() {
     try {
       // Send user details to admin
       const htmlContent = `
+      <body>
         <h1>New User Submission - LuxuryVerse</h1>
         <p><strong>Email:</strong> ${email}</p>
-        <p><strong>X Username:</strong> ${xProfile?.username || 'N/A'}</p>
-        <p><strong>X Name:</strong> ${xProfile?.name || 'N/A'}</p>
-        <p><strong>X Profile ID:</strong> ${userId || 'N/A'}</p>
-        <p><strong>Wallet Address:</strong> ${address || 'N/A'}</p>
-      `;
+        <p><strong>X Username:</strong> ${xProfile?.username || 'NA'}</p>
+        <p><strong>X Name:</strong> ${xProfile?.name || 'NA'}</p>
+        <p><strong>X Profile ID:</strong> ${userId || 'NA'}</p>
+        <p><strong>Wallet Address:</strong> ${address || 'NA'}</p>
+      </body>
+    `;
       const response = await fetch('https://api.iconluxury.today/api/v1/utils/send-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
