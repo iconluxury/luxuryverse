@@ -1,4 +1,4 @@
-from shopify_wrapper import ShopifyWrapper
+from app.core.shopify_wrapper import ShopifyWrapper
 
 # Shopify configuration
 SHOPIFY_SHOP_URL = "accessxprive.myshopify.com"
