@@ -3,7 +3,7 @@ import react from "@vitejs/plugin-react"; // Switch to esbuild
 import { TanStackRouterVite } from "@tanstack/router-vite-plugin";
 import path from "path";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
-import { visualizer } from "vite-plugin-visualizer";
+import { visualizer } from "vite-bundle-visualizer"
 
 export default defineConfig({
   plugins: [
