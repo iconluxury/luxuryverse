@@ -7,7 +7,7 @@ api_router = APIRouter()
 
 api_router.include_router(utils.router, prefix="/utils", tags=["utils"])
 api_router.include_router(x_auth_router)
-api_router.include_router(shopify.shopify_router))
+api_router.include_router(shopify.shopify_router)
 
 
 # Private routes for local environment
