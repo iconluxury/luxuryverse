@@ -16,7 +16,7 @@ function BlogPostDetails() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await fetch('https://raw.githubusercontent.com/CobaltDataNet/static/refs/heads/main/blog-posts.json');
+        const response = await fetch('https://raw.githubusercontent.com/static/refs/heads/main/blog-posts.json');
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
