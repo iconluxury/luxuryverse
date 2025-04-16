@@ -72,7 +72,7 @@ services:
       - POSTGRES_PORT=${POSTGRES_PORT}
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER?Variable not set}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD?Variable not set}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD? CAPITALIZED Variable not set}
       - SENTRY_DSN=${SENTRY_DSN}
 
   backend:
@@ -120,15 +120,9 @@ services:
       - "traefik.constraint-label=traefik-public"
       - "traefik.http.routers.api-http.rule=Host(`iconluxury.today`) && PathPrefix(`/api`)"
       - "traefik.http.routers.api-http.entrypoints=http"
-      - "traefik.http.routers.api-http.middlewares=api-stripprefix,redirect-to-https"
       - "traefik.http.services.api-service.loadbalancer.server.port=8000"
       - "traefik.http.routers.api-http.middlewares=api-stripprefix"
       - "traefik.http.middlewares.api-stripprefix.stripprefix.prefixes=/api"
-      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
-      - "traefik.http.routers.api-https.rule=Host(`iconluxury.today`) && PathPrefix(`/api`)"
-      - "traefik.http.routers.api-https.entrypoints=https"
-      - "traefik.http.routers.api-https.tls=true"
-      - "traefik.http.routers.api-https.middlewares=api-stripprefix"
 
   frontend:
     image: "${DOCKER_IMAGE_FRONTEND?Variable not set}:${TAG-latest}"
@@ -144,18 +138,13 @@ services:
       - NGINX_PROXY_BUFFER_SIZE=128k
       - NGINX_PROXY_BUFFERS=4 256k
       - NGINX_LARGE_CLIENT_HEADER_BUFFERS=4 16k
-      - API_BASE_URL=https://iconluxury.today
+      - REACT_APP_API_BASE_URL=https://iconluxury.today
     labels:
       - traefik.enable=true
       - traefik.docker.network=traefik-public
       - traefik.constraint-label=traefik-public
       - traefik.http.routers.dashboard.rule=Host(`iconluxury.today`)
       - traefik.http.routers.dashboard.entrypoints=http
-      - traefik.http.routers.dashboard.middlewares=redirect-to-https
-      - traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https
-      - traefik.http.routers.dashboard-https.rule=Host(`iconluxury.today`)
-      - traefik.http.routers.dashboard-https.entrypoints=https
-      - traefik.http.routers.dashboard-https.tls=true
       - traefik.http.services.dashboard.loadbalancer.server.port=80
 
 volumes:
