@@ -3,6 +3,8 @@ from pydantic import BaseModel
 from typing import List
 from app.core.shopify_config import wrapper
 import logging
+import requests
+
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -34,15 +36,21 @@ async def get_products():
     """
     try:
         products = wrapper.list_products(limit=10)
-        return [
-            Product(
-                id=str(product["id"]),
-                title=product["title"],
-                thumbnail=product["images"][0]["src"] if product.get("images") else "",
-                price=f"${product['variants'][0]['price']}" if product.get("variants") and len(product["variants"]) > 0 else "N/A"
+        result = []
+        for product in products:
+            variants = product.get("variants", [])
+            price = f"${variants[0]['price']}" if variants and len(variants) > 0 else "Contact for price"
+            if not variants:
+                logger.warning(f"Product {product['id']} has no variants")
+            result.append(
+                Product(
+                    id=str(product["id"]),
+                    title=product["title"],
+                    thumbnail=product["images"][0]["src"] if product.get("images") else "",
+                    price=price
+                )
             )
-            for product in products
-        ]
+        return result
     except Exception as e:
         logger.error(f"Failed to fetch products: {e}")
         raise HTTPException(status_code=500, detail="Failed to fetch products")
@@ -56,11 +64,15 @@ async def get_product(product_id: str):
         product = wrapper.get_product_details(int(product_id))
         if not product:
             raise HTTPException(status_code=404, detail="Product not found")
+        variants = product.get("variants", [])
+        price = f"${variants[0]['price']}" if variants and len(variants) > 0 else "Contact for price"
+        if not variants:
+            logger.warning(f"Product {product['id']} has no variants")
         return Product(
             id=str(product["id"]),
             title=product["title"],
             thumbnail=product["images"][0]["src"] if product.get("images") else "",
-            price=f"${product['variants'][0]['price']}" if product.get("variants") and len(product["variants"]) > 0 else "N/A"
+            price=price
         )
     except Exception as e:
         logger.error(f"Failed to fetch product {product_id}: {e}")
@@ -74,21 +86,35 @@ async def get_collections():
     try:
         collections = wrapper.list_collections(limit=10, collection_type="all")
         result = []
-        for collection in collections:
-            products = wrapper.list_collection_products(collection["id"], limit=5)
+        for collection, collection_type in collections:
+            # Fetch full collection details
+            collection_details = wrapper.get_collection_details(collection["id"], collection_type=collection_type)
+            # Fetch product IDs from collection
+            collection_products = wrapper.list_collection_products(collection["id"], limit=5)
+            # Fetch full product details for each product
+            products = []
+            for prod in collection_products:
+                try:
+                    full_product = wrapper.get_product_details(prod["id"])
+                    variants = full_product.get("variants", [])
+                    price = f"${variants[0]['price']}" if variants and len(variants) > 0 else "Contact for price"
+                    if not variants:
+                        logger.warning(f"Product {full_product['id']} in collection {collection['id']} has no variants")
+                    products.append(
+                        Product(
+                            id=str(full_product["id"]),
+                            title=full_product["title"],
+                            thumbnail=full_product["images"][0]["src"] if full_product.get("images") else "",
+                            price=price
+                        )
+                    )
+                except requests.RequestException as e:
+                    logger.warning(f"Failed to fetch details for product {prod['id']} in collection {collection['id']}: {e}")
             result.append(
                 Collection(
-                    id=str(collection["id"]),
-                    title=collection["title"],
-                    products=[
-                        Product(
-                            id=str(product["id"]),
-                            title=product["title"],
-                            thumbnail=product["images"][0]["src"] if product.get("images") else "",
-                            price=f"${product['variants'][0]['price']}" if product.get("variants") and len(product["variants"]) > 0 else "N/A"
-                        )
-                        for product in products
-                    ]
+                    id=str(collection_details["id"]),
+                    title=collection_details["title"],
+                    products=products
                 )
             )
         return result

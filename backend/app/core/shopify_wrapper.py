@@ -177,15 +177,21 @@ class ShopifyWrapper:
             endpoint = f"/admin/api/{self.api_version}/custom_collections.json"
             params = {"limit": min(limit, 250), "since_id": since_id}
             logger.info(f"Fetching custom collections with limit={limit}, since_id={since_id}")
-            response = self._make_request("GET", endpoint, params=params)
-            collections.extend(response.get("custom_collections", []))
+            try:
+                response = self._make_request("GET", endpoint, params=params)
+                collections.extend([(c, "custom") for c in response.get("custom_collections", [])])
+            except requests.RequestException as e:
+                logger.warning(f"Failed to fetch custom collections: {e}")
         
         if collection_type in ["all", "smart"]:
             endpoint = f"/admin/api/{self.api_version}/smart_collections.json"
             params = {"limit": min(limit, 250), "since_id": since_id}
             logger.info(f"Fetching smart collections with limit={limit}, since_id={since_id}")
-            response = self._make_request("GET", endpoint, params=params)
-            collections.extend(response.get("smart_collections", []))
+            try:
+                response = self._make_request("GET", endpoint, params=params)
+                collections.extend([(c, "smart") for c in response.get("smart_collections", [])])
+            except requests.RequestException as e:
+                logger.warning(f"Failed to fetch smart collections: {e}")
         
         logger.info(f"Fetched {len(collections)} total collections")
         return collections
