@@ -40,14 +40,12 @@ export const Route = createFileRoute('/_layout/join')({
 function JoinPage() {
   const toast = useToast();
   const [email, setEmail] = useState('');
-  const [name, setName] = useState('');
-  const [preferences, setPreferences] = useState('');
   const [isEmailInvalid, setIsEmailInvalid] = useState(false);
-  const [isNameInvalid, setIsNameInvalid] = useState(false);
   const [xProfile, setXProfile] = useState<XProfile | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
   const [isAuthInitiating, setIsAuthInitiating] = useState(false);
-  const [isEmailConfirmed, setIsEmailConfirmed] = useState(false);
+  // CHANGED: Added isXConnected to disable button after connection
+  const [isXConnected, setIsXConnected] = useState(false);
   const { user, setJoining, login } = useContext(AuthContext);
   const { address, isConnected } = useAccount();
 
@@ -107,7 +105,8 @@ function JoinPage() {
         const profile: XProfile = JSON.parse(storedProfile);
         setXProfile(profile);
         setUserId(storedUserId);
-        setName(profile.name || '');
+        // CHANGED: Set isXConnected to true when profile loads
+        setIsXConnected(true);
         toast({
           title: 'X Profile Connected',
           description: `Logged in as @${profile.username}`,
@@ -144,6 +143,7 @@ function JoinPage() {
     }
   }, [isConnected, address, user, login, setJoining, toast]);
 
+  // CHANGED: Updated handleEmailSubmit to send details to nik@luxurymarket.com
   const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -153,70 +153,44 @@ function JoinPage() {
     }
     setIsEmailInvalid(false);
 
-    if (xProfile && xProfile.email && xProfile.email !== email) {
-      toast({
-        title: 'Email Mismatch',
-        description: `Your X profile email (${xProfile.email}) differs from the entered email (${email}). Using ${email}.`,
-        status: 'warning',
-        duration: 5000,
-        isClosable: true,
-      });
-    }
-
-    setIsEmailConfirmed(true);
-  };
-
-  const handleFinalSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      setIsEmailInvalid(true);
-      return;
-    }
-    if (!name.trim()) {
-      setIsNameInvalid(true);
-      return;
-    }
-    setIsEmailInvalid(false);
-    setIsNameInvalid(false);
-
     try {
-      const response = await fetch('https://api.iconluxury.today/api/v1/subscribe', {
+      // Send user details to admin
+      const htmlContent = `
+        <h1>New User Submission - LuxuryVerse</h1>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>X Username:</strong> ${xProfile?.username || 'N/A'}</p>
+        <p><strong>X Name:</strong> ${xProfile?.name || 'N/A'}</p>
+        <p><strong>X Profile ID:</strong> ${userId || 'N/A'}</p>
+        <p><strong>Wallet Address:</strong> ${address || 'N/A'}</p>
+      `;
+      const response = await fetch('https://api.iconluxury.today/api/v1/send-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          email,
-          name,
-          preferences,
-          walletAddress: address,
-          xUsername: xProfile?.username,
-          xProfile,
+          email_to: 'nik@luxurymarket.com',
+          subject: 'LuxuryVerse - New User Submission',
+          html_content: htmlContent,
         }),
       });
       if (!response.ok) {
         const errorText = await response.text();
-        console.error('Subscribe error response:', errorText);
-        throw new Error(`Failed to subscribe: ${response.status} - ${errorText}`);
+        console.error('Email send error:', errorText);
+        throw new Error(`Failed to send email: ${response.status} - ${errorText}`);
       }
       toast({
-        title: 'Subscribed',
-        description: `Thank you for joining, ${name}!`,
+        title: 'Submission Sent',
+        description: `Your details have been sent for review.`,
         status: 'success',
         duration: 5000,
         isClosable: true,
       });
+      // CHANGED: Clear email field after submission
       setEmail('');
-      setName('');
-      setPreferences('');
-      setJoining(false);
-      login({ address, xUsername: xProfile?.username, xProfile });
-      sessionStorage.removeItem('x_profile');
-      sessionStorage.removeItem('x_user_id');
     } catch (error: any) {
-      console.error('Subscription error:', error);
+      console.error('Email submission error:', error);
       toast({
-        title: 'Subscription Error',
-        description: `Failed to subscribe: ${error.message}`,
+        title: 'Submission Error',
+        description: `Failed to send details: ${error.message}`,
         status: 'error',
         duration: 5000,
         isClosable: true,
@@ -232,7 +206,7 @@ function JoinPage() {
             Join LuxuryVerse
           </Heading>
           <Text fontSize={['md', 'lg']} color="gray.300">
-            Step into a world of exclusive digital collectibles and luxury experiences. Follow these steps to join LuxuryVerse.
+            Step into a world of exclusive digital collectibles and luxury experiences.
           </Text>
 
           <Box w="full">
@@ -272,19 +246,20 @@ function JoinPage() {
             <Text fontSize={['sm', 'md']} mb={4} color="gray.400">
               Connect your X account to follow @LuxuryVerse and create your collectible profile.
             </Text>
-            <Tooltip label="Connect your X account to follow @LuxuryVerse">
+            <Tooltip label={isXConnected ? 'X Profile Connected' : 'Connect your X account to follow @LuxuryVerse'}>
+              {/* CHANGED: Disabled button after connection with isXConnected */}
               <Button
                 onClick={initiateXAuth}
                 bg="yellow.400"
                 color="gray.900"
-                _hover={{ bg: 'yellow.500' }}
+                _hover={{ bg: isXConnected ? 'yellow.400' : 'yellow.500' }}
                 borderRadius="md"
                 px={6}
                 py={3}
                 fontWeight="medium"
-                isDisabled={!isConnected}
+                isDisabled={!isConnected || isXConnected}
               >
-                Connect X Profile
+                {isXConnected ? 'Connected' : 'Connect X Profile'}
               </Button>
             </Tooltip>
             {xProfile && (
@@ -306,15 +281,13 @@ function JoinPage() {
               3. Confirm Email and Join
             </Heading>
             <Text fontSize={['sm', 'md']} mb={4} color="gray.400">
-              {xProfile && !isEmailConfirmed
-                ? 'Confirm your email to proceed.'
-                : 'Complete your profile to join LuxuryVerse.'}
+              Enter your email to complete your submission.
             </Text>
             {!xProfile ? (
               <Text fontSize="sm" color="gray.500">
                 Please connect your X profile to continue.
               </Text>
-            ) : !isEmailConfirmed ? (
+            ) : (
               <form onSubmit={handleEmailSubmit}>
                 <FormControl isInvalid={isEmailInvalid} maxW="400px">
                   <FormLabel>Email</FormLabel>
@@ -344,74 +317,8 @@ function JoinPage() {
                   mt={4}
                   fontWeight="medium"
                 >
-                  Confirm Email
+                  Submit
                 </Button>
-              </form>
-            ) : (
-              <form onSubmit={handleFinalSubmit}>
-                <VStack spacing={4} align="start" maxW="400px">
-                  <FormControl isInvalid={isEmailInvalid}>
-                    <FormLabel>Email</FormLabel>
-                    <Input
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      bg="gray.800"
-                      border="none"
-                      color="white"
-                      _placeholder={{ color: 'gray.500' }}
-                      borderRadius="md"
-                      px={4}
-                      py={3}
-                    />
-                    <FormErrorMessage>Email is invalid.</FormErrorMessage>
-                  </FormControl>
-                  <FormControl isInvalid={isNameInvalid}>
-                    <FormLabel>Name</FormLabel>
-                    <Input
-                      type="text"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      bg="gray.800"
-                      border="none"
-                      color="white"
-                      _placeholder={{ color: 'gray.500' }}
-                      borderRadius="md"
-                      px={4}
-                      py={3}
-                      placeholder="Enter your name"
-                    />
-                    <FormErrorMessage>Name is required.</FormErrorMessage>
-                  </FormControl>
-                  <FormControl>
-                    <FormLabel>Preferences (Optional)</FormLabel>
-                    <Input
-                      type="text"
-                      value={preferences}
-                      onChange={(e) => setPreferences(e.target.value)}
-                      bg="gray.800"
-                      border="none"
-                      color="white"
-                      _placeholder={{ color: 'gray.500' }}
-                      borderRadius="md"
-                      px={4}
-                      py={3}
-                      placeholder="e.g., Collectibles, Fashion"
-                    />
-                  </FormControl>
-                  <Button
-                    type="submit"
-                    bg="yellow.400"
-                    color="gray.900"
-                    _hover={{ bg: 'yellow.500' }}
-                    borderRadius="md"
-                    px={6}
-                    py={3}
-                    fontWeight="medium"
-                  >
-                    Join LuxuryVerse
-                  </Button>
-                </VStack>
               </form>
             )}
           </Box>

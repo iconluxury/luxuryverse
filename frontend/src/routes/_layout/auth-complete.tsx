@@ -4,6 +4,7 @@ import { useNavigate } from '@tanstack/react-router';
 import { useToast } from '@chakra-ui/react';
 import { Box } from '@chakra-ui/react';
 
+// NEW: Add this file to src/routes/_layout/ to handle /auth-complete redirect
 export const Route = createFileRoute('/_layout/auth-complete')({
   component: AuthComplete,
 });
