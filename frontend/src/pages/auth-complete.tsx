@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
 import { useNavigate } from '@tanstack/react-router';
 import { useToast } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 
 export const Route = createFileRoute('/_layout/auth-complete')({
   component: AuthComplete,
@@ -35,13 +36,13 @@ function AuthComplete() {
     }
 
     if (twitter === '1' && userId) {
-      const fetchXProfile = async (retryCount = 3) => {
+      const fetchXProfile = async (retryCount = 3): Promise<void> => {
         try {
           console.log('Fetching user details for user_id:', userId);
           const response = await fetch(`https://api.iconluxury.today/api/v1/x-auth/user/${userId}`, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
-            credentials: 'include'
+            credentials: 'include',
           });
           if (!response.ok) {
             const errorText = await response.text();
@@ -64,7 +65,7 @@ function AuthComplete() {
             isClosable: true,
           });
           navigate({ to: '/join' });
-        } catch (error) {
+        } catch (error: any) {
           console.error('X Auth Error:', error);
           toast({
             title: 'X Auth Error',
