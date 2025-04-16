@@ -4,7 +4,7 @@ import { createFileRoute, useParams, Link } from "@tanstack/react-router";
 import { TimeIcon } from "@chakra-ui/icons";
 import Footer from "../../../components/Common/Footer";
 
-export const Route = createFileRoute('/_layout/product/ProductDetails')({
+export const Route = createFileRoute('/_layout/products/$id')({
   component: ProductDetails,
 });
 
@@ -12,24 +12,68 @@ function ProductDetails() {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://api.iconluxury.today';
+
   // Extract the 'id' parameter from the URL
-  const { id } = useParams({ from: "/_layout/product/$id" });
+  const { id } = useParams({ from: "/_layout/products/$id" });
 
   // Fetch product details from the FastAPI backend
   useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        const response = await fetch(`https://api.iconluxury.today/api/v1/products/${id}`);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+    const fetchProduct = async (retryCount = 6, delay = 2000) => {
+      for (let attempt = 1; attempt <= retryCount; attempt++) {
+        try {
+          console.debug(`Attempt ${attempt}: Fetching product ${id} from ${API_BASE_URL}/api/v1/products/${id}`);
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 30000);
+
+          const response = await fetch(`${API_BASE_URL}/api/v1/products/${id}`, {
+            signal: controller.signal,
+            method: 'GET',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+            credentials: 'omit',
+          });
+
+          clearTimeout(timeoutId);
+          const headers = Object.fromEntries(response.headers.entries());
+          console.debug(`Response status: ${response.status}, ok: ${response.ok}, headers: ${JSON.stringify(headers)}`);
+
+          if (!response.ok) {
+            if (response.status === 502) {
+              throw new Error('Server error (502 Bad Gateway). The backend may be down or misconfigured.');
+            }
+            if (response.status === 404) {
+              throw new Error('Product not found.');
+            }
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
+          const data = await response.json();
+          console.debug(`Fetched product: ${data.id}`);
+          setProduct(data);
+          setError(null);
+          break;
+        } catch (err: any) {
+          const errorMessage = `Attempt ${attempt} failed: ${err.message || 'Unknown error'}`;
+          console.error(errorMessage);
+          if (err.name === 'AbortError') {
+            err.message = 'Request timed out after 30s. Please check the backend server status.';
+          }
+          if (err.message.includes('Failed to fetch')) {
+            err.message = 'Unable to connect: Possible CORS issue, server downtime, or network error. Check console for details.';
+          }
+          if (attempt === retryCount) {
+            setError(`Failed to load product: ${err.message || 'Unable to connect to the server.'}`);
+          } else {
+            await new Promise(resolve => setTimeout(resolve, delay * attempt));
+          }
+        } finally {
+          if (attempt === retryCount || !error) {
+            setLoading(false);
+          }
         }
-        const data = await response.json();
-        setProduct(data);
-      } catch (err) {
-        setError(`Failed to load product: ${(err as Error).message}`);
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -94,7 +138,7 @@ function ProductDetails() {
   if (loading) {
     return (
       <Flex justify="center" align="center" minH="100vh">
-        <Spinner size="xl" color="red.500" />
+        <Spinner size="xl" color="yellow.400" />
       </Flex>
     );
   }
@@ -102,9 +146,24 @@ function ProductDetails() {
   // Handle error state
   if (error) {
     return (
-      <Text fontSize="lg" textAlign="center" py={16} color="red.500">
-        {error}
-      </Text>
+      <Box textAlign="center" py={16} color="red.500">
+        <Text fontSize="lg">{error}</Text>
+        <Text fontSize="sm" mt={2}>
+          Please check your network connection, ensure the backend is running, or contact{' '}
+          <a href="mailto:support@iconluxury.today" style={{ color: '#3182CE' }}>
+            support@iconluxury.today
+          </a>.
+        </Text>
+        <Button
+          mt={4}
+          bg="yellow.400"
+          color="gray.900"
+          _hover={{ bg: 'yellow.500' }}
+          onClick={() => window.location.reload()}
+        >
+          Retry
+        </Button>
+      </Box>
     );
   }
 
@@ -115,6 +174,9 @@ function ProductDetails() {
         <Text fontSize="lg" mb={4}>
           Product not found for ID: {id}
         </Text>
+        <Link to="/products" style={{ color: '#3182CE' }}>
+          Back to all products
+        </Link>
       </Box>
     );
   }
