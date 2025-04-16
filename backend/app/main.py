@@ -16,7 +16,7 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://iconluxury.today","https://psychic-space-goldfish-4jjjw7wp967xfqqj9-5173.app.github.dev"],
+    allow_origins=["https://iconluxury.today"],
     allow_credentials=True,
     allow_methods=["GET", "POST", "PATCH", "OPTIONS"],
     allow_headers=["*"],
