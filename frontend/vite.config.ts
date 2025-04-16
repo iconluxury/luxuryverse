@@ -15,7 +15,6 @@ export default defineConfig({
     nodePolyfills({
       globals: { Buffer: true, global: true },
     }),
-    visualizer(), // Bundle analysis
   ],
   resolve: {
     alias: { "@": path.resolve(__dirname, "src") },
@@ -26,6 +25,12 @@ export default defineConfig({
   build: {
     sourcemap: false, // Disable sourcemaps for faster builds
     rollupOptions: {
+      plugins: [
+        visualizer({
+          filename: "dist/stats.html", // Output file for visualization
+          open: true, // Auto-open in browser after build
+        }),
+      ],
       output: {
         manualChunks: {
           wagmi: ["@wagmi/connectors", "viem"],
