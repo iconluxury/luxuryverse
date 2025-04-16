@@ -4,6 +4,7 @@ from typing import List
 from app.core.shopify_config import wrapper
 import logging
 import requests
+
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
@@ -21,7 +22,7 @@ class Product(BaseModel):
     title: str
     thumbnail: str
     price: str
-    variants: List[str] = []  # Added for variant titles
+    variants: List[str] = []
 
 class Collection(BaseModel):
     id: str
@@ -89,6 +90,9 @@ async def get_collections():
     try:
         collections = wrapper.list_collections(limit=3, collection_type="all")
         result = []
+        if not collections:
+            logger.info("No collections found, returning empty list")
+            return result
         for collection, collection_type in collections:
             try:
                 collection_details = wrapper.get_collection_details(collection["id"], collection_type=collection_type)
@@ -134,11 +138,9 @@ async def get_collection(collection_id: str):
     Fetch a single collection by ID from Shopify.
     """
     try:
-        # Try as custom collection first
         try:
             collection_details = wrapper.get_collection_details(int(collection_id), collection_type="custom")
         except requests.RequestException as e:
-            # Fallback to smart collection
             collection_details = wrapper.get_collection_details(int(collection_id), collection_type="smart")
         
         collection_products = wrapper.list_collection_products(int(collection_id), limit=10)
