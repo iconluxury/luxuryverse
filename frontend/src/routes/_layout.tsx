@@ -55,7 +55,7 @@ function Layout() {
       {!consentGiven && (
         <CookieConsent
           location="bottom"
-          buttonText="Accept All"
+          buttonText="Accept"
           declineButtonText="Decline"
           cookieName="luxuryverse-consent"
           enableDeclineButton
