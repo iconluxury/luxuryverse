@@ -20,6 +20,7 @@ import { Route as LayoutJoinImport } from './routes/_layout/join'
 import { Route as LayoutDoNotSellImport } from './routes/_layout/do-not-sell'
 import { Route as LayoutDemoRequestImport } from './routes/_layout/demo-request'
 import { Route as LayoutCookieImport } from './routes/_layout/cookie'
+import { Route as LayoutAuthCompleteImport } from './routes/_layout/auth-complete'
 import { Route as LayoutResourcesWebScrapingGuidesImport } from './routes/_layout/resources/web-scraping-guides'
 import { Route as LayoutResourcesSupportCenterImport } from './routes/_layout/resources/support-center'
 import { Route as LayoutResourcesFaqImport } from './routes/_layout/resources/faq'
@@ -82,6 +83,12 @@ const LayoutCookieRoute = LayoutCookieImport.update({
   getParentRoute: () => LayoutRoute,
 } as any)
 
+const LayoutAuthCompleteRoute = LayoutAuthCompleteImport.update({
+  id: '/auth-complete',
+  path: '/auth-complete',
+  getParentRoute: () => LayoutRoute,
+} as any)
+
 const LayoutResourcesWebScrapingGuidesRoute =
   LayoutResourcesWebScrapingGuidesImport.update({
     id: '/resources/web-scraping-guides',
@@ -131,6 +138,13 @@ declare module '@tanstack/react-router' {
       fullPath: ''
       preLoaderRoute: typeof LayoutImport
       parentRoute: typeof rootRoute
+    }
+    '/_layout/auth-complete': {
+      id: '/_layout/auth-complete'
+      path: '/auth-complete'
+      fullPath: '/auth-complete'
+      preLoaderRoute: typeof LayoutAuthCompleteImport
+      parentRoute: typeof LayoutImport
     }
     '/_layout/cookie': {
       id: '/_layout/cookie'
@@ -236,6 +250,7 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 interface LayoutRouteChildren {
+  LayoutAuthCompleteRoute: typeof LayoutAuthCompleteRoute
   LayoutCookieRoute: typeof LayoutCookieRoute
   LayoutDemoRequestRoute: typeof LayoutDemoRequestRoute
   LayoutDoNotSellRoute: typeof LayoutDoNotSellRoute
@@ -253,6 +268,7 @@ interface LayoutRouteChildren {
 }
 
 const LayoutRouteChildren: LayoutRouteChildren = {
+  LayoutAuthCompleteRoute: LayoutAuthCompleteRoute,
   LayoutCookieRoute: LayoutCookieRoute,
   LayoutDemoRequestRoute: LayoutDemoRequestRoute,
   LayoutDoNotSellRoute: LayoutDoNotSellRoute,
@@ -274,6 +290,7 @@ const LayoutRouteWithChildren =
 
 export interface FileRoutesByFullPath {
   '': typeof LayoutRouteWithChildren
+  '/auth-complete': typeof LayoutAuthCompleteRoute
   '/cookie': typeof LayoutCookieRoute
   '/demo-request': typeof LayoutDemoRequestRoute
   '/do-not-sell': typeof LayoutDoNotSellRoute
@@ -291,6 +308,7 @@ export interface FileRoutesByFullPath {
 }
 
 export interface FileRoutesByTo {
+  '/auth-complete': typeof LayoutAuthCompleteRoute
   '/cookie': typeof LayoutCookieRoute
   '/demo-request': typeof LayoutDemoRequestRoute
   '/do-not-sell': typeof LayoutDoNotSellRoute
@@ -310,6 +328,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/_layout': typeof LayoutRouteWithChildren
+  '/_layout/auth-complete': typeof LayoutAuthCompleteRoute
   '/_layout/cookie': typeof LayoutCookieRoute
   '/_layout/demo-request': typeof LayoutDemoRequestRoute
   '/_layout/do-not-sell': typeof LayoutDoNotSellRoute
@@ -330,6 +349,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | ''
+    | '/auth-complete'
     | '/cookie'
     | '/demo-request'
     | '/do-not-sell'
@@ -346,6 +366,7 @@ export interface FileRouteTypes {
     | '/resources/blogs/$path'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/auth-complete'
     | '/cookie'
     | '/demo-request'
     | '/do-not-sell'
@@ -363,6 +384,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/_layout'
+    | '/_layout/auth-complete'
     | '/_layout/cookie'
     | '/_layout/demo-request'
     | '/_layout/do-not-sell'
@@ -404,6 +426,7 @@ export const routeTree = rootRoute
     "/_layout": {
       "filePath": "_layout.tsx",
       "children": [
+        "/_layout/auth-complete",
         "/_layout/cookie",
         "/_layout/demo-request",
         "/_layout/do-not-sell",
@@ -419,6 +442,10 @@ export const routeTree = rootRoute
         "/_layout/resources/web-scraping-guides",
         "/_layout/resources/blogs/$path"
       ]
+    },
+    "/_layout/auth-complete": {
+      "filePath": "_layout/auth-complete.tsx",
+      "parent": "/_layout"
     },
     "/_layout/cookie": {
       "filePath": "_layout/cookie.tsx",
