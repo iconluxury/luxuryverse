@@ -121,8 +121,6 @@ services:
       - "traefik.http.routers.api-http.rule=Host(`iconluxury.today`) && PathPrefix(`/api`)"
       - "traefik.http.routers.api-http.entrypoints=http"
       - "traefik.http.services.api-service.loadbalancer.server.port=8000"
-      - "traefik.http.routers.api-http.middlewares=api-stripprefix"
-      - "traefik.http.middlewares.api-stripprefix.stripprefix.prefixes=/api"
 
   frontend:
     image: "${DOCKER_IMAGE_FRONTEND?Variable not set}:${TAG-latest}"
