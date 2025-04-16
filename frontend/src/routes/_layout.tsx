@@ -70,14 +70,14 @@ function Layout() {
             background: theme.colors.purple[500] || "#EF4444",
             color: theme.colors.white || "#FFFFFF",
             borderRadius: theme.radii.md || "4px",
-            padding: "8px 16px",
+            padding: "4px 8px",
             fontWeight: "medium",
           }}
           declineButtonStyle={{
             background: theme.colors.gray[500] || "#6B7280",
             color: theme.colors.white || "#FFFFFF",
             borderRadius: theme.radii.md || "4px",
-            padding: "8px 16px",
+            padding: "4px 8px",
             fontWeight: "medium",
           }}
           expires={150}
