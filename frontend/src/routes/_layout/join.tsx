@@ -154,7 +154,6 @@ function JoinPage() {
     setIsEmailInvalid(false);
 
     if (xProfile && xProfile.email && xProfile.email !== email) {
-      // Email differs; prompt for confirmation or update
       toast({
         title: 'Email Mismatch',
         description: `Your X profile email (${xProfile.email}) differs from the entered email (${email}). Using ${email}.`,
@@ -162,7 +161,6 @@ function JoinPage() {
         duration: 5000,
         isClosable: true,
       });
-      // Optionally update X profile email (requires additional API call, not implemented here)
     }
 
     setIsEmailConfirmed(true);
@@ -212,7 +210,6 @@ function JoinPage() {
       setPreferences('');
       setJoining(false);
       login({ address, xUsername: xProfile?.username, xProfile });
-      // Clean up sessionStorage
       sessionStorage.removeItem('x_profile');
       sessionStorage.removeItem('x_user_id');
     } catch (error: any) {
