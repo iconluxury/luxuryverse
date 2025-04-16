@@ -62,7 +62,7 @@ function Layout() {
           style={{
             background: theme.colors.gray[800] || "#1F2937",
             color: theme.colors.white || "#FFFFFF",
-            padding: "8px",
+            padding: "2px",
             fontSize: "12px",
             zIndex: 9999,
           }}
@@ -125,7 +125,7 @@ function Layout() {
             style={{ color: theme.colors.purple[500] || "#EF4444", textDecoration: "underline" }}
           >
             Cookie Policy
-          </Link>
+          </Link>{" "}
           and our{" "}
           <Link
             to="/privacy"
