@@ -13,44 +13,22 @@ function ProductsPage() {
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://api.iconluxury.today';
 
   useEffect(() => {
-    const fetchWithRedirect = async (url: string, maxRedirects = 5) => {
-      let currentUrl = url;
-      let redirects = 0;
-
-      while (redirects < maxRedirects) {
+    const fetchProducts = async (retryCount = 3, delay = 2000) => {
+      for (let attempt = 1; attempt <= retryCount; attempt++) {
         try {
-          const response = await fetch(currentUrl, { 
-            timeout: 10000,
-            redirect: 'manual' // Handle redirects manually
+          const response = await fetch(`${API_BASE_URL}/api/v1/products`, {
+            timeout: 15000, // Increased timeout
+            headers: {
+              'Accept': 'application/json',
+            },
           });
-          
-          if (response.status >= 300 && response.status < 400) {
-            const redirectUrl = response.headers.get('location');
-            if (!redirectUrl) {
-              throw new Error('Redirect response missing location header');
-            }
-            logger.info(`Redirecting from ${currentUrl} to ${redirectUrl}`);
-            currentUrl = redirectUrl;
-            redirects++;
-            continue;
+          if (response.status === 0) {
+            throw new Error('Network error: No response received');
           }
-          
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
           }
-          
-          return await response.json();
-        } catch (err) {
-          throw err;
-        }
-      }
-      throw new Error('Max redirects exceeded');
-    };
-
-    const fetchProducts = async (retryCount = 3, delay = 1000) => {
-      for (let attempt = 1; attempt <= retryCount; attempt++) {
-        try {
-          const data = await fetchWithRedirect(`${API_BASE_URL}/api/v1/products`);
+          const data = await response.json();
           setProducts(data);
           setError(null);
           break;
@@ -86,7 +64,7 @@ function ProductsPage() {
       <Box textAlign="center" py={16} color="red.500">
         <Text fontSize="lg">{error}</Text>
         <Text fontSize="sm" mt={2}>
-          Please check your network connection or try again later.
+          Please check your network connection, ensure the backend is running, or try again later.
         </Text>
         <Button
           mt={4}
