@@ -134,12 +134,6 @@ function Layout() {
             Privacy Policy
           </Link>
           , or{" "}
-          <Link
-            to="/terms"
-            style={{ color: theme.colors.purple[500] || "#EF4444", textDecoration: "underline" }}
-          >
-            Terms
-          </Link>
           .
         </CookieConsent>
       )}
