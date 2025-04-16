@@ -14,7 +14,7 @@ function CollectionsPage() {
   useEffect(() => {
     const fetchCollections = async () => {
       try {
-        const response = await fetch('http://localhost:8000/api/v1/collections');
+        const response = await fetch('https://api.iconluxury.today/api/v1/collections');
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }

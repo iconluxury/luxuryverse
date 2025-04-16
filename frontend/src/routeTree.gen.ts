@@ -14,18 +14,18 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as LayoutImport } from './routes/_layout'
 import { Route as LayoutIndexImport } from './routes/_layout/index'
 import { Route as LayoutTermsImport } from './routes/_layout/terms'
+import { Route as LayoutProductsImport } from './routes/_layout/products'
 import { Route as LayoutPrivacyRequestImport } from './routes/_layout/privacy-request'
 import { Route as LayoutPrivacyImport } from './routes/_layout/privacy'
 import { Route as LayoutJoinImport } from './routes/_layout/join'
 import { Route as LayoutDoNotSellImport } from './routes/_layout/do-not-sell'
 import { Route as LayoutDemoRequestImport } from './routes/_layout/demo-request'
 import { Route as LayoutCookieImport } from './routes/_layout/cookie'
+import { Route as LayoutCollectionsImport } from './routes/_layout/collections'
 import { Route as LayoutAuthCompleteImport } from './routes/_layout/auth-complete'
-import { Route as LayoutResourcesWebScrapingGuidesImport } from './routes/_layout/resources/web-scraping-guides'
-import { Route as LayoutResourcesSupportCenterImport } from './routes/_layout/resources/support-center'
-import { Route as LayoutResourcesFaqImport } from './routes/_layout/resources/faq'
-import { Route as LayoutResourcesCodeExamplesImport } from './routes/_layout/resources/code-examples'
 import { Route as LayoutResourcesBlogImport } from './routes/_layout/resources/blog'
+import { Route as LayoutProductProductDetailsImport } from './routes/_layout/product/ProductDetails'
+import { Route as LayoutCollectionCollectionDetailsImport } from './routes/_layout/collection/CollectionDetails'
 import { Route as LayoutResourcesBlogsPathImport } from './routes/_layout/resources/blogs/$path'
 
 // Create/Update Routes
@@ -44,6 +44,12 @@ const LayoutIndexRoute = LayoutIndexImport.update({
 const LayoutTermsRoute = LayoutTermsImport.update({
   id: '/terms',
   path: '/terms',
+  getParentRoute: () => LayoutRoute,
+} as any)
+
+const LayoutProductsRoute = LayoutProductsImport.update({
+  id: '/products',
+  path: '/products',
   getParentRoute: () => LayoutRoute,
 } as any)
 
@@ -83,44 +89,37 @@ const LayoutCookieRoute = LayoutCookieImport.update({
   getParentRoute: () => LayoutRoute,
 } as any)
 
+const LayoutCollectionsRoute = LayoutCollectionsImport.update({
+  id: '/collections',
+  path: '/collections',
+  getParentRoute: () => LayoutRoute,
+} as any)
+
 const LayoutAuthCompleteRoute = LayoutAuthCompleteImport.update({
   id: '/auth-complete',
   path: '/auth-complete',
   getParentRoute: () => LayoutRoute,
 } as any)
 
-const LayoutResourcesWebScrapingGuidesRoute =
-  LayoutResourcesWebScrapingGuidesImport.update({
-    id: '/resources/web-scraping-guides',
-    path: '/resources/web-scraping-guides',
-    getParentRoute: () => LayoutRoute,
-  } as any)
-
-const LayoutResourcesSupportCenterRoute =
-  LayoutResourcesSupportCenterImport.update({
-    id: '/resources/support-center',
-    path: '/resources/support-center',
-    getParentRoute: () => LayoutRoute,
-  } as any)
-
-const LayoutResourcesFaqRoute = LayoutResourcesFaqImport.update({
-  id: '/resources/faq',
-  path: '/resources/faq',
-  getParentRoute: () => LayoutRoute,
-} as any)
-
-const LayoutResourcesCodeExamplesRoute =
-  LayoutResourcesCodeExamplesImport.update({
-    id: '/resources/code-examples',
-    path: '/resources/code-examples',
-    getParentRoute: () => LayoutRoute,
-  } as any)
-
 const LayoutResourcesBlogRoute = LayoutResourcesBlogImport.update({
   id: '/resources/blog',
   path: '/resources/blog',
   getParentRoute: () => LayoutRoute,
 } as any)
+
+const LayoutProductProductDetailsRoute =
+  LayoutProductProductDetailsImport.update({
+    id: '/product/ProductDetails',
+    path: '/product/ProductDetails',
+    getParentRoute: () => LayoutRoute,
+  } as any)
+
+const LayoutCollectionCollectionDetailsRoute =
+  LayoutCollectionCollectionDetailsImport.update({
+    id: '/collection/CollectionDetails',
+    path: '/collection/CollectionDetails',
+    getParentRoute: () => LayoutRoute,
+  } as any)
 
 const LayoutResourcesBlogsPathRoute = LayoutResourcesBlogsPathImport.update({
   id: '/resources/blogs/$path',
@@ -144,6 +143,13 @@ declare module '@tanstack/react-router' {
       path: '/auth-complete'
       fullPath: '/auth-complete'
       preLoaderRoute: typeof LayoutAuthCompleteImport
+      parentRoute: typeof LayoutImport
+    }
+    '/_layout/collections': {
+      id: '/_layout/collections'
+      path: '/collections'
+      fullPath: '/collections'
+      preLoaderRoute: typeof LayoutCollectionsImport
       parentRoute: typeof LayoutImport
     }
     '/_layout/cookie': {
@@ -188,6 +194,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutPrivacyRequestImport
       parentRoute: typeof LayoutImport
     }
+    '/_layout/products': {
+      id: '/_layout/products'
+      path: '/products'
+      fullPath: '/products'
+      preLoaderRoute: typeof LayoutProductsImport
+      parentRoute: typeof LayoutImport
+    }
     '/_layout/terms': {
       id: '/_layout/terms'
       path: '/terms'
@@ -202,39 +215,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutIndexImport
       parentRoute: typeof LayoutImport
     }
+    '/_layout/collection/CollectionDetails': {
+      id: '/_layout/collection/CollectionDetails'
+      path: '/collection/CollectionDetails'
+      fullPath: '/collection/CollectionDetails'
+      preLoaderRoute: typeof LayoutCollectionCollectionDetailsImport
+      parentRoute: typeof LayoutImport
+    }
+    '/_layout/product/ProductDetails': {
+      id: '/_layout/product/ProductDetails'
+      path: '/product/ProductDetails'
+      fullPath: '/product/ProductDetails'
+      preLoaderRoute: typeof LayoutProductProductDetailsImport
+      parentRoute: typeof LayoutImport
+    }
     '/_layout/resources/blog': {
       id: '/_layout/resources/blog'
       path: '/resources/blog'
       fullPath: '/resources/blog'
       preLoaderRoute: typeof LayoutResourcesBlogImport
-      parentRoute: typeof LayoutImport
-    }
-    '/_layout/resources/code-examples': {
-      id: '/_layout/resources/code-examples'
-      path: '/resources/code-examples'
-      fullPath: '/resources/code-examples'
-      preLoaderRoute: typeof LayoutResourcesCodeExamplesImport
-      parentRoute: typeof LayoutImport
-    }
-    '/_layout/resources/faq': {
-      id: '/_layout/resources/faq'
-      path: '/resources/faq'
-      fullPath: '/resources/faq'
-      preLoaderRoute: typeof LayoutResourcesFaqImport
-      parentRoute: typeof LayoutImport
-    }
-    '/_layout/resources/support-center': {
-      id: '/_layout/resources/support-center'
-      path: '/resources/support-center'
-      fullPath: '/resources/support-center'
-      preLoaderRoute: typeof LayoutResourcesSupportCenterImport
-      parentRoute: typeof LayoutImport
-    }
-    '/_layout/resources/web-scraping-guides': {
-      id: '/_layout/resources/web-scraping-guides'
-      path: '/resources/web-scraping-guides'
-      fullPath: '/resources/web-scraping-guides'
-      preLoaderRoute: typeof LayoutResourcesWebScrapingGuidesImport
       parentRoute: typeof LayoutImport
     }
     '/_layout/resources/blogs/$path': {
@@ -251,37 +250,38 @@ declare module '@tanstack/react-router' {
 
 interface LayoutRouteChildren {
   LayoutAuthCompleteRoute: typeof LayoutAuthCompleteRoute
+  LayoutCollectionsRoute: typeof LayoutCollectionsRoute
   LayoutCookieRoute: typeof LayoutCookieRoute
   LayoutDemoRequestRoute: typeof LayoutDemoRequestRoute
   LayoutDoNotSellRoute: typeof LayoutDoNotSellRoute
   LayoutJoinRoute: typeof LayoutJoinRoute
   LayoutPrivacyRoute: typeof LayoutPrivacyRoute
   LayoutPrivacyRequestRoute: typeof LayoutPrivacyRequestRoute
+  LayoutProductsRoute: typeof LayoutProductsRoute
   LayoutTermsRoute: typeof LayoutTermsRoute
   LayoutIndexRoute: typeof LayoutIndexRoute
+  LayoutCollectionCollectionDetailsRoute: typeof LayoutCollectionCollectionDetailsRoute
+  LayoutProductProductDetailsRoute: typeof LayoutProductProductDetailsRoute
   LayoutResourcesBlogRoute: typeof LayoutResourcesBlogRoute
-  LayoutResourcesCodeExamplesRoute: typeof LayoutResourcesCodeExamplesRoute
-  LayoutResourcesFaqRoute: typeof LayoutResourcesFaqRoute
-  LayoutResourcesSupportCenterRoute: typeof LayoutResourcesSupportCenterRoute
-  LayoutResourcesWebScrapingGuidesRoute: typeof LayoutResourcesWebScrapingGuidesRoute
   LayoutResourcesBlogsPathRoute: typeof LayoutResourcesBlogsPathRoute
 }
 
 const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutAuthCompleteRoute: LayoutAuthCompleteRoute,
+  LayoutCollectionsRoute: LayoutCollectionsRoute,
   LayoutCookieRoute: LayoutCookieRoute,
   LayoutDemoRequestRoute: LayoutDemoRequestRoute,
   LayoutDoNotSellRoute: LayoutDoNotSellRoute,
   LayoutJoinRoute: LayoutJoinRoute,
   LayoutPrivacyRoute: LayoutPrivacyRoute,
   LayoutPrivacyRequestRoute: LayoutPrivacyRequestRoute,
+  LayoutProductsRoute: LayoutProductsRoute,
   LayoutTermsRoute: LayoutTermsRoute,
   LayoutIndexRoute: LayoutIndexRoute,
+  LayoutCollectionCollectionDetailsRoute:
+    LayoutCollectionCollectionDetailsRoute,
+  LayoutProductProductDetailsRoute: LayoutProductProductDetailsRoute,
   LayoutResourcesBlogRoute: LayoutResourcesBlogRoute,
-  LayoutResourcesCodeExamplesRoute: LayoutResourcesCodeExamplesRoute,
-  LayoutResourcesFaqRoute: LayoutResourcesFaqRoute,
-  LayoutResourcesSupportCenterRoute: LayoutResourcesSupportCenterRoute,
-  LayoutResourcesWebScrapingGuidesRoute: LayoutResourcesWebScrapingGuidesRoute,
   LayoutResourcesBlogsPathRoute: LayoutResourcesBlogsPathRoute,
 }
 
@@ -291,37 +291,37 @@ const LayoutRouteWithChildren =
 export interface FileRoutesByFullPath {
   '': typeof LayoutRouteWithChildren
   '/auth-complete': typeof LayoutAuthCompleteRoute
+  '/collections': typeof LayoutCollectionsRoute
   '/cookie': typeof LayoutCookieRoute
   '/demo-request': typeof LayoutDemoRequestRoute
   '/do-not-sell': typeof LayoutDoNotSellRoute
   '/join': typeof LayoutJoinRoute
   '/privacy': typeof LayoutPrivacyRoute
   '/privacy-request': typeof LayoutPrivacyRequestRoute
+  '/products': typeof LayoutProductsRoute
   '/terms': typeof LayoutTermsRoute
   '/': typeof LayoutIndexRoute
+  '/collection/CollectionDetails': typeof LayoutCollectionCollectionDetailsRoute
+  '/product/ProductDetails': typeof LayoutProductProductDetailsRoute
   '/resources/blog': typeof LayoutResourcesBlogRoute
-  '/resources/code-examples': typeof LayoutResourcesCodeExamplesRoute
-  '/resources/faq': typeof LayoutResourcesFaqRoute
-  '/resources/support-center': typeof LayoutResourcesSupportCenterRoute
-  '/resources/web-scraping-guides': typeof LayoutResourcesWebScrapingGuidesRoute
   '/resources/blogs/$path': typeof LayoutResourcesBlogsPathRoute
 }
 
 export interface FileRoutesByTo {
   '/auth-complete': typeof LayoutAuthCompleteRoute
+  '/collections': typeof LayoutCollectionsRoute
   '/cookie': typeof LayoutCookieRoute
   '/demo-request': typeof LayoutDemoRequestRoute
   '/do-not-sell': typeof LayoutDoNotSellRoute
   '/join': typeof LayoutJoinRoute
   '/privacy': typeof LayoutPrivacyRoute
   '/privacy-request': typeof LayoutPrivacyRequestRoute
+  '/products': typeof LayoutProductsRoute
   '/terms': typeof LayoutTermsRoute
   '/': typeof LayoutIndexRoute
+  '/collection/CollectionDetails': typeof LayoutCollectionCollectionDetailsRoute
+  '/product/ProductDetails': typeof LayoutProductProductDetailsRoute
   '/resources/blog': typeof LayoutResourcesBlogRoute
-  '/resources/code-examples': typeof LayoutResourcesCodeExamplesRoute
-  '/resources/faq': typeof LayoutResourcesFaqRoute
-  '/resources/support-center': typeof LayoutResourcesSupportCenterRoute
-  '/resources/web-scraping-guides': typeof LayoutResourcesWebScrapingGuidesRoute
   '/resources/blogs/$path': typeof LayoutResourcesBlogsPathRoute
 }
 
@@ -329,19 +329,19 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/_layout': typeof LayoutRouteWithChildren
   '/_layout/auth-complete': typeof LayoutAuthCompleteRoute
+  '/_layout/collections': typeof LayoutCollectionsRoute
   '/_layout/cookie': typeof LayoutCookieRoute
   '/_layout/demo-request': typeof LayoutDemoRequestRoute
   '/_layout/do-not-sell': typeof LayoutDoNotSellRoute
   '/_layout/join': typeof LayoutJoinRoute
   '/_layout/privacy': typeof LayoutPrivacyRoute
   '/_layout/privacy-request': typeof LayoutPrivacyRequestRoute
+  '/_layout/products': typeof LayoutProductsRoute
   '/_layout/terms': typeof LayoutTermsRoute
   '/_layout/': typeof LayoutIndexRoute
+  '/_layout/collection/CollectionDetails': typeof LayoutCollectionCollectionDetailsRoute
+  '/_layout/product/ProductDetails': typeof LayoutProductProductDetailsRoute
   '/_layout/resources/blog': typeof LayoutResourcesBlogRoute
-  '/_layout/resources/code-examples': typeof LayoutResourcesCodeExamplesRoute
-  '/_layout/resources/faq': typeof LayoutResourcesFaqRoute
-  '/_layout/resources/support-center': typeof LayoutResourcesSupportCenterRoute
-  '/_layout/resources/web-scraping-guides': typeof LayoutResourcesWebScrapingGuidesRoute
   '/_layout/resources/blogs/$path': typeof LayoutResourcesBlogsPathRoute
 }
 
@@ -350,54 +350,54 @@ export interface FileRouteTypes {
   fullPaths:
     | ''
     | '/auth-complete'
+    | '/collections'
     | '/cookie'
     | '/demo-request'
     | '/do-not-sell'
     | '/join'
     | '/privacy'
     | '/privacy-request'
+    | '/products'
     | '/terms'
     | '/'
+    | '/collection/CollectionDetails'
+    | '/product/ProductDetails'
     | '/resources/blog'
-    | '/resources/code-examples'
-    | '/resources/faq'
-    | '/resources/support-center'
-    | '/resources/web-scraping-guides'
     | '/resources/blogs/$path'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/auth-complete'
+    | '/collections'
     | '/cookie'
     | '/demo-request'
     | '/do-not-sell'
     | '/join'
     | '/privacy'
     | '/privacy-request'
+    | '/products'
     | '/terms'
     | '/'
+    | '/collection/CollectionDetails'
+    | '/product/ProductDetails'
     | '/resources/blog'
-    | '/resources/code-examples'
-    | '/resources/faq'
-    | '/resources/support-center'
-    | '/resources/web-scraping-guides'
     | '/resources/blogs/$path'
   id:
     | '__root__'
     | '/_layout'
     | '/_layout/auth-complete'
+    | '/_layout/collections'
     | '/_layout/cookie'
     | '/_layout/demo-request'
     | '/_layout/do-not-sell'
     | '/_layout/join'
     | '/_layout/privacy'
     | '/_layout/privacy-request'
+    | '/_layout/products'
     | '/_layout/terms'
     | '/_layout/'
+    | '/_layout/collection/CollectionDetails'
+    | '/_layout/product/ProductDetails'
     | '/_layout/resources/blog'
-    | '/_layout/resources/code-examples'
-    | '/_layout/resources/faq'
-    | '/_layout/resources/support-center'
-    | '/_layout/resources/web-scraping-guides'
     | '/_layout/resources/blogs/$path'
   fileRoutesById: FileRoutesById
 }
@@ -427,24 +427,28 @@ export const routeTree = rootRoute
       "filePath": "_layout.tsx",
       "children": [
         "/_layout/auth-complete",
+        "/_layout/collections",
         "/_layout/cookie",
         "/_layout/demo-request",
         "/_layout/do-not-sell",
         "/_layout/join",
         "/_layout/privacy",
         "/_layout/privacy-request",
+        "/_layout/products",
         "/_layout/terms",
         "/_layout/",
+        "/_layout/collection/CollectionDetails",
+        "/_layout/product/ProductDetails",
         "/_layout/resources/blog",
-        "/_layout/resources/code-examples",
-        "/_layout/resources/faq",
-        "/_layout/resources/support-center",
-        "/_layout/resources/web-scraping-guides",
         "/_layout/resources/blogs/$path"
       ]
     },
     "/_layout/auth-complete": {
       "filePath": "_layout/auth-complete.tsx",
+      "parent": "/_layout"
+    },
+    "/_layout/collections": {
+      "filePath": "_layout/collections.tsx",
       "parent": "/_layout"
     },
     "/_layout/cookie": {
@@ -471,6 +475,10 @@ export const routeTree = rootRoute
       "filePath": "_layout/privacy-request.tsx",
       "parent": "/_layout"
     },
+    "/_layout/products": {
+      "filePath": "_layout/products.tsx",
+      "parent": "/_layout"
+    },
     "/_layout/terms": {
       "filePath": "_layout/terms.tsx",
       "parent": "/_layout"
@@ -479,24 +487,16 @@ export const routeTree = rootRoute
       "filePath": "_layout/index.tsx",
       "parent": "/_layout"
     },
+    "/_layout/collection/CollectionDetails": {
+      "filePath": "_layout/collection/CollectionDetails.tsx",
+      "parent": "/_layout"
+    },
+    "/_layout/product/ProductDetails": {
+      "filePath": "_layout/product/ProductDetails.tsx",
+      "parent": "/_layout"
+    },
     "/_layout/resources/blog": {
       "filePath": "_layout/resources/blog.tsx",
-      "parent": "/_layout"
-    },
-    "/_layout/resources/code-examples": {
-      "filePath": "_layout/resources/code-examples.tsx",
-      "parent": "/_layout"
-    },
-    "/_layout/resources/faq": {
-      "filePath": "_layout/resources/faq.tsx",
-      "parent": "/_layout"
-    },
-    "/_layout/resources/support-center": {
-      "filePath": "_layout/resources/support-center.tsx",
-      "parent": "/_layout"
-    },
-    "/_layout/resources/web-scraping-guides": {
-      "filePath": "_layout/resources/web-scraping-guides.tsx",
       "parent": "/_layout"
     },
     "/_layout/resources/blogs/$path": {
