@@ -13,14 +13,44 @@ function ProductsPage() {
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://api.iconluxury.today';
 
   useEffect(() => {
-    const fetchProducts = async (retryCount = 3, delay = 1000) => {
-      for (let attempt = 1; attempt <= retryCount; attempt++) {
+    const fetchWithRedirect = async (url: string, maxRedirects = 5) => {
+      let currentUrl = url;
+      let redirects = 0;
+
+      while (redirects < maxRedirects) {
         try {
-          const response = await fetch(`${API_BASE_URL}/api/v1/products`, { timeout: 10000 });
+          const response = await fetch(currentUrl, { 
+            timeout: 10000,
+            redirect: 'manual' // Handle redirects manually
+          });
+          
+          if (response.status >= 300 && response.status < 400) {
+            const redirectUrl = response.headers.get('location');
+            if (!redirectUrl) {
+              throw new Error('Redirect response missing location header');
+            }
+            logger.info(`Redirecting from ${currentUrl} to ${redirectUrl}`);
+            currentUrl = redirectUrl;
+            redirects++;
+            continue;
+          }
+          
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
           }
-          const data = await response.json();
+          
+          return await response.json();
+        } catch (err) {
+          throw err;
+        }
+      }
+      throw new Error('Max redirects exceeded');
+    };
+
+    const fetchProducts = async (retryCount = 3, delay = 1000) => {
+      for (let attempt = 1; attempt <= retryCount; attempt++) {
+        try {
+          const data = await fetchWithRedirect(`${API_BASE_URL}/api/v1/products`);
           setProducts(data);
           setError(null);
           break;
