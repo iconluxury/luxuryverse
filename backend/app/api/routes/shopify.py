@@ -9,7 +9,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(
 logger = logging.getLogger(__name__)
 
 # Main router for Shopify endpoints
-shopify_router = APIRouter(prefix="/api/v1", tags=["shopify"])
+shopify_router = APIRouter( tags=["shopify"])
 
 # Sub-routers for products and collections
 products_router = APIRouter(prefix="/products", tags=["products"])
