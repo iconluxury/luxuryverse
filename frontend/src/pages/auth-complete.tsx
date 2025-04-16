@@ -57,13 +57,6 @@ function AuthComplete() {
           const data = await response.json();
           sessionStorage.setItem('x_profile', JSON.stringify(data));
           sessionStorage.setItem('x_user_id', userId);
-          toast({
-            title: 'X Profile Connected',
-            description: `Logged in as @${data.username}`,
-            status: 'success',
-            duration: 5000,
-            isClosable: true,
-          });
           navigate({ to: '/join' });
         } catch (error: any) {
           console.error('X Auth Error:', error);

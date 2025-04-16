@@ -14,6 +14,7 @@ import {
   Image,
   HStack,
   Tooltip,
+  FormLabel,
 } from '@chakra-ui/react';
 import Footer from '../../components/Common/Footer';
 import theme from '../../theme';
@@ -22,6 +23,16 @@ import { useAccount } from 'wagmi';
 import { AuthContext } from '../../components/Common/TopNav';
 import { OpenAPI } from '../../client';
 
+interface XProfile {
+  id: string;
+  username: string;
+  name: string;
+  email?: string;
+  location?: string;
+  description?: string;
+  profile_image_url?: string;
+}
+
 export const Route = createFileRoute('/_layout/join')({
   component: JoinPage,
 });
@@ -29,10 +40,14 @@ export const Route = createFileRoute('/_layout/join')({
 function JoinPage() {
   const toast = useToast();
   const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
+  const [preferences, setPreferences] = useState('');
   const [isEmailInvalid, setIsEmailInvalid] = useState(false);
-  const [xProfile, setXProfile] = useState(null);
-  const [userId, setUserId] = useState(null);
+  const [isNameInvalid, setIsNameInvalid] = useState(false);
+  const [xProfile, setXProfile] = useState<XProfile | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
   const [isAuthInitiating, setIsAuthInitiating] = useState(false);
+  const [isEmailConfirmed, setIsEmailConfirmed] = useState(false);
   const { user, setJoining, login } = useContext(AuthContext);
   const { address, isConnected } = useAccount();
 
@@ -47,7 +62,7 @@ function JoinPage() {
       sessionStorage.removeItem('x_user_id');
       const response = await fetch(`https://api.iconluxury.today/api/v1/x-auth/request-token`, {
         headers: { 'Content-Type': 'application/json' },
-        credentials: 'include'
+        credentials: 'include',
       });
       if (!response.ok) {
         const errorText = await response.text();
@@ -57,7 +72,7 @@ function JoinPage() {
       const data = await response.json();
       console.log('Redirecting to authorization URL:', data.authorization_url);
       window.location.href = data.authorization_url;
-    } catch (error) {
+    } catch (error: any) {
       console.error('X Auth Initiation Error:', error);
       toast({
         title: 'X Auth Error',
@@ -69,7 +84,7 @@ function JoinPage() {
     } finally {
       setIsAuthInitiating(false);
     }
-  }, [isAuthInitiating]);
+  }, [isAuthInitiating, toast]);
 
   useEffect(() => {
     setJoining(true);
@@ -89,9 +104,10 @@ function JoinPage() {
     const storedUserId = sessionStorage.getItem('x_user_id');
     if (storedProfile && storedUserId) {
       try {
-        const profile = JSON.parse(storedProfile);
+        const profile: XProfile = JSON.parse(storedProfile);
         setXProfile(profile);
         setUserId(storedUserId);
+        setName(profile.name || '');
         toast({
           title: 'X Profile Connected',
           description: `Logged in as @${profile.username}`,
@@ -99,9 +115,6 @@ function JoinPage() {
           duration: 5000,
           isClosable: true,
         });
-        // Clean up stored data after use
-        sessionStorage.removeItem('x_profile');
-        sessionStorage.removeItem('x_user_id');
       } catch (error) {
         console.error('Error parsing stored profile:', error);
         toast({
@@ -131,7 +144,7 @@ function JoinPage() {
     }
   }, [isConnected, address, user, login, setJoining, toast]);
 
-  const handleEmailSubmit = async (e) => {
+  const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
@@ -140,12 +153,43 @@ function JoinPage() {
     }
     setIsEmailInvalid(false);
 
+    if (xProfile && xProfile.email && xProfile.email !== email) {
+      // Email differs; prompt for confirmation or update
+      toast({
+        title: 'Email Mismatch',
+        description: `Your X profile email (${xProfile.email}) differs from the entered email (${email}). Using ${email}.`,
+        status: 'warning',
+        duration: 5000,
+        isClosable: true,
+      });
+      // Optionally update X profile email (requires additional API call, not implemented here)
+    }
+
+    setIsEmailConfirmed(true);
+  };
+
+  const handleFinalSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setIsEmailInvalid(true);
+      return;
+    }
+    if (!name.trim()) {
+      setIsNameInvalid(true);
+      return;
+    }
+    setIsEmailInvalid(false);
+    setIsNameInvalid(false);
+
     try {
       const response = await fetch('https://api.iconluxury.today/api/v1/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email,
+          name,
+          preferences,
           walletAddress: address,
           xUsername: xProfile?.username,
           xProfile,
@@ -158,15 +202,20 @@ function JoinPage() {
       }
       toast({
         title: 'Subscribed',
-        description: `Thank you for subscribing with ${email}!`,
+        description: `Thank you for joining, ${name}!`,
         status: 'success',
         duration: 5000,
         isClosable: true,
       });
       setEmail('');
+      setName('');
+      setPreferences('');
       setJoining(false);
       login({ address, xUsername: xProfile?.username, xProfile });
-    } catch (error) {
+      // Clean up sessionStorage
+      sessionStorage.removeItem('x_profile');
+      sessionStorage.removeItem('x_user_id');
+    } catch (error: any) {
       console.error('Subscription error:', error);
       toast({
         title: 'Subscription Error',
@@ -221,7 +270,7 @@ function JoinPage() {
 
           <Box w="full">
             <Heading as="h2" size={['md', 'lg']} fontWeight="medium" mb={4}>
-              2. Follow @LuxuryVerse
+              2. Connect X Profile
             </Heading>
             <Text fontSize={['sm', 'md']} mb={4} color="gray.400">
               Connect your X account to follow @LuxuryVerse and create your collectible profile.
@@ -257,43 +306,117 @@ function JoinPage() {
 
           <Box w="full">
             <Heading as="h2" size={['md', 'lg']} fontWeight="medium" mb={4}>
-              3. Sign Up for Notifications
+              3. Confirm Email and Join
             </Heading>
             <Text fontSize={['sm', 'md']} mb={4} color="gray.400">
-              Enter your email to receive order updates and exclusive offers.
+              {xProfile && !isEmailConfirmed
+                ? 'Confirm your email to proceed.'
+                : 'Complete your profile to join LuxuryVerse.'}
             </Text>
-            <form onSubmit={handleEmailSubmit}>
-              <FormControl isInvalid={isEmailInvalid} maxW="400px">
-                <Input
-                  type="email"
-                  placeholder="Enter your email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  bg="gray.800"
-                  border="none"
-                  color="white"
-                  _placeholder={{ color: 'gray.500' }}
+            {!xProfile ? (
+              <Text fontSize="sm" color="gray.500">
+                Please connect your X profile to continue.
+              </Text>
+            ) : !isEmailConfirmed ? (
+              <form onSubmit={handleEmailSubmit}>
+                <FormControl isInvalid={isEmailInvalid} maxW="400px">
+                  <FormLabel>Email</FormLabel>
+                  <Input
+                    type="email"
+                    placeholder="Enter your email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    bg="gray.800"
+                    border="none"
+                    color="white"
+                    _placeholder={{ color: 'gray.500' }}
+                    borderRadius="md"
+                    px={4}
+                    py={3}
+                  />
+                  <FormErrorMessage>Email is invalid.</FormErrorMessage>
+                </FormControl>
+                <Button
+                  type="submit"
+                  bg="yellow.400"
+                  color="gray.900"
+                  _hover={{ bg: 'yellow.500' }}
                   borderRadius="md"
-                  px={4}
+                  px={6}
                   py={3}
-                />
-                <FormErrorMessage>Email is invalid.</FormErrorMessage>
-              </FormControl>
-              <Button
-                type="submit"
-                bg="yellow.400"
-                color="gray.900"
-                _hover={{ bg: 'yellow.500' }}
-                borderRadius="md"
-                px={6}
-                py={3}
-                mt={4}
-                fontWeight="medium"
-                isDisabled={!isConnected || !xProfile}
-              >
-                Subscribe
-              </Button>
-            </form>
+                  mt={4}
+                  fontWeight="medium"
+                >
+                  Confirm Email
+                </Button>
+              </form>
+            ) : (
+              <form onSubmit={handleFinalSubmit}>
+                <VStack spacing={4} align="start" maxW="400px">
+                  <FormControl isInvalid={isEmailInvalid}>
+                    <FormLabel>Email</FormLabel>
+                    <Input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      bg="gray.800"
+                      border="none"
+                      color="white"
+                      _placeholder={{ color: 'gray.500' }}
+                      borderRadius="md"
+                      px={4}
+                      py={3}
+                    />
+                    <FormErrorMessage>Email is invalid.</FormErrorMessage>
+                  </FormControl>
+                  <FormControl isInvalid={isNameInvalid}>
+                    <FormLabel>Name</FormLabel>
+                    <Input
+                      type="text"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      bg="gray.800"
+                      border="none"
+                      color="white"
+                      _placeholder={{ color: 'gray.500' }}
+                      borderRadius="md"
+                      px={4}
+                      py={3}
+                      placeholder="Enter your name"
+                    />
+                    <FormErrorMessage>Name is required.</FormErrorMessage>
+                  </FormControl>
+                  <FormControl>
+                    <FormLabel>Preferences (Optional)</FormLabel>
+                    <Input
+                      type="text"
+                      value={preferences}
+                      onChange={(e) => setPreferences(e.target.value)}
+                      bg="gray.800"
+                      border="none"
+                      color="white"
+                      _placeholder={{ color: 'gray.500' }}
+                      borderRadius="md"
+                      px={4}
+                      py={3}
+                      placeholder="e.g., Collectibles, Fashion"
+                    />
+                  </FormControl>
+                  <Button
+                    type="submit"
+                    bg="yellow.400"
+                    color="gray.900"
+                    _hover={{ bg: 'yellow.500' }}
+                    borderRadius="md"
+                    px={6}
+                    py={3}
+                    fontWeight="medium"
+                  >
+                    Join LuxuryVerse
+                  </Button>
+                </VStack>
+              </form>
+            )}
           </Box>
 
           <Box w="full">
