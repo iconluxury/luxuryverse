@@ -13,52 +13,53 @@ function CollectionsPage() {
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://api.iconluxury.today';
 
   useEffect(() => {
-    const fetchWithRedirect = async (url: string, maxRedirects = 5) => {
-      let currentUrl = url;
-      let redirects = 0;
-
-      while (redirects < maxRedirects) {
-        try {
-          const response = await fetch(currentUrl, { 
-            timeout: 10000,
-            redirect: 'manual'
-          });
-          
-          if (response.status >= 300 && response.status < 400) {
-            const redirectUrl = response.headers.get('location');
-            if (!redirectUrl) {
-              throw new Error('Redirect response missing location header');
-            }
-            console.info(`Redirecting from ${currentUrl} to ${redirectUrl}`);
-            currentUrl = redirectUrl;
-            redirects++;
-            continue;
-          }
-          
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          
-          return await response.json();
-        } catch (err) {
-          throw err;
-        }
-      }
-      throw new Error('Max redirects exceeded');
-    };
-
-    const fetchCollections = async (retryCount = 3, delay = 1000) => {
+    const fetchCollections = async (retryCount = 6, delay = 2000) => {
       for (let attempt = 1; attempt <= retryCount; attempt++) {
         try {
-          const data = await fetchWithRedirect(`${API_BASE_URL}/api/v1/collections`);
+          console.debug(`Attempt ${attempt}: Fetching collections from ${API_BASE_URL}/api/v1/collections`);
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 30000);
+
+          const response = await fetch(`${API_BASE_URL}/api/v1/collections`, {
+            signal: controller.signal,
+            method: 'GET',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+            credentials: 'omit',
+          });
+
+          clearTimeout(timeoutId);
+          const headers = Object.fromEntries(response.headers.entries());
+          console.debug(`Response status: ${response.status}, ok: ${response.ok}, headers: ${JSON.stringify(headers)}`);
+
+          if (!response.ok) {
+            if (response.status === 502) {
+              throw new Error('Server error (502 Bad Gateway). The backend may be down or misconfigured.');
+            }
+            if (response.status === 0) {
+              throw new Error('No response received. Possible CORS policy block or network issue.');
+            }
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
+          const data = await response.json();
+          console.debug(`Fetched ${data.length} collections`);
           setCollections(data);
           setError(null);
           break;
-        } catch (err) {
-          const errorMessage = `Attempt ${attempt} failed: ${(err as Error).message}`;
+        } catch (err: any) {
+          const errorMessage = `Attempt ${attempt} failed: ${err.message || 'Unknown error'}`;
           console.error(errorMessage);
+          if (err.name === 'AbortError') {
+            err.message = 'Request timed out after 30s. Please check the backend server status.';
+          }
+          if (err.message.includes('Failed to fetch')) {
+            err.message = 'Unable to connect: Possible CORS issue, server downtime, or network error. Check console for details.';
+          }
           if (attempt === retryCount) {
-            setError(`Failed to load collections: ${(err as Error).message}`);
+            setError(`Failed to load collections: ${err.message || 'Unable to connect to the server.'}`);
           } else {
             await new Promise(resolve => setTimeout(resolve, delay * attempt));
           }
@@ -86,7 +87,10 @@ function CollectionsPage() {
       <Box textAlign="center" py={16} color="red.500">
         <Text fontSize="lg">{error}</Text>
         <Text fontSize="sm" mt={2}>
-          Please check your network connection or try again later.
+          Please check your network connection, ensure the backend is running, or contact{' '}
+          <a href="mailto:support@iconluxury.today" style={{ color: '#3182CE' }}>
+            support@iconluxury.today
+          </a>.
         </Text>
         <Button
           mt={4}
