@@ -70,88 +70,156 @@ function Home() {
     return () => clearInterval(interval);
   }, []);
 
- // Inside Home component
-useEffect(() => {
-  setIsLoading(true);
-  axios
-    .get("https://iconluxury.today/api/v1/collections")
-    .then((res) => {
-      console.log("API Response:", res.data); // Debug
-      const data = Array.isArray(res.data) ? res.data : [];
-      setCollections(data);
-      setIsLoading(false);
-    })
-    .catch((err) => {
-      setError("Unable to load collections. Please try again later.");
-      setCollections([]); // Fallback to empty array
-      setIsLoading(false);
-    });
-}, []);
+  // Fetch collections from the API
+  useEffect(() => {
+    setIsLoading(true);
+    axios
+      .get("https://iconluxury.today/api/v1/collections")
+      .then((res) => {
+        console.log("API Response:", res.data); // Debug
+        const data = Array.isArray(res.data)
+          ? res.data
+          : Array.isArray(res.data?.collections)
+          ? res.data.collections
+          : [];
+        setCollections(data);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        setError("Unable to load collections. Please try again later.");
+        setCollections([]); // Fallback to empty array
+        setIsLoading(false);
+      });
+  }, []);
 
-// Recent Drops Card
-<Box py={16} px={{ base: 4, md: 8 }} maxW="1200px" mx="auto">
-  <VStack
-    bg="gray.700"
-    borderRadius="md"
-    p={8}
-    spacing={6}
-    transition="all 0.3s"
-    _hover={{ transform: "translateY(-4px)", shadow: "lg" }}
-  >
-    <Heading as="h2" size="xl">
-      Recent Drops
-    </Heading>
-    <Text maxW="600px" textAlign="center">
-      Each week, LuxuryVerse releases a limited selection of luxury goods to our members. We
-      announce these drops one day in advance on X, releasing goods on a first come first serve
-      basis exclusive to our members.
-    </Text>
-    {error && <Text color="red.300">{error}</Text>}
-    {isLoading && <Text color="gray.400">Loading drops...</Text>}
-    {!isLoading && !Array.isArray(collections) && (
-      <Text color="gray.400">No valid collections available</Text>
-    )}
-    {!isLoading && Array.isArray(collections) && collections.length === 0 && (
-      <Text color="gray.400">No drops available</Text>
-    )}
-    {!isLoading && Array.isArray(collections) && collections.length > 0 && (
-      <Grid
-        templateColumns={{ base: "1fr", md: "repeat(3, 1fr)" }}
-        gap={8}
-        w="100%"
+  // Handle wallet authentication
+  const handleConnect = async () => {
+    try {
+      await open();
+      if (isConnected && address) {
+        const message = `Sign this message to authenticate with LuxuryVerse: ${address}`;
+        const signature = await signMessageAsync({ message });
+        const response = await axios.post("https://iconluxury.today/api/v1/auth/wallet", {
+          address,
+          signature,
+          message,
+        });
+        localStorage.setItem("access_token", response.data.access_token);
+      }
+    } catch (err) {
+      console.error(err);
+      setError("Authentication failed");
+    }
+  };
+
+  // Handle waitlist join (placeholder functionality)
+  const handleJoinWaitlist = () => {
+    console.log("Joined the waitlist");
+    // TODO: Implement waitlist logic (e.g., API call or form redirect)
+  };
+
+  return (
+    <Box>
+      {/* Hero Section: Exclusive Brands */}
+      <Box
+        bgImage="url('/images/hero-bg.jpg')"
+        bgSize="cover"
+        bgPosition="center"
+        py={{ base: 16, md: 24 }}
+        px={{ base: 4, md: 8 }}
       >
-        {collections.flatMap((collection) =>
-          collection.products.map((product) => (
-            <VStack
-              key={product.id}
-              bg="gray.600"
-              borderRadius="md"
-              p={4}
-              align="start"
-            >
+        <VStack spacing={6} maxW="800px" align="flex-start">
+          <Heading as="h1" size={{ base: "2xl", md: "3xl" }} fontWeight="extrabold" lineHeight="1.2">
+            Exclusive Brands
+          </Heading>
+          <Text fontSize={{ base: "xl", md: "2xl" }} fontWeight="bold">
+            Exclusive Access
+          </Text>
+          <Text fontSize={{ base: "lg", md: "xl" }} opacity={0.9}>
+            Authenticated luxury goods, fully verified on the blockchain
+          </Text>
+          <Button
+            size="lg"
+            colorScheme="purple"
+            bgGradient="linear(to-r, purple.500, pink.500)"
+            _hover={{ bgGradient: "linear(to-r, purple.600, pink.600)" }}
+            onClick={handleJoinWaitlist}
+            fontSize="xl"
+            py={8}
+            px={12}
+          >
+            Join The Waitlist
+          </Button>
+          <Flex gap={8} flexWrap="nowrap" overflowX="auto" mt={12} pb={2}>
+            {[
+              { src: "/images/balmain.jpg", alt: "Balmain Logo" },
+              { src: "/images/ferragamo.jpg", alt: "Ferragamo Logo" },
+              { src: "/images/the-row.jpg", alt: "The Row Logo" },
+              { src: "/images/roger-vivier.jpg", alt: "Roger Vivier Logo" },
+              { src: "/images/gianvito-rossi.jpg", alt: "Gianvito Rossi Logo" },
+              { src: "/images/etro.jpg", alt: "Etro Logo" },
+              { src: "/images/moschino.jpg", alt: "Moschino Logo" },
+            ].map((img) => (
               <Image
-                src={product.thumbnail}
-                alt={`${product.title} Image`}
-                borderRadius="md"
-                objectFit="cover"
-                h="150px"
-                w="100%"
+                key={img.alt}
+                src={img.src}
+                alt={img.alt}
+                boxSize="100px"
+                objectFit="contain"
                 fallbackSrc="/images/placeholder.jpg"
               />
-              <Text fontSize="md" fontWeight="bold">
-                {product.title}
-              </Text>
-              <Text color="purple.300">{product.price}</Text>
-              <Button size="sm" colorScheme="purple" variant="outline" w="full" mt={2}>
-                View Details
-              </Button>
-            </VStack>
-          ))
-        )}
-      </Grid>
-    )}
-  </VStack>
-</Box>
+            ))}
+          </Flex>
+        </VStack>
+      </Box>
+
+      {/* Cards Section: Luxury Brands, Exclusive Drops, Authentic Goods */}
+      <Box py={16} px={{ base: 4, md: 8 }} maxW="1200px" mx="auto">
+        <Flex
+          direction={{ base: "column", lg: "row" }}
+          gap={8}
+          justify="space-between"
+          align="stretch"
+        >
+          {/* Luxury Brands Card */}
+          <VStack
+            bg="gray.700"
+            borderRadius="md"
+            p={6}
+            flex="1"
+            align="start"
+            transition="all 0.3s"
+            _hover={{ transform: "translateY(-4px)", shadow: "lg" }}
+          >
+            <Heading as="h3" size="lg" mb={4}>
+              Luxury Brands
+            </Heading>
+            <Text>
+              LuxuryVerse has direct access to the world's top luxury brands. We have built our
+              industry relationships over decades, ensuring that we have the best styles at the prices.
+            </Text>
+          </VStack>
+
+          {/* Exclusive Drops Card */}
+          <VStack
+            bg="gray.700"
+            borderRadius="md"
+            p={6}
+            flex="1"
+            align="start"
+            transition="all 0.3s"
+            _hover={{ transform: "translateY(-4px)", shadow: "lg" }}
+          >
+            <Heading as="h3" size="lg" mb={4}>
+              Exclusive Drops
+            </Heading>
+            <Text>
+              Each week, LuxuryVerse releases a limited selection of luxury goods to our members. We
+              announce these drops one day in advance on X, releasing goods on a first come first serve
+              basis exclusive to our members. Over time, LuxuryVerse will move to daily drops and
+              additional membership levels, enabling earlier access or deeper discounts.
+            </Text>
+          </VStack>
 
           {/* Authentic Goods Card */}
           <VStack
@@ -173,6 +241,8 @@ useEffect(() => {
               experience.
             </Text>
           </VStack>
+        </Flex>
+      </Box>
 
       {/* Launch Card */}
       <Box py={16} bg="gray.800" textAlign="center">
@@ -239,10 +309,13 @@ useEffect(() => {
           </Text>
           {error && <Text color="red.300">{error}</Text>}
           {isLoading && <Text color="gray.400">Loading drops...</Text>}
-          {!isLoading && collections.length === 0 && (
+          {!isLoading && !Array.isArray(collections) && (
+            <Text color="gray.400">No valid collections available</Text>
+          )}
+          {!isLoading && Array.isArray(collections) && collections.length === 0 && (
             <Text color="gray.400">No drops available</Text>
           )}
-          {!isLoading && collections.length > 0 && (
+          {!isLoading && Array.isArray(collections) && collections.length > 0 && (
             <Grid
               templateColumns={{ base: "1fr", md: "repeat(3, 1fr)" }}
               gap={8}
