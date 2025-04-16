@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import List
-from app.core.shopify_config import wrapper
+from shopify_config import wrapper
 import logging
 
 # Configure logging
@@ -38,8 +38,8 @@ async def get_products():
             Product(
                 id=str(product["id"]),
                 title=product["title"],
-                thumbnail=product["images"][0]["src"] if product["images"] else "",
-                price=f"${product['variants'][0]['price']}" if product["variants"] else "N/A"
+                thumbnail=product["images"][0]["src"] if product.get("images") else "",
+                price=f"${product['variants'][0]['price']}" if product.get("variants") and len(product["variants"]) > 0 else "N/A"
             )
             for product in products
         ]
@@ -59,8 +59,8 @@ async def get_product(product_id: str):
         return Product(
             id=str(product["id"]),
             title=product["title"],
-            thumbnail=product["images"][0]["src"] if product["images"] else "",
-            price=f"${product['variants'][0]['price']}" if product["variants"] else "N/A"
+            thumbnail=product["images"][0]["src"] if product.get("images") else "",
+            price=f"${product['variants'][0]['price']}" if product.get("variants") and len(product["variants"]) > 0 else "N/A"
         )
     except Exception as e:
         logger.error(f"Failed to fetch product {product_id}: {e}")
@@ -84,8 +84,8 @@ async def get_collections():
                         Product(
                             id=str(product["id"]),
                             title=product["title"],
-                            thumbnail=product["images"][0]["src"] if product["images"] else "",
-                            price=f"${product['variants'][0]['price']}" if product["variants"] else "N/A"
+                            thumbnail=product["images"][0]["src"] if product.get("images") else "",
+                            price=f"${product['variants'][0]['price']}" if product.get("variants") and len(product["variants"]) > 0 else "N/A"
                         )
                         for product in products
                     ]
