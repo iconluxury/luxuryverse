@@ -4,6 +4,7 @@ import hmac
 import hashlib
 import base64
 from typing import Dict, List, Optional
+import time
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -38,37 +39,49 @@ class ShopifyWrapper:
             "Content-Type": "application/json"
         }
 
-    def _make_request(self, method: str, endpoint: str, params: Dict = None, json: Dict = None) -> Dict:
+    def _make_request(self, method: str, endpoint: str, params: Dict = None, json: Dict = None, retries: int = 3, backoff: float = 1.0) -> Dict:
         """
-        Make an HTTP request to the Shopify Admin API.
+        Make an HTTP request to the Shopify Admin API with retry on rate limit.
 
         Args:
             method (str): HTTP method ('GET', 'POST', etc.).
             endpoint (str): API endpoint (e.g., '/admin/api/2025-04/products.json').
             params (Dict, optional): Query parameters.
             json (Dict, optional): JSON payload for POST/PUT requests.
+            retries (int): Number of retries for 429 errors (default: 3).
+            backoff (float): Initial backoff delay in seconds (default: 1.0).
 
         Returns:
             Dict: JSON response from the API.
 
         Raises:
-            requests.RequestException: If the request fails.
+            requests.RequestException: If the request fails after retries.
         """
         url = f"{self.base_url}{endpoint}"
-        try:
-            response = requests.request(
-                method=method,
-                url=url,
-                headers=self.headers,
-                params=params,
-                json=json,
-                timeout=10
-            )
-            response.raise_for_status()
-            return response.json()
-        except requests.RequestException as e:
-            logger.error(f"Request to {url} failed: {e}")
-            raise
+        for attempt in range(retries):
+            try:
+                response = requests.request(
+                    method=method,
+                    url=url,
+                    headers=self.headers,
+                    params=params,
+                    json=json,
+                    timeout=10
+                )
+                if response.status_code == 429:
+                    retry_after = float(response.headers.get("Retry-After", backoff * (2 ** attempt)))
+                    logger.warning(f"Rate limit hit for {url}, retrying after {retry_after} seconds")
+                    time.sleep(retry_after)
+                    continue
+                response.raise_for_status()
+                return response.json()
+            except requests.RequestException as e:
+                if attempt == retries - 1:
+                    logger.error(f"Request to {url} failed after {retries} retries: {e}")
+                    raise
+                logger.warning(f"Request to {url} failed, retrying... ({attempt + 1}/{retries}): {e}")
+                time.sleep(backoff * (2 ** attempt))
+        raise requests.RequestException(f"Failed to complete request to {url} after {retries} retries")
 
     def list_products(self, limit: int = 50, since_id: int = 0) -> List[Dict]:
         """
@@ -285,3 +298,4 @@ class ShopifyWrapper:
         ).digest()
         computed_hmac = base64.b64encode(digest).decode('utf-8')
         return hmac.compare_digest(computed_hmac, hmac_header)
+

@@ -1,127 +1,301 @@
-from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel
-from typing import List
-from app.core.shopify_config import wrapper
-import logging
 import requests
-
+import logging
+import hmac
+import hashlib
+import base64
+from typing import Dict, List, Optional
+import time
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
-# Main router for Shopify endpoints
-shopify_router = APIRouter(tags=["shopify"])
-
-# Sub-routers for products and collections
-products_router = APIRouter(prefix="/products", tags=["products"])
-collections_router = APIRouter(prefix="/collections", tags=["collections"])
-
-# Pydantic models
-class Product(BaseModel):
-    id: str
-    title: str
-    thumbnail: str
-    price: str
-
-class Collection(BaseModel):
-    id: str
-    title: str
-    products: List[Product]
-
-@products_router.get("/", response_model=List[Product])
-async def get_products():
+class ShopifyWrapper:
     """
-    Fetch a list of products from Shopify.
+    A Python wrapper for Shopify's Admin API (version 2025-04), supporting products, draft orders, collections,
+    and webhooks for draft order events.
     """
-    try:
-        products = wrapper.list_products(limit=10)
-        result = []
-        for product in products:
-            variants = product.get("variants", [])
-            price = f"${variants[0]['price']}" if variants and len(variants) > 0 else "Contact for price"
-            if not variants:
-                logger.warning(f"Product {product['id']} has no variants")
-            result.append(
-                Product(
-                    id=str(product["id"]),
-                    title=product["title"],
-                    thumbnail=product["images"][0]["src"] if product.get("images") else "",
-                    price=price
+    def __init__(self, shop_url: str, access_token: str, webhook_secret: Optional[str] = None):
+        """
+        Initialize the Shopify wrapper.
+
+        Args:
+            shop_url (str): The Shopify store URL (e.g., 'accessxprive.myshopify.com').
+            access_token (str): Access token for Admin API authentication.
+            webhook_secret (str, optional): Secret for verifying webhook signatures.
+
+        Raises:
+            ValueError: If access_token is missing or empty.
+        """
+        if not access_token:
+            raise ValueError("Access token is required for Admin API")
+        self.shop_url = shop_url.rstrip('/')
+        self.access_token = access_token
+        self.webhook_secret = webhook_secret
+        self.base_url = f"https://{self.shop_url}"
+        self.api_version = "2025-04"
+        self.headers = {
+            "X-Shopify-Access-Token": self.access_token,
+            "Content-Type": "application/json"
+        }
+
+    def _make_request(self, method: str, endpoint: str, params: Dict = None, json: Dict = None, retries: int = 3, backoff: float = 1.0) -> Dict:
+        """
+        Make an HTTP request to the Shopify Admin API with retry on rate limit.
+
+        Args:
+            method (str): HTTP method ('GET', 'POST', etc.).
+            endpoint (str): API endpoint (e.g., '/admin/api/2025-04/products.json').
+            params (Dict, optional): Query parameters.
+            json (Dict, optional): JSON payload for POST/PUT requests.
+            retries (int): Number of retries for 429 errors (default: 3).
+            backoff (float): Initial backoff delay in seconds (default: 1.0).
+
+        Returns:
+            Dict: JSON response from the API.
+
+        Raises:
+            requests.RequestException: If the request fails after retries.
+        """
+        url = f"{self.base_url}{endpoint}"
+        for attempt in range(retries):
+            try:
+                response = requests.request(
+                    method=method,
+                    url=url,
+                    headers=self.headers,
+                    params=params,
+                    json=json,
+                    timeout=10
                 )
-            )
-        return result
-    except Exception as e:
-        logger.error(f"Failed to fetch products: {e}")
-        raise HTTPException(status_code=500, detail="Failed to fetch products")
+                if response.status_code == 429:
+                    retry_after = float(response.headers.get("Retry-After", backoff * (2 ** attempt)))
+                    logger.warning(f"Rate limit hit for {url}, retrying after {retry_after} seconds")
+                    time.sleep(retry_after)
+                    continue
+                response.raise_for_status()
+                return response.json()
+            except requests.RequestException as e:
+                if attempt == retries - 1:
+                    logger.error(f"Request to {url} failed after {retries} retries: {e}")
+                    raise
+                logger.warning(f"Request to {url} failed, retrying... ({attempt + 1}/{retries}): {e}")
+                time.sleep(backoff * (2 ** attempt))
+        raise requests.RequestException(f"Failed to complete request to {url} after {retries} retries")
 
-@products_router.get("/{product_id}", response_model=Product)
-async def get_product(product_id: str):
-    """
-    Fetch details for a specific product by ID.
-    """
-    try:
-        product = wrapper.get_product_details(int(product_id))
-        if not product:
-            raise HTTPException(status_code=404, detail="Product not found")
+    def list_products(self, limit: int = 50, since_id: int = 0) -> List[Dict]:
+        """
+        List products using the Admin API.
+
+        Args:
+            limit (int): Number of products to fetch (max 250).
+            since_id (int): Fetch products after this ID.
+
+        Returns:
+            List[Dict]: List of product dictionaries.
+
+        Example:
+            wrapper.list_products(limit=10)
+        """
+        endpoint = f"/admin/api/{self.api_version}/products.json"
+        params = {"limit": min(limit, 250), "since_id": since_id}
+        logger.info(f"Listing products with limit={limit}, since_id={since_id}")
+        response = self._make_request("GET", endpoint, params=params)
+        return response.get("products", [])
+
+    def get_product_details(self, product_id: int) -> Dict:
+        """
+        Fetch detailed product information for a product details page using the Admin API.
+
+        Args:
+            product_id (int): The ID of the product to fetch.
+
+        Returns:
+            Dict: Detailed product data including title, description, images, variants, etc.
+
+        Example:
+            wrapper.get_product_details(123456789)
+        """
+        endpoint = f"/admin/api/{self.api_version}/products/{product_id}.json"
+        logger.info(f"Fetching detailed product with ID: {product_id}")
+        response = self._make_request("GET", endpoint)
+        return response.get("product", {})
+
+    def list_variants(self, product_id: int) -> List[Dict]:
+        """
+        Fetch all variants for a specific product.
+
+        Args:
+            product_id (int): The ID of the product.
+
+        Returns:
+            List[Dict]: List of variant dictionaries.
+
+        Example:
+            wrapper.list_variants(123456789)
+        """
+        product = self.get_product_details(product_id)
         variants = product.get("variants", [])
-        price = f"${variants[0]['price']}" if variants and len(variants) > 0 else "Contact for price"
-        if not variants:
-            logger.warning(f"Product {product['id']} has no variants")
-        return Product(
-            id=str(product["id"]),
-            title=product["title"],
-            thumbnail=product["images"][0]["src"] if product.get("images") else "",
-            price=price
-        )
-    except Exception as e:
-        logger.error(f"Failed to fetch product {product_id}: {e}")
-        raise HTTPException(status_code=500, detail=f"Failed to fetch product {product_id}")
+        logger.info(f"Fetched {len(variants)} variants for product ID: {product_id}")
+        return variants
 
-@collections_router.get("/", response_model=List[Collection])
-async def get_collections():
-    """
-    Fetch collections and their associated products from Shopify.
-    """
-    try:
-        collections = wrapper.list_collections(limit=10, collection_type="all")
-        result = []
-        for collection, collection_type in collections:
-            # Fetch full collection details
-            collection_details = wrapper.get_collection_details(collection["id"], collection_type=collection_type)
-            # Fetch product IDs from collection
-            collection_products = wrapper.list_collection_products(collection["id"], limit=5)
-            # Fetch full product details for each product
-            products = []
-            for prod in collection_products:
-                try:
-                    full_product = wrapper.get_product_details(prod["id"])
-                    variants = full_product.get("variants", [])
-                    price = f"${variants[0]['price']}" if variants and len(variants) > 0 else "Contact for price"
-                    if not variants:
-                        logger.warning(f"Product {full_product['id']} in collection {collection['id']} has no variants")
-                    products.append(
-                        Product(
-                            id=str(full_product["id"]),
-                            title=full_product["title"],
-                            thumbnail=full_product["images"][0]["src"] if full_product.get("images") else "",
-                            price=price
-                        )
-                    )
-                except requests.RequestException as e:
-                    logger.warning(f"Failed to fetch details for product {prod['id']} in collection {collection['id']}: {e}")
-            result.append(
-                Collection(
-                    id=str(collection_details["id"]),
-                    title=collection_details["title"],
-                    products=products
-                )
-            )
-        return result
-    except Exception as e:
-        logger.error(f"Failed to fetch collections: {e}")
-        raise HTTPException(status_code=500, detail="Failed to fetch collections")
+    def create_draft_order(self, variant_id: int, email: str = "nik@luxuryverse.com", quantity: int = 1) -> Dict:
+        """
+        Create a draft order with a specific variant and email.
 
-# Include sub-routers in the main Shopify router
-shopify_router.include_router(products_router)
-shopify_router.include_router(collections_router)
+        Args:
+            variant_id (int): The ID of the variant to include.
+            email (str): Email for the draft order (default: 'nik@luxuryverse.com').
+            quantity (int): Quantity of the variant (default: 1).
+
+        Returns:
+            Dict: Created draft order details.
+
+        Example:
+            wrapper.create_draft_order(variant_id=47003275755815)
+        """
+        endpoint = f"/admin/api/{self.api_version}/draft_orders.json"
+        draft_order = {
+            "draft_order": {
+                "line_items": [
+                    {
+                        "variant_id": variant_id,
+                        "quantity": quantity
+                    }
+                ],
+                "email": email
+            }
+        }
+        logger.info(f"Creating draft order with variant ID: {variant_id}, email: {email}")
+        response = self._make_request("POST", endpoint, json=draft_order)
+        return response.get("draft_order", {})
+
+    def list_collections(self, limit: int = 50, since_id: int = 0, collection_type: str = "all") -> List[Dict]:
+        """
+        Fetch a list of collections (custom or smart) for featured sections.
+
+        Args:
+            limit (int): Number of collections to fetch (max 250).
+            since_id (int): Fetch collections after this ID.
+            collection_type (str): 'custom', 'smart', or 'all' (default: 'all').
+
+        Returns:
+            List[Dict]: List of collection dictionaries.
+
+        Example:
+            wrapper.list_collections(limit=10, collection_type='custom')
+        """
+        collections = []
+        if collection_type in ["all", "custom"]:
+            endpoint = f"/admin/api/{self.api_version}/custom_collections.json"
+            params = {"limit": min(limit, 250), "since_id": since_id}
+            logger.info(f"Fetching custom collections with limit={limit}, since_id={since_id}")
+            try:
+                response = self._make_request("GET", endpoint, params=params)
+                collections.extend([(c, "custom") for c in response.get("custom_collections", [])])
+            except requests.RequestException as e:
+                logger.warning(f"Failed to fetch custom collections: {e}")
+        
+        if collection_type in ["all", "smart"]:
+            endpoint = f"/admin/api/{self.api_version}/smart_collections.json"
+            params = {"limit": min(limit, 250), "since_id": since_id}
+            logger.info(f"Fetching smart collections with limit={limit}, since_id={since_id}")
+            try:
+                response = self._make_request("GET", endpoint, params=params)
+                collections.extend([(c, "smart") for c in response.get("smart_collections", [])])
+            except requests.RequestException as e:
+                logger.warning(f"Failed to fetch smart collections: {e}")
+        
+        logger.info(f"Fetched {len(collections)} total collections")
+        return collections
+
+    def get_collection_details(self, collection_id: int, collection_type: str = "custom") -> Dict:
+        """
+        Fetch detailed information for a specific collection.
+
+        Args:
+            collection_id (int): The ID of the collection.
+            collection_type (str): 'custom' or 'smart' (default: 'custom').
+
+        Returns:
+            Dict: Collection details including title, description, etc.
+
+        Example:
+            wrapper.get_collection_details(123456789, collection_type='custom')
+        """
+        endpoint = f"/admin/api/{self.api_version}/{'custom_collections' if collection_type == 'custom' else 'smart_collections'}/{collection_id}.json"
+        logger.info(f"Fetching {collection_type} collection with ID: {collection_id}")
+        response = self._make_request("GET", endpoint)
+        return response.get("custom_collection" if collection_type == "custom" else "smart_collection", {})
+
+    def list_collection_products(self, collection_id: int, limit: int = 50) -> List[Dict]:
+        """
+        Fetch products associated with a specific collection.
+
+        Args:
+            collection_id (int): The ID of the collection.
+            limit (int): Number of products to fetch (max 250).
+
+        Returns:
+            List[Dict]: List of product dictionaries in the collection.
+
+        Example:
+            wrapper.list_collection_products(452814242087, limit=10)
+        """
+        endpoint = f"/admin/api/{self.api_version}/collections/{collection_id}/products.json"
+        params = {"limit": min(limit, 250)}
+        logger.info(f"Fetching products for collection ID: {collection_id} with limit={limit}")
+        response = self._make_request("GET", endpoint, params=params)
+        return response.get("products", [])
+
+    def create_webhook(self, topic: str, callback_url: str) -> Dict:
+        """
+        Create a webhook for a specific topic.
+
+        Args:
+            topic (str): The webhook topic (e.g., 'draft_orders/create').
+            callback_url (str): The URL to receive webhook payloads.
+
+        Returns:
+            Dict: Created webhook details.
+
+        Example:
+            wrapper.create_webhook('draft_orders/create', 'https://yourapp.com/webhooks')
+        """
+        endpoint = f"/admin/api/{self.api_version}/webhooks.json"
+        webhook = {
+            "webhook": {
+                "topic": topic,
+                "address": callback_url,
+                "format": "json"
+            }
+        }
+        logger.info(f"Creating webhook for topic: {topic}, callback: {callback_url}")
+        response = self._make_request("POST", endpoint, json=webhook)
+        return response.get("webhook", {})
+
+    def verify_webhook(self, data: bytes, hmac_header: str) -> bool:
+        """
+        Verify a Shopify webhook's authenticity.
+
+        Args:
+            data (bytes): The raw webhook payload.
+            hmac_header (str): The X-Shopify-Hmac-Sha256 header value.
+
+        Returns:
+            bool: True if the webhook is authentic, False otherwise.
+
+        Example:
+            wrapper.verify_webhook(request.body, request.headers['X-Shopify-Hmac-Sha256'])
+        """
+        if not self.webhook_secret:
+            logger.error("Webhook secret is required for verification")
+            return False
+        digest = hmac.new(
+            self.webhook_secret.encode('utf-8'),
+            data,
+            hashlib.sha256
+        ).digest()
+        computed_hmac = base64.b64encode(digest).decode('utf-8')
+        return hmac.compare_digest(computed_hmac, hmac_header)
+
