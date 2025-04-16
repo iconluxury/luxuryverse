@@ -54,7 +54,7 @@ function Layout() {
       </Flex>
       {!consentGiven && (
         <CookieConsent
-          location="bottom"
+          location="top"
           buttonText="Accept"
           declineButtonText="Decline"
           cookieName="luxuryverse-consent"
