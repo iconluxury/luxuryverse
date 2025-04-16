@@ -10,18 +10,19 @@ function ProductsPage() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://iconluxury.today';
+  const API_BASE_URL = process.env.API_BASE_URL || 'https://iconluxury.today';
 
   console.debug(`API_BASE_URL set to: ${API_BASE_URL}`);
 
   useEffect(() => {
-    const fetchProducts = async (retryCount = 6, delay = 2000) => {
+    
+    const fetchProducts = async (retryCount = 3, delay = 1000) => {
       for (let attempt = 1; attempt <= retryCount; attempt++) {
         try {
           console.debug(`Attempt ${attempt}: Fetching products from ${API_BASE_URL}/api/v1/products`);
           const controller = new AbortController();
-          const timeoutId = setTimeout(() => controller.abort(), 30000);
-
+          const timeoutId = setTimeout(() => controller.abort(), 15000);
+    
           const response = await fetch(`${API_BASE_URL}/api/v1/products`, {
             signal: controller.signal,
             method: 'GET',
@@ -31,42 +32,39 @@ function ProductsPage() {
             },
             credentials: 'omit',
           });
-
+    
           clearTimeout(timeoutId);
-          const headers = Object.fromEntries(response.headers.entries());
-          console.debug(`Response status: ${response.status}, ok: ${response.ok}, headers: ${JSON.stringify(headers)}`);
-
+          console.debug(`Response status: ${response.status}, ok: ${response.ok}`);
+    
           if (!response.ok) {
             const text = await response.text();
-            console.error(`Non-OK response: ${text.slice(0, 200)}`);
-            if (response.status === 404) {
-              throw new Error('API endpoint not found. Check backend routes.');
-            }
-            if (response.status === 502) {
-              throw new Error('Server error (502 Bad Gateway).');
-            }
-            throw new Error(`HTTP error! status: ${response.status}`);
+            throw new Error(`HTTP error! status: ${response.status}, body: ${text.slice(0, 200)}`);
           }
-
+    
           const data = await response.json();
-          console.debug(`Fetched ${data.length} products`);
-          setProducts(data);
+          if (!Array.isArray(data)) {
+            throw new Error('Expected an array of products');
+          }
+          setProducts(data.map(product => ({
+            id: product.id || '',
+            title: product.title || 'Untitled',
+            price: product.price || 'N/A',
+            thumbnail: product.thumbnail || null,
+          })));
           setError(null);
           break;
         } catch (err) {
           let errorMessage = err.message || 'Unknown error';
           if (err.name === 'AbortError') {
-            errorMessage = 'Request timed out after 30s.';
+            errorMessage = 'Request timed out after 15s.';
           } else if (err.message.includes('Failed to fetch')) {
             errorMessage = 'Unable to connect: Possible DNS, CORS, or server issue.';
-          } else if (err.message.includes('Unexpected token')) {
-            errorMessage = 'Invalid JSON response: Received HTML instead of JSON.';
           }
-          console.error(`Attempt ${attempt} failed: ${errorMessage}`, err, { stack: err.stack });
+          console.error(`Attempt ${attempt} failed: ${errorMessage}`, err);
           if (attempt === retryCount) {
             setError(`Failed to load products: ${errorMessage}`);
           } else {
-            await new Promise(resolve => setTimeout(resolve, delay * attempt));
+            await new Promise(resolve => setTimeout(resolve, delay * Math.pow(2, attempt)));
           }
         } finally {
           if (attempt === retryCount || !error) {
@@ -77,7 +75,7 @@ function ProductsPage() {
     };
 
     fetchProducts();
-  }, []);
+  }, []); };
 
   if (loading) {
     return (
