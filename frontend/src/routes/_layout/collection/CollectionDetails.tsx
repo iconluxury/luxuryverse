@@ -12,7 +12,7 @@ function CollectionDetails() {
   const [collection, setCollection] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://api.iconluxury.today';
+  const API_BASE_URL = process.env.API_BASE_URL || 'https://iconluxury.today';
 
   // Extract the 'id' parameter from the URL
   const { id } = useParams({ from: "/_layout/collections/$id" });

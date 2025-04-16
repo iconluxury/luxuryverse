@@ -34,7 +34,7 @@ async def request_token():
         logger.error("Missing consumer key or secret")
         raise HTTPException(status_code=500, detail="Server configuration error: Missing OAuth credentials")
 
-    callback_uri = "https://api.iconluxury.today/api/v1/x-auth/callback"
+    callback_uri = "https://iconluxury.today/api/v1/x-auth/callback"
     oauth = requests_oauthlib.OAuth1Session(
         client_key=CONSUMER_KEY,
         client_secret=CONSUMER_SECRET,

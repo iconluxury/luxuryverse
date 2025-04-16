@@ -10,7 +10,7 @@ function ProductsPage() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://api.iconluxury.today';
+  const API_BASE_URL = process.env.API_BASE_URL || 'https://iconluxury.today';
 
   useEffect(() => {
     const fetchProducts = async (retryCount = 6, delay = 2000) => {
@@ -56,7 +56,7 @@ function ProductsPage() {
           } else if (err.message.includes('Failed to fetch')) {
               errorMessage = 'Unable to connect: Possible DNS, CORS, or server issue.';
           } else if (err.message.includes('ERR_NAME_NOT_RESOLVED')) {
-              errorMessage = 'DNS error: api.iconluxury.today could not be resolved.';
+              errorMessage = 'DNS error: iconluxury.today could not be resolved.';
           }
           console.error(`Attempt ${attempt} failed: ${errorMessage}`, err);
           if (attempt === retryCount) {
