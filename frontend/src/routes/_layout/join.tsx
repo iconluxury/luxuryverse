@@ -143,7 +143,6 @@ function JoinPage() {
     }
   }, [isConnected, address, user, login, setJoining, toast]);
 
-  // CHANGED: Updated handleEmailSubmit to send details to nik@luxurymarket.com
   const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -152,20 +151,19 @@ function JoinPage() {
       return;
     }
     setIsEmailInvalid(false);
-
+  
     try {
-      // Send user details to admin
       const htmlContent = `
-      <body>
-        <h1>New User Submission - LuxuryVerse</h1>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>X Username:</strong> ${xProfile?.username || 'NA'}</p>
-        <p><strong>X Name:</strong> ${xProfile?.name || 'NA'}</p>
-        <p><strong>X Profile ID:</strong> ${userId || 'NA'}</p>
-        <p><strong>Wallet Address:</strong> ${address || 'NA'}</p>
-      </body>
-    `;
-      const response = await fetch('https://api.iconluxury.today/api/v1/utils/send-email', {
+        <body>
+          <h1>New User Submission - LuxuryVerse</h1>
+          <p><strong>Email:</strong> ${email}</p>
+          <p><strong>X Username:</strong> ${xProfile?.username || 'NA'}</p>
+          <p><strong>X Name:</strong> ${xProfile?.name || 'NA'}</p>
+          <p><strong>X Profile ID:</strong> ${userId || 'NA'}</p>
+          <p><strong>Wallet Address:</strong> ${address || 'NA'}</p>
+        </body>
+      `;
+      const response = await fetch('https://api.iconluxury.today/api/v1/utils/send-email/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -181,12 +179,11 @@ function JoinPage() {
       }
       toast({
         title: 'Submission Sent',
-        description: `Your details have been sent for review.`,
+        description: 'Your details have been sent for review.',
         status: 'success',
         duration: 5000,
         isClosable: true,
       });
-      // CHANGED: Clear email field after submission
       setEmail('');
     } catch (error: any) {
       console.error('Email submission error:', error);
@@ -199,7 +196,7 @@ function JoinPage() {
       });
     }
   };
-
+  
   return (
     <Box bg="gray.900" minH="100vh" color="white">
       <Container maxW="1000px" mx="auto" px={4} py={16}>
