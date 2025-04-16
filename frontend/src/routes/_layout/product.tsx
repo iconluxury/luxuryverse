@@ -50,20 +50,21 @@ function ProductsPage() {
           setError(null);
           break;
         } catch (err: any) {
-          const errorMessage = `Attempt ${attempt} failed: ${err.message || 'Unknown error'}`;
-          console.error(errorMessage);
+          let errorMessage = err.message || 'Unknown error';
           if (err.name === 'AbortError') {
-            err.message = 'Request timed out after 30s. Please check the backend server status or your network.';
+              errorMessage = 'Request timed out after 30s.';
+          } else if (err.message.includes('Failed to fetch')) {
+              errorMessage = 'Unable to connect: Possible DNS, CORS, or server issue.';
+          } else if (err.message.includes('ERR_NAME_NOT_RESOLVED')) {
+              errorMessage = 'DNS error: api.iconluxury.today could not be resolved.';
           }
-          if (err.message.includes('Failed to fetch')) {
-            err.message = 'Unable to connect: Possible CORS issue, server downtime, or network error. Check console for details.';
-          }
+          console.error(`Attempt ${attempt} failed: ${errorMessage}`, err);
           if (attempt === retryCount) {
-            setError(`Failed to load products: ${err.message || 'Unable to connect to the server.'}`);
+              setError(`Failed to load products: ${errorMessage}`);
           } else {
-            await new Promise(resolve => setTimeout(resolve, delay * attempt));
+              await new Promise(resolve => setTimeout(resolve, delay * attempt));
           }
-        } finally {
+      } finally {
           if (attempt === retryCount || !error) {
             setLoading(false);
           }
