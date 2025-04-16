@@ -14,7 +14,7 @@ function ProductDetails() {
   const [error, setError] = useState<string | null>(null);
   
   // Extract the 'id' parameter from the URL
-  const { id } = useParams({ from: "/_layout/products/$id" });
+  const { id } = useParams({ from: "/_layout/product/$id" });
 
   // Fetch product details from the FastAPI backend
   useEffect(() => {
