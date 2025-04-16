@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Box, Text, Image, Grid, Spinner, Flex } from '@chakra-ui/react';
+import { Box, Text, Image, Grid, Spinner, Flex, Button } from '@chakra-ui/react';
 import { createFileRoute, Link } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/_layout/products')({
@@ -10,30 +10,43 @@ function ProductsPage() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const API_BASE_URL = 'https://api.iconluxury.today'; // Configurable API URL
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await fetch('https://api.iconluxury.today/api/v1/products');
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+    const fetchProducts = async (retryCount = 3, delay = 1000) => {
+      for (let attempt = 1; attempt <= retryCount; attempt++) {
+        try {
+          const response = await fetch(`${API_BASE_URL}/api/v1/products`, { timeout: 10000 });
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          const data = await response.json();
+          setProducts(data);
+          setError(null);
+          break;
+        } catch (err) {
+          const errorMessage = `Attempt ${attempt} failed: ${(err as Error).message}`;
+          console.error(errorMessage);
+          if (attempt === retryCount) {
+            setError(`Failed to load products: ${(err as Error).message}`);
+          } else {
+            await new Promise(resolve => setTimeout(resolve, delay * attempt));
+          }
+        } finally {
+          if (attempt === retryCount || !error) {
+            setLoading(false);
+          }
         }
-        const data = await response.json();
-        setProducts(data);
-      } catch (err) {
-        setError(`Failed to load products: ${(err as Error).message}`);
-      } finally {
-        setLoading(false);
       }
     };
 
     fetchProducts();
-  }, []);
+  }, [error]);
 
   if (loading) {
     return (
       <Flex justify="center" align="center" minH="100vh">
-        <Spinner size="xl" color="red.500" />
+        <Spinner size="xl" color="yellow.400" />
       </Flex>
     );
   }
@@ -43,23 +56,38 @@ function ProductsPage() {
       <Box textAlign="center" py={16} color="red.500">
         <Text fontSize="lg">{error}</Text>
         <Text fontSize="sm" mt={2}>
-          Please check if the backend server is running or try again later.
+          Please check your network connection or try again later.
         </Text>
+        <Button
+          mt={4}
+          bg="yellow.400"
+          color="gray.900"
+          _hover={{ bg: 'yellow.500' }}
+          onClick={() => window.location.reload()}
+        >
+          Retry
+        </Button>
       </Box>
     );
   }
 
   return (
-    <Box p={4}>
+    <Box p={4} bg="gray.900" color="white">
       <Text fontSize="2xl" mb={4}>Products</Text>
       <Link to="/collections" style={{ color: '#3182CE', marginBottom: '16px', display: 'block' }}>
         Go to Collections
       </Link>
       <Grid templateColumns="repeat(auto-fill, minmax(200px, 1fr))" gap={6}>
         {products.map((product: { id: string; title: string; thumbnail: string; price: string }) => (
-          <Link key={product.id} to={`/product/${product.id}`}>
-            <Box borderWidth="1px" borderRadius="lg" overflow="hidden">
-              {product.thumbnail && <Image src={product.thumbnail} alt={product.title} />}
+          <Link key={product.id} to={`/products/${product.id}`}>
+            <Box borderWidth="1px" borderRadius="lg" overflow="hidden" bg="white" color="gray.900">
+              {product.thumbnail ? (
+                <Image src={product.thumbnail} alt={product.title} />
+              ) : (
+                <Box h="200px" bg="gray.200" display="flex" alignItems="center" justifyContent="center">
+                  <Text color="gray.500">No Image</Text>
+                </Box>
+              )}
               <Box p={4}>
                 <Text fontWeight="bold">{product.title}</Text>
                 <Text>{product.price}</Text>
