@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, Component, ReactNode } from 'react';
 import {
   Box,
   Flex,
@@ -11,14 +11,39 @@ import {
   Spinner,
   IconButton,
   Skeleton,
+  SkeletonText,
 } from '@chakra-ui/react';
 import { createFileRoute, useParams, Link } from '@tanstack/react-router';
 import { TimeIcon, ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { Helmet } from 'react-helmet-async';
 import Footer from '../../../components/Common/Footer';
 
+// Error Boundary Component
+class ErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {
+  state = { hasError: false };
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: Error, errorInfo: any) {
+    console.error('ErrorBoundary caught:', error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <Box textAlign="center" py={16} color="red.500">
+          <Text fontSize="lg">Something went wrong. Please try again later.</Text>
+        </Box>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 export const Route = createFileRoute('/_layout/products/$id')({
-  component: ProductDetails,
+  component: ProductDetailsWrapper,
 });
 
 interface Variant {
@@ -213,7 +238,8 @@ function parseHtml(html: string): React.ReactNode {
 function ProductDetails() {
   const [product, setProduct] = useState<Product | null>(null);
   const [topProducts, setTopProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [productLoading, setProductLoading] = useState(true);
+  const [topProductsLoading, setTopProductsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [currentImage, setCurrentImage] = useState(0);
   const API_BASE_URL = process.env.API_BASE_URL || 'https://iconluxury.shop';
@@ -255,15 +281,14 @@ function ProductDetails() {
       }
     };
 
-    const fetchProductAndTopProducts = async () => {
+    const fetchProduct = async () => {
       try {
-        // Fetch product details
         const productData = await fetchWithRetry(`${API_BASE_URL}/api/v1/products/${id}`);
         console.log('Fetched product data:', productData);
         if (!productData || typeof productData !== 'object') {
           throw new Error('Invalid product data received');
         }
-    
+
         // Validate variants
         if (productData.variants && Array.isArray(productData.variants)) {
           productData.variants = productData.variants
@@ -293,125 +318,81 @@ function ProductDetails() {
         }
         setProduct(productData);
         setError(null);
-    
-        // Fetch top 5 products from the featured collection
-        try {
-          const topProductsUrl = `${API_BASE_URL}/api/v1/collections/488238383399`;
-          const collectionData = await fetchWithRetry(topProductsUrl);
-          console.log('Fetched collection products:', collectionData);
-    
-          if (!collectionData || !Array.isArray(collectionData.products)) {
-            console.warn('Invalid collection data:', collectionData);
-            setTopProducts([]);
-            return;
-          }
-    
-          // Validate and sort top products
-          const validatedTopProducts = collectionData.products
-            .filter(
-              (p: Product) =>
-                p &&
-                typeof p === 'object' &&
-                typeof p.id === 'string' &&
-                typeof p.title === 'string' &&
-                p.id !== id &&
-                Array.isArray(p.variants)
-            )
-            .map((p: Product) => {
-              const variants = Array.isArray(p.variants) ? p.variants : [];
-              return {
-                ...p,
-                total_inventory: variants.reduce((sum: number, v: Variant) => {
-                  return sum + (typeof v.inventory_quantity === 'number' ? v.inventory_quantity : 0);
-                }, 0),
-                discount_value: p.discount
-                  ? parseFloat(p.discount.replace('% off', '')) || 0
-                  : 0,
-              };
-            })
-            .sort((a, b) => {
-              const aDiscount = a.discount_value || 0;
-              const bDiscount = b.discount_value || 0;
-              const aInventory = a.total_inventory || 0;
-              const bInventory = b.total_inventory || 0;
-    
-              if (aDiscount !== bDiscount) {
-                return bDiscount - aDiscount;
-              }
-              return bInventory - aInventory;
-            })
-            .slice(0, 5);
-    
-          console.log('Top 5 products:', validatedTopProducts);
-          setTopProducts(validatedTopProducts);
-        } catch (topErr: any) {
-          console.warn('Failed to fetch top products:', topErr.message);
-          setTopProducts([]);
-          setError((prev) => prev || `Failed to load top products: ${topErr.message || 'Unknown error'}`);
-        }
       } catch (err: any) {
         setError(`Failed to load product: ${err.message || 'Unknown error'}`);
-        try {
-          // Fallback: Fetch top 5 products from featured collection
-          const topProductsUrl = `${API_BASE_URL}/api/v1/collections/488238383399`;
-          const collectionData = await fetchWithRetry(topProductsUrl);
-          console.log('Fetched collection products (fallback):', collectionData);
-    
-          if (!collectionData || !Array.isArray(collectionData.products)) {
-            console.warn('Invalid collection data (fallback):', collectionData);
-            setTopProducts([]);
-            return;
-          }
-    
-          const validatedTopProducts = collectionData.products
-            .filter(
-              (p: Product) =>
-                p &&
-                typeof p === 'object' &&
-                typeof p.id === 'string' &&
-                typeof p.title === 'string' &&
-                p.id !== id &&
-                Array.isArray(p.variants)
-            )
-            .map((p: Product) => {
-              const variants = Array.isArray(p.variants) ? p.variants : [];
-              return {
-                ...p,
-                total_inventory: variants.reduce((sum: number, v: Variant) => {
-                  return sum + (typeof v.inventory_quantity === 'number' ? v.inventory_quantity : 0);
-                }, 0),
-                discount_value: p.discount
-                  ? parseFloat(p.discount.replace('% off', '')) || 0
-                  : 0,
-              };
-            })
-            .sort((a, b) => {
-              const aDiscount = a.discount_value || 0;
-              const bDiscount = b.discount_value || 0;
-              const aInventory = a.total_inventory || 0;
-              const bInventory = b.total_inventory || 0;
-    
-              if (aDiscount !== bDiscount) {
-                return bDiscount - aDiscount;
-              }
-              return bInventory - aInventory;
-            })
-            .slice(0, 5);
-    
-          console.log('Top 5 products (fallback):', validatedTopProducts);
-          setTopProducts(validatedTopProducts);
-        } catch (topErr: any) {
-          console.warn('Failed to fetch top products (fallback):', topErr.message);
-          setError((prev) => `${prev}\nFailed to load top products: ${topErr.message || 'Unknown error'}`);
-          setTopProducts([]);
-        }
       } finally {
-        setLoading(false);
+        setProductLoading(false);
       }
     };
 
-    fetchProductAndTopProducts();
-  }, [id]);
+    const fetchTopProducts = async () => {
+      try {
+        const topProductsUrl = `${API_BASE_URL}/api/v1/collections/488238383399`;
+        const collectionData = await fetchWithRetry(topProductsUrl);
+        console.log('Fetched collection products:', collectionData);
+
+        if (!collectionData || !Array.isArray(collectionData.products)) {
+          console.warn('Invalid collection data:', collectionData);
+          setTopProducts([]);
+          return;
+        }
+
+        // Validate and sort top products
+        const validatedTopProducts = collectionData.products
+          .filter(
+            (p: Product) =>
+              p &&
+              typeof p === 'object' &&
+              typeof p.id === 'string' &&
+              typeof p.title === 'string' &&
+              p.id !== id &&
+              Array.isArray(p.variants)
+          )
+          .map((p: Product) => {
+            const variants = Array.isArray(p.variants) ? p.variants : [];
+            return {
+              ...p,
+              total_inventory: variants.reduce((sum: number, v: Variant) => {
+                return sum + (typeof v.inventory_quantity === 'number' ? v.inventory_quantity : 0);
+              }, 0),
+              discount_value: p.discount
+                ? parseFloat(p.discount.replace('% off', '')) || 0
+                : 0,
+            };
+          })
+          .sort((a, b) => {
+            const aDiscount = a.discount_value || 0;
+            const bDiscount = b.discount_value || 0;
+            const aInventory = a.total_inventory || 0;
+            const bInventory = b.total_inventory || 0;
+
+            if (aDiscount !== bDiscount) {
+              return bDiscount - aDiscount;
+            }
+            return bInventory - aInventory;
+          })
+          .slice(0, 5);
+
+        console.log('Top 5 products:', validatedTopProducts);
+        setTopProducts(validatedTopProducts);
+      } catch (topErr: any) {
+        console.warn('Failed to fetch top products:', topErr.message);
+        setError((prev) => prev || `Failed to load top products: ${topErr.message || 'Unknown error'}`);
+        setTopProducts([]);
+      } finally {
+        setTopProductsLoading(false);
+      }
+    };
+
+    // Fetch product first, then top products
+    fetchProduct().then(() => {
+      if (!error) {
+        fetchTopProducts();
+      } else {
+        setTopProductsLoading(false);
+      }
+    });
+  }, [id, error]);
 
   const stripHtml = (html: string) => {
     return html.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
@@ -454,7 +435,7 @@ function ProductDetails() {
     });
   }, [product?.variants]);
 
-  if (loading) {
+  if (productLoading) {
     return (
       <Flex justify="center" align="center" minH="100vh">
         <Spinner size="xl" color="yellow.400" />
@@ -593,11 +574,28 @@ function ProductDetails() {
               {variantComponents}
             </HStack>
           </Box>
-          {topProducts.length > 0 ? (
-            <Box mt={8}>
-              <Heading as="h2" size="lg" mb={4}>
-                Related Products
-              </Heading>
+          <Box mt={8}>
+            <Heading as="h2" size="lg" mb={4}>
+              Related Products
+            </Heading>
+            {topProductsLoading ? (
+              <HStack spacing={4} flexWrap="wrap">
+                {[...Array(5)].map((_, index) => (
+                  <Box
+                    key={index}
+                    p={4}
+                    borderWidth="1px"
+                    borderRadius="md"
+                    textAlign="center"
+                    maxW="200px"
+                  >
+                    <Skeleton w="150px" h="150px" mx="auto" startColor="gray.100" endColor="gray.300" />
+                    <SkeletonText mt={2} noOfLines={2} spacing="2" />
+                    <Skeleton mt={2} h="16px" w="100px" mx="auto" />
+                  </Box>
+                ))}
+              </HStack>
+            ) : topProducts.length > 0 ? (
               <HStack spacing={4} flexWrap="wrap">
                 {topProducts.map((topProduct) => (
                   <Link key={topProduct.id} to={`/products/${topProduct.id}`}>
@@ -616,7 +614,7 @@ function ProductDetails() {
                         w="150px"
                         h="150px"
                         objectFit="cover"
-                        mx="auto"
+                        mx "auto"
                         onError={(e) => (e.currentTarget.src = 'https://placehold.co/150x150')}
                       />
                       <Text mt={2} fontSize="sm" fontWeight="medium" noOfLines={2}>
@@ -634,17 +632,25 @@ function ProductDetails() {
                   </Link>
                 ))}
               </HStack>
-            </Box>
-          ) : (
-            <Text fontSize="md" color="gray.500" mt={8}>
-              No related products available.
-            </Text>
-          )}
+            ) : (
+              <Text fontSize="md" color="gray.500">
+                No related products available.
+              </Text>
+            )}
+          </Box>
           <Divider mb={8} />
         </Box>
       </Box>
       <Footer />
     </Box>
+  );
+}
+
+function ProductDetailsWrapper() {
+  return (
+    <ErrorBoundary>
+      <ProductDetails />
+    </ErrorBoundary>
   );
 }
 
