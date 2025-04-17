@@ -17,6 +17,7 @@ import { TimeIcon, ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { Helmet } from 'react-helmet-async';
 import parse from 'html-react-parser';
 import Footer from '../../../components/Common/Footer';
+import { Element } from 'domhandler/lib/node';
 
 export const Route = createFileRoute('/_layout/products/$id')({
   component: ProductDetails,
@@ -115,8 +116,12 @@ function ProductDetails() {
     }
     return parse(description, {
       replace: (domNode) => {
-        if (domNode.name === 'div' || domNode.name === 'span') {
-          return <Text fontSize="lg" color="gray.700" mb={2}>{domNode.children}</Text>;
+        if (domNode instanceof Element && (domNode.name === 'div' || domNode.name === 'span')) {
+          return (
+            <Text fontSize="lg" color="gray.700" mb={2}>
+              {domToReact(domNode.children)}
+            </Text>
+          );
         }
       },
     });
