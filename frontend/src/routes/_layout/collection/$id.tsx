@@ -115,7 +115,7 @@ function CollectionsDetails() {
           title: collectionData.title || 'Untitled Collection',
           description: collectionData.description || '',
           image: collectionData.image || 'https://placehold.co/400x400',
-          products: collectionData.products
+          products: Array.isArray(collectionData.products)
             ? collectionData.products
                 .filter(
                   (p: Product) =>
@@ -162,15 +162,15 @@ function CollectionsDetails() {
         }
 
         const otherCollectionsData = allCollectionsData
-          .filter((col: any) => col && col.id && col.id !== id)
+          .filter((col: any) => col && typeof col === 'object' && col.id && col.id !== id)
           .slice(0, 6)
           .map((data: any) => ({
             id: data.id || '',
             title: data.title || 'Untitled Collection',
             description: data.description || '',
             image: data.image || 'https://placehold.co/400x400',
-            products: data.products || [],
-            productCount: data.products?.length || 0,
+            products: Array.isArray(data.products) ? data.products : [],
+            productCount: Array.isArray(data.products) ? data.products.length : 0,
           }));
 
         console.log('Other collections for grid:', otherCollectionsData);
@@ -201,6 +201,7 @@ function CollectionsDetails() {
   }, [collection, error]);
 
   const stripHtml = (html: string) => {
+    if (typeof html !== 'string') return '';
     return html.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
   };
 
