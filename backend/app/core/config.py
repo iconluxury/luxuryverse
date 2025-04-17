@@ -32,7 +32,12 @@ class Settings(BaseSettings):
     )
     API_V1_STR: str = "/api/v1"
     API_V_STR: str = "/v1/"
+
     SECRET_KEY: str = secrets.token_urlsafe(32)
+
+    # Shopify configuration
+    SHOPIFY_SHOP_URL = "accessxprive.myshopify.com"
+    SHOPIFY_ACCESS_TOKEN = "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"  # Replace with your Shopify access token
     # 60 minutes * 24 hours * 8 days = 8 days
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8
     FRONTEND_HOST: str = "http://localhost:5173"
