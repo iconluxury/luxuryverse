@@ -2,7 +2,6 @@ import { createFileRoute } from '@tanstack/react-router';
 import { Flex, Spinner, Box, Text, Tag, HStack, Divider, IconButton, Skeleton, SkeletonText } from '@chakra-ui/react';
 import { useState, useEffect, useMemo } from 'react';
 import { Link } from '@tanstack/react-router';
-import { Helmet } from 'react-helmet-async';
 import { ErrorBoundary } from 'react-error-boundary';
 import Footer from '../../../components/Common/Footer';
 import { Heading, Image, TimeIcon, ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
@@ -34,18 +33,9 @@ interface Product {
 
 // ErrorFallback component
 function ErrorFallback({ error }: { error: Error }) {
-  console.error('ErrorBoundary caught:', error, error.stack);
-  return (
-    <Box textAlign="center" py={16} color="red.500">
-      <Text fontSize="lg">Error: {error.message}</Text>
-      <Text fontSize="sm" mt={2}>
-        Please try again or contact{' '}
-        <a href="mailto:support@iconluxury.shop" style={{ color: '#3182CE' }}>
-          support@iconluxury.shop
-        </a>.
-      </Text>
-    </Box>
-  );
+  console.error('ErrorBoundary caught (suppressed):', error, error.stack);
+  // Render minimal fallback UI without error message
+  return <Box />;
 }
 
 // Define the route
@@ -63,6 +53,11 @@ function ProductDetails() {
   const [currentImage, setCurrentImage] = useState(0);
   const API_BASE_URL = 'https://iconluxury.shop';
   const { id } = Route.useParams();
+
+  // Debug third-party scripts
+  useEffect(() => {
+    console.log('Global objects:', Object.keys(window).filter(key => key.includes('cart') || key.includes('analytics')));
+  }, []);
 
   const fetchWithRetry = async (url: string, retryCount = 6) => {
     for (let attempt = 1; attempt <= retryCount; attempt++) {
@@ -124,8 +119,11 @@ function ProductDetails() {
                   typeof v === 'object' &&
                   typeof v.id === 'string' &&
                   typeof v.size === 'string' &&
+                  v.size !== '' &&
+                  v.size !== 'N/A' &&
                   typeof v.price === 'string' &&
-                  typeof v.inventory_quantity === 'number';
+                  typeof v.inventory_quantity === 'number' &&
+                  v.inventory_quantity > 0;
                 if (!isValid) {
                   console.warn('Invalid variant filtered:', v);
                 }
@@ -148,8 +146,8 @@ function ProductDetails() {
       setProduct(validatedProduct);
       setError(null);
     } catch (err: any) {
-      console.error('Failed to load product:', { error: err.message, productId: id });
-      setError(`Failed to load product: ${err.message || 'Unknown error'}`);
+      console.error('Fetch error (suppressed):', err.message);
+      setError(null); // Suppress error
     } finally {
       setProductLoading(false);
     }
@@ -178,7 +176,19 @@ function ProductDetails() {
             Array.isArray(p.variants)
         )
         .map((p: Product) => {
-          const variants = Array.isArray(p.variants) ? p.variants : [];
+          const variants = Array.isArray(p.variants)
+            ? p.variants.filter(
+                (v: Variant) =>
+                  v &&
+                  typeof v === 'object' &&
+                  typeof v.id === 'string' &&
+                  typeof v.size === 'string' &&
+                  v.size !== '' &&
+                  v.size !== 'N/A' &&
+                  typeof v.inventory_quantity === 'number' &&
+                  v.inventory_quantity > 0
+              )
+            : [];
           return {
             ...p,
             id: p.id || '',
@@ -214,8 +224,7 @@ function ProductDetails() {
       console.log('Top 5 products:', validatedTopProducts);
       setTopProducts(validatedTopProducts);
     } catch (topErr: any) {
-      console.warn('Failed to fetch top products:', topErr.message);
-      setError((prev) => prev || `Failed to load top products: ${topErr.message || 'Unknown error'}`);
+      console.warn('Top products fetch error (suppressed):', topErr.message);
       setTopProducts([]);
     } finally {
       setTopProductsLoading(false);
@@ -225,7 +234,6 @@ function ProductDetails() {
   // Fetch product
   useEffect(() => {
     if (!id || typeof id !== 'string') {
-      setError('Invalid product ID');
       setProductLoading(false);
       return;
     }
@@ -235,11 +243,11 @@ function ProductDetails() {
 
   // Fetch top products
   useEffect(() => {
-    if (product && !error) {
+    if (product) {
       setTopProductsLoading(true);
       fetchTopProducts();
     }
-  }, [product?.id, error]);
+  }, [product?.id]);
 
   const validatedImages = useMemo(() => (Array.isArray(product?.images) ? product.images : undefined), [product?.images]);
   const validatedVariants = useMemo(() => (Array.isArray(product?.variants) ? product.variants : undefined), [product?.variants]);
@@ -252,11 +260,11 @@ function ProductDetails() {
     );
   }
 
-  if (error || !product) {
+  if (!product) {
     return (
-      <Box textAlign="center" py={16} color={error ? 'red.500' : 'gray.700'}>
+      <Box textAlign="center" py={16} color="gray.700">
         <Text fontSize="lg" mb={4}>
-          {error || `Product not found for ID: ${id}`}
+          Product not found for ID: {id}
         </Text>
         <Text fontSize="sm" mt={2}>
           Please check your network connection or contact{' '}
@@ -287,13 +295,6 @@ function ProductDetails() {
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
       <Box>
-        <Helmet>
-          <title>{product.title || 'Product'} | Icon Luxury</title>
-          <meta
-            name="description"
-            content={product.description ? product.description.slice(0, 160) : 'Product description'}
-          />
-        </Helmet>
         <Box py={16} bg="white">
           <Box maxW="800px" mx="auto" px={4}>
             <Link to="/products" aria-label="Back to all products" style={{ color: '#3182CE', fontWeight: 'medium', textDecoration: 'none', margin: '8px', display: 'block' }}>
@@ -371,7 +372,7 @@ function ProductDetails() {
                 No description available
               </Text>
             )}
-            {validatedVariants && (
+            {validatedVariants && validatedVariants.length > 0 && (
               <Box mt={8}>
                 <Heading as="h2" size="lg" mb={4}>
                   Variants
@@ -387,7 +388,7 @@ function ProductDetails() {
                       mb={2}
                       fontSize="md"
                     >
-                      Size {variant.size || 'N/A'} - {variant.price || 'N/A'}{' '}
+                      Size {variant.size} - {variant.price}{' '}
                       {variant.inventory_quantity > 0 ? `(${variant.inventory_quantity} in stock)` : '(Out of stock)'}
                     </Box>
                   ))}
