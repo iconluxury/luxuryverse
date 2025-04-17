@@ -77,21 +77,20 @@ function CollectionsPage() {
 
   return (
     <Box
-      p={4}
       bg="gray.900"
       color="white"
       minH="100vh"
       display="flex"
-      justifyContent="center"
-      alignItems="flex-start"
+      flexDirection="column"
+      alignItems="center"
     >
-      <Box maxW="1200px" w="full">
+      <Box maxW="1200px" w="full" px={4} pt={4}>
         <Heading fontSize="2xl" mb={10} textAlign="center">Collections</Heading>
         <Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={6}>
           {collectionsData.map(collection => (
             <Link
               key={collection.id}
-              to={`/collections/${collection.id}`}
+              to={`/collection/${collection.id}`}
               style={{ textDecoration: 'none' }}
             >
               <Box
@@ -127,9 +126,9 @@ function CollectionsPage() {
             </Link>
           ))}
         </Grid>
-        <Box mt={10}>
-          <Footer />
-        </Box>
+      </Box>
+      <Box w="full" mt={10}>
+        <Footer />
       </Box>
     </Box>
   );
