@@ -54,26 +54,25 @@ function Layout() {
       </Flex>
       {!consentGiven && (
         <CookieConsent
-          location="top"
+          location="bottom"
           buttonText="Yes, I accept"
           declineButtonText="No, I decline"
           cookieName="luxuryverse-consent"
           enableDeclineButton
           style={{
             background: "rgba(0, 0, 0, 0.5)", // Semi-transparent grey (50% opacity)
-            top: "200px",
             color: theme.colors.white || "#FFFFFF",
             padding: "2px",
             fontSize: "12px",
             zIndex: 9999,
           }}
           buttonStyle={{
+            background: theme.colors.purple[500] || "#EF4444",
             color: theme.colors.white || "#FFFFFF",
             padding: "4px 8px",
             fontWeight: "medium",
           }}
           declineButtonStyle={{
-            background: theme.colors.gray[500] || "#6B7280",
             color: theme.colors.white || "#FFFFFF",
             borderRadius: theme.radii.md || "4px",
             padding: "4px 8px",
