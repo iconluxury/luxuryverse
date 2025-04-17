@@ -36,7 +36,6 @@ function ProductsPage() {
               'Accept': 'application/json',
               'Content-Type': 'application/json',
             },
-            credentials: 'omit',
           });
 
           clearTimeout(timeoutId);
