@@ -21,6 +21,7 @@ import { Route as LayoutCookiesImport } from './routes/_layout/cookies'
 import { Route as LayoutCollectionsImport } from './routes/_layout/collections'
 import { Route as LayoutAuthCompleteImport } from './routes/_layout/auth-complete'
 import { Route as LayoutProductsIdImport } from './routes/_layout/products/$id'
+import { Route as LayoutCollectionsIdImport } from './routes/_layout/collections/$id'
 import { Route as LayoutResourcesBlogsPathImport } from './routes/_layout/resources/blogs/$path'
 
 // Create/Update Routes
@@ -82,6 +83,12 @@ const LayoutProductsIdRoute = LayoutProductsIdImport.update({
   id: '/products/$id',
   path: '/products/$id',
   getParentRoute: () => LayoutRoute,
+} as any)
+
+const LayoutCollectionsIdRoute = LayoutCollectionsIdImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => LayoutCollectionsRoute,
 } as any)
 
 const LayoutResourcesBlogsPathRoute = LayoutResourcesBlogsPathImport.update({
@@ -157,6 +164,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutIndexImport
       parentRoute: typeof LayoutImport
     }
+    '/_layout/collections/$id': {
+      id: '/_layout/collections/$id'
+      path: '/$id'
+      fullPath: '/collections/$id'
+      preLoaderRoute: typeof LayoutCollectionsIdImport
+      parentRoute: typeof LayoutCollectionsImport
+    }
     '/_layout/products/$id': {
       id: '/_layout/products/$id'
       path: '/products/$id'
@@ -176,9 +190,20 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
+interface LayoutCollectionsRouteChildren {
+  LayoutCollectionsIdRoute: typeof LayoutCollectionsIdRoute
+}
+
+const LayoutCollectionsRouteChildren: LayoutCollectionsRouteChildren = {
+  LayoutCollectionsIdRoute: LayoutCollectionsIdRoute,
+}
+
+const LayoutCollectionsRouteWithChildren =
+  LayoutCollectionsRoute._addFileChildren(LayoutCollectionsRouteChildren)
+
 interface LayoutRouteChildren {
   LayoutAuthCompleteRoute: typeof LayoutAuthCompleteRoute
-  LayoutCollectionsRoute: typeof LayoutCollectionsRoute
+  LayoutCollectionsRoute: typeof LayoutCollectionsRouteWithChildren
   LayoutCookiesRoute: typeof LayoutCookiesRoute
   LayoutJoinRoute: typeof LayoutJoinRoute
   LayoutOptOutRoute: typeof LayoutOptOutRoute
@@ -191,7 +216,7 @@ interface LayoutRouteChildren {
 
 const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutAuthCompleteRoute: LayoutAuthCompleteRoute,
-  LayoutCollectionsRoute: LayoutCollectionsRoute,
+  LayoutCollectionsRoute: LayoutCollectionsRouteWithChildren,
   LayoutCookiesRoute: LayoutCookiesRoute,
   LayoutJoinRoute: LayoutJoinRoute,
   LayoutOptOutRoute: LayoutOptOutRoute,
@@ -208,26 +233,28 @@ const LayoutRouteWithChildren =
 export interface FileRoutesByFullPath {
   '': typeof LayoutRouteWithChildren
   '/auth-complete': typeof LayoutAuthCompleteRoute
-  '/collections': typeof LayoutCollectionsRoute
+  '/collections': typeof LayoutCollectionsRouteWithChildren
   '/cookies': typeof LayoutCookiesRoute
   '/join': typeof LayoutJoinRoute
   '/opt-out': typeof LayoutOptOutRoute
   '/privacy-policy': typeof LayoutPrivacyPolicyRoute
   '/terms-conditions': typeof LayoutTermsConditionsRoute
   '/': typeof LayoutIndexRoute
+  '/collections/$id': typeof LayoutCollectionsIdRoute
   '/products/$id': typeof LayoutProductsIdRoute
   '/resources/blogs/$path': typeof LayoutResourcesBlogsPathRoute
 }
 
 export interface FileRoutesByTo {
   '/auth-complete': typeof LayoutAuthCompleteRoute
-  '/collections': typeof LayoutCollectionsRoute
+  '/collections': typeof LayoutCollectionsRouteWithChildren
   '/cookies': typeof LayoutCookiesRoute
   '/join': typeof LayoutJoinRoute
   '/opt-out': typeof LayoutOptOutRoute
   '/privacy-policy': typeof LayoutPrivacyPolicyRoute
   '/terms-conditions': typeof LayoutTermsConditionsRoute
   '/': typeof LayoutIndexRoute
+  '/collections/$id': typeof LayoutCollectionsIdRoute
   '/products/$id': typeof LayoutProductsIdRoute
   '/resources/blogs/$path': typeof LayoutResourcesBlogsPathRoute
 }
@@ -236,13 +263,14 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/_layout': typeof LayoutRouteWithChildren
   '/_layout/auth-complete': typeof LayoutAuthCompleteRoute
-  '/_layout/collections': typeof LayoutCollectionsRoute
+  '/_layout/collections': typeof LayoutCollectionsRouteWithChildren
   '/_layout/cookies': typeof LayoutCookiesRoute
   '/_layout/join': typeof LayoutJoinRoute
   '/_layout/opt-out': typeof LayoutOptOutRoute
   '/_layout/privacy-policy': typeof LayoutPrivacyPolicyRoute
   '/_layout/terms-conditions': typeof LayoutTermsConditionsRoute
   '/_layout/': typeof LayoutIndexRoute
+  '/_layout/collections/$id': typeof LayoutCollectionsIdRoute
   '/_layout/products/$id': typeof LayoutProductsIdRoute
   '/_layout/resources/blogs/$path': typeof LayoutResourcesBlogsPathRoute
 }
@@ -259,6 +287,7 @@ export interface FileRouteTypes {
     | '/privacy-policy'
     | '/terms-conditions'
     | '/'
+    | '/collections/$id'
     | '/products/$id'
     | '/resources/blogs/$path'
   fileRoutesByTo: FileRoutesByTo
@@ -271,6 +300,7 @@ export interface FileRouteTypes {
     | '/privacy-policy'
     | '/terms-conditions'
     | '/'
+    | '/collections/$id'
     | '/products/$id'
     | '/resources/blogs/$path'
   id:
@@ -284,6 +314,7 @@ export interface FileRouteTypes {
     | '/_layout/privacy-policy'
     | '/_layout/terms-conditions'
     | '/_layout/'
+    | '/_layout/collections/$id'
     | '/_layout/products/$id'
     | '/_layout/resources/blogs/$path'
   fileRoutesById: FileRoutesById
@@ -331,7 +362,10 @@ export const routeTree = rootRoute
     },
     "/_layout/collections": {
       "filePath": "_layout/collections.tsx",
-      "parent": "/_layout"
+      "parent": "/_layout",
+      "children": [
+        "/_layout/collections/$id"
+      ]
     },
     "/_layout/cookies": {
       "filePath": "_layout/cookies.tsx",
@@ -356,6 +390,10 @@ export const routeTree = rootRoute
     "/_layout/": {
       "filePath": "_layout/index.tsx",
       "parent": "/_layout"
+    },
+    "/_layout/collections/$id": {
+      "filePath": "_layout/collections/$id.tsx",
+      "parent": "/_layout/collections"
     },
     "/_layout/products/$id": {
       "filePath": "_layout/products/$id.tsx",

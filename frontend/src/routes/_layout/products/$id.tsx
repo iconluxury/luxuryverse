@@ -41,10 +41,178 @@ interface Product {
   full_price: string;
   sale_price: string;
   discount: string | null;
+  collection_id?: string; // Optional, as it may not be in the product response
 }
 
-// Custom HTML Parser (unchanged, omitted for brevity)
-// ... parseHtml function ...
+// Custom HTML Parser (unchanged)
+const ALLOWED_TAGS = ['div', 'span', 'p', 'strong', 'em', 'ul', 'li', 'ol'];
+const ALLOWED_ATTRIBUTES = ['class', 'style'];
+const ALLOWED_STYLES = {
+  color: /^#(0x)?[0-9a-f]+$/i,
+  'text-align': /^left$|^right$|^center$/,
+  'font-size': /^\d+(?:px|em|rem|%)$/,
+};
+
+interface HtmlNode {
+  type: 'element' | 'text';
+  tag?: string;
+  attributes?: Record<string, string>;
+  children?: HtmlNode[];
+  content?: string;
+}
+
+function parseHtml(html: string): React.ReactNode {
+  if (!html || typeof html !== 'string') {
+    return <Text fontSize="lg" color="gray.700" mb={4}>No description available</Text>;
+  }
+
+  try {
+    // Tokenize HTML string
+    const tokens: string[] = [];
+    let current = '';
+    let inTag = false;
+    let inComment = false;
+
+    for (let i = 0; i < html.length; i++) {
+      if (html[i] === '<' && html.slice(i, i + 4) === '<!--') {
+        inComment = true;
+        i += 3;
+        continue;
+      }
+      if (inComment && html.slice(i, i + 3) === '-->') {
+        inComment = false;
+        i += 2;
+        continue;
+      }
+      if (inComment) continue;
+
+      if (html[i] === '<' && !inTag) {
+        if (current) tokens.push(current);
+        current = '<';
+        inTag = true;
+      } else if (html[i] === '>' && inTag) {
+        current += '>';
+        tokens.push(current);
+        current = '';
+        inTag = false;
+      } else {
+        current += html[i];
+      }
+    }
+    if (current) tokens.push(current);
+
+    // Parse tokens into a node tree
+    function parseTokens(tokens: string[], index: { value: number }): HtmlNode[] {
+      const nodes: HtmlNode[] = [];
+
+      while (index.value < tokens.length) {
+        const token = tokens[index.value].trim();
+        index.value++;
+
+        if (!token) continue;
+
+        if (token.startsWith('</')) {
+          return nodes;
+        } else if (token.startsWith('<') && token.endsWith('>')) {
+          const tagMatch = token.match(/^<([a-zA-Z][a-zA-Z0-9]*)([^>]*)>$/);
+          if (!tagMatch) continue;
+
+          const [, tag, attrString] = tagMatch;
+          if (!ALLOWED_TAGS.includes(tag.toLowerCase())) {
+            const children = parseTokens(tokens, index);
+            nodes.push(...children);
+            continue;
+          }
+
+          const attributes: Record<string, string> = {};
+          const attrMatches = attrString.matchAll(/([a-zA-Z-]+)(?:="([^"]*)")?/g);
+          for (const match of attrMatches) {
+            const [, name, value = ''] = match;
+            if (ALLOWED_ATTRIBUTES.includes(name.toLowerCase())) {
+              if (name === 'style') {
+                const styleProps = value
+                  .split(';')
+                  .filter(Boolean)
+                  .map((prop) => prop.trim().split(':').map((s) => s.trim()));
+                const validStyles = styleProps
+                  .filter(([key, val]) => ALLOWED_STYLES[key]?.test(val))
+                  .map(([key, val]) => `${key}: ${val}`);
+                if (validStyles.length) {
+                  attributes.style = validStyles.join('; ');
+                }
+              } else {
+                attributes[name.toLowerCase()] = value;
+              }
+            }
+          }
+
+          const children = parseTokens(tokens, index);
+          nodes.push({
+            type: 'element',
+            tag: tag.toLowerCase(),
+            attributes,
+            children,
+          });
+        } else {
+          nodes.push({
+            type: 'text',
+            content: token
+              .replace(/</g, '<')
+              .replace(/>/g, '>')
+              .replace(/&/g, '&')
+              .replace(/"/g, '"'),
+          });
+        }
+      }
+
+      return nodes;
+    }
+
+    const nodes = parseTokens(tokens, { value: 0 });
+
+    // Convert nodes to React elements
+    function nodesToReact(nodes: HtmlNode[]): React.ReactNode[] {
+      return nodes
+        .map((node, index) => {
+          if (node.type === 'text') {
+            return node.content ? (
+              <Text key={index} as="span" fontSize="lg" color="gray.700">
+                {node.content}
+              </Text>
+            ) : null;
+          }
+          if (node.type === 'element' && node.tag) {
+            const props: Record<string, any> = {
+              fontSize: 'lg',
+              color: 'gray.700',
+              mb: 2,
+              ...node.attributes,
+            };
+            if (node.tag === 'ul' || node.tag === 'ol') {
+              props.as = node.tag;
+            } else if (node.tag === 'li') {
+              props.as = 'li';
+            } else {
+              props.as = 'div';
+            }
+            return (
+              <Text key={index} {...props}>
+                {node.children ? nodesToReact(node.children) : null}
+              </Text>
+            );
+          }
+          return null;
+        })
+        .filter(Boolean);
+    }
+
+    const reactNodes = nodesToReact(nodes);
+    return reactNodes.length > 0 ? reactNodes : <Text fontSize="lg" color="gray.700" mb={4}>No description available</Text>;
+  } catch (err) {
+    console.error('Error parsing HTML:', err, 'HTML:', html);
+    return <Text fontSize="lg" color="gray.700" mb={4}>Failed to parse description</Text>;
+  }
+}
 
 function ProductDetails() {
   const [product, setProduct] = useState<Product | null>(null);
@@ -54,7 +222,6 @@ function ProductDetails() {
   const [currentImage, setCurrentImage] = useState(0);
   const API_BASE_URL = process.env.API_BASE_URL || 'https://iconluxury.shop';
   const { id } = useParams({ from: '/_layout/products/$id' });
-  const isBrowser = typeof window !== 'undefined';
 
   useEffect(() => {
     const fetchWithRetry = async (url: string, retryCount = 6) => {
@@ -93,7 +260,7 @@ function ProductDetails() {
 
     const fetchProductAndTopProducts = async () => {
       try {
-        // Fetch product details
+        // Fetch the product details
         const productData = await fetchWithRetry(`${API_BASE_URL}/api/v1/products/${id}`);
         console.log('Fetched product data:', productData);
         if (!productData || typeof productData !== 'object') {
@@ -101,7 +268,7 @@ function ProductDetails() {
         }
 
         // Validate variants
-        if (productData.variants && Array.isArray(productData.variants)) {
+        if (productData.variants) {
           productData.variants = productData.variants
             .filter((v: Variant) => {
               const isValid =
@@ -130,14 +297,16 @@ function ProductDetails() {
         setProduct(productData);
         setError(null);
 
-        // Fetch top 5 products from the featured collection
+        // Fetch top 5 products from the collection
         try {
-          const topProductsUrl = `${API_BASE_URL}/api/v1/collections/8789669282087/products`;
+          // Use collection ID from product data or fallback to Men's Shoes collection
+          const collectionId = productData.collection_id || '8789669282087';
+          const topProductsUrl = `${API_BASE_URL}/api/v1/collections/${collectionId}/products`;
           const collectionData = await fetchWithRetry(topProductsUrl);
           console.log('Fetched collection products:', collectionData);
 
           // Validate and sort top products
-          const validatedTopProducts = Array.isArray(collectionData?.products)
+          const validatedTopProducts = Array.isArray(collectionData.products)
             ? collectionData.products
                 .filter(
                   (p: Product) =>
@@ -145,26 +314,24 @@ function ProductDetails() {
                     typeof p === 'object' &&
                     typeof p.id === 'string' &&
                     typeof p.title === 'string' &&
-                    p.id !== id // Exclude current product
+                    p.id !== id // Exclude the current product
                 )
                 .map((p: Product) => ({
                   ...p,
-                  total_inventory: p.variants && Array.isArray(p.variants)
-                    ? p.variants.reduce((sum: number, v: Variant) => sum + v.inventory_quantity, 0)
-                    : 0,
+                  total_inventory: p.variants.reduce((sum: number, v: Variant) => sum + v.inventory_quantity, 0),
                   discount_value: p.discount
                     ? parseFloat(p.discount.replace('% off', '')) || 0
                     : 0,
                 }))
                 .sort((a: any, b: any) => {
+                  // Sort by discount (descending), then by total inventory (descending)
                   if (a.discount_value !== b.discount_value) {
                     return b.discount_value - a.discount_value;
                   }
                   return b.total_inventory - a.total_inventory;
                 })
-                .slice(0, 5)
+                .slice(0, 5) // Take top 5
             : [];
-          console.log('Top 5 products:', validatedTopProducts);
           setTopProducts(validatedTopProducts);
         } catch (topErr: any) {
           console.warn('Failed to fetch top products:', topErr.message);
@@ -174,12 +341,12 @@ function ProductDetails() {
       } catch (err: any) {
         setError(`Failed to load product: ${err.message || 'Unknown error'}`);
         try {
-          // Fallback: Fetch top 5 products from featured collection
+          // Fallback: Fetch top 5 products from Men's Shoes collection
           const topProductsUrl = `${API_BASE_URL}/api/v1/collections/8789669282087/products`;
           const collectionData = await fetchWithRetry(topProductsUrl);
           console.log('Fetched collection products (fallback):', collectionData);
 
-          const validatedTopProducts = Array.isArray(collectionData?.products)
+          const validatedTopProducts = Array.isArray(collectionData.products)
             ? collectionData.products
                 .filter(
                   (p: Product) =>
@@ -191,9 +358,7 @@ function ProductDetails() {
                 )
                 .map((p: Product) => ({
                   ...p,
-                  total_inventory: p.variants && Array.isArray(p.variants)
-                    ? p.variants.reduce((sum: number, v: Variant) => sum + v.inventory_quantity, 0)
-                    : 0,
+                  total_inventory: p.variants.reduce((sum: number, v: Variant) => sum + v.inventory_quantity, 0),
                   discount_value: p.discount
                     ? parseFloat(p.discount.replace('% off', '')) || 0
                     : 0,
@@ -206,10 +371,8 @@ function ProductDetails() {
                 })
                 .slice(0, 5)
             : [];
-          console.log('Top 5 products (fallback):', validatedTopProducts);
           setTopProducts(validatedTopProducts);
         } catch (topErr: any) {
-          console.warn('Failed to fetch top products (fallback):', topErr.message);
           setError((prev) => `${prev}\nFailed to load top products: ${topErr.message || 'Unknown error'}`);
           setTopProducts([]);
         }
@@ -237,12 +400,17 @@ function ProductDetails() {
     }
   };
 
+  // Memoize variants rendering to prevent re-renders
   const variantComponents = useMemo(() => {
     if (!product?.variants?.length) {
       return <Text fontSize="md" color="gray.500">No variants available</Text>;
     }
     return product.variants.map((variant, index) => {
-      console.log('Rendering variant:', index, variant);
+      console.log('Rendering variant:', index, variant, {
+        colorScheme: variant.inventory_quantity > 0 ? 'gray' : 'red',
+        variant: 'subtle',
+        size: 'md',
+      });
       return (
         <Box
           key={variant.id || `variant-${index}`}
@@ -253,7 +421,7 @@ function ProductDetails() {
           mb={2}
           fontSize="md"
         >
-          Size {variant.size || 'N/A'} - {variant.price ||지지 'N/A'}{' '}
+          Size {variant.size || 'N/A'} - {variant.price || 'N/A'}{' '}
           {variant.inventory_quantity > 0
             ? `(${variant.inventory_quantity} in stock)`
             : '(Out of stock)'}
@@ -311,15 +479,13 @@ function ProductDetails() {
 
   return (
     <Box>
-      {isBrowser && (
-        <Helmet>
-          <title>{product.title || 'Product'} | Icon Luxury</title>
-          <meta
-            name="description"
-            content={product.description ? stripHtml(product.description).slice(0, 160) : 'Product description'}
-          />
-        </Helmet>
-      )}
+      <Helmet>
+        <title>{product.title || 'Product'} | Icon Luxury</title>
+        <meta
+          name="description"
+          content={product.description ? stripHtml(product.description).slice(0, 160) : 'Product description'}
+        />
+      </Helmet>
       <Box py={16} bg="white">
         <Box maxW="800px" mx="auto" px={4}>
           <Link
@@ -338,7 +504,7 @@ function ProductDetails() {
           {product.images?.length > 0 ? (
             <Box position="relative">
               <Image
-                src={product.images[currentImage] || 'https://placehold.co/275x350'}
+                src={product.images[currentImage]}
                 alt={`${product.title || 'Product'} image ${currentImage + 1}`}
                 w="full"
                 h="400px"
@@ -408,7 +574,8 @@ function ProductDetails() {
               {variantComponents}
             </HStack>
           </Box>
-          {topProducts.length > 0 ? (
+          {/* New Related Products Section */}
+          {topProducts.length > 0 && (
             <Box mt={8}>
               <Heading as="h2" size="lg" mb={4}>
                 Related Products
@@ -416,18 +583,10 @@ function ProductDetails() {
               <HStack spacing={4} flexWrap="wrap">
                 {topProducts.map((topProduct) => (
                   <Link key={topProduct.id} to={`/products/${topProduct.id}`}>
-                    <Box
-                      p={4}
-                      borderWidth="1px"
-                      borderRadius="md"
-                      textAlign="center"
-                      maxW="200px"
-                      _hover={{ transform: 'scale(1.05)', boxShadow: 'md' }}
-                      transition="all 0.2s"
-                    >
+                    <Box p={4} borderWidth="1px" borderRadius="md" textAlign="center" maxW="200px">
                       <Image
-                        src={topProduct.thumbnail || 'https://placehold.co/150x150'}
-                        alt={topProduct.title || 'Product'}
+                        src={topProduct.thumbnail}
+                        alt={topProduct.title}
                         w="150px"
                         h="150px"
                         objectFit="cover"
@@ -435,10 +594,10 @@ function ProductDetails() {
                         onError={(e) => (e.currentTarget.src = 'https://placehold.co/150x150')}
                       />
                       <Text mt={2} fontSize="sm" fontWeight="medium" noOfLines={2}>
-                        {topProduct.title || 'Untitled Product'}
+                        {topProduct.title}
                       </Text>
                       <Text color="gray.700" fontSize="sm">
-                        {topProduct.sale_price || 'N/A'}
+                        {topProduct.sale_price}
                         {topProduct.discount && (
                           <Text as="span" color="green.500" ml={1}>
                             ({topProduct.discount})
@@ -450,10 +609,6 @@ function ProductDetails() {
                 ))}
               </HStack>
             </Box>
-          ) : (
-            <Text fontSize="md" color="gray.500" mt={8}>
-              No related products available.
-            </Text>
           )}
           <Divider mb={8} />
         </Box>
