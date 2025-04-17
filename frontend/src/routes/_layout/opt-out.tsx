@@ -12,7 +12,7 @@ import {
 import Footer from '../../components/Common/Footer';
 import theme from "../../theme";
 
-export const Route = createFileRoute('/_layout/do-not-sell')({
+export const Route = createFileRoute('/_layout/opt-out')({
   component: OptOutPage,
 });
 
