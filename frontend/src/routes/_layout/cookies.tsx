@@ -36,9 +36,8 @@ function CookiePolicyPage() {
             <Text fontSize="md" mb={4}>
               If you have any questions, please reach out to us:
             </Text>
-            <VStack align="start" spacing={2} pl={4}>
-              <Text><strong>Email:</strong> support@luxuryverse.com</Text>
-            </VStack>
+    
+            <Text><strong>Email:</strong> support@luxuryverse.com</Text>
           </Box>
         </VStack>
       </Container>
