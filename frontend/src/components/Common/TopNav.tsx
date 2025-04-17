@@ -1,8 +1,9 @@
+// src/components/Common/TopNav.tsx
 import { Flex, Heading, Button } from '@chakra-ui/react';
 import { Link, useNavigate } from '@tanstack/react-router';
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
+import { useAccount, useConnect, useDisconnect } from 'wagmi';
 
-// AuthContext
 export const AuthContext = createContext({
   user: null,
   isJoining: false,
@@ -12,17 +13,40 @@ export const AuthContext = createContext({
 });
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null); // e.g., { address, xUsername, xProfile }
+  const [user, setUser] = useState(null);
   const [isJoining, setJoining] = useState(false);
+  const { address, isConnected, isConnecting, error: walletError } = useAccount();
+  const { connect, connectors, error: connectError } = useConnect();
+  const { disconnect } = useDisconnect();
 
-  const login = async (userData) => {
-    setUser(userData);
-    setJoining(false);
+  useEffect(() => {
+    if (isConnected && address) {
+      setUser({ address });
+      setJoining(false);
+      localStorage.setItem('walletAddress', address);
+    } else if (connectError || walletError) {
+      console.error('Wallet connection failed:', connectError || walletError);
+      setJoining(false);
+    }
+  }, [address, isConnected, connectError, walletError]);
+
+  const login = async () => {
+    try {
+      setJoining(true);
+      if (!isConnected && connectors.length > 0) {
+        await connect({ connector: connectors[0] });
+      }
+    } catch (error) {
+      console.error('Wallet connection failed:', error);
+      setJoining(false);
+    }
   };
 
   const logout = () => {
+    disconnect();
     setUser(null);
     setJoining(false);
+    localStorage.removeItem('walletAddress');
   };
 
   return (
