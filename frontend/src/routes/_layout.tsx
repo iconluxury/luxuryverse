@@ -60,7 +60,7 @@ function Layout() {
           cookieName="luxuryverse-consent"
           enableDeclineButton
           style={{
-            background: theme.colors.gray[800] || "#1F2937",
+            background: "rgba(128, 128, 128, 0.5)", // Semi-transparent grey (50% opacity)
             color: theme.colors.white || "#FFFFFF",
             padding: "2px",
             fontSize: "12px",
