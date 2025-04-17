@@ -10,6 +10,8 @@ import {
   Spinner,
   Grid,
   useToast,
+  Skeleton,
+  SkeletonText,
 } from '@chakra-ui/react';
 import { createFileRoute, useParams, Link } from '@tanstack/react-router';
 import { Helmet } from 'react-helmet-async';
@@ -265,8 +267,8 @@ function CollectionsDetails() {
               >
                 <Skeleton w="full" h="200px" startColor="gray.100" endColor="gray.300" />
                 <Box p={4}>
-                  <SkeletonText noOfLines={1} w="80%" mb={2} />
-                  <SkeletonText noOfLines={2} />
+                  <SkeletonText noOfLines={1} w="80%" mb={2} startColor="gray.100" endColor="gray.300" />
+                  <SkeletonText noOfLines={2} startColor="gray.100" endColor="gray.300" />
                 </Box>
               </Box>
             ))}
