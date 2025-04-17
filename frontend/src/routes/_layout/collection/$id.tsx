@@ -41,17 +41,22 @@ interface Collection {
 function CollectionsDetails() {
   const [collection, setCollection] = useState<Collection | null>(null);
   const [otherCollections, setOtherCollections] = useState<Collection[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [collectionLoading, setCollectionLoading] = useState(true);
+  const [otherCollectionsLoading, setOtherCollectionsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [maxDescriptionHeight, setMaxDescriptionHeight] = useState(0);
-  // Match ProductDetails' API_BASE_URL
-  const API_BASE_URL = process.env.API_BASE_URL || 'https://iconluxury.shop';
+  // Hardcode API_BASE_URL like ProductDetails
+  const API_BASE_URL = 'https://iconluxury.shop';
   const { id } = useParams({ from: '/_layout/collection/$id' });
   const toast = useToast();
 
   useEffect(() => {
-    // Debug environment and URLs
-    console.log('Environment:', process.env);
+    if (!id || typeof id !== 'string') {
+      setError('Invalid collection ID');
+      setCollectionLoading(false);
+      return;
+    }
+
     console.log('API_BASE_URL:', API_BASE_URL);
 
     const fetchWithRetry = async (url: string, retryCount = 6) => {
@@ -95,16 +100,14 @@ function CollectionsDetails() {
       }
     };
 
-    const fetchData = async () => {
+    const fetchCollection = async () => {
       try {
-        // Fetch current collection
         const collectionUrl = `${API_BASE_URL}/api/v1/collections/${id}`;
         const collectionData = await fetchWithRetry(collectionUrl);
         if (!collectionData || typeof collectionData !== 'object') {
           throw { status: 500, body: { detail: 'Invalid collection data received' } };
         }
 
-        // Validate collection data
         const validatedCollection: Collection = {
           id: collectionData.id || '',
           title: collectionData.title || 'Untitled Collection',
@@ -131,15 +134,24 @@ function CollectionsDetails() {
         };
 
         setCollection(validatedCollection);
+        setError(null);
+      } catch (err: any) {
+        console.error('Failed to load collection:', { error: err.message, collectionId: id });
+        setError(`Failed to load collection: ${err.message || 'Unknown error'}`);
+      } finally {
+        setCollectionLoading(false);
+      }
+    };
 
-        // Fetch all collections for the grid
+    const fetchOtherCollections = async () => {
+      try {
         const allCollectionsUrl = `${API_BASE_URL}/api/v1/collections`;
         let allCollectionsData;
         try {
           allCollectionsData = await fetchWithRetry(allCollectionsUrl);
         } catch (err: any) {
           console.warn('Failed to fetch other collections:', err.message);
-          allCollectionsData = []; // Fallback to empty array
+          allCollectionsData = [];
         }
 
         if (!Array.isArray(allCollectionsData)) {
@@ -147,7 +159,6 @@ function CollectionsDetails() {
           allCollectionsData = [];
         }
 
-        // Filter and validate other collections
         const otherCollectionsData = allCollectionsData
           .filter((col: any) => col && col.id && col.id !== id)
           .slice(0, 6)
@@ -163,39 +174,35 @@ function CollectionsDetails() {
         console.log('Other collections for grid:', otherCollectionsData);
         setOtherCollections(otherCollectionsData);
 
-        // Calculate max description height
         if (otherCollectionsData.length > 0) {
           const descriptions = otherCollectionsData.map((col: Collection) => col.description || '');
           const maxHeight = Math.max(...descriptions.map((desc: string) => desc.length)) * 1.5;
           setMaxDescriptionHeight(maxHeight);
         }
-
-        setError(null);
       } catch (err: any) {
-        console.error('Fetch error:', err);
-        handleError(err, (title: string, description: string, status: string) => {
-          toast({
-            title,
-            description,
-            status: status as any,
-            duration: 5000,
-            isClosable: true,
-          });
-        });
-        setError(`Failed to load collection: ${err.message || 'Unknown error'}`);
+        console.warn('Error processing other collections:', err.message);
+        setError((prev) => prev || `Failed to load other collections: ${err.message || 'Unknown error'}`);
+        setOtherCollections([]);
       } finally {
-        setLoading(false);
+        setOtherCollectionsLoading(false);
       }
     };
 
-    fetchData();
-  }, [id, toast, API_BASE_URL]);
+    fetchCollection();
+  }, [id, toast]);
+
+  useEffect(() => {
+    if (collection && !error) {
+      setOtherCollectionsLoading(true);
+      fetchOtherCollections();
+    }
+  }, [collection, error]);
 
   const stripHtml = (html: string) => {
     return html.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
   };
 
-  if (loading) {
+  if (collectionLoading) {
     return (
       <Flex justify="center" align="center" minH="100vh">
         <Spinner size="xl" color="yellow.400" />
@@ -245,7 +252,26 @@ function CollectionsDetails() {
         <Heading fontSize="2xl" mb={6}>
           Other Collections
         </Heading>
-        {otherCollections.length > 0 ? (
+        {otherCollectionsLoading ? (
+          <Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={6}>
+            {[...Array(6)].map((_, index) => (
+              <Box
+                key={index}
+                borderWidth="1px"
+                borderRadius="lg"
+                overflow="hidden"
+                bg="white"
+                color="gray.900"
+              >
+                <Skeleton w="full" h="200px" startColor="gray.100" endColor="gray.300" />
+                <Box p={4}>
+                  <SkeletonText noOfLines={1} w="80%" mb={2} />
+                  <SkeletonText noOfLines={2} />
+                </Box>
+              </Box>
+            ))}
+          </Grid>
+        ) : otherCollections.length > 0 ? (
           <Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={6}>
             {otherCollections.map((col) => (
               <Link
