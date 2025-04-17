@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Request
-from starlette.middleware.cors import CORSMiddleware
 from fastapi.routing import APIRoute
+from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
+from starlette.middleware.cors import CORSMiddleware
 from app.api.main import api_router
 from app.core.config import settings
 
@@ -17,11 +18,11 @@ app = FastAPI(
 @app.middleware("http")
 async def add_path_to_response(request: Request, call_next):
     response = await call_next(request)
-    # Add path to response headers
     response.headers["X-Request-Path"] = request.url.path
-    # Optionally, log the path
     print(f"Request path: {request.url.path}")
     return response
+
+app.add_middleware(HTTPSRedirectMiddleware)
 
 app.add_middleware(
     CORSMiddleware,
@@ -34,5 +35,5 @@ app.add_middleware(
 app.include_router(api_router, prefix=settings.API_V1_STR)
 
 @app.get("/health", tags=["health"])
-async def health_check():
-    return {"status": "healthy"}
+async def health_check(request: Request):
+    return {"status": "healthy", "path": request.url.path}
