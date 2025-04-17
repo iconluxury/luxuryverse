@@ -40,6 +40,7 @@ function OptOutPage() {
             color="purple.500"
             _hover={{ textDecoration: "underline" }}
             p={0}
+            mb={2}
             fontSize="lg"
             fontWeight="medium"
           >
