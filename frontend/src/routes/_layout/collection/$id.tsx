@@ -69,6 +69,7 @@ function CollectionsDetails() {
   const [otherCollectionsLoading, setOtherCollectionsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [maxDescriptionHeight, setMaxDescriptionHeight] = useState(0);
+  // Use HTTPS for API base URL
   const API_BASE_URL = 'https://iconluxury.shop';
   const { id } = useParams({ from: '/_layout/collection/$id' });
   const toast = useToast();
@@ -161,7 +162,8 @@ function CollectionsDetails() {
         const allCollectionsData = await fetchWithRetry(allCollectionsUrl).catch(() => []);
 
         if (!Array.isArray(allCollectionsData)) {
-          return [];
+          setOtherCollections([]);
+          return;
         }
 
         const otherCollectionsData = allCollectionsData
@@ -185,6 +187,7 @@ function CollectionsDetails() {
         }
       } catch (err: any) {
         setError((prev) => prev || `Failed to load other collections: ${err.message || 'Unknown error'}`);
+        setOtherCollections([]);
       } finally {
         setOtherCollectionsLoading(false);
       }
