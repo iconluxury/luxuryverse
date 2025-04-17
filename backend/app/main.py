@@ -22,7 +22,6 @@ async def add_path_to_response(request: Request, call_next):
     print(f"Request path: {request.url.path}")
     return response
 
-app.add_middleware(HTTPSRedirectMiddleware)
 
 app.add_middleware(
     CORSMiddleware,
