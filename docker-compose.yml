@@ -121,7 +121,7 @@ services:
       # Updated API HTTP Router to use /api path prefix
       - "traefik.http.routers.api-http.rule=Host(`iconluxury.shop`) && PathPrefix(`/api`)"
       - "traefik.http.routers.api-http.entrypoints=http"
-      # - "traefik.http.services.api-service.loadbalancer.server.port=8000"
+      - "traefik.http.services.api-service.loadbalancer.server.port=8000"
 
   frontend:
     image: "${DOCKER_IMAGE_FRONTEND?Variable not set}:${TAG-latest}"
