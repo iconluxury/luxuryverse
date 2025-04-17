@@ -22,10 +22,9 @@ function ProductsPage() {
     const fetchProducts = async (retryCount = 3, delay = 2000) => {
       if (!hasMore) return;
       setLoading(true);
-
+      const url = `${API_BASE_URL}/api/v1/products`;
       for (let attempt = 1; attempt <= retryCount; attempt++) {
         try {
-          const url = `${API_BASE_URL}/api/v1/products`;
           logDebug(`Attempt ${attempt}: Fetching products from ${url}`);
           const controller = new AbortController();
           const timeoutId = setTimeout(() => controller.abort(), 30000); // Increased to 30s
