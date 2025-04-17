@@ -56,7 +56,7 @@ function CollectionsPage() {
     return (
       <Box p={4} bg="gray.900" color="white" minH="100vh" display="flex" justifyContent="center" alignItems="center">
         <Box maxW="1200px" w="full">
-          <Skeleton height="20px" width="200px" mb={6} />
+          <Skeleton height="20px" width="200px" mb={8} />
           <Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={6}>
             {selectedCollections.map((_, index) => (
               <Skeleton key={index} height="300px" />
@@ -83,10 +83,10 @@ function CollectionsPage() {
       minH="100vh"
       display="flex"
       justifyContent="center"
-      alignItems="flex-start" // Changed to flex-start to keep content near top
+      alignItems="flex-start"
     >
       <Box maxW="1200px" w="full">
-        <Heading fontSize="2xl" mb={6} textAlign="center">Collections</Heading>
+        <Heading fontSize="2xl" mb={10} textAlign="center">Collections</Heading>
         <Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={6}>
           {collectionsData.map(collection => (
             <Link
@@ -127,7 +127,9 @@ function CollectionsPage() {
             </Link>
           ))}
         </Grid>
-        <Footer />
+        <Box mt={10}>
+          <Footer />
+        </Box>
       </Box>
     </Box>
   );
