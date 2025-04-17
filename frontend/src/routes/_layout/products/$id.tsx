@@ -263,7 +263,7 @@ function ProductDetails() {
         if (!productData || typeof productData !== 'object') {
           throw new Error('Invalid product data received');
         }
-
+    
         // Validate variants
         if (productData.variants && Array.isArray(productData.variants)) {
           productData.variants = productData.variants
@@ -293,41 +293,55 @@ function ProductDetails() {
         }
         setProduct(productData);
         setError(null);
-
+    
         // Fetch top 5 products from the featured collection
         try {
           const topProductsUrl = `${API_BASE_URL}/api/v1/collections/488238383399`;
           const collectionData = await fetchWithRetry(topProductsUrl);
           console.log('Fetched collection products:', collectionData);
-
+    
+          if (!collectionData || !Array.isArray(collectionData.products)) {
+            console.warn('Invalid collection data:', collectionData);
+            setTopProducts([]);
+            return;
+          }
+    
           // Validate and sort top products
-          const validatedTopProducts = Array.isArray(collectionData?.products)
-            ? collectionData.products
-                .filter(
-                  (p: Product) =>
-                    p &&
-                    typeof p === 'object' &&
-                    typeof p.id === 'string' &&
-                    typeof p.title === 'string' &&
-                    p.id !== id
-                )
-                .map((p: Product) => ({
-                  ...p,
-                  total_inventory: p.variants && Array.isArray(p.variants)
-                    ? p.variants.reduce((sum: number, v: Variant) => sum + v.inventory_quantity, 0)
-                    : 0,
-                  discount_value: p.discount
-                    ? parseFloat(p.discount.replace('% off', '')) || 0
-                    : 0,
-                }))
-                .sort((a: any, b: any) => {
-                  if (a.discount_value !== b.discount_value) {
-                    return b.discount_value - a.discount_value;
-                  }
-                  return b.total_inventory - a.total_inventory;
-                })
-                .slice(0, 5)
-            : [];
+          const validatedTopProducts = collectionData.products
+            .filter(
+              (p: Product) =>
+                p &&
+                typeof p === 'object' &&
+                typeof p.id === 'string' &&
+                typeof p.title === 'string' &&
+                p.id !== id &&
+                Array.isArray(p.variants)
+            )
+            .map((p: Product) => {
+              const variants = Array.isArray(p.variants) ? p.variants : [];
+              return {
+                ...p,
+                total_inventory: variants.reduce((sum: number, v: Variant) => {
+                  return sum + (typeof v.inventory_quantity === 'number' ? v.inventory_quantity : 0);
+                }, 0),
+                discount_value: p.discount
+                  ? parseFloat(p.discount.replace('% off', '')) || 0
+                  : 0,
+              };
+            })
+            .sort((a, b) => {
+              const aDiscount = a.discount_value || 0;
+              const bDiscount = b.discount_value || 0;
+              const aInventory = a.total_inventory || 0;
+              const bInventory = b.total_inventory || 0;
+    
+              if (aDiscount !== bDiscount) {
+                return bDiscount - aDiscount;
+              }
+              return bInventory - aInventory;
+            })
+            .slice(0, 5);
+    
           console.log('Top 5 products:', validatedTopProducts);
           setTopProducts(validatedTopProducts);
         } catch (topErr: any) {
@@ -342,34 +356,48 @@ function ProductDetails() {
           const topProductsUrl = `${API_BASE_URL}/api/v1/collections/488238383399`;
           const collectionData = await fetchWithRetry(topProductsUrl);
           console.log('Fetched collection products (fallback):', collectionData);
-
-          const validatedTopProducts = Array.isArray(collectionData?.products)
-            ? collectionData.products
-                .filter(
-                  (p: Product) =>
-                    p &&
-                    typeof p === 'object' &&
-                    typeof p.id === 'string' &&
-                    typeof p.title === 'string' &&
-                    p.id !== id
-                )
-                .map((p: Product) => ({
-                  ...p,
-                  total_inventory: p.variants && Array.isArray(p.variants)
-                    ? p.variants.reduce((sum: number, v: Variant) => sum + v.inventory_quantity, 0)
-                    : 0,
-                  discount_value: p.discount
-                    ? parseFloat(p.discount.replace('% off', '')) || 0
-                    : 0,
-                }))
-                .sort((a: any, b: any) => {
-                  if (a.discount_value !== b.discount_value) {
-                    return b.discount_value - a.discount_value;
-                  }
-                  return b.total_inventory - a.total_inventory;
-                })
-                .slice(0, 5)
-            : [];
+    
+          if (!collectionData || !Array.isArray(collectionData.products)) {
+            console.warn('Invalid collection data (fallback):', collectionData);
+            setTopProducts([]);
+            return;
+          }
+    
+          const validatedTopProducts = collectionData.products
+            .filter(
+              (p: Product) =>
+                p &&
+                typeof p === 'object' &&
+                typeof p.id === 'string' &&
+                typeof p.title === 'string' &&
+                p.id !== id &&
+                Array.isArray(p.variants)
+            )
+            .map((p: Product) => {
+              const variants = Array.isArray(p.variants) ? p.variants : [];
+              return {
+                ...p,
+                total_inventory: variants.reduce((sum: number, v: Variant) => {
+                  return sum + (typeof v.inventory_quantity === 'number' ? v.inventory_quantity : 0);
+                }, 0),
+                discount_value: p.discount
+                  ? parseFloat(p.discount.replace('% off', '')) || 0
+                  : 0,
+              };
+            })
+            .sort((a, b) => {
+              const aDiscount = a.discount_value || 0;
+              const bDiscount = b.discount_value || 0;
+              const aInventory = a.total_inventory || 0;
+              const bInventory = b.total_inventory || 0;
+    
+              if (aDiscount !== bDiscount) {
+                return bDiscount - aDiscount;
+              }
+              return bInventory - aInventory;
+            })
+            .slice(0, 5);
+    
           console.log('Top 5 products (fallback):', validatedTopProducts);
           setTopProducts(validatedTopProducts);
         } catch (topErr: any) {
