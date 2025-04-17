@@ -69,7 +69,6 @@ function Layout() {
           }}
           buttonStyle={{
             color: theme.colors.white || "#FFFFFF",
-            borderRadius: theme.radii.md || "4px",
             padding: "4px 8px",
             fontWeight: "medium",
           }}
