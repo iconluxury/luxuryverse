@@ -1,51 +1,21 @@
-import { useState, useEffect, useMemo, Component, ReactNode } from 'react';
+// src/components/ProductDetails.tsx
+import { useAccount } from 'wagmi';
+import { Flex, Spinner, Box, Text } from '@chakra-ui/react';
+import { useState, useEffect, useMemo } from 'react';
+import { useParams, Link } from '@tanstack/react-router';
+import { Helmet } from 'react-helmet-async';
+import Footer from './Common/Footer';
 import {
-  Box,
-  Flex,
   Heading,
-  Text,
   Image,
   Tag,
   HStack,
   Divider,
-  Spinner,
   IconButton,
   Skeleton,
   SkeletonText,
 } from '@chakra-ui/react';
-import { createFileRoute, useParams, Link } from '@tanstack/react-router';
 import { TimeIcon, ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
-import { Helmet } from 'react-helmet-async';
-import Footer from '../../../components/Common/Footer';
-
-// Error Boundary Component
-class ErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {
-  state = { hasError: false };
-
-  static getDerivedStateFromError() {
-    return { hasError: true };
-  }
-
-  componentDidCatch(error: Error, errorInfo: any) {
-    console.error('ErrorBoundary caught:', error, errorInfo);
-    console.error('Component stack:', errorInfo.componentStack);
-  }
-
-  render() {
-    if (this.state.hasError) {
-      return (
-        <Box textAlign="center" py={16} color="red.500">
-          <Text fontSize="lg">Something went wrong. Please try again later.</Text>
-        </Box>
-      );
-    }
-    return this.props.children;
-  }
-}
-
-export const Route = createFileRoute('/_layout/products/$id')({
-  component: ProductDetailsWrapper,
-});
 
 interface Variant {
   id: string;
@@ -70,194 +40,17 @@ interface Product {
   collection_id?: string;
 }
 
-const ALLOWED_TAGS = ['div', 'span', 'p', 'strong', 'em', 'ul', 'li', 'ol'];
-const ALLOWED_ATTRIBUTES = ['class', 'style'];
-const ALLOWED_STYLES = {
-  color: /^#(0x)?[0-9a-f]+$/i,
-  'text-align': /^left$|^right$|^center$/,
-  'font-size': /^\d+(?:px|em|rem|%)$/,
-};
-
-interface HtmlNode {
-  type: 'element' | 'text';
-  tag?: string;
-  attributes?: Record<string, string>;
-  children?: HtmlNode[];
-  content?: string;
-}
-
-function parseHtml(html: string): React.ReactNode {
-  if (!html || typeof html !== 'string') {
-    return <Text fontSize="lg" color="gray.700" mb={4}>No description available</Text>;
-  }
-
-  try {
-    const tokens: string[] = [];
-    let current = '';
-    let inTag = false;
-    let inComment = false;
-
-    for (let i = 0; i < html.length; i++) {
-      if (html[i] === '<' && html.slice(i, i + 4) === '<!--') {
-        inComment = true;
-        i += 3;
-        continue;
-      }
-      if (inComment && html.slice(i, i + 3) === '-->') {
-        inComment = false;
-        i += 2;
-        continue;
-      }
-      if (inComment) continue;
-
-      if (html[i] === '<' && !inTag) {
-        if (current) tokens.push(current);
-        current = '<';
-        inTag = true;
-      } else if (html[i] === '>' && inTag) {
-        current += '>';
-        tokens.push(current);
-        current = '';
-        inTag = false;
-      } else {
-        current += html[i];
-      }
-    }
-    if (current) tokens.push(current);
-
-    function parseTokens(tokens: string[], index: { value: number }): HtmlNode[] {
-      const nodes: HtmlNode[] = [];
-
-      while (index.value < tokens.length) {
-        const token = tokens[index.value].trim();
-        index.value++;
-
-        if (!token) continue;
-
-        if (token.startsWith('</')) {
-          return nodes;
-        } else if (token.startsWith('<') && token.endsWith('>')) {
-          const tagMatch = token.match(/^<([a-zA-Z][a-zA-Z0-9]*)([^>]*)>$/);
-          if (!tagMatch) continue;
-
-          const [, tag, attrString] = tagMatch;
-          if (!ALLOWED_TAGS.includes(tag.toLowerCase())) {
-            const children = parseTokens(tokens, index);
-            nodes.push(...children);
-            continue;
-          }
-
-          const attributes: Record<string, string> = {};
-          const attrMatches = attrString.matchAll(/([a-zA-Z-]+)(?:="([^"]*)")?/g);
-          for (const match of attrMatches) {
-            const [, name, value = ''] = match;
-            if (ALLOWED_ATTRIBUTES.includes(name.toLowerCase())) {
-              if (name === 'style') {
-                const styleProps = value
-                  .split(';')
-                  .filter(Boolean)
-                  .map((prop) => prop.trim().split(':').map((s) => s.trim()));
-                const validStyles = styleProps
-                  .filter(([key, val]) => ALLOWED_STYLES[key]?.test(val))
-                  .map(([key, val]) => `${key}: ${val}`);
-                if (validStyles.length) {
-                  attributes.style = validStyles.join('; ');
-                }
-              } else {
-                attributes[name.toLowerCase()] = value;
-              }
-            }
-          }
-
-          const children = parseTokens(tokens, index);
-          nodes.push({
-            type: 'element',
-            tag: tag.toLowerCase(),
-            attributes,
-            children,
-          });
-        } else {
-          nodes.push({
-            type: 'text',
-            content: token
-              .replace(/</g, '<')
-              .replace(/>/g, '>')
-              .replace(/&/g, '&')
-              .replace(/"/g, '"'),
-          });
-        }
-      }
-
-      return nodes;
-    }
-
-    const nodes = parseTokens(tokens, { value: 0 });
-
-    function nodesToReact(nodes: HtmlNode[]): React.ReactNode[] {
-      return nodes
-        .map((node, index) => {
-          if (node.type === 'text') {
-            return node.content ? (
-              <Text key={index} as="span" fontSize="lg" color="gray.700">
-                {node.content}
-              </Text>
-            ) : null;
-          }
-          if (node.type === 'element' && node.tag) {
-            const props: Record<string, any> = {
-              fontSize: 'lg',
-              color: 'gray.700',
-              mb: 2,
-              ...node.attributes,
-            };
-            if (node.tag === 'ul' || node.tag === 'ol') {
-              props.as = node.tag;
-            } else if (node.tag === 'li') {
-              props.as = 'li';
-            } else {
-              props.as = 'div';
-            }
-            return (
-              <Text key={index} {...props}>
-                {node.children ? nodesToReact(node.children) : null}
-              </Text>
-            );
-          }
-          return null;
-        })
-        .filter(Boolean);
-    }
-
-    const reactNodes = nodesToReact(nodes);
-    return reactNodes.length > 0 ? reactNodes : <Text fontSize="lg" color="gray.700" mb={4}>No description available</Text>;
-  } catch (err) {
-    console.error('Error parsing HTML:', err, 'HTML:', html);
-    return <Text fontSize="lg" color="gray.700" mb={4}>Failed to parse description</Text>;
-  }
-}
-
 function ProductDetails() {
+  const { isConnected, isConnecting, error: walletError } = useAccount();
   const [product, setProduct] = useState<Product | null>(null);
   const [topProducts, setTopProducts] = useState<Product[]>([]);
   const [productLoading, setProductLoading] = useState(true);
   const [topProductsLoading, setTopProductsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [currentImage, setCurrentImage] = useState(0);
-  const API_BASE_URL = process.env.API_BASE_URL || 'https://iconluxury.shop';
+  const API_BASE_URL = 'https://iconluxury.shop';
   const { id } = useParams({ from: '/_layout/products/$id' });
   const isBrowser = typeof window !== 'undefined';
-
-  // Debug Set.prototype.add
-  useEffect(() => {
-    const originalAdd = Set.prototype.add;
-    Set.prototype.add = function (...args) {
-      console.log('Set.add called with:', args, 'this:', this);
-      return originalAdd.apply(this, args);
-    };
-    return () => {
-      Set.prototype.add = originalAdd;
-    };
-  }, []);
 
   useEffect(() => {
     const fetchWithRetry = async (url: string, retryCount = 6) => {
@@ -302,7 +95,6 @@ function ProductDetails() {
           throw new Error('Invalid product data received');
         }
 
-        // Validate variants
         if (productData.variants && Array.isArray(productData.variants)) {
           productData.variants = productData.variants
             .filter((v: Variant) => {
@@ -350,7 +142,6 @@ function ProductDetails() {
           return;
         }
 
-        // Validate and sort top products
         const validatedTopProducts = collectionData.products
           .filter(
             (p: Product) =>
@@ -387,7 +178,7 @@ function ProductDetails() {
           .slice(0, 5);
 
         console.log('Top 5 products:', validatedTopProducts);
-        setTopProducts(validatedTopProducts);
+        setTopProducts(validTopProducts);
       } catch (topErr: any) {
         console.warn('Failed to fetch top products:', topErr.message);
         setError((prev) => prev || `Failed to load top products: ${topErr.message || 'Unknown error'}`);
@@ -397,7 +188,6 @@ function ProductDetails() {
       }
     };
 
-    // Fetch product first, then top products
     fetchProduct().then(() => {
       if (!error) {
         fetchTopProducts();
@@ -407,46 +197,21 @@ function ProductDetails() {
     });
   }, [id, error]);
 
-  const stripHtml = (html: string) => {
-    return html.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
-  };
+  if (isConnecting) {
+    return (
+      <Flex justify="center" align="center" minH="100vh">
+        <Spinner size="xl" color="yellow.400" />
+      </Flex>
+    );
+  }
 
-  const nextImage = () => {
-    if (product?.images?.length) {
-      setCurrentImage((prev) => (prev + 1) % product.images.length);
-    }
-  };
-
-  const prevImage = () => {
-    if (product?.images?.length) {
-      setCurrentImage((prev) => (prev - 1 + product.images.length) % product.images.length);
-    }
-  };
-
-  const variantComponents = useMemo(() => {
-    if (!product || !product.variants?.length) {
-      return <Text fontSize="md" color="gray.500">No variants available</Text>;
-    }
-    return product.variants.map((variant, index) => {
-      console.log('Rendering variant:', index, variant);
-      return (
-        <Box
-          key={variant.id || `variant-${index}`}
-          bg={variant.inventory_quantity > 0 ? 'gray.100' : 'red.100'}
-          px={3}
-          py={1}
-          borderRadius="full"
-          mb={2}
-          fontSize="md"
-        >
-          Size {variant.size || 'N/A'} - {variant.price || 'N/A'}{' '}
-          {variant.inventory_quantity > 0
-            ? `(${variant.inventory_quantity} in stock)`
-            : '(Out of stock)'}
-        </Box>
-      );
-    });
-  }, [product]);
+  if (walletError) {
+    return (
+      <Box textAlign="center" py={16} color="red.500">
+        <Text fontSize="lg">Wallet connection failed: {walletError.message}</Text>
+      </Box>
+    );
+  }
 
   if (productLoading) {
     return (
@@ -495,7 +260,7 @@ function ProductDetails() {
           <title>{product.title || 'Product'} | Icon Luxury</title>
           <meta
             name="description"
-            content={product.description ? stripHtml(product.description).slice(0, 160) : 'Product description'}
+            content={product.description ? product.description.slice(0, 160) : 'Product description'}
           />
         </Helmet>
       )}
@@ -535,7 +300,7 @@ function ProductDetails() {
                     left="8px"
                     top="50%"
                     transform="translateY(-50%)"
-                    onClick={prevImage}
+                    onClick={() => setCurrentImage((prev) => (prev - 1 + product.images.length) % product.images.length)}
                   />
                   <IconButton
                     aria-label="Next image"
@@ -544,7 +309,7 @@ function ProductDetails() {
                     right="8px"
                     top="50%"
                     transform="translateY(-50%)"
-                    onClick={nextImage}
+                    onClick={() => setCurrentImage((prev) => (prev + 1) % product.images.length)}
                   />
                 </>
               )}
@@ -574,7 +339,7 @@ function ProductDetails() {
             {product.sale_price || 'N/A'}{' '}
             {product.full_price && <Text as="s" color="gray.500">{product.full_price}</Text>}
           </Text>
-          {product.description ? parseHtml(product.description) : (
+          {product.description ? <Text fontSize="lg" color="gray.700" mb={4}>{product.description}</Text> : (
             <Text fontSize="lg" color="gray.700" mb={4}>
               No description available
             </Text>
@@ -584,7 +349,22 @@ function ProductDetails() {
               Variants
             </Heading>
             <HStack spacing={2} flexWrap="wrap" maxW="100%" gap={2}>
-              {variantComponents}
+              {product.variants.map((variant, index) => (
+                <Box
+                  key={variant.id || `variant-${index}`}
+                  bg={variant.inventory_quantity > 0 ? 'gray.100' : 'red.100'}
+                  px={3}
+                  py={1}
+                  borderRadius="full"
+                  mb={2}
+                  fontSize="md"
+                >
+                  Size {variant.size || 'N/A'} - {variant.price || 'N/A'}{' '}
+                  {variant.inventory_quantity > 0
+                    ? `(${variant.inventory_quantity} in stock)`
+                    : '(Out of stock)'}
+                </Box>
+              ))}
             </HStack>
           </Box>
           <Box mt={8}>
@@ -656,14 +436,6 @@ function ProductDetails() {
       </Box>
       <Footer />
     </Box>
-  );
-}
-
-function ProductDetailsWrapper() {
-  return (
-    <ErrorBoundary>
-      <ProductDetails />
-    </ErrorBoundary>
   );
 }
 
