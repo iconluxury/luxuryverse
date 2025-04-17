@@ -1,78 +1,94 @@
 import { useState, useEffect } from 'react';
-import { Box, Flex, Heading, Text, Image, Tag, HStack, Divider, Spinner, UnorderedList, ListItem } from "@chakra-ui/react";
-import { createFileRoute, useParams, Link } from "@tanstack/react-router";
-import { TimeIcon } from "@chakra-ui/icons";
-import Footer from "../../../components/Common/Footer";
+import {
+  Box,
+  Flex,
+  Heading,
+  Text,
+  Image,
+  Tag,
+  HStack,
+  Divider,
+  Spinner,
+  IconButton,
+  Skeleton,
+} from '@chakra-ui/react';
+import { createFileRoute, useParams, Link } from '@tanstack/react-router';
+import { TimeIcon, ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
+import { Helmet } from 'react-helmet-async';
+import parse from 'html-react-parser';
+import Footer from '../../../components/Common/Footer';
 
 export const Route = createFileRoute('/_layout/products/ProductDetails')({
   component: ProductDetails,
 });
 
+interface Variant {
+  id: string;
+  title: string;
+  size: string;
+  inventory_quantity: number;
+  price: string;
+  compare_at_price: string;
+}
+
+interface Product {
+  id: string;
+  title: string;
+  description: string;
+  brand: string;
+  thumbnail: string;
+  images: string[];
+  variants: Variant[];
+  full_price: string;
+  sale_price: string;
+  discount: string;
+}
+
 function ProductDetails() {
-  const [product, setProduct] = useState(null);
+  const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [currentImage, setCurrentImage] = useState(0);
   const API_BASE_URL = process.env.API_BASE_URL || 'https://iconluxury.shop';
+  const { id } = useParams({ from: '/_layout/products/$id' });
 
-  // Extract the 'id' parameter from the URL
-  const { id } = useParams({ from: "/_layout/products/$id" });
-
-  // Fetch product details from the FastAPI backend
   useEffect(() => {
-    const fetchProduct = async (retryCount = 6, delay = 2000) => {
+    const fetchProduct = async (retryCount = 6) => {
       for (let attempt = 1; attempt <= retryCount; attempt++) {
         try {
-          console.debug(`Attempt ${attempt}: Fetching product ${id} from ${API_BASE_URL}/api/v1/products/${id}`);
           const controller = new AbortController();
           const timeoutId = setTimeout(() => controller.abort(), 30000);
-
           const response = await fetch(`${API_BASE_URL}/api/v1/products/${id}`, {
             signal: controller.signal,
             method: 'GET',
             headers: {
-              'Accept': 'application/json',
+              Accept: 'application/json',
               'Content-Type': 'application/json',
             },
             credentials: 'omit',
           });
-
           clearTimeout(timeoutId);
-          const headers = Object.fromEntries(response.headers.entries());
-          console.debug(`Response status: ${response.status}, ok: ${response.ok}, headers: ${JSON.stringify(headers)}`);
 
           if (!response.ok) {
-            if (response.status === 502) {
-              throw new Error('Server error (502 Bad Gateway). The backend may be down or misconfigured.');
-            }
-            if (response.status === 404) {
-              throw new Error('Product not found.');
-            }
+            if (response.status === 404) throw new Error('Product not found.');
             throw new Error(`HTTP error! status: ${response.status}`);
           }
 
           const data = await response.json();
-          console.debug(`Fetched product: ${data.id}`);
           setProduct(data);
           setError(null);
           break;
         } catch (err: any) {
-          const errorMessage = `Attempt ${attempt} failed: ${err.message || 'Unknown error'}`;
-          console.error(errorMessage);
           if (err.name === 'AbortError') {
-            err.message = 'Request timed out after 30s. Please check the backend server status.';
-          }
-          if (err.message.includes('Failed to fetch')) {
-            err.message = 'Unable to connect: Possible CORS issue, server downtime, or network error. Check console for details.';
+            err.message = 'Request timed out after 30s.';
           }
           if (attempt === retryCount) {
-            setError(`Failed to load product: ${err.message || 'Unable to connect to the server.'}`);
+            setError(`Failed to load product: ${err.message || 'Unknown error'}`);
           } else {
-            await new Promise(resolve => setTimeout(resolve, delay * attempt));
+            await new Promise((resolve) => setTimeout(resolve, Math.min(1000 * 2 ** attempt, 10000)));
           }
         } finally {
-          if (attempt === retryCount || !error) {
-            setLoading(false);
-          }
+          if (attempt === retryCount || !error) setLoading(false);
         }
       }
     };
@@ -80,61 +96,22 @@ function ProductDetails() {
     fetchProduct();
   }, [id]);
 
-  // Parse the product description into JSX elements
   const parseDescription = (description: string) => {
     if (!description || typeof description !== 'string') {
-      return [<Text key="no-description" fontSize="lg" color="gray.700" mb={4}>No description available</Text>];
+      return <Text fontSize="lg" color="gray.700" mb={4}>No description available</Text>;
     }
-
-    const paragraphs = description.split('\n').filter(p => p.trim());
-    const elements: JSX.Element[] = [];
-    paragraphs.forEach((paragraph, index) => {
-      if (paragraph.startsWith('<h1>')) {
-        elements.push(
-          <Heading key={`h1-${index}`} as="h1" size="xl" mb={4}>
-            {paragraph.replace(/<\/?h1>/g, '')}
-          </Heading>
-        );
-      } else if (paragraph.startsWith('<h2>')) {
-        elements.push(
-          <Heading key={`h2-${index}`} as="h2" size="lg" mb={4} mt={6}>
-            {paragraph.replace(/<\/?h2>/g, '')}
-          </Heading>
-        );
-      } else if (paragraph.startsWith('<h3>')) {
-        elements.push(
-          <Heading key={`h3-${index}`} as="h3" size="md" mb={4} mt={6}>
-            {paragraph.replace(/<\/?h3>/g, '')}
-          </Heading>
-        );
-      } else if (paragraph.startsWith('<ul>')) {
-        const listItems = paragraph.replace(/<\/?ul>/g, '').split('<li>').filter(item => item.trim()).map(item => item.replace('</li>', ''));
-        elements.push(
-          <UnorderedList key={`ul-${index}`} mb={4}>
-            {listItems.map((item, itemIndex) => (
-              <ListItem key={`li-${itemIndex}`}>
-                {item}
-              </ListItem>
-            ))}
-          </UnorderedList>
-        );
-      } else {
-        elements.push(
-          <Text key={`p-${index}`} fontSize="lg" color="gray.700" mb={4}>
-            {paragraph}
-          </Text>
-        );
-      }
-
-      if (index < paragraphs.length - 1) {
-        elements.push(<br key={`br-${index}`} />);
-      }
+    return parse(description, {
+      replace: (domNode) => {
+        if (domNode.name === 'div' || domNode.name === 'span') {
+          return <Text fontSize="lg" color="gray.700" mb={2}>{domNode.children}</Text>;
+        }
+      },
     });
-
-    return elements.length > 0 ? elements : [<Text key="empty" fontSize="lg" color="gray.700" mb={4}>Description is empty</Text>];
   };
 
-  // Handle loading state
+  const nextImage = () => setCurrentImage((prev) => (prev + 1) % (product?.images.length || 1));
+  const prevImage = () => setCurrentImage((prev) => (prev - 1 + (product?.images.length || 1)) % (product?.images.length || 1));
+
   if (loading) {
     return (
       <Flex justify="center" align="center" minH="100vh">
@@ -143,71 +120,94 @@ function ProductDetails() {
     );
   }
 
-  // Handle error state
   if (error) {
     return (
       <Box textAlign="center" py={16} color="red.500">
         <Text fontSize="lg">{error}</Text>
         <Text fontSize="sm" mt={2}>
-          Please check your network connection, ensure the backend is running, or contact{' '}
+          Please check your network connection or contact{' '}
           <a href="mailto:support@iconluxury.shop" style={{ color: '#3182CE' }}>
             support@iconluxury.shop
           </a>.
         </Text>
-        <Button
-          mt={4}
-          bg="yellow.400"
-          color="gray.900"
-          _hover={{ bg: 'yellow.500' }}
-          onClick={() => window.location.reload()}
-        >
-          Retry
-        </Button>
-      </Box>
-    );
-  }
-
-  // Handle product not found
-  if (!product) {
-    return (
-      <Box py={16} textAlign="center">
-        <Text fontSize="lg" mb={4}>
-          Product not found for ID: {id}
-        </Text>
-        <Link to="/products" style={{ color: '#3182CE' }}>
+        <Link to="/products" aria-label="Back to all products" style={{ color: '#3182CE', marginTop: '16px', display: 'inline-block' }}>
           Back to all products
         </Link>
       </Box>
     );
   }
 
-  // Render the product details
+  if (!product) {
+    return (
+      <Box py={16} textAlign="center">
+        <Text fontSize="lg" mb={4}>
+          Product not found for ID: {id}
+        </Text>
+        <Link to="/products" aria-label="Back to all products" style={{ color: '#3182CE' }}>
+          Back to all products
+        </Link>
+      </Box>
+    );
+  }
+
   return (
     <Box>
+      <Helmet>
+        <title>{product.title} | Icon Luxury</title>
+        <meta name="description" content={product.description.slice(0, 160)} />
+      </Helmet>
       <Box py={16} bg="white">
         <Box maxW="800px" mx="auto" px={4}>
-          <Link 
-            to="/products" 
-            style={{ 
-              color: "#3182CE", 
-              fontWeight: "medium", 
-              textDecoration: "none", 
-              margin: "8px",
-              display: "block"
+          <Link
+            to="/products"
+            aria-label="Back to all products"
+            style={{
+              color: '#3182CE',
+              fontWeight: 'medium',
+              textDecoration: 'none',
+              margin: '8px',
+              display: 'block',
             }}
           >
             ← Back to all products
           </Link>
-          {product.thumbnail && (
-            <Image 
-              src={product.thumbnail} 
-              alt={product.title} 
-              w="full" 
-              h="400px" 
-              objectFit="cover" 
-              borderRadius="md" 
-              mb={8} 
-            />
+          {product.images.length > 0 ? (
+            <Box position="relative">
+              <Image
+                src={product.images[currentImage]}
+                alt={`${product.title} image ${currentImage + 1}`}
+                w="full"
+                h="400px"
+                objectFit="cover"
+                borderRadius="md"
+                mb={8}
+                onError={(e) => (e.currentTarget.src = '/fallback-image.png')}
+              />
+              {product.images.length > 1 && (
+                <>
+                  <IconButton
+                    aria-label="Previous image"
+                    icon={<ChevronLeftIcon />}
+                    position="absolute"
+                    left="8px"
+                    top="50%"
+                    transform="translateY(-50%)"
+                    onClick={prevImage}
+                  />
+                  <IconButton
+                    aria-label="Next image"
+                    icon={<ChevronRightIcon />}
+                    position="absolute"
+                    right="8px"
+                    top="50%"
+                    transform="translateY(-50%)"
+                    onClick={nextImage}
+                  />
+                </>
+              )}
+            </Box>
+          ) : (
+            <Skeleton w="full" h="400px" borderRadius="md" mb={8} />
           )}
           <Flex align="center" mb={4}>
             <Tag colorScheme="gray" mr={4} px={3} py={1} borderRadius="full">
@@ -218,12 +218,18 @@ function ProductDetails() {
               <TimeIcon mr={1} color="gray.500" boxSize={3} />
               <Text fontSize="sm" color="gray.500">{product.variants.length} variants</Text>
             </Flex>
+            {product.discount && (
+              <Tag colorScheme="green" ml={4} px={3} py={1} borderRadius="full">
+                {product.discount}
+              </Tag>
+            )}
           </Flex>
           <Heading as="h1" size="2xl" mb={6} fontWeight="medium" lineHeight="1.3">
             {product.title}
           </Heading>
           <Text fontSize="xl" color="gray.700" mb={4}>
-            {product.price}
+            {product.sale_price}{' '}
+            {product.full_price && <Text as="s" color="gray.500">{product.full_price}</Text>}
           </Text>
           {product.description ? parseDescription(product.description) : (
             <Text fontSize="lg" color="gray.700" mb={4}>
@@ -231,18 +237,22 @@ function ProductDetails() {
             </Text>
           )}
           <Box mt={8}>
-            <Heading as="h2" size="lg" mb={4}>Variants</Heading>
+            <Heading as="h2" size="lg" mb={4}>
+              Variants
+            </Heading>
             <HStack spacing={2} flexWrap="wrap" maxW="100%" gap={2}>
-              {product.variants.map((variant: string, index: number) => (
+              {product.variants.map((variant) => (
                 <Tag
-                  key={`variant-${index}`}
-                  colorScheme="gray"
+                  key={variant.id}
+                  colorScheme={variant.inventory_quantity > 0 ? 'gray' : 'red'}
                   variant="subtle"
                   size="md"
-                  flex="0 0 calc(25% - 8px)"
                   mb={2}
                 >
-                  {variant}
+                  Size {variant.size} - {variant.price}{' '}
+                  {variant.inventory_quantity > 0
+                    ? `(${variant.inventory_quantity} in stock)`
+                    : '(Out of stock)'}
                 </Tag>
               ))}
             </HStack>
