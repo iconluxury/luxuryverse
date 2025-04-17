@@ -73,10 +73,15 @@ function Home() {
   // Fetch collections from the API
   useEffect(() => {
     setIsLoading(true);
+    const url = 'https://iconluxury.today/api/v1/collections'; // Use .today
+    console.log('Fetching collections from:', url);
     axios
-      .get("https://iconluxury.shop/api/v1/collections")
+      .get(url, {
+        headers: { 'Accept': 'application/json' },
+        timeout: 10000,
+      })
       .then((res) => {
-        console.log("API Response:", res.data); // Debug
+        console.log('API Response:', res.data);
         const data = Array.isArray(res.data)
           ? res.data
           : Array.isArray(res.data?.collections)
@@ -86,8 +91,16 @@ function Home() {
         setIsLoading(false);
       })
       .catch((err) => {
-        setError("Unable to load collections. Please try again later.");
-        setCollections([]); // Fallback to empty array
+        console.error('Fetch error:', {
+          message: err.message,
+          code: err.code,
+          response: err.response ? {
+            status: err.response.status,
+            data: err.response.data,
+          } : null,
+        });
+        setError('Unable to load collections. Please try again later.');
+        setCollections([]);
         setIsLoading(false);
       });
   }, []);
