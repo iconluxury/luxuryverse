@@ -141,7 +141,7 @@ services:
       - traefik.enable=true
       - traefik.docker.network=traefik-public
       - traefik.constraint-label=traefik-public
-      - traefik.http.routers.dashboard.rule=Host(`iconluxury.shop`) && !PathPrefix(`/api`))
+      - traefik.http.routers.dashboard.rule=Host(`iconluxury.shop`) && !PathPrefix(`/api`)
       - traefik.http.routers.dashboard.entrypoints=http
       - traefik.http.services.dashboard.loadbalancer.server.port=80
 
