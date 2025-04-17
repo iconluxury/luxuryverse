@@ -15,7 +15,6 @@ function CollectionsPage() {
   useEffect(() => {
     const fetchCollections = async () => {
       try {
-        // Create an array of fetch promises for each collection ID
         const collectionPromises = selectedCollections.map(id =>
           fetch(`https://iconluxury.shop/api/v1/collections/${id}`).then(response => {
             if (!response.ok) {
@@ -25,10 +24,8 @@ function CollectionsPage() {
           })
         );
 
-        // Wait for all promises to settle (fulfilled or rejected)
         const results = await Promise.allSettled(collectionPromises);
 
-        // Filter successful fetches and transform the data
         const collections = results
           .filter(result => result.status === 'fulfilled')
           .map(result => result.value)
@@ -37,10 +34,8 @@ function CollectionsPage() {
             productCount: collection.products ? collection.products.length : 0
           }));
 
-        // Set the state with the fetched collections
         setCollectionsData(collections);
 
-        // Log any errors for failed fetches
         const errors = results
           .filter(result => result.status === 'rejected')
           .map(result => result.reason);
@@ -58,7 +53,6 @@ function CollectionsPage() {
     fetchCollections();
   }, []);
 
-  // Display loading state
   if (loading) {
     return (
       <Box p={4} bg="gray.900" color="white" minH="100vh">
@@ -67,7 +61,6 @@ function CollectionsPage() {
     );
   }
 
-  // Display message if no collections are available
   if (collectionsData.length === 0) {
     return (
       <Box p={4} bg="gray.900" color="white" minH="100vh">
@@ -76,7 +69,6 @@ function CollectionsPage() {
     );
   }
 
-  // Render the collections grid
   return (
     <Box p={4} bg="gray.900" color="white" minH="100vh">
       <Heading fontSize="2xl" mb={6}>Collections</Heading>
@@ -89,44 +81,36 @@ function CollectionsPage() {
       </Link>
       <Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={6}>
         {collectionsData.map((collection) => (
-          <Box
+          <Link
             key={collection.id}
-            borderWidth="1px"
-            borderRadius="lg"
-            overflow="hidden"
-            bg="white"
-            color="gray.900"
-            _hover={{ boxShadow: 'md' }}
+            to={`/collections/${collection.id}`}
+            style={{ textDecoration: 'none' }}
           >
-            <Image
-              src={collection.image || 'https://placehold.co/400x400'}
-              alt={collection.title || 'Collection Image'}
-              style={{ aspectRatio: '4 / 3', objectFit: 'cover' }}
-              w="full"
-            />
-            <Box p={4}>
-              <Text fontWeight="bold" fontSize="xl" mb={2}>
-                {collection.title || 'Untitled Collection'}
-              </Text>
-              <Text fontSize="sm" color="gray.600" mb={4} noOfLines={2}>
-                {collection.description || 'No description available.'}
-              </Text>
-              <Text fontSize="sm" color="gray.500" mb={4}>
-                {collection.productCount} {collection.productCount === 1 ? 'item' : 'items'}
-              </Text>
-              <Button
-                as={Link}
-                to={`/collections/${collection.id}`}
-                bg="yellow.400"
-                color="gray.900"
-                _hover={{ bg: 'yellow.500' }}
-                size="sm"
-                aria-label={`View ${collection.title || 'collection'}`}
-              >
-                View Collection
-              </Button>
+            <Box
+              role="link"
+              borderWidth="1px"
+              borderRadius="lg"
+              overflow="hidden"
+              bg="white"
+              color="gray.900"
+              _hover={{ boxShadow: 'md', cursor: 'pointer' }}
+            >
+              <Image
+                src={collection.image || 'https://placehold.co/400x400'}
+                alt={collection.title || 'Collection Image'}
+                style={{ aspectRatio: '4 / 3', objectFit: 'cover' }}
+                w="full"
+              />
+              <Box p={4}>
+                <Text fontWeight="bold" fontSize="xl" mb={2}>
+                  {collection.title || 'Untitled Collection'}
+                </Text>
+                <Text fontSize="sm" color="gray.600" mb={4} noOfLines={2}>
+                  {collection.description || 'No description available.'}
+                </Text>
+              </Box>
             </Box>
-          </Box>
+          </Link>
         ))}
       </Grid>
     </Box>
