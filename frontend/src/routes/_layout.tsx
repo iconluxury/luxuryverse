@@ -117,14 +117,14 @@ function Layout() {
             window.dispatchEvent(new Event("consentChange"));
           }}
         >
-         We use cookies to provide necessary site functionality and improve your experience. Learn more in our{" "}
+         We use cookies to provide necessary site functionality and improve your experience. Read about{" "}
           <Link
             to="/cookie"
             style={{ color: theme.colors.purple[500] || "#EF4444", textDecoration: "underline" }}
           >
             Cookies
           </Link>{" "}
-          and {" "}
+          and our {" "}
           <Link
             to="/privacy"
             style={{ color: theme.colors.purple[500] || "#EF4444", textDecoration: "underline" }}
