@@ -21,7 +21,7 @@ async def enforce_https(request: Request, call_next):
         return RedirectResponse(url, status_code=301)
     return await call_next(request)
 
-ALLOWED_ORIGINS = ["https://iconluxury.shop", "https://iconluxury.today"]
+ALLOWED_ORIGINS = ["https://iconluxury.shop"]
 
 @app.middleware("http")
 async def custom_cors_middleware(request: Request, call_next):
