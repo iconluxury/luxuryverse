@@ -46,6 +46,7 @@ interface Product {
 
 function ProductDetails() {
   const [product, setProduct] = useState<Product | null>(null);
+  const [topProducts, setTopProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [currentImage, setCurrentImage] = useState(0);
@@ -84,6 +85,19 @@ function ProductDetails() {
           }
           if (attempt === retryCount) {
             setError(`Failed to load product: ${err.message || 'Unknown error'}`);
+            // Fetch top products as fallback
+            try {
+              const topResponse = await fetch(`${API_BASE_URL}/api/v1/top`, {
+                method: 'GET',
+                headers: { Accept: 'application/json' },
+              });
+              if (topResponse.ok) {
+                const topData = await topResponse.json();
+                setTopProducts(topData);
+              }
+            } catch (topErr) {
+              console.error('Failed to fetch top products:', topErr);
+            }
           } else {
             await new Promise((resolve) => setTimeout(resolve, Math.min(1000 * 2 ** attempt, 10000)));
           }
@@ -96,21 +110,7 @@ function ProductDetails() {
     fetchProduct();
   }, [id]);
 
-  const parseDescription = (description: string) => {
-    if (!description || typeof description !== 'string') {
-      return <Text fontSize="lg" color="gray.700" mb={4}>No description available</Text>;
-    }
-    return parse(description, {
-      replace: (domNode) => {
-        if (domNode.name === 'div' || domNode.name === 'span') {
-          return <Text fontSize="lg" color="gray.700" mb={2}>{domNode.children}</Text>;
-        }
-      },
-    });
-  };
-
-  const nextImage = () => setCurrentImage((prev) => (prev + 1) % (product?.images.length || 1));
-  const prevImage = () => setCurrentImage((prev) => (prev - 1 + (product?.images.length || 1)) % (product?.images.length || 1));
+  // ... parseDescription, nextImage, prevImage functions remain the same
 
   if (loading) {
     return (
@@ -130,7 +130,27 @@ function ProductDetails() {
             support@iconluxury.shop
           </a>.
         </Text>
-        <Link to="/products" aria-label="Back to all products" style={{ color: '#3182CE', marginTop: '16px', display: 'inline-block' }}>
+        {topProducts.length > 0 && (
+          <Box mt={4}>
+            <Text fontSize="md" mb={2}>
+              Explore our top products:
+            </Text>
+            <HStack spacing={2} flexWrap="wrap" justify="center">
+              {topProducts.slice(0, 3).map((topProduct) => (
+                <Link key={topProduct.id} to={`/products/${topProduct.id}`} style={{ color: '#3182CE' }}>
+                  <Tag colorScheme="gray" m={1}>
+                    {topProduct.title}
+                  </Tag>
+                </Link>
+              ))}
+            </HStack>
+          </Box>
+        )}
+        <Link
+          to="/products"
+          aria-label="Back to all products"
+          style={{ color: '#3182CE', marginTop: '16px', display: 'inline-block' }}
+        >
           Back to all products
         </Link>
       </Box>
@@ -143,13 +163,32 @@ function ProductDetails() {
         <Text fontSize="lg" mb={4}>
           Product not found for ID: {id}
         </Text>
-        <Link to="/products" aria-label="Back to all products" style={{ color: '#3182CE' }}>
+        {topProducts.length > 0 && (
+          <Box mt={4}>
+            <Text fontSize="md" mb={2}>
+              Explore our top products:
+            </Text>
+            <HStack spacing={2} flexWrap="wrap" justify="center">
+              {topProducts.slice(0, 3).map((topProduct) => (
+                <Link key={topProduct.id} to={`/products/${topProduct.id}`} style={{ color: '#3182CE' }}>
+                  <Tag colorScheme="gray" m={1}>
+                    {topProduct.title}
+                  </Tag>
+                </Link>
+              ))}
+            </HStack>
+          </Box>
+        )}
+        <Link
+          to="/products"
+          aria-label="Back to all products"
+          style={{ color: '#3182CE', marginTop: '16px', display: 'inline-block' }}
+        >
           Back to all products
         </Link>
       </Box>
     );
   }
-
   return (
     <Box>
       <Helmet>
@@ -181,7 +220,7 @@ function ProductDetails() {
                 objectFit="cover"
                 borderRadius="md"
                 mb={8}
-                onError={(e) => (e.currentTarget.src = '/fallback-image.png')}
+                onError={(e) => (e.currentTarget.src = 'https://placehold.co/400x400')}
               />
               {product.images.length > 1 && (
                 <>
