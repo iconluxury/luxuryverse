@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import {
   Box,
   Flex,
@@ -140,8 +140,8 @@ function parseHtml(html: string): React.ReactNode {
                   attributes.style = validStyles.join('; ');
                 }
               } else {
-                attributes[name.toLowerCase()] = value;
-              }
+                  attributes[name.toLowerCase()] = value;
+                }
             }
           }
 
@@ -156,10 +156,10 @@ function parseHtml(html: string): React.ReactNode {
           nodes.push({
             type: 'text',
             content: token
-              .replace(/</g, '&lt;')
-              .replace(/>/g, '&gt;')
-              .replace(/&/g, '&amp;')
-              .replace(/"/g, '&quot;'),
+              .replace(/</g, '<')
+              .replace(/>/g, '>')
+              .replace(/&/g, '&')
+              .replace(/"/g, '"'),
           });
         }
       }
@@ -296,7 +296,7 @@ function ProductDetails() {
       } catch (err: any) {
         setError(`Failed to load product: ${err.message || 'Unknown error'}`);
         try {
-          const topData = await fetchWithRetry(`${API_BASE_URL}/api/v1/products/${id}`);
+          const topData = await fetchWithRetry(`${API_BASE_URL}/api/v1/top`);
           console.log('Fetched top products:', topData);
           setTopProducts(topData && Array.isArray(topData) ? topData : []);
         } catch (topErr: any) {
@@ -325,6 +325,36 @@ function ProductDetails() {
       setCurrentImage((prev) => (prev - 1 + product.images.length) % product.images.length);
     }
   };
+
+  // Memoize variants rendering to prevent re-renders
+  const variantComponents = useMemo(() => {
+    if (!product?.variants?.length) {
+      return <Text fontSize="md" color="gray.500">No variants available</Text>;
+    }
+    return product.variants.map((variant, index) => {
+      console.log('Rendering variant:', index, variant, {
+        colorScheme: variant.inventory_quantity > 0 ? 'gray' : 'red',
+        variant: 'subtle',
+        size: 'md',
+      });
+      return (
+        <Box
+          key={variant.id || `variant-${index}`}
+          bg={variant.inventory_quantity > 0 ? 'gray.100' : 'red.100'}
+          px={3}
+          py={1}
+          borderRadius="full"
+          mb={2}
+          fontSize="md"
+        >
+          Size {variant.size || 'N/A'} - {variant.price || 'N/A'}{' '}
+          {variant.inventory_quantity > 0
+            ? `(${variant.inventory_quantity} in stock)`
+            : '(Out of stock)'}
+        </Box>
+      );
+    });
+  }, [product?.variants]);
 
   if (loading) {
     return (
@@ -467,29 +497,7 @@ function ProductDetails() {
               Variants
             </Heading>
             <HStack spacing={2} flexWrap="wrap" maxW="100%" gap={2}>
-              {product.variants?.length > 0 ? (
-                product.variants.map((variant, index) => {
-                  console.log('Rendering variant:', index, variant);
-                  return (
-                    <Tag
-                      key={variant.id || `variant-${index}`}
-                      colorScheme={variant.inventory_quantity > 0 ? 'gray' : 'red'}
-                      variant="subtle"
-                      size="md"
-                      mb={2}
-                    >
-                      Size {variant.size || 'N/A'} - {variant.price || 'N/A'}{' '}
-                      {variant.inventory_quantity > 0
-                        ? `(${variant.inventory_quantity} in stock)`
-                        : '(Out of stock)'}
-                    </Tag>
-                  );
-                })
-              ) : (
-                <Text fontSize="md" color="gray.500">
-                  No variants available
-                </Text>
-              )}
+              {variantComponents}
             </HStack>
           </Box>
           <Divider mb={8} />
