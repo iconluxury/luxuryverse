@@ -4,7 +4,7 @@ import { Flex, Spinner, Box, Text } from '@chakra-ui/react';
 import { useState, useEffect, useMemo } from 'react';
 import { useParams, Link } from '@tanstack/react-router';
 import { Helmet } from 'react-helmet-async';
-import Footer from './Common/Footer';
+import Footer from '../../../components/Common/Footer';
 import {
   Heading,
   Image,
