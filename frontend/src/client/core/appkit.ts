@@ -28,7 +28,7 @@ const wagmiAdapter = new WagmiAdapter({
 // Initialize AppKit
 createAppKit({
   adapters: [wagmiAdapter],
-  networks: [mainnet],
+  networks: [mainnet, sepolia],
   metadata,
   projectId,
   features: {
