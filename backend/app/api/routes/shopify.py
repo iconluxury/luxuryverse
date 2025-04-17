@@ -43,34 +43,7 @@ class Collection(BaseModel):
     image: str
     products: List[Product]
 
-@products_router.get("/", response_model=List[Product])
-async def get_products():
-    """
-    Fetch a list of products from Shopify.
-    """
-    try:
-        products = wrapper.list_products(limit=5)
-        result = []
-        for product in products:
-            variants = product.get("variants", [])
-            price = f"${variants[0]['price']}" if variants and len(variants) > 0 else "Contact for price"
-            if not variants:
-                logger.warning(f"Product {product['id']} has no variants")
-            result.append(
-                Product(
-                    id=str(product["id"]),
-                    title=product["title"],
-                    thumbnail=product["images"][0]["src"] if product.get("images") else "",
-                    price=price,
-                    variants=[v["title"] for v in variants]
-                )
-            )
-        logger.info(f"Fetched {len(result)} products")
-        return result
-    except Exception as e:
-        logger.error(f"Failed to fetch products: {e}")
-        raise HTTPException(status_code=500, detail="Failed to fetch products")
-
+# Existing product endpoint
 @products_router.get("/{product_id}", response_model=Product)
 async def get_product(product_id: str):
     """
@@ -89,7 +62,6 @@ async def get_product(product_id: str):
         # Extract variant details
         variant_list = []
         for v in variants:
-            # Assume size is in option1 (customize based on your Shopify setup)
             size = v.get("option1") or v.get("title")
             variant_list.append(
                 Variant(
@@ -136,64 +108,13 @@ async def get_product(product_id: str):
         logger.error(f"Failed to fetch product {product_id}: {e}")
         raise HTTPException(status_code=500, detail=f"Failed to fetch product {product_id}")
 
-@collections_router.get("/", response_model=List[Collection])
-async def get_collections():
-    """
-    Fetch collections and their associated products from Shopify.
-    """
-    try:
-        collections = wrapper.list_collections(limit=3, collection_type="all")
-        result = []
-        if not collections:
-            logger.info("No collections found, returning empty list")
-            return result
-        for collection, collection_type in collections:
-            try:
-                collection_details = wrapper.get_collection_details(collection["id"], collection_type=collection_type)
-                collection_products = wrapper.list_collection_products(collection["id"], limit=3)
-                products = []
-                for prod in collection_products:
-                    try:
-                        full_product = wrapper.get_product_details(prod["id"])
-                        variants = full_product.get("variants", [])
-                        price = f"${variants[0]['price']}" if variants and len(variants) > 0 else "Contact for price"
-                        if not variants:
-                            logger.warning(f"Product {full_product['id']} in collection {collection['id']} has no variants")
-                        products.append(
-                            Product(
-                                id=str(full_product["id"]),
-                                title=full_product["title"],
-                                thumbnail=full_product["images"][0]["src"] if full_product.get("images") else "",
-                                price=price,
-                                variants=[v["title"] for v in variants]
-                            )
-                        )
-                    except requests.RequestException as e:
-                        logger.warning(f"Failed to fetch details for product {prod['id']} in collection {collection['id']}: {e}")
-                result.append(
-                    Collection(
-                        id=str(collection_details["id"]),
-                        title=collection_details["title"],
-                        description=collection_details.get("body_html", "") or "",  # Ensure string
-                        image=collection_details.get("image", {}).get("src", ""),
-                        products=products
-                    )
-                )
-            except requests.RequestException as e:
-                logger.warning(f"Failed to fetch details for collection {collection['id']}: {e}")
-        logger.info(f"Fetched {len(result)} collections")
-        return result
-    except Exception as e:
-        logger.error(f"Failed to fetch collections: {e}")
-        raise HTTPException(status_code=500, detail="Failed to fetch collections")
-
+# Existing collection details endpoint
 @collections_router.get("/{collection_id}", response_model=Collection)
 async def get_collection(collection_id: str):
     """
     Fetch a single collection by ID from Shopify, including detailed product information.
     """
     try:
-        # Try custom collection first, fallback to smart collection
         try:
             collection_details = wrapper.get_collection_details(int(collection_id), collection_type="custom")
         except requests.RequestException:
@@ -209,10 +130,8 @@ async def get_collection(collection_id: str):
                     logger.warning(f"Product {full_product['id']} in collection {collection_id} has no variants")
                     continue
                 
-                # Extract variant details
                 variant_list = []
                 for v in variants:
-                    # Assume size is in option1 (customize based on your Shopify setup)
                     size = v.get("option1") or v.get("title")
                     variant_list.append(
                         Variant(
@@ -225,7 +144,6 @@ async def get_collection(collection_id: str):
                         )
                     )
                 
-                # Calculate prices and discount
                 prices = [float(v["price"]) for v in variants]
                 compare_at_prices = [
                     float(v["compare_at_price"]) for v in variants if v.get("compare_at_price")
@@ -237,7 +155,6 @@ async def get_collection(collection_id: str):
                     discount_percent = ((full_price - sale_price) / full_price) * 100
                     discount = f"{discount_percent:.0f}% off"
                 
-                # Collect all image URLs
                 images = [img["src"] for img in full_product.get("images", [])]
                 thumbnail = images[0] if images else ""
 
