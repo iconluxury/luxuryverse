@@ -1,21 +1,11 @@
-// src/components/ProductDetails.tsx
 import { useAccount } from 'wagmi';
-import { Flex, Spinner, Box, Text } from '@chakra-ui/react';
+import { Flex, Spinner, Box, Text, Tag, HStack, Divider, IconButton, Skeleton, SkeletonText } from '@chakra-ui/react';
 import { useState, useEffect, useMemo } from 'react';
 import { useParams, Link } from '@tanstack/react-router';
 import { Helmet } from 'react-helmet-async';
-import Footer from '../../../components/Common/Footer';
-import {
-  Heading,
-  Image,
-  Tag,
-  HStack,
-  Divider,
-  IconButton,
-  Skeleton,
-  SkeletonText,
-} from '@chakra-ui/react';
-import { TimeIcon, ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
+import { ErrorBoundary } from 'react-error-boundary';
+import Footer from './Common/Footer';
+import { Heading, Image, TimeIcon, ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 
 interface Variant {
   id: string;
@@ -40,6 +30,19 @@ interface Product {
   collection_id?: string;
 }
 
+function ErrorFallback({ error }: { error: Error }) {
+  return (
+    <Box textAlign="center" py={16} color="red.500">
+      <Text fontSize="lg">Error: {error.message}</Text>
+      <Text fontSize="sm" mt={2}>
+        Please try again or contact <a href="mailto:support@iconluxury.shop" style={{ color: '#3182CE' }}>
+          support@iconluxury.shop
+        </a>.
+      </Text>
+    </Box>
+  );
+}
+
 function ProductDetails() {
   const { isConnected, isConnecting, error: walletError } = useAccount();
   const [product, setProduct] = useState<Product | null>(null);
@@ -53,6 +56,12 @@ function ProductDetails() {
   const isBrowser = typeof window !== 'undefined';
 
   useEffect(() => {
+    if (!id || typeof id !== 'string') {
+      setError('Invalid product ID');
+      setProductLoading(false);
+      return;
+    }
+
     const fetchWithRetry = async (url: string, retryCount = 6) => {
       for (let attempt = 1; attempt <= retryCount; attempt++) {
         try {
@@ -64,6 +73,7 @@ function ProductDetails() {
             headers: {
               Accept: 'application/json',
               'Content-Type': 'application/json',
+              // Authorization: `Bearer ${YOUR_TOKEN}`, // Add if needed
             },
             credentials: 'omit',
           });
@@ -79,6 +89,7 @@ function ProductDetails() {
           if (err.name === 'AbortError') {
             err.message = 'Request timed out after 30s.';
           }
+          console.error('Fetch error:', { url, attempt, error: err.message });
           if (attempt === retryCount) {
             throw err;
           }
@@ -95,35 +106,38 @@ function ProductDetails() {
           throw new Error('Invalid product data received');
         }
 
-        if (productData.variants && Array.isArray(productData.variants)) {
-          productData.variants = productData.variants
-            .filter((v: Variant) => {
-              const isValid =
-                v &&
-                typeof v === 'object' &&
-                typeof v.id === 'string' &&
-                typeof v.size === 'string' &&
-                typeof v.price === 'string' &&
-                typeof v.inventory_quantity === 'number';
-              if (!isValid) {
-                console.warn('Invalid variant filtered:', v);
-              }
-              return isValid;
-            })
-            .map((v: Variant) => ({
-              id: v.id,
-              title: v.title || 'Unknown',
-              size: v.size || 'N/A',
-              inventory_quantity: typeof v.inventory_quantity === 'number' ? v.inventory_quantity : 0,
-              price: v.price || 'N/A',
-              compare_at_price: v.compare_at_price || '',
-            }));
-        } else {
-          productData.variants = [];
-        }
-        setProduct(productData);
+        const validatedProduct = {
+          ...productData,
+          images: Array.isArray(productData.images) ? productData.images : [],
+          variants: Array.isArray(productData.variants)
+            ? productData.variants
+                .filter((v: Variant) => {
+                  const isValid =
+                    v &&
+                    typeof v === 'object' &&
+                    typeof v.id === 'string' &&
+                    typeof v.size === 'string' &&
+                    typeof v.price === 'string' &&
+                    typeof v.inventory_quantity === 'number';
+                  if (!isValid) {
+                    console.warn('Invalid variant filtered:', v);
+                  }
+                  return isValid;
+                })
+                .map((v: Variant) => ({
+                  id: v.id,
+                  title: v.title || 'Unknown',
+                  size: v.size || 'N/A',
+                  inventory_quantity: typeof v.inventory_quantity === 'number' ? v.inventory_quantity : 0,
+                  price: v.price || 'N/A',
+                  compare_at_price: v.compare_at_price || '',
+                }))
+            : [],
+        };
+        setProduct(validatedProduct);
         setError(null);
       } catch (err: any) {
+        console.error('Failed to load product:', { error: err.message, productId: id });
         setError(`Failed to load product: ${err.message || 'Unknown error'}`);
       } finally {
         setProductLoading(false);
@@ -178,7 +192,7 @@ function ProductDetails() {
           .slice(0, 5);
 
         console.log('Top 5 products:', validatedTopProducts);
-        setTopProducts(validTopProducts);
+        setTopProducts(validatedTopProducts);
       } catch (topErr: any) {
         console.warn('Failed to fetch top products:', topErr.message);
         setError((prev) => prev || `Failed to load top products: ${topErr.message || 'Unknown error'}`);
@@ -188,14 +202,18 @@ function ProductDetails() {
       }
     };
 
-    fetchProduct().then(() => {
-      if (!error) {
-        fetchTopProducts();
-      } else {
-        setTopProductsLoading(false);
-      }
-    });
-  }, [id, error]);
+    fetchProduct();
+  }, [id]);
+
+  useEffect(() => {
+    if (product && !error) {
+      setTopProductsLoading(true);
+      fetchTopProducts();
+    }
+  }, [product, error]);
+
+  const validatedImages = useMemo(() => product?.images ?? [], [product?.images]);
+  const validatedVariants = useMemo(() => product?.variants ?? [], [product?.variants]);
 
   if (isConnecting) {
     return (
@@ -254,188 +272,194 @@ function ProductDetails() {
   }
 
   return (
-    <Box>
-      {isBrowser && (
-        <Helmet>
-          <title>{product.title || 'Product'} | Icon Luxury</title>
-          <meta
-            name="description"
-            content={product.description ? product.description.slice(0, 160) : 'Product description'}
-          />
-        </Helmet>
-      )}
-      <Box py={16} bg="white">
-        <Box maxW="800px" mx="auto" px={4}>
-          <a
-            href="/products"
-            aria-label="Back to all products"
-            style={{
-              color: '#3182CE',
-              fontWeight: 'medium',
-              textDecoration: 'none',
-              margin: '8px',
-              display: 'block',
-            }}
-          >
-            ← Back to all products
-          </a>
-          {product.images?.length > 0 ? (
-            <Box position="relative">
-              <Image
-                src={product.images[currentImage] || 'https://placehold.co/275x350'}
-                alt={`${product.title || 'Product'} image ${currentImage + 1}`}
-                w="full"
-                h="400px"
-                objectFit="cover"
-                borderRadius="md"
-                mb={8}
-                onError={(e) => (e.currentTarget.src = 'https://placehold.co/275x350')}
-              />
-              {product.images.length > 1 && (
-                <>
-                  <IconButton
-                    aria-label="Previous image"
-                    icon={<ChevronLeftIcon />}
-                    position="absolute"
-                    left="8px"
-                    top="50%"
-                    transform="translateY(-50%)"
-                    onClick={() => setCurrentImage((prev) => (prev - 1 + product.images.length) % product.images.length)}
-                  />
-                  <IconButton
-                    aria-label="Next image"
-                    icon={<ChevronRightIcon />}
-                    position="absolute"
-                    right="8px"
-                    top="50%"
-                    transform="translateY(-50%)"
-                    onClick={() => setCurrentImage((prev) => (prev + 1) % product.images.length)}
-                  />
-                </>
-              )}
-            </Box>
-          ) : (
-            <Skeleton w="full" h="400px" borderRadius="md" mb={8} />
-          )}
-          <Flex align="center" mb={4}>
-            <Tag colorScheme="gray" mr={4} px={3} py={1} borderRadius="full">
-              Product
-            </Tag>
-            <Text fontSize="sm" color="gray.500">{new Date().toLocaleDateString()}</Text>
-            <Flex align="center" ml={4}>
-              <TimeIcon mr={1} color="gray.500" boxSize={3} />
-              <Text fontSize="sm" color="gray.500">{product.variants?.length || 0} variants</Text>
-            </Flex>
-            {product.discount && (
-              <Tag colorScheme="green" ml={4} px={3} py={1} borderRadius="full">
-                {product.discount}
-              </Tag>
+    <ErrorBoundary FallbackComponent={ErrorFallback}>
+      <Box>
+        {isBrowser && (
+          <Helmet>
+            <title>{product.title || 'Product'} | Icon Luxury</title>
+            <meta
+              name="description"
+              content={product.description ? product.description.slice(0, 160) : 'Product description'}
+            />
+          </Helmet>
+        )}
+        <Box py={16} bg="white">
+          <Box maxW="800px" mx="auto" px={4}>
+            <a
+              href="/products"
+              aria-label="Back to all products"
+              style={{
+                color: '#3182CE',
+                fontWeight: 'medium',
+                textDecoration: 'none',
+                margin: '8px',
+                display: 'block',
+              }}
+            >
+              ← Back to all products
+            </a>
+            {validatedImages.length > 0 ? (
+              <Box position="relative">
+                <Image
+                  src={validatedImages[currentImage] || 'https://placehold.co/275x350'}
+                  alt={`${product.title || 'Product'} image ${currentImage + 1}`}
+                  w="full"
+                  h="400px"
+                  objectFit="cover"
+                  borderRadius="md"
+                  mb={8}
+                  onError={(e) => (e.currentTarget.src = 'https://placehold.co/275x350')}
+                />
+                {validatedImages.length > 1 && (
+                  <>
+                    <IconButton
+                      aria-label="Previous image"
+                      icon={<ChevronLeftIcon />}
+                      position="absolute"
+                      left="8px"
+                      top="50%"
+                      transform="translateY(-50%)"
+                      onClick={() =>
+                        setCurrentImage((prev) => (prev - 1 + validatedImages.length) % validatedImages.length)
+                      }
+                    />
+                    < byIconButton
+                      aria-label="Next image"
+                      icon={<ChevronRightIcon />}
+                      position="absolute"
+                      right="8px"
+                      top="50%"
+                      transform="translateY(-50%)"
+                      onClick={() => setCurrentImage((prev) => (prev + 1) % validatedImages.length)}
+                    />
+                  </>
+                )}
+              </Box>
+            ) : (
+              <Skeleton w="full" h="400px" borderRadius="md" mb={8} />
             )}
-          </Flex>
-          <Heading as="h1" size="2xl" mb={6} fontWeight="medium" lineHeight="1.3">
-            {product.title || 'Untitled Product'}
-          </Heading>
-          <Text fontSize="xl" color="gray.700" mb={4}>
-            {product.sale_price || 'N/A'}{' '}
-            {product.full_price && <Text as="s" color="gray.500">{product.full_price}</Text>}
-          </Text>
-          {product.description ? <Text fontSize="lg" color="gray.700" mb={4}>{product.description}</Text> : (
-            <Text fontSize="lg" color="gray.700" mb={4}>
-              No description available
+            <Flex align="center" mb={4}>
+              <Tag colorScheme="gray" mr={4} px={3} py={1} borderRadius="full">
+                Product
+              </Tag>
+              <Text fontSize="sm" color="gray.500">{new Date().toLocaleDateString()}</Text>
+              <Flex align="center" ml={4}>
+                <TimeIcon mr={1} color="gray.500" boxSize={3} />
+                <Text fontSize="sm" color="gray.500">{validatedVariants.length || 0} variants</Text>
+              </Flex>
+              {product.discount && (
+                <Tag colorScheme="green" ml={4} px={3} py={1} borderRadius="full">
+                  {product.discount}
+                </Tag>
+              )}
+            </Flex>
+            <Heading as="h1" size="2xl" mb={6} fontWeight="medium" lineHeight="1.3">
+              {product.title || 'Untitled Product'}
+            </Heading>
+            <Text fontSize="xl" color="gray.700" mb={4}>
+              {product.sale_price || 'N/A'}{' '}
+              {product.full_price && <Text as="s" color="gray.500">{product.full_price}</Text>}
             </Text>
-          )}
-          <Box mt={8}>
-            <Heading as="h2" size="lg" mb={4}>
-              Variants
-            </Heading>
-            <HStack spacing={2} flexWrap="wrap" maxW="100%" gap={2}>
-              {product.variants.map((variant, index) => (
-                <Box
-                  key={variant.id || `variant-${index}`}
-                  bg={variant.inventory_quantity > 0 ? 'gray.100' : 'red.100'}
-                  px={3}
-                  py={1}
-                  borderRadius="full"
-                  mb={2}
-                  fontSize="md"
-                >
-                  Size {variant.size || 'N/A'} - {variant.price || 'N/A'}{' '}
-                  {variant.inventory_quantity > 0
-                    ? `(${variant.inventory_quantity} in stock)`
-                    : '(Out of stock)'}
-                </Box>
-              ))}
-            </HStack>
-          </Box>
-          <Box mt={8}>
-            <Heading as="h2" size="lg" mb={4}>
-              Related Products
-            </Heading>
-            {topProductsLoading ? (
-              <HStack spacing={4} flexWrap="wrap">
-                {[...Array(5)].map((_, index) => (
+            {product.description ? (
+              <Text fontSize="lg" color="gray.700" mb={4}>{product.description}</Text>
+            ) : (
+              <Text fontSize="lg" color="gray.700" mb={4}>
+                No description available
+              </Text>
+            )}
+            <Box mt={8}>
+              <Heading as="h2" size="lg" mb={4}>
+                Variants
+              </Heading>
+              <HStack spacing={2} flexWrap="wrap" maxW="100%" gap={2}>
+                {validatedVariants.map((variant, index) => (
                   <Box
-                    key={index}
-                    p={4}
-                    borderWidth="1px"
-                    borderRadius="md"
-                    textAlign="center"
-                    maxW="200px"
+                    key={variant.id || `variant-${index}`}
+                    bg={variant.inventory_quantity > 0 ? 'gray.100' : 'red.100'}
+                    px={3}
+                    py={1}
+                    borderRadius="full"
+                    mb={2}
+                    fontSize="md"
                   >
-                    <Skeleton w="150px" h="150px" mx="auto" startColor="gray.100" endColor="gray.300" />
-                    <SkeletonText mt={2} noOfLines={2} spacing="2" />
-                    <Skeleton mt={2} h="16px" w="100px" mx="auto" />
+                    Size {variant.size || 'N/A'} - {variant.price || 'N/A'}{' '}
+                    {variant.inventory_quantity > 0
+                      ? `(${variant.inventory_quantity} in stock)`
+                      : '(Out of stock)'}
                   </Box>
                 ))}
               </HStack>
-            ) : topProducts.length > 0 ? (
-              <HStack spacing={4} flexWrap="wrap">
-                {topProducts.map((topProduct) => (
-                  <Link key={topProduct.id} to={`/products/${topProduct.id}`}>
+            </Box>
+            <Box mt={8}>
+              <Heading as="h2" size="lg" mb={4}>
+                Related Products
+              </Heading>
+              {topProductsLoading ? (
+                <HStack spacing={4} flexWrap="wrap">
+                  {[...Array(5)].map((_, index) => (
                     <Box
+                      key={index}
                       p={4}
                       borderWidth="1px"
                       borderRadius="md"
                       textAlign="center"
                       maxW="200px"
-                      _hover={{ transform: 'scale(1.05)', boxShadow: 'md' }}
-                      transition="all 0.2s"
                     >
-                      <Image
-                        src={topProduct.thumbnail || 'https://placehold.co/150x150'}
-                        alt={topProduct.title || 'Product'}
-                        w="150px"
-                        h="150px"
-                        objectFit="cover"
-                        mx="auto"
-                        onError={(e) => (e.currentTarget.src = 'https://placehold.co/150x150')}
-                      />
-                      <Text mt={2} fontSize="sm" fontWeight="medium" noOfLines={2}>
-                        {topProduct.title || 'Untitled Product'}
-                      </Text>
-                      <Text color="gray.700" fontSize="sm">
-                        {topProduct.sale_price || 'N/A'}
-                        {topProduct.discount && (
-                          <Text as="span" color="green.500" ml={1}>
-                            ({topProduct.discount})
-                          </Text>
-                        )}
-                      </Text>
+                      <Skeleton w="150px" h="150px" mx="auto" startColor="gray.100" endColor="gray.300" />
+                      <SkeletonText mt={2} noOfLines={2} spacing="2" />
+                      <Skeleton mt={2} h="16px" w="100px" mx="auto" />
                     </Box>
-                  </Link>
-                ))}
-              </HStack>
-            ) : (
-              <Text fontSize="md" color="gray.500">
-                No related products available.
-              </Text>
-            )}
+                  ))}
+                </HStack>
+              ) : topProducts.length > 0 ? (
+                <HStack spacing={4} flexWrap="wrap">
+                  {topProducts.map((topProduct) => (
+                    <Link key={topProduct.id} to={`/products/${topProduct.id}`}>
+                      <Box
+                        p={4}
+                        borderWidth="1px"
+                        borderRadius="md"
+                        textAlign="center"
+                        maxW="200px"
+                        _hover={{ transform: 'scale(1.05)', boxShadow: 'md' }}
+                        transition="all 0.2s"
+                      >
+                        <Image
+                          src={topProduct.thumbnail || 'https://placehold.co/150x150'}
+                          alt={topProduct.title || 'Product'}
+                          w="150px"
+                          h="150px"
+                          objectFit="cover"
+                          mx="auto"
+                          onError={(e) => (e.currentTarget.src = 'https://placehold.co/150x150')}
+                        />
+                        <Text mt={2} fontSize="sm" fontWeight="medium" noOfLines={2}>
+                          {topProduct.title || 'Untitled Product'}
+                        </Text>
+                        <Text color="gray.700" fontSize="sm">
+                          {topProduct.sale_price || 'N/A'}
+                          {topProduct.discount && (
+                            <Text as="span" color="green.500" ml={1}>
+                              ({topProduct.discount})
+                            </Text>
+                          )}
+                        </Text>
+                      </Box>
+                    </Link>
+                  ))}
+                </HStack>
+              ) : (
+                <Text fontSize="md" color="gray.500">
+                  No related products available.
+                </Text>
+              )}
+            </Box>
+            <Divider mb={8} />
           </Box>
-          <Divider mb={8} />
         </Box>
+        <Footer />
       </Box>
-      <Footer />
-    </Box>
+    </ErrorBoundary>
   );
 }
 
