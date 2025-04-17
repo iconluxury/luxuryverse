@@ -28,6 +28,7 @@
     "react": "^18.3.1",
     "react-cookie-consent": "^9.0.0",
     "react-dom": "^18.3.1",
+    "react-error-boundary": "^5.0.0",
     "react-from-dom": "^0.7.5",
     "react-helmet-async": "^2.0.5",
     "sanitize-html": "^2.16.0",

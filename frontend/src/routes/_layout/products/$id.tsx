@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { useParams, Link } from '@tanstack/react-router';
 import { Helmet } from 'react-helmet-async';
 import { ErrorBoundary } from 'react-error-boundary';
-import Footer from './Common/Footer';
+import Footer from '../../../components/Common/Footer';
 import { Heading, Image, TimeIcon, ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 
 interface Variant {
