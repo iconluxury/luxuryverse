@@ -1,10 +1,11 @@
+// src/routes/_layout/auth-complete.tsx
 import { createFileRoute } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
 import { useNavigate } from '@tanstack/react-router';
 import { useToast } from '@chakra-ui/react';
 import { Box } from '@chakra-ui/react';
+import { OpenAPI } from '../../client';
 
-// NEW: Add this file to src/routes/_layout/ to handle /auth-complete redirect
 export const Route = createFileRoute('/_layout/auth-complete')({
   component: AuthComplete,
 });
@@ -40,10 +41,14 @@ function AuthComplete() {
       const fetchXProfile = async (retryCount = 3): Promise<void> => {
         try {
           console.log('Fetching user details for user_id:', userId);
+          const token = await OpenAPI.TOKEN();
           const response = await fetch(`https://iconluxury.shop/api/v1/x-auth/user/${userId}`, {
             method: 'GET',
-            headers: { 'Content-Type': 'application/json' },
-            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+            credentials: 'omit',
           });
           if (!response.ok) {
             const errorText = await response.text();

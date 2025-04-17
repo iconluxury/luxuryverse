@@ -34,7 +34,7 @@ createAppKit({
   features: {
     connectMethodsOrder: ["wallet"],
     analytics: true // Enable analytics (optional)
-  }
+  },
 });
 
 // Export for use in your app

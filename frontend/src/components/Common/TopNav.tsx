@@ -20,6 +20,14 @@ export const AuthProvider = ({ children }) => {
   const { disconnect } = useDisconnect();
 
   useEffect(() => {
+    // Restore session from localStorage
+    const savedAddress = localStorage.getItem('walletAddress');
+    if (savedAddress && !isConnected && connectors.length > 0) {
+      connect({ connector: connectors[0] });
+    }
+  }, [connectors, isConnected, connect]);
+
+  useEffect(() => {
     if (isConnected && address) {
       setUser({ address });
       setJoining(false);
