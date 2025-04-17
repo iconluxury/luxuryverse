@@ -124,12 +124,12 @@ function Layout() {
           >
             Cookies
           </Link>{" "}
-          and our {" "}
+          and {" "}
           <Link
             to="/privacy"
             style={{ color: theme.colors.purple[500] || "#EF4444", textDecoration: "underline" }}
           >
-            Privacy Policy
+            Privacy 
           </Link>
         </CookieConsent>
       )}
