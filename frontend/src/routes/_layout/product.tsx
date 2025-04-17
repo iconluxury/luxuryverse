@@ -28,7 +28,7 @@ function ProductsPage() {
     const fetchProducts = async (retryCount = 3, delay = 3000) => {
       if (!hasMore) return;
       setLoading(true);
-      const url = `${API_BASE_URL}/api/v1/products`;
+      const url = `${API_BASE_URL}/api/v1/products/`;
       console.log('Fetching from:', url); // Debug log
 
       for (let attempt = 1; attempt <= retryCount; attempt++) {
