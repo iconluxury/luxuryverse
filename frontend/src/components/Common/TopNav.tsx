@@ -1,9 +1,8 @@
-// src/components/Common/TopNav.tsx
 import { Flex, Heading, Button } from '@chakra-ui/react';
 import { Link, useNavigate } from '@tanstack/react-router';
-import { createContext, useContext, useState, useEffect } from 'react';
-import { useAccount, useConnect, useDisconnect } from 'wagmi';
+import { createContext, useContext, useState } from 'react';
 
+// AuthContext
 export const AuthContext = createContext({
   user: null,
   isJoining: false,
@@ -13,48 +12,17 @@ export const AuthContext = createContext({
 });
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null); // e.g., { address, xUsername, xProfile }
   const [isJoining, setJoining] = useState(false);
-  const { address, isConnected, isConnecting, error: walletError } = useAccount();
-  const { connect, connectors, error: connectError } = useConnect();
-  const { disconnect } = useDisconnect();
 
-  useEffect(() => {
-    // Restore session from localStorage
-    const savedAddress = localStorage.getItem('walletAddress');
-    if (savedAddress && !isConnected && connectors.length > 0) {
-      connect({ connector: connectors[0] });
-    }
-  }, [connectors, isConnected, connect]);
-
-  useEffect(() => {
-    if (isConnected && address) {
-      setUser({ address });
-      setJoining(false);
-      localStorage.setItem('walletAddress', address);
-    } else if (connectError || walletError) {
-      console.error('Wallet connection failed:', connectError || walletError);
-      setJoining(false);
-    }
-  }, [address, isConnected, connectError, walletError]);
-
-  const login = async () => {
-    try {
-      setJoining(true);
-      if (!isConnected && connectors.length > 0) {
-        await connect({ connector: connectors[0] });
-      }
-    } catch (error) {
-      console.error('Wallet connection failed:', error);
-      setJoining(false);
-    }
+  const login = async (userData) => {
+    setUser(userData);
+    setJoining(false);
   };
 
   const logout = () => {
-    disconnect();
     setUser(null);
     setJoining(false);
-    localStorage.removeItem('walletAddress');
   };
 
   return (
