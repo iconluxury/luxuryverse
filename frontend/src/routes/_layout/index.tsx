@@ -73,7 +73,7 @@ function Home() {
   // Fetch collections from the API
   useEffect(() => {
     setIsLoading(true);
-    const url = 'https://iconluxury.shop/api/v1/collections'; // Use .today
+    const url = 'https://iconluxury.shop/api/v1/collections/'; 
     console.log('Fetching collections from:', url);
     axios
       .get(url, {
