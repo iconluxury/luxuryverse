@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { Link } from '@tanstack/react-router';
 import { Helmet } from 'react-helmet-async';
 import { ErrorBoundary } from 'react-error-boundary';
-import Footer from '../../components/Common/Footer'; // Adjust path as needed
+import Footer from '../../../components/Common/Footer'; // Adjust path as needed
 import { Heading, Image, TimeIcon, ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 
 // Interfaces
