@@ -15,8 +15,6 @@ import {
 import { createFileRoute, useParams, Link } from '@tanstack/react-router';
 import { TimeIcon, ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { Helmet } from 'react-helmet-async';
-import parse, { domToReact } from 'html-react-parser';
-import { Element } from 'domhandler';
 import Footer from '../../../components/Common/Footer';
 
 export const Route = createFileRoute('/_layout/products/$id')({
@@ -43,6 +41,176 @@ interface Product {
   full_price: string;
   sale_price: string;
   discount: string;
+}
+
+// Custom HTML Parser
+const ALLOWED_TAGS = ['div', 'span', 'p', 'strong', 'em', 'ul', 'li', 'ol'];
+const ALLOWED_ATTRIBUTES = ['class', 'style'];
+const ALLOWED_STYLES = {
+  color: /^#(0x)?[0-9a-f]+$/i,
+  'text-align': /^left$|^right$|^center$/,
+  'font-size': /^\d+(?:px|em|rem|%)$/,
+};
+
+interface HtmlNode {
+  type: 'element' | 'text';
+  tag?: string;
+  attributes?: Record<string, string>;
+  children?: HtmlNode[];
+  content?: string;
+}
+
+function parseHtml(html: string): React.ReactNode {
+  if (!html || typeof html !== 'string') {
+    return <Text fontSize="lg" color="gray.700" mb={4}>No description available</Text>;
+  }
+
+  try {
+    // Tokenize HTML string
+    const tokens: string[] = [];
+    let current = '';
+    let inTag = false;
+    let inComment = false;
+
+    for (let i = 0; i < html.length; i++) {
+      if (html[i] === '<' && html.slice(i, i + 4) === '<!--') {
+        inComment = true;
+        i += 3;
+        continue;
+      }
+      if (inComment && html.slice(i, i + 3) === '-->') {
+        inComment = false;
+        i += 2;
+        continue;
+      }
+      if (inComment) continue;
+
+      if (html[i] === '<' && !inTag) {
+        if (current) tokens.push(current);
+        current = '<';
+        inTag = true;
+      } else if (html[i] === '>' && inTag) {
+        current += '>';
+        tokens.push(current);
+        current = '';
+        inTag = false;
+      } else {
+        current += html[i];
+      }
+    }
+    if (current) tokens.push(current);
+
+    // Parse tokens into a node tree
+    function parseTokens(tokens: string[], index: { value: number }): HtmlNode[] {
+      const nodes: HtmlNode[] = [];
+
+      while (index.value < tokens.length) {
+        const token = tokens[index.value].trim();
+        index.value++;
+
+        if (!token) continue;
+
+        if (token.startsWith('</')) {
+          return nodes;
+        } else if (token.startsWith('<') && token.endsWith('>')) {
+          const tagMatch = token.match(/^<([a-zA-Z][a-zA-Z0-9]*)([^>]*)>$/);
+          if (!tagMatch) continue;
+
+          const [, tag, attrString] = tagMatch;
+          if (!ALLOWED_TAGS.includes(tag.toLowerCase())) {
+            const children = parseTokens(tokens, index);
+            nodes.push(...children);
+            continue;
+          }
+
+          const attributes: Record<string, string> = {};
+          const attrMatches = attrString.matchAll(/([a-zA-Z-]+)(?:="([^"]*)")?/g);
+          for (const match of attrMatches) {
+            const [, name, value = ''] = match;
+            if (ALLOWED_ATTRIBUTES.includes(name.toLowerCase())) {
+              if (name === 'style') {
+                const styleProps = value
+                  .split(';')
+                  .filter(Boolean)
+                  .map((prop) => prop.trim().split(':').map((s) => s.trim()));
+                const validStyles = styleProps
+                  .filter(([key, val]) => ALLOWED_STYLES[key]?.test(val))
+                  .map(([key, val]) => `${key}: ${val}`);
+                if (validStyles.length) {
+                  attributes.style = validStyles.join('; ');
+                }
+              } else {
+                attributes[name.toLowerCase()] = value;
+              }
+            }
+          }
+
+          const children = parseTokens(tokens, index);
+          nodes.push({
+            type: 'element',
+            tag: tag.toLowerCase(),
+            attributes,
+            children,
+          });
+        } else {
+          nodes.push({
+            type: 'text',
+            content: token
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;')
+              .replace(/&/g, '&amp;')
+              .replace(/"/g, '&quot;'),
+          });
+        }
+      }
+
+      return nodes;
+    }
+
+    const nodes = parseTokens(tokens, { value: 0 });
+
+    // Convert nodes to React elements
+    function nodesToReact(nodes: HtmlNode[]): React.ReactNode[] {
+      return nodes
+        .map((node, index) => {
+          if (node.type === 'text') {
+            return node.content ? (
+              <Text key={index} as="span" fontSize="lg" color="gray.700">
+                {node.content}
+              </Text>
+            ) : null;
+          }
+          if (node.type === 'element' && node.tag) {
+            const props: Record<string, any> = {
+              fontSize: 'lg',
+              color: 'gray.700',
+              mb: 2,
+              ...node.attributes,
+            };
+            if (node.tag === 'ul' || node.tag === 'ol') {
+              props.as = node.tag;
+            } else if (node.tag === 'li') {
+              props.as = 'li';
+            } else {
+              props.as = 'div';
+            }
+            return (
+              <Text key={index} {...props}>
+                {node.children ? nodesToReact(node.children) : null}
+              </Text>
+            );
+          }
+          return null;
+        })
+        .filter(Boolean);
+    }
+
+    const reactNodes = nodesToReact(nodes);
+    return reactNodes.length > 0 ? reactNodes : <Text fontSize="lg" color="gray.700" mb={4}>No description available</Text>;
+  } catch (err) {
+    console.error('Error parsing HTML:', err, 'HTML:', html);
+    return <Text fontSize="lg" color="gray.700" mb={4}>Failed to parse description</Text>;
+  }
 }
 
 function ProductDetails() {
@@ -92,13 +260,27 @@ function ProductDetails() {
     const fetchProduct = async () => {
       try {
         const data = await fetchWithRetry(`${API_BASE_URL}/api/v1/products/${id}`);
+        console.log('Fetched product data:', data);
+        if (!data || typeof data !== 'object') {
+          throw new Error('Invalid product data received');
+        }
+        // Validate variants
+        if (data.variants) {
+          data.variants = data.variants.filter(
+            (v: Variant) =>
+              v && typeof v === 'object' && v.id && typeof v.size === 'string' && typeof v.price === 'string'
+          );
+        } else {
+          data.variants = [];
+        }
         setProduct(data);
         setError(null);
       } catch (err: any) {
         setError(`Failed to load product: ${err.message || 'Unknown error'}`);
         try {
           const topData = await fetchWithRetry(`${API_BASE_URL}/api/v1/top`);
-          setTopProducts(topData);
+          console.log('Fetched top products:', topData);
+          setTopProducts(topData && Array.isArray(topData) ? topData : []);
         } catch (topErr: any) {
           setError((prev) => `${prev}\nFailed to load top products: ${topErr.message || 'Unknown error'}`);
         }
@@ -110,40 +292,18 @@ function ProductDetails() {
     fetchProduct();
   }, [id]);
 
-  const parseDescription = (description: string) => {
-    if (!description || typeof description !== 'string') {
-      return <Text fontSize="lg" color="gray.700" mb={4}>No description available</Text>;
-    }
-    try {
-      return parse(description, {
-        replace: (domNode) => {
-          if (domNode instanceof Element && (domNode.name === 'div' || domNode.name === 'span')) {
-            return (
-              <Text fontSize="lg" color="gray.700" mb={2}>
-                {domToReact(domNode.children, { trim: true })}
-              </Text>
-            );
-          }
-        },
-      });
-    } catch (err) {
-      console.error('Error parsing description:', err, 'Description:', description);
-      return <Text fontSize="lg" color="gray.700" mb={4}>Failed to parse description</Text>;
-    }
-  };
-
   const stripHtml = (html: string) => {
     return html.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
   };
 
   const nextImage = () => {
-    if (product?.images.length) {
+    if (product?.images?.length) {
       setCurrentImage((prev) => (prev + 1) % product.images.length);
     }
   };
 
   const prevImage = () => {
-    if (product?.images.length) {
+    if (product?.images?.length) {
       setCurrentImage((prev) => (prev - 1 + product.images.length) % product.images.length);
     }
   };
@@ -177,7 +337,7 @@ function ProductDetails() {
               {topProducts.slice(0, 3).map((topProduct) => (
                 <Link key={topProduct.id} to={`/products/${topProduct.id}`} style={{ color: '#3182CE' }}>
                   <Tag colorScheme="gray" m={1}>
-                    {topProduct.title}
+                    {topProduct.title || 'Untitled Product'}
                   </Tag>
                 </Link>
               ))}
@@ -185,11 +345,11 @@ function ProductDetails() {
           </Box>
         )}
         <Link
-          to="/products"
-          aria-label="Back to all products"
+          to="/collections"
+          aria-label=""
           style={{ color: '#3182CE', marginTop: '16px', display: 'inline-block' }}
         >
-          Back to all products
+      Breadcrumbs
         </Link>
       </Box>
     );
@@ -198,8 +358,11 @@ function ProductDetails() {
   return (
     <Box>
       <Helmet>
-        <title>{product.title} | Icon Luxury</title>
-        <meta name="description" content={stripHtml(product.description).slice(0, 160)} />
+        <title>{product.title || 'Product'} | Icon Luxury</title>
+        <meta
+          name="description"
+          content={product.description ? stripHtml(product.description).slice(0, 160) : 'Product description'}
+        />
       </Helmet>
       <Box py={16} bg="white">
         <Box maxW="800px" mx="auto" px={4}>
@@ -216,11 +379,11 @@ function ProductDetails() {
           >
             ← Back to all products
           </Link>
-          {product.images.length > 0 ? (
+          {product.images?.length > 0 ? (
             <Box position="relative">
               <Image
                 src={product.images[currentImage]}
-                alt={`${product.title} image ${currentImage + 1}`}
+                alt={`${product.title || 'Product'} image ${currentImage + 1}`}
                 w="full"
                 h="400px"
                 objectFit="cover"
@@ -261,7 +424,7 @@ function ProductDetails() {
             <Text fontSize="sm" color="gray.500">{new Date().toLocaleDateString()}</Text>
             <Flex align="center" ml={4}>
               <TimeIcon mr={1} color="gray.500" boxSize={3} />
-              <Text fontSize="sm" color="gray.500">{product.variants.length} variants</Text>
+              <Text fontSize="sm" color="gray.500">{product.variants?.length || 0} variants</Text>
             </Flex>
             {product.discount && (
               <Tag colorScheme="green" ml={4} px={3} py={1} borderRadius="full">
@@ -270,13 +433,13 @@ function ProductDetails() {
             )}
           </Flex>
           <Heading as="h1" size="2xl" mb={6} fontWeight="medium" lineHeight="1.3">
-            {product.title}
+            {product.title || 'Untitled Product'}
           </Heading>
           <Text fontSize="xl" color="gray.700" mb={4}>
-            {product.sale_price}{' '}
+            {product.sale_price || 'N/A'}{' '}
             {product.full_price && <Text as="s" color="gray.500">{product.full_price}</Text>}
           </Text>
-          {product.description ? parseDescription(product.description) : (
+          {product.description ? parseHtml(product.description) : (
             <Text fontSize="lg" color="gray.700" mb={4}>
               No description available
             </Text>
@@ -286,20 +449,29 @@ function ProductDetails() {
               Variants
             </Heading>
             <HStack spacing={2} flexWrap="wrap" maxW="100%" gap={2}>
-              {product.variants.map((variant) => (
-                <Tag
-                  key={variant.id}
-                  colorScheme={variant.inventory_quantity > 0 ? 'gray' : 'red'}
-                  variant="subtle"
-                  size="md"
-                  mb={2}
-                >
-                  Size {variant.size} - {variant.price}{' '}
-                  {variant.inventory_quantity > 0
-                    ? `(${variant.inventory_quantity} in stock)`
-                    : '(Out of stock)'}
-                </Tag>
-              ))}
+              {product.variants?.length > 0 ? (
+                product.variants.map((variant, index) => {
+                  console.log('Rendering variant:', index, variant); // Debug variant
+                  return (
+                    <Tag
+                      key={variant.id || `variant-${index}`}
+                      colorScheme={variant.inventory_quantity > 0 ? 'gray' : 'red'}
+                      variant="subtle"
+                      size="md"
+                      mb={2}
+                    >
+                      Size {variant.size || 'N/A'} - {variant.price || 'N/A'}{' '}
+                      {variant.inventory_quantity > 0
+                        ? `(${variant.inventory_quantity} in stock)`
+                        : '(Out of stock)'}
+                    </Tag>
+                  );
+                })
+              ) : (
+                <Text fontSize="md" color="gray.500">
+                  No variants available
+                </Text>
+              )}
             </HStack>
           </Box>
           <Divider mb={8} />
