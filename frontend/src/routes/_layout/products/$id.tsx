@@ -266,10 +266,28 @@ function ProductDetails() {
         }
         // Validate variants
         if (data.variants) {
-          data.variants = data.variants.filter(
-            (v: Variant) =>
-              v && typeof v === 'object' && v.id && typeof v.size === 'string' && typeof v.price === 'string'
-          );
+          data.variants = data.variants
+            .filter((v: Variant) => {
+              const isValid =
+                v &&
+                typeof v === 'object' &&
+                typeof v.id === 'string' &&
+                typeof v.size === 'string' &&
+                typeof v.price === 'string' &&
+                typeof v.inventory_quantity === 'number';
+              if (!isValid) {
+                console.warn('Invalid variant filtered:', v);
+              }
+              return isValid;
+            })
+            .map((v: Variant) => ({
+              id: v.id,
+              title: v.title || 'Unknown',
+              size: v.size || 'N/A',
+              inventory_quantity: typeof v.inventory_quantity === 'number' ? v.inventory_quantity : 0,
+              price: v.price || 'N/A',
+              compare_at_price: v.compare_at_price || '',
+            }));
         } else {
           data.variants = [];
         }
@@ -324,8 +342,8 @@ function ProductDetails() {
         </Text>
         <Text fontSize="sm" mt={2}>
           Please check your network connection or contact{' '}
-          <a href="mailto:support@luxuryverse.com" style={{ color: '#3182CE' }}>
-            support@luxuryverse.com
+          <a href="mailto:support@iconluxury.shop" style={{ color: '#3182CE' }}>
+            support@iconluxury.shop
           </a>.
         </Text>
         {topProducts.length > 0 && (
@@ -345,11 +363,11 @@ function ProductDetails() {
           </Box>
         )}
         <Link
-          to="/collections"
-          aria-label="breadcrumbs"
+          to="/products"
+          aria-label="Back to all products"
           style={{ color: '#3182CE', marginTop: '16px', display: 'inline-block' }}
         >
-      Breadcrumbs
+          Back to all products
         </Link>
       </Box>
     );
@@ -451,7 +469,7 @@ function ProductDetails() {
             <HStack spacing={2} flexWrap="wrap" maxW="100%" gap={2}>
               {product.variants?.length > 0 ? (
                 product.variants.map((variant, index) => {
-                  console.log('Rendering variant:', index, variant); // Debug variant
+                  console.log('Rendering variant:', index, variant);
                   return (
                     <Tag
                       key={variant.id || `variant-${index}`}
