@@ -63,7 +63,7 @@ function ProductDetails() {
   const [currentImage, setCurrentImage] = useState(0);
   const API_BASE_URL = 'https://iconluxury.shop';
   const { id } = Route.useParams();
-  const isBrowser = typeof window !== 'undefined';
+
 
   const fetchWithRetry = async (url: string, retryCount = 6) => {
     for (let attempt = 1; attempt <= retryCount; attempt++) {
@@ -288,7 +288,6 @@ function ProductDetails() {
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
       <Box>
-        {isBrowser && (
           <Helmet>
             <title>{product.title || 'Product'} | Icon Luxury</title>
             <meta
@@ -296,7 +295,6 @@ function ProductDetails() {
               content={product.description ? product.description.slice(0, 160) : 'Product description'}
             />
           </Helmet>
-        )}
         <Box py={16} bg="white">
           <Box maxW="800px" mx="auto" px={4}>
             <Link to="/products" aria-label="Back to all products" style={{ color: '#3182CE', fontWeight: 'medium', textDecoration: 'none', margin: '8px', display: 'block' }}>
