@@ -18,11 +18,14 @@ app = FastAPI(
 @app.middleware("http")
 async def add_path_to_response(request: Request, call_next):
     response = await call_next(request)
-    # Add full URL to response headers
-    response.headers["X-Request-Path"] = str(request.url)
+    # Add full URL to response headers, forcing HTTPS
+    full_url = str(request.url).replace("http://", "https://")
+    response.headers["X-Request-Path"] = full_url
     # Log the full URL
-    print(f"Request URL: {request.url}")
+    print(f"Request URL: {full_url}")
     return response
+
+app.add_middleware(HTTPSRedirectMiddleware)
 
 app.add_middleware(
     CORSMiddleware,
@@ -31,9 +34,5 @@ app.add_middleware(
     allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["Accept", "Content-Type", "Authorization"],
 )
-
-@app.get("/health", tags=["health"])
-async def health_check(request: Request):
-    return {"status": "healthy", "path": request.url.path}
 
 app.include_router(api_router, prefix=settings.API_V1_STR)
