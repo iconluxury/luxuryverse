@@ -614,7 +614,7 @@ function ProductDetails() {
                         w="150px"
                         h="150px"
                         objectFit="cover"
-                        mx "auto"
+                        mx="auto"
                         onError={(e) => (e.currentTarget.src = 'https://placehold.co/150x150')}
                       />
                       <Text mt={2} fontSize="sm" fontWeight="medium" noOfLines={2}>
