@@ -1,28 +1,12 @@
 User-agent: *
 Allow: /
-Allow: /resources/blog/
-Allow: /resources/faq/
-Allow: /resources/web-scraping-guides/
-Allow: /resources/code-examples/
-Allow: /resources/support-center/
-Allow: /solutions/
-Allow: /tools/
-Allow: /use-cases/
-Allow: /network/
+
 
 # Disallow admin and private areas
 Disallow: /admin/
 Disallow: /api/
-Disallow: /cloud/
-Disallow: /login/
-Disallow: /account/
-Disallow: /billing/
 
-# Disallow demo request and sensitive forms
-Disallow: /demo-request
-Disallow: /contact-sales
-Disallow: /privacy-request
-Disallow: /report
+
 
 # Sitemap
-Sitemap: https://iconluxury.shop/sitemap.xml
+Sitemap: https://luxuryverse.com/sitemap.xml
