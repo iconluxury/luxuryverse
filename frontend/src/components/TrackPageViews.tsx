@@ -9,7 +9,7 @@ export const TrackPageViews = ({ consentGiven }) => {
       console.log("TrackPageViews: Sending page view for", location.pathname);
       window.gtag("event", "page_view", {
         page_path: location.pathname,
-        send_to: "G-8322NRFMV3",
+        send_to: "G-6KMK7YJL5N",
       });
     }
   }, [location.pathname, consentGiven]);

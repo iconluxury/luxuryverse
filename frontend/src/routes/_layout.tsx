@@ -93,7 +93,7 @@ function Layout() {
               console.log("Consent updated, sending page view");
               window.gtag("event", "page_view", {
                 page_path: window.location.pathname,
-                send_to: "G-8322NRFMV3",
+                send_to: "G-6KMK7YJL5N",
               });
             } else {
               console.error("gtag not loaded yet");
@@ -119,14 +119,14 @@ function Layout() {
         >
          We use cookies to provide necessary site functionality and improve your experience. Read about{" "}
           <Link
-            to="/cookie"
+            to="/cookies"
             style={{ color: theme.colors.purple[500] || "#EF4444", textDecoration: "underline" }}
           >
             Cookies
           </Link>{" "}
           and {" "}
           <Link
-            to="/privacy"
+            to="/privacy-policy"
             style={{ color: theme.colors.purple[500] || "#EF4444", textDecoration: "underline" }}
           >
             Privacy 
