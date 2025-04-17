@@ -40,10 +40,11 @@ interface Product {
   variants: Variant[];
   full_price: string;
   sale_price: string;
-  discount: string;
+  discount: string | null;
+  collection_id?: string; // Optional, as it may not be in the product response
 }
 
-// Custom HTML Parser
+// Custom HTML Parser (unchanged)
 const ALLOWED_TAGS = ['div', 'span', 'p', 'strong', 'em', 'ul', 'li', 'ol'];
 const ALLOWED_ATTRIBUTES = ['class', 'style'];
 const ALLOWED_STYLES = {
@@ -140,8 +141,8 @@ function parseHtml(html: string): React.ReactNode {
                   attributes.style = validStyles.join('; ');
                 }
               } else {
-                  attributes[name.toLowerCase()] = value;
-                }
+                attributes[name.toLowerCase()] = value;
+              }
             }
           }
 
@@ -257,16 +258,18 @@ function ProductDetails() {
       }
     };
 
-    const fetchProduct = async () => {
+    const fetchProductAndTopProducts = async () => {
       try {
-        const data = await fetchWithRetry(`${API_BASE_URL}/api/v1/products/${id}`);
-        console.log('Fetched product data:', data);
-        if (!data || typeof data !== 'object') {
+        // Fetch the product details
+        const productData = await fetchWithRetry(`${API_BASE_URL}/api/v1/products/${id}`);
+        console.log('Fetched product data:', productData);
+        if (!productData || typeof productData !== 'object') {
           throw new Error('Invalid product data received');
         }
+
         // Validate variants
-        if (data.variants) {
-          data.variants = data.variants
+        if (productData.variants) {
+          productData.variants = productData.variants
             .filter((v: Variant) => {
               const isValid =
                 v &&
@@ -289,25 +292,96 @@ function ProductDetails() {
               compare_at_price: v.compare_at_price || '',
             }));
         } else {
-          data.variants = [];
+          productData.variants = [];
         }
-        setProduct(data);
+        setProduct(productData);
         setError(null);
+
+        // Fetch top 5 products from the collection
+        try {
+          // Use collection ID from product data or fallback to Men's Shoes collection
+          const collectionId = productData.collection_id || '8789669282087';
+          const topProductsUrl = `${API_BASE_URL}/api/v1/collections/${collectionId}/products`;
+          const collectionData = await fetchWithRetry(topProductsUrl);
+          console.log('Fetched collection products:', collectionData);
+
+          // Validate and sort top products
+          const validatedTopProducts = Array.isArray(collectionData.products)
+            ? collectionData.products
+                .filter(
+                  (p: Product) =>
+                    p &&
+                    typeof p === 'object' &&
+                    typeof p.id === 'string' &&
+                    typeof p.title === 'string' &&
+                    p.id !== id // Exclude the current product
+                )
+                .map((p: Product) => ({
+                  ...p,
+                  total_inventory: p.variants.reduce((sum: number, v: Variant) => sum + v.inventory_quantity, 0),
+                  discount_value: p.discount
+                    ? parseFloat(p.discount.replace('% off', '')) || 0
+                    : 0,
+                }))
+                .sort((a: any, b: any) => {
+                  // Sort by discount (descending), then by total inventory (descending)
+                  if (a.discount_value !== b.discount_value) {
+                    return b.discount_value - a.discount_value;
+                  }
+                  return b.total_inventory - a.total_inventory;
+                })
+                .slice(0, 5) // Take top 5
+            : [];
+          setTopProducts(validatedTopProducts);
+        } catch (topErr: any) {
+          console.warn('Failed to fetch top products:', topErr.message);
+          setTopProducts([]);
+          setError((prev) => prev || `Failed to load top products: ${topErr.message || 'Unknown error'}`);
+        }
       } catch (err: any) {
         setError(`Failed to load product: ${err.message || 'Unknown error'}`);
         try {
-          const topData = await fetchWithRetry(`${API_BASE_URL}/api/v1/products/`);
-          console.log('Fetched top products:', topData);
-          setTopProducts(topData && Array.isArray(topData) ? topData : []);
+          // Fallback: Fetch top 5 products from Men's Shoes collection
+          const topProductsUrl = `${API_BASE_URL}/api/v1/collections/8789669282087/products`;
+          const collectionData = await fetchWithRetry(topProductsUrl);
+          console.log('Fetched collection products (fallback):', collectionData);
+
+          const validatedTopProducts = Array.isArray(collectionData.products)
+            ? collectionData.products
+                .filter(
+                  (p: Product) =>
+                    p &&
+                    typeof p === 'object' &&
+                    typeof p.id === 'string' &&
+                    typeof p.title === 'string' &&
+                    p.id !== id
+                )
+                .map((p: Product) => ({
+                  ...p,
+                  total_inventory: p.variants.reduce((sum: number, v: Variant) => sum + v.inventory_quantity, 0),
+                  discount_value: p.discount
+                    ? parseFloat(p.discount.replace('% off', '')) || 0
+                    : 0,
+                }))
+                .sort((a: any, b: any) => {
+                  if (a.discount_value !== b.discount_value) {
+                    return b.discount_value - a.discount_value;
+                  }
+                  return b.total_inventory - a.total_inventory;
+                })
+                .slice(0, 5)
+            : [];
+          setTopProducts(validatedTopProducts);
         } catch (topErr: any) {
           setError((prev) => `${prev}\nFailed to load top products: ${topErr.message || 'Unknown error'}`);
+          setTopProducts([]);
         }
       } finally {
         setLoading(false);
       }
     };
 
-    fetchProduct();
+    fetchProductAndTopProducts();
   }, [id]);
 
   const stripHtml = (html: string) => {
@@ -500,6 +574,42 @@ function ProductDetails() {
               {variantComponents}
             </HStack>
           </Box>
+          {/* New Related Products Section */}
+          {topProducts.length > 0 && (
+            <Box mt={8}>
+              <Heading as="h2" size="lg" mb={4}>
+                Related Products
+              </Heading>
+              <HStack spacing={4} flexWrap="wrap">
+                {topProducts.map((topProduct) => (
+                  <Link key={topProduct.id} to={`/products/${topProduct.id}`}>
+                    <Box p={4} borderWidth="1px" borderRadius="md" textAlign="center" maxW="200px">
+                      <Image
+                        src={topProduct.thumbnail}
+                        alt={topProduct.title}
+                        w="150px"
+                        h="150px"
+                        objectFit="cover"
+                        mx="auto"
+                        onError={(e) => (e.currentTarget.src = 'https://placehold.co/150x150')}
+                      />
+                      <Text mt={2} fontSize="sm" fontWeight="medium" noOfLines={2}>
+                        {topProduct.title}
+                      </Text>
+                      <Text color="gray.700" fontSize="sm">
+                        {topProduct.sale_price}
+                        {topProduct.discount && (
+                          <Text as="span" color="green.500" ml={1}>
+                            ({topProduct.discount})
+                          </Text>
+                        )}
+                      </Text>
+                    </Box>
+                  </Link>
+                ))}
+              </HStack>
+            </Box>
+          )}
           <Divider mb={8} />
         </Box>
       </Box>
