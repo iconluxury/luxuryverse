@@ -1,10 +1,9 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import List, Optional
-from app.core.shopify_config import wrapper
 import logging
 import requests
-
+from app.core.shopify_config import wrapper
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
@@ -45,12 +44,6 @@ class SimpleCollection(BaseModel):
     description: Optional[str] = ""
     image: str
 
-# Initialize ShopifyWrapper (replace with your credentials)
-wrapper = ShopifyWrapper(
-    shop_url="accessxprive.myshopify.com",
-    access_token="your_access_token",
-    webhook_secret="your_webhook_secret"
-)
 
 @collections_router.get("/", response_model=List[SimpleCollection])
 async def list_collections(limit: int = 100, collection_type: str = "all"):
