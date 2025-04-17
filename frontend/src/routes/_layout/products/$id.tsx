@@ -41,7 +41,6 @@ interface Product {
   full_price: string;
   sale_price: string;
   discount: string | null;
-  collection_id?: string;
 }
 
 // Custom HTML Parser (unchanged, omitted for brevity)
@@ -94,13 +93,15 @@ function ProductDetails() {
 
     const fetchProductAndTopProducts = async () => {
       try {
+        // Fetch product details
         const productData = await fetchWithRetry(`${API_BASE_URL}/api/v1/products/${id}`);
         console.log('Fetched product data:', productData);
         if (!productData || typeof productData !== 'object') {
           throw new Error('Invalid product data received');
         }
 
-        if (productData.variants) {
+        // Validate variants
+        if (productData.variants && Array.isArray(productData.variants)) {
           productData.variants = productData.variants
             .filter((v: Variant) => {
               const isValid =
@@ -129,12 +130,13 @@ function ProductDetails() {
         setProduct(productData);
         setError(null);
 
+        // Fetch top 5 products from the featured collection
         try {
-          const collectionId = productData.collection_id || '8789669282087';
-          const topProductsUrl = `${API_BASE_URL}/api/v1/collections/${collectionId}/products`;
+          const topProductsUrl = `${API_BASE_URL}/api/v1/collections/8789669282087/products`;
           const collectionData = await fetchWithRetry(topProductsUrl);
           console.log('Fetched collection products:', collectionData);
 
+          // Validate and sort top products
           const validatedTopProducts = Array.isArray(collectionData?.products)
             ? collectionData.products
                 .filter(
@@ -143,11 +145,13 @@ function ProductDetails() {
                     typeof p === 'object' &&
                     typeof p.id === 'string' &&
                     typeof p.title === 'string' &&
-                    p.id !== id
+                    p.id !== id // Exclude current product
                 )
                 .map((p: Product) => ({
                   ...p,
-                  total_inventory: p.variants.reduce((sum: number, v: Variant) => sum + v.inventory_quantity, 0),
+                  total_inventory: p.variants && Array.isArray(p.variants)
+                    ? p.variants.reduce((sum: number, v: Variant) => sum + v.inventory_quantity, 0)
+                    : 0,
                   discount_value: p.discount
                     ? parseFloat(p.discount.replace('% off', '')) || 0
                     : 0,
@@ -170,6 +174,7 @@ function ProductDetails() {
       } catch (err: any) {
         setError(`Failed to load product: ${err.message || 'Unknown error'}`);
         try {
+          // Fallback: Fetch top 5 products from featured collection
           const topProductsUrl = `${API_BASE_URL}/api/v1/collections/8789669282087/products`;
           const collectionData = await fetchWithRetry(topProductsUrl);
           console.log('Fetched collection products (fallback):', collectionData);
@@ -186,7 +191,9 @@ function ProductDetails() {
                 )
                 .map((p: Product) => ({
                   ...p,
-                  total_inventory: p.variants.reduce((sum: number, v: Variant) => sum + v.inventory_quantity, 0),
+                  total_inventory: p.variants && Array.isArray(p.variants)
+                    ? p.variants.reduce((sum: number, v: Variant) => sum + v.inventory_quantity, 0)
+                    : 0,
                   discount_value: p.discount
                     ? parseFloat(p.discount.replace('% off', '')) || 0
                     : 0,
@@ -202,6 +209,7 @@ function ProductDetails() {
           console.log('Top 5 products (fallback):', validatedTopProducts);
           setTopProducts(validatedTopProducts);
         } catch (topErr: any) {
+          console.warn('Failed to fetch top products (fallback):', topErr.message);
           setError((prev) => `${prev}\nFailed to load top products: ${topErr.message || 'Unknown error'}`);
           setTopProducts([]);
         }
@@ -245,7 +253,7 @@ function ProductDetails() {
           mb={2}
           fontSize="md"
         >
-          Size {variant.size || 'N/A'} - {variant.price || 'N/A'}{' '}
+          Size {variant.size || 'N/A'} - {variant.price ||지지 'N/A'}{' '}
           {variant.inventory_quantity > 0
             ? `(${variant.inventory_quantity} in stock)`
             : '(Out of stock)'}
@@ -270,8 +278,8 @@ function ProductDetails() {
         </Text>
         <Text fontSize="sm" mt={2}>
           Please check your network connection or contact{' '}
-          <a href="mailto:support@luxuryverse.com" style={{ color: '#3182CE' }}>
-            support@luxuryverse.com
+          <a href="mailto:support@iconluxury.shop" style={{ color: '#3182CE' }}>
+            support@iconluxury.shop
           </a>.
         </Text>
         {topProducts.length > 0 && (
@@ -290,6 +298,13 @@ function ProductDetails() {
             </HStack>
           </Box>
         )}
+        <Link
+          to="/products"
+          aria-label="Back to all products"
+          style={{ color: '#3182CE', marginTop: '16px', display: 'inline-block' }}
+        >
+          Back to all products
+        </Link>
       </Box>
     );
   }
@@ -323,7 +338,7 @@ function ProductDetails() {
           {product.images?.length > 0 ? (
             <Box position="relative">
               <Image
-                src={product.images[currentImage]}
+                src={product.images[currentImage] || 'https://placehold.co/275x350'}
                 alt={`${product.title || 'Product'} image ${currentImage + 1}`}
                 w="full"
                 h="400px"
@@ -412,7 +427,7 @@ function ProductDetails() {
                     >
                       <Image
                         src={topProduct.thumbnail || 'https://placehold.co/150x150'}
-                        alt={topProduct.title}
+                        alt={topProduct.title || 'Product'}
                         w="150px"
                         h="150px"
                         objectFit="cover"
@@ -420,10 +435,10 @@ function ProductDetails() {
                         onError={(e) => (e.currentTarget.src = 'https://placehold.co/150x150')}
                       />
                       <Text mt={2} fontSize="sm" fontWeight="medium" noOfLines={2}>
-                        {topProduct.title}
+                        {topProduct.title || 'Untitled Product'}
                       </Text>
                       <Text color="gray.700" fontSize="sm">
-                        {topProduct.sale_price}
+                        {topProduct.sale_price || 'N/A'}
                         {topProduct.discount && (
                           <Text as="span" color="green.500" ml={1}>
                             ({topProduct.discount})
