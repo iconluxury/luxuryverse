@@ -346,7 +346,7 @@ function ProductDetails() {
         )}
         <Link
           to="/collections"
-          aria-label=""
+          aria-label="breadcrumbs"
           style={{ color: '#3182CE', marginTop: '16px', display: 'inline-block' }}
         >
       Breadcrumbs
