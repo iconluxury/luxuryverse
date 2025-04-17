@@ -5,17 +5,18 @@ import {
   Heading,
   Text,
   Image,
-  Tag,
   HStack,
   Divider,
   Spinner,
   Skeleton,
   Grid,
+  useToast,
 } from '@chakra-ui/react';
 import { createFileRoute, useParams, Link } from '@tanstack/react-router';
 import { Helmet } from 'react-helmet-async';
 import Footer from '../../../components/Common/Footer';
-import { parseHtml } from '../../../utils/htmlParser'; 
+import { parseHtml } from '../../../utils/htmlParser';
+import { handleError } from '../../../utils';
 
 export const Route = createFileRoute('/_layout/collection/$id')({
   component: CollectionsDetails,
@@ -44,10 +45,10 @@ function CollectionsDetails() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [maxDescriptionHeight, setMaxDescriptionHeight] = useState(0);
-  const API_BASE_URL = process.env.API_BASE_URL || 'https://iconluxury.shop';
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://iconluxury.shop';
   const { id } = useParams({ from: '/_layout/collection/$id' });
+  const toast = useToast();
 
-  // Same selected collections as in CollectionsPage
   const selectedCollections = ['461931184423', '471622844711', '488238383399'];
 
   useEffect(() => {
@@ -69,8 +70,7 @@ function CollectionsDetails() {
           clearTimeout(timeoutId);
 
           if (!response.ok) {
-            if (response.status === 404) throw new Error('Resource not found.');
-            throw new Error(`HTTP error! status: ${response.status}`);
+            throw { status: response.status, body: { detail: `HTTP error! status: ${response.status}` } };
           }
 
           return await response.json();
@@ -90,41 +90,48 @@ function CollectionsDetails() {
       try {
         // Fetch current collection
         const collectionData = await fetchWithRetry(`${API_BASE_URL}/api/v1/collections/${id}`);
-        console.log('Fetched collection data:', collectionData);
         if (!collectionData || typeof collectionData !== 'object') {
-          throw new Error('Invalid collection data received');
+          throw { status: 500, body: { detail: 'Invalid collection data received' } };
         }
 
-        // Validate products
-        if (collectionData.products) {
-          collectionData.products = collectionData.products
-            .filter(
-              (p: Product) =>
-                p &&
-                typeof p === 'object' &&
-                typeof p.id === 'string' &&
-                typeof p.title === 'string'
-            )
-            .map((p: Product) => ({
-              id: p.id,
-              title: p.title || 'Untitled Product',
-              thumbnail: p.thumbnail || 'https://placehold.co/150x150',
-              sale_price: p.sale_price || 'N/A',
-              full_price: p.full_price || '',
-              discount: p.discount || null,
-            }));
-        } else {
-          collectionData.products = [];
-        }
+        // Validate collection data
+        const validatedCollection: Collection = {
+          id: collectionData.id || '',
+          title: collectionData.title || 'Untitled Collection',
+          description: collectionData.description || '',
+          image: collectionData.image || 'https://placehold.co/400x400',
+          products: collectionData.products
+            ? collectionData.products
+                .filter(
+                  (p: Product) =>
+                    p &&
+                    typeof p === 'object' &&
+                    typeof p.id === 'string' &&
+                    typeof p.title === 'string'
+                )
+                .map((p: Product) => ({
+                  id: p.id,
+                  title: p.title || 'Untitled Product',
+                  thumbnail: p.thumbnail || 'https://placehold.co/150x150',
+                  sale_price: p.sale_price || 'N/A',
+                  full_price: p.full_price || '',
+                  discount: p.discount || null,
+                }))
+            : [],
+        };
 
-        setCollection(collectionData);
+        setCollection(validatedCollection);
 
-        // Fetch other collections for the grid
+        // Fetch other collections
         const collectionPromises = selectedCollections
           .filter((colId) => colId !== id)
           .map((colId) =>
             fetchWithRetry(`${API_BASE_URL}/api/v1/collections/${colId}`).then((data) => ({
-              ...data,
+              id: data.id || '',
+              title: data.title || 'Untitled Collection',
+              description: data.description || '',
+              image: data.image || 'https://placehold.co/400x400',
+              products: data.products || [],
               productCount: data.products?.length || 0,
             }))
           );
@@ -135,7 +142,7 @@ function CollectionsDetails() {
 
         setOtherCollections(validCollections);
 
-        // Calculate max description height for other collections
+        // Calculate max description height
         if (validCollections.length > 0) {
           const descriptions = validCollections.map((col: Collection) => col.description || '');
           const maxHeight = Math.max(...descriptions.map((desc: string) => desc.length)) * 1.5;
@@ -144,6 +151,15 @@ function CollectionsDetails() {
 
         setError(null);
       } catch (err: any) {
+        handleError(err, (title: string, description: string, status: string) => {
+          toast({
+            title,
+            description,
+            status: status as any,
+            duration: 5000,
+            isClosable: true,
+          });
+        });
         setError(`Failed to load collection: ${err.message || 'Unknown error'}`);
       } finally {
         setLoading(false);
@@ -151,7 +167,7 @@ function CollectionsDetails() {
     };
 
     fetchData();
-  }, [id]);
+  }, [id, toast]);
 
   const stripHtml = (html: string) => {
     return html.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
@@ -202,7 +218,7 @@ function CollectionsDetails() {
         />
       </Helmet>
 
-      {/* Grid of Other Collections */}
+      {/* Other Collections Grid */}
       <Box p={4} bg="gray.900" color="white">
         <Heading fontSize="2xl" mb={6}>
           Other Collections
@@ -226,21 +242,20 @@ function CollectionsDetails() {
                   transition="all 0.2s"
                 >
                   <Image
-                    src={col.image || 'https://placehold.co/400x400'}
-                    alt={col.title || 'Collection Image'}
+                    src={col.image}
+                    alt={col.title}
                     style={{ aspectRatio: '4 / 3', objectFit: 'cover' }}
                     w="full"
                     loading="lazy"
+                    onError={(e) => (e.currentTarget.src = 'https://placehold.co/400x400')}
                   />
                   <Box p={4}>
                     <Text fontWeight="bold" fontSize="xl" mb={2}>
-                      {col.title || 'Untitled Collection'}
+                      {col.title}
                     </Text>
                     <Box height={`${maxDescriptionHeight}px`} overflow="hidden">
                       <Text fontSize="sm" color="gray.600" noOfLines={2}>
-                        {col.description
-                          ? stripHtml(col.description)
-                          : 'No description available.'}
+                        {col.description ? stripHtml(col.description) : 'No description available.'}
                       </Text>
                     </Box>
                   </Box>
@@ -269,41 +284,37 @@ function CollectionsDetails() {
           >
             ← Back to all collections
           </Link>
-          {collection.image ? (
-            <Image
-              src={collection.image}
-              alt={`${collection.title || 'Collection'} image`}
-              w="full"
-              h="400px"
-              objectFit="cover"
-              borderRadius="md"
-              mb={8}
-              onError={(e) => (e.currentTarget.src = 'https://placehold.co/400x400')}
-            />
-          ) : (
-            <Skeleton w="full" h="400px" borderRadius="md" mb={8} />
-          )}
+          <Image
+            src={collection.image}
+            alt={`${collection.title} image`}
+            w="full"
+            h="400px"
+            objectFit="cover"
+            borderRadius="md"
+            mb={8}
+            onError={(e) => (e.currentTarget.src = 'https://placehold.co/400x400')}
+          />
           <Flex align="center" mb={4}>
-            <Tag colorScheme="gray" mr={4} px={3} py={1} borderRadius="full">
+            <Box
+              bg="gray.200"
+              color="gray.800"
+              px={3}
+              py={1}
+              borderRadius="full"
+              fontSize="sm"
+              mr={4}
+            >
               Collection
-            </Tag>
+            </Box>
             <Text fontSize="sm" color="gray.500">{new Date().toLocaleDateString()}</Text>
             <Text fontSize="sm" color="gray.500" ml={4}>
               {collection.products.length} products
             </Text>
           </Flex>
           <Heading as="h1" size="2xl" mb={6} fontWeight="medium" lineHeight="1.3">
-            {collection.title || 'Untitled Collection'}
+            {collection.title}
           </Heading>
-          {collection.description ? (
-            parseHtml(collection.description)
-          ) : (
-            <Text fontSize="lg" color="gray.700" mb={4}>
-              No description available
-            </Text>
-          )}
-
-          {/* Products in Collection */}
+          {parseHtml(collection.description)}
           {collection.products.length > 0 && (
             <Box mt={8}>
               <Heading as="h2" size="lg" mb={4}>
