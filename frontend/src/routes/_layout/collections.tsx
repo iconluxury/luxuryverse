@@ -17,13 +17,6 @@ function CollectionsPage() {
   return (
     <Box p={4} bg="gray.900" color="white" minH="100vh">
       <Heading fontSize="2xl" mb={6}>Collections</Heading>
-      <Link
-        to="/products"
-        style={{ color: '#3182CE', marginBottom: '16px', display: 'block' }}
-        aria-label="Go to products page"
-      >
-        Go to Products
-      </Link>
       <Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={6}>
         {selectedCollections.map((collection) => (
           <Box
