@@ -233,13 +233,6 @@ function ProductDetails() {
     fetchProduct();
   }, [id]);
 
-  useEffect(() => {
-    if (product && !error) {
-      setTopProductsLoading(true);
-      fetchTopProducts();
-    }
-  }, [product, error]);
-
   const validatedImages = useMemo(() => product?.images ?? [], [product?.images]);
   const validatedVariants = useMemo(() => product?.variants ?? [], [product?.variants]);
 
@@ -282,7 +275,7 @@ function ProductDetails() {
       </Box>
     );
   }
-
+ 
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
       <Box>
