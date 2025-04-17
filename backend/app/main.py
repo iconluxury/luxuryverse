@@ -18,14 +18,9 @@ app = FastAPI(
 @app.middleware("http")
 async def add_path_to_response(request: Request, call_next):
     response = await call_next(request)
-    # Add full URL to response headers, forcing HTTPS
-    full_url = str(request.url).replace("http://", "https://")
-    response.headers["X-Request-Path"] = full_url
-    # Log the full URL
-    print(f"Request URL: {full_url}")
+    response.headers["X-Request-Path"] = request.url.path
+    print(f"Request path: {request.url.path}")
     return response
-
-app.add_middleware(HTTPSRedirectMiddleware)
 
 app.add_middleware(
     CORSMiddleware,
