@@ -462,13 +462,6 @@ function ProductDetails() {
             </HStack>
           </Box>
         )}
-        <a
-          href="/products"
-          aria-label="Back to all products"
-          style={{ color: '#3182CE', marginTop: '16px', display: 'inline-block' }}
-        >
-          Back to all products
-        </a>
       </Box>
     );
   }
