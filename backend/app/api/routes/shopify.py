@@ -43,7 +43,56 @@ class Collection(BaseModel):
     image: str
     products: List[Product]
 
-# Existing product endpoint
+class SimpleCollection(BaseModel):
+    id: str
+    title: str
+    description: Optional[str] = ""  # Ensure string, default to empty
+    image: str
+
+@collections_router.get("/", response_model=List[SimpleCollection])
+async def list_collections(limit: int = 50, collection_type: str = "all"):
+    """
+    List all available collections with basic information (ID, title, description, image).
+
+    Args:
+        limit (int): Number of collections to fetch (max 250, default 50).
+        collection_type (str): Filter by 'custom', 'smart', or 'all' (default 'all').
+
+    Returns:
+        List[SimpleCollection]: List of collections with basic details.
+    """
+    try:
+        if collection_type not in ["all", "custom", "smart"]:
+            raise HTTPException(status_code=400, detail="Invalid collection_type. Must be 'all', 'custom', or 'smart'.")
+        
+        collections = wrapper.list_collections(limit=limit, collection_type=collection_type)
+        result = []
+        if not collections:
+            logger.info("No collections found, returning empty list")
+            return result
+        
+        for collection, collection_type in collections:
+            try:
+                collection_details = wrapper.get_collection_details(
+                    collection["id"], collection_type=collection_type
+                )
+                result.append(
+                    SimpleCollection(
+                        id=str(collection_details["id"]),
+                        title=collection_details["title"],
+                        description=collection_details.get("body_html", "") or "",
+                        image=collection_details.get("image", {}).get("src", "https://via.placeholder.com/150")
+                    )
+                )
+            except requests.RequestException as e:
+                logger.warning(f"Failed to fetch details for collection {collection['id']}: {e}")
+        
+        logger.info(f"Fetched {len(result)} collections")
+        return result
+    except Exception as e:
+        logger.error(f"Failed to fetch collections: {e}")
+        raise HTTPException(status_code=500, detail="Failed to fetch collections")
+
 @products_router.get("/{product_id}", response_model=Product)
 async def get_product(product_id: str):
     """
@@ -88,7 +137,7 @@ async def get_product(product_id: str):
         
         # Collect all image URLs
         images = [img["src"] for img in product.get("images", [])]
-        thumbnail = images[0] if images else ""
+        thumbnail = images[0] if images else "https://via.placeholder.com/150"
 
         result = Product(
             id=str(product["id"]),
@@ -108,7 +157,6 @@ async def get_product(product_id: str):
         logger.error(f"Failed to fetch product {product_id}: {e}")
         raise HTTPException(status_code=500, detail=f"Failed to fetch product {product_id}")
 
-# Existing collection details endpoint
 @collections_router.get("/{collection_id}", response_model=Collection)
 async def get_collection(collection_id: str):
     """
@@ -156,7 +204,7 @@ async def get_collection(collection_id: str):
                     discount = f"{discount_percent:.0f}% off"
                 
                 images = [img["src"] for img in full_product.get("images", [])]
-                thumbnail = images[0] if images else ""
+                thumbnail = images[0] if images else "https://via.placeholder.com/150"
 
                 products.append(
                     Product(
@@ -179,7 +227,7 @@ async def get_collection(collection_id: str):
             id=str(collection_details["id"]),
             title=collection_details["title"],
             description=collection_details.get("body_html", "") or "",
-            image=collection_details.get("image", {}).get("src", ""),
+            image=collection_details.get("image", {}).get("src", "https://via.placeholder.com/150"),
             products=products
         )
         logger.info(f"Fetched collection {collection_id} with {len(products)} products")
