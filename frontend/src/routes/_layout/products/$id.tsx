@@ -1,14 +1,13 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { useAccount } from 'wagmi';
 import { Flex, Spinner, Box, Text, Tag, HStack, Divider, IconButton, Skeleton, SkeletonText } from '@chakra-ui/react';
 import { useState, useEffect, useMemo } from 'react';
 import { Link } from '@tanstack/react-router';
 import { Helmet } from 'react-helmet-async';
 import { ErrorBoundary } from 'react-error-boundary';
-import Footer from '../../../components/Common/Footer';
+import Footer from '../../components/Common/Footer'; // Adjust path as needed
 import { Heading, Image, TimeIcon, ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 
-// Interfaces (same as before)
+// Interfaces
 interface Variant {
   id: string;
   title: string;
@@ -32,7 +31,7 @@ interface Product {
   collection_id?: string;
 }
 
-// ErrorFallback component (same as before)
+// ErrorFallback component
 function ErrorFallback({ error }: { error: Error }) {
   return (
     <Box textAlign="center" py={16} color="red.500">
@@ -52,9 +51,8 @@ export const Route = createFileRoute('/_layout/products/$id')({
   component: ProductDetails,
 });
 
-// ProductDetails component (same as before, included here for completeness)
+// ProductDetails component
 function ProductDetails() {
-  const { isConnected, isConnecting, error: walletError } = useAccount();
   const [product, setProduct] = useState<Product | null>(null);
   const [topProducts, setTopProducts] = useState<Product[]>([]);
   const [productLoading, setProductLoading] = useState(true);
@@ -62,9 +60,10 @@ function ProductDetails() {
   const [error, setError] = useState<string | null>(null);
   const [currentImage, setCurrentImage] = useState(0);
   const API_BASE_URL = 'https://iconluxury.shop';
-  const { id } = Route.useParams(); // Use Route.useParams() instead of useParams
+  const { id } = Route.useParams();
   const isBrowser = typeof window !== 'undefined';
 
+  // Fetch product and top products
   useEffect(() => {
     if (!id || typeof id !== 'string') {
       setError('Invalid product ID');
@@ -182,16 +181,14 @@ function ProductDetails() {
               total_inventory: variants.reduce((sum: number, v: Variant) => {
                 return sum + (typeof v.inventory_quantity === 'number' ? v.inventory_quantity : 0);
               }, 0),
-              discount_value: p.discount
-                ? parseFloat(p.discount.replace('% off', '')) || 0
-                : 0,
+              discount_value: p.discount ? parseFloat(p.discount.replace('% off', '')) || 0 : 0,
             };
           })
           .sort((a, b) => {
             const aDiscount = a.discount_value || 0;
             const bDiscount = b.discount_value || 0;
             const aInventory = a.total_inventory || 0;
-            bInventory = b.total_inventory || 0;
+            const bInventory = b.total_inventory || 0;
 
             if (aDiscount !== bDiscount) {
               return bDiscount - aDiscount;
@@ -212,6 +209,7 @@ function ProductDetails() {
     };
 
     fetchProduct();
+    // Note: fetchTopProducts is called in a separate useEffect to avoid fetching until product is loaded
   }, [id]);
 
   useEffect(() => {
@@ -223,22 +221,6 @@ function ProductDetails() {
 
   const validatedImages = useMemo(() => product?.images ?? [], [product?.images]);
   const validatedVariants = useMemo(() => product?.variants ?? [], [product?.variants]);
-
-  if (isConnecting) {
-    return (
-      <Flex justify="center" align="center" minH="100vh">
-        <Spinner size="xl" color="yellow.400" />
-      </Flex>
-    );
-  }
-
-  if (walletError) {
-    return (
-      <Box textAlign="center" py={16} color="red.500">
-        <Text fontSize="lg">Wallet connection failed: {walletError.message}</Text>
-      </Box>
-    );
-  }
 
   if (productLoading) {
     return (
