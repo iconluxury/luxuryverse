@@ -1,6 +1,5 @@
 from fastapi import FastAPI
 from fastapi.routing import APIRoute
-from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
 from starlette.middleware.cors import CORSMiddleware
 from app.api.main import api_router
 from app.core.config import settings
@@ -14,8 +13,6 @@ app = FastAPI(
     generate_unique_id_function=custom_generate_unique_id,
     redirect_slashes=False,
 )
-
-app.add_middleware(HTTPSRedirectMiddleware)
 
 app.add_middleware(
     CORSMiddleware,
