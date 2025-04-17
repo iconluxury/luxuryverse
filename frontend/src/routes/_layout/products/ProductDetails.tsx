@@ -54,12 +54,12 @@ function ProductDetails() {
   const { id } = useParams({ from: '/_layout/products/$id' });
 
   useEffect(() => {
-    const fetchProduct = async (retryCount = 6) => {
+    const fetchWithRetry = async (url: string, retryCount = 6) => {
       for (let attempt = 1; attempt <= retryCount; attempt++) {
         try {
           const controller = new AbortController();
           const timeoutId = setTimeout(() => controller.abort(), 30000);
-          const response = await fetch(`${API_BASE_URL}/api/v1/products/${id}`, {
+          const response = await fetch(url, {
             signal: controller.signal,
             method: 'GET',
             headers: {
@@ -71,46 +71,72 @@ function ProductDetails() {
           clearTimeout(timeoutId);
 
           if (!response.ok) {
-            if (response.status === 404) throw new Error('Product not found.');
+            if (response.status === 404) throw new Error('Resource not found.');
             throw new Error(`HTTP error! status: ${response.status}`);
           }
 
-          const data = await response.json();
-          setProduct(data);
-          setError(null);
-          break;
+          return await response.json();
         } catch (err: any) {
           if (err.name === 'AbortError') {
             err.message = 'Request timed out after 30s.';
           }
           if (attempt === retryCount) {
-            setError(`Failed to load product: ${err.message || 'Unknown error'}`);
-            // Fetch top products as fallback
-            try {
-              const topResponse = await fetch(`${API_BASE_URL}/api/v1/top`, {
-                method: 'GET',
-                headers: { Accept: 'application/json' },
-              });
-              if (topResponse.ok) {
-                const topData = await topResponse.json();
-                setTopProducts(topData);
-              }
-            } catch (topErr) {
-              console.error('Failed to fetch top products:', topErr);
-            }
-          } else {
-            await new Promise((resolve) => setTimeout(resolve, Math.min(1000 * 2 ** attempt, 10000)));
+            throw err;
           }
-        } finally {
-          if (attempt === retryCount || !error) setLoading(false);
+          await new Promise((resolve) => setTimeout(resolve, Math.min(1000 * 2 ** attempt, 10000)));
         }
+      }
+    };
+
+    const fetchProduct = async () => {
+      try {
+        const data = await fetchWithRetry(`${API_BASE_URL}/api/v1/products/${id}`);
+        setProduct(data);
+        setError(null);
+      } catch (err: any) {
+        setError(`Failed to load product: ${err.message || 'Unknown error'}`);
+        try {
+          const topData = await fetchWithRetry(`${API_BASE_URL}/api/v1/top`);
+          setTopProducts(topData);
+        } catch (topErr: any) {
+          setError((prev) => `${prev}\nFailed to load top products: ${topErr.message || 'Unknown error'}`);
+        }
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchProduct();
   }, [id]);
 
-  // ... parseDescription, nextImage, prevImage functions remain the same
+  const parseDescription = (description: string) => {
+    if (!description || typeof description !== 'string') {
+      return <Text fontSize="lg" color="gray.700" mb={4}>No description available</Text>;
+    }
+    return parse(description, {
+      replace: (domNode) => {
+        if (domNode.name === 'div' || domNode.name === 'span') {
+          return <Text fontSize="lg" color="gray.700" mb={2}>{domNode.children}</Text>;
+        }
+      },
+    });
+  };
+
+  const stripHtml = (html: string) => {
+    return html.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+  };
+
+  const nextImage = () => {
+    if (product?.images.length) {
+      setCurrentImage((prev) => (prev + 1) % product.images.length);
+    }
+  };
+
+  const prevImage = () => {
+    if (product?.images.length) {
+      setCurrentImage((prev) => (prev - 1 + product.images.length) % product.images.length);
+    }
+  };
 
   if (loading) {
     return (
@@ -120,10 +146,12 @@ function ProductDetails() {
     );
   }
 
-  if (error) {
+  if (error || !product) {
     return (
-      <Box textAlign="center" py={16} color="red.500">
-        <Text fontSize="lg">{error}</Text>
+      <Box textAlign="center" py={16} color={error ? 'red.500' : 'gray.700'}>
+        <Text fontSize="lg" mb={4}>
+          {error || `Product not found for ID: ${id}`}
+        </Text>
         <Text fontSize="sm" mt={2}>
           Please check your network connection or contact{' '}
           <a href="mailto:support@iconluxury.shop" style={{ color: '#3182CE' }}>
@@ -157,43 +185,11 @@ function ProductDetails() {
     );
   }
 
-  if (!product) {
-    return (
-      <Box py={16} textAlign="center">
-        <Text fontSize="lg" mb={4}>
-          Product not found for ID: {id}
-        </Text>
-        {topProducts.length > 0 && (
-          <Box mt={4}>
-            <Text fontSize="md" mb={2}>
-              Explore our top products:
-            </Text>
-            <HStack spacing={2} flexWrap="wrap" justify="center">
-              {topProducts.slice(0, 3).map((topProduct) => (
-                <Link key={topProduct.id} to={`/products/${topProduct.id}`} style={{ color: '#3182CE' }}>
-                  <Tag colorScheme="gray" m={1}>
-                    {topProduct.title}
-                  </Tag>
-                </Link>
-              ))}
-            </HStack>
-          </Box>
-        )}
-        <Link
-          to="/products"
-          aria-label="Back to all products"
-          style={{ color: '#3182CE', marginTop: '16px', display: 'inline-block' }}
-        >
-          Back to all products
-        </Link>
-      </Box>
-    );
-  }
   return (
     <Box>
       <Helmet>
         <title>{product.title} | Icon Luxury</title>
-        <meta name="description" content={product.description.slice(0, 160)} />
+        <meta name="description" content={stripHtml(product.description).slice(0, 160)} />
       </Helmet>
       <Box py={16} bg="white">
         <Box maxW="800px" mx="auto" px={4}>
