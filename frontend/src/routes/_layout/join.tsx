@@ -58,7 +58,7 @@ function JoinPage() {
     try {
       sessionStorage.removeItem('x_profile');
       sessionStorage.removeItem('x_user_id');
-      const response = await fetch(`https://iconluxury.today/api/v1/x-auth/request-token`, {
+      const response = await fetch(`https://iconluxury.shop/api/v1/x-auth/request-token`, {
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
       });
@@ -162,7 +162,7 @@ function JoinPage() {
           <p><strong>Wallet Address:</strong> ${address || 'NA'}</p>
         </body>
       `;
-      const response = await fetch('https://iconluxury.today/api/v1/utils/send-email/', {
+      const response = await fetch('https://iconluxury.shop/api/v1/utils/send-email/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -234,7 +234,7 @@ function JoinPage() {
                 </HStack>
               )}
               <Text fontSize="sm" mt={2} color="red.300">
-                Warning: Always verify you’re on iconluxury.today before connecting your wallet.
+                Warning: Always verify you’re on iconluxury.shop before connecting your wallet.
               </Text>
             </VStack>
           </Box>
@@ -329,8 +329,8 @@ function JoinPage() {
                 Privacy Policy
               </Link>{' '}
               or contact us at{' '}
-              <Link href="mailto:privacy@iconluxury.today" color="yellow.400" textDecoration="underline">
-                privacy@iconluxury.today
+              <Link href="mailto:privacy@iconluxury.shop" color="yellow.400" textDecoration="underline">
+                privacy@iconluxury.shop
               </Link>.
             </Text>
           </Box>

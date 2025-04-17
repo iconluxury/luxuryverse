@@ -14,7 +14,7 @@ function ProductsPage() {
   const [error, setError] = useState(null);
 
   // Ensure API_BASE_URL is always HTTPS
-  const API_BASE_URL = (process.env.API_BASE_URL || 'https://iconluxury.today')
+  const API_BASE_URL = (process.env.API_BASE_URL || 'https://iconluxury.shop')
     .replace(/^http:/, 'https:')
     .replace(/\/+$/, '');
 
@@ -51,13 +51,13 @@ function ProductsPage() {
           if (!response.ok) {
             const text = await response.text();
             if (response.status === 404) {
-              throw new Error('API route not found (404). Please contact support@iconluxury.today.');
+              throw new Error('API route not found (404). Please contact support@iconluxury.shop.');
             }
             if (response.status === 403) {
-              throw new Error('Access denied by server (403). Please contact support@iconluxury.today.');
+              throw new Error('Access denied by server (403). Please contact support@iconluxury.shop.');
             }
             if (response.status === 500) {
-              throw new Error('Server error (500). Please try again later or contact support@iconluxury.today.');
+              throw new Error('Server error (500). Please try again later or contact support@iconluxury.shop.');
             }
             throw new Error(`HTTP error! status: ${response.status}, body: ${text.slice(0, 200)}`);
           }
@@ -87,16 +87,16 @@ function ProductsPage() {
             userErrorMessage = 'Request timed out. Please try again later.';
           } else if (err.message.includes('Failed to fetch')) {
             errorMessage = 'Unable to connect: Possible CORS, network, or server issue.';
-            userErrorMessage = 'Failed to load products. Please check your network or contact support@iconluxury.today.';
+            userErrorMessage = 'Failed to load products. Please check your network or contact support@iconluxury.shop.';
           } else if (err.message.includes('API route not found')) {
             errorMessage = 'API route not found (404).';
-            userErrorMessage = 'The product data could not be found. Please contact support@iconluxury.today.';
+            userErrorMessage = 'The product data could not be found. Please contact support@iconluxury.shop.';
           } else if (err.message.includes('Access denied')) {
             errorMessage = 'Access denied by server (403).';
-            userErrorMessage = 'Access to product data was denied. Please contact support@iconluxury.today.';
+            userErrorMessage = 'Access to product data was denied. Please contact support@iconluxury.shop.';
           } else if (err.message.includes('Server error')) {
             errorMessage = 'Server error (500).';
-            userErrorMessage = 'A server error occurred. Please try again later or contact support@iconluxury.today.';
+            userErrorMessage = 'A server error occurred. Please try again later or contact support@iconluxury.shop.';
           }
           console.error(`Attempt ${attempt} failed: ${errorMessage}`, {
             name: err.name,
@@ -130,8 +130,8 @@ function ProductsPage() {
         <Text fontSize="lg">{error}</Text>
         <Text fontSize="sm" mt={2}>
           Please check your network connection, ensure the backend is running, or contact{' '}
-          <a href="mailto:support@iconluxury.today" style={{ color: '#3182CE' }}>
-            support@iconluxury.today
+          <a href="mailto:support@iconluxury.shop" style={{ color: '#3182CE' }}>
+            support@iconluxury.shop
           </a>.
         </Text>
         <Button

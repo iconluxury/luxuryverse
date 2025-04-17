@@ -40,7 +40,7 @@ function AuthComplete() {
       const fetchXProfile = async (retryCount = 3): Promise<void> => {
         try {
           console.log('Fetching user details for user_id:', userId);
-          const response = await fetch(`https://iconluxury.today/api/v1/x-auth/user/${userId}`, {
+          const response = await fetch(`https://iconluxury.shop/api/v1/x-auth/user/${userId}`, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'include',

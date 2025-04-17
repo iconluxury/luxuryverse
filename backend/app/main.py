@@ -16,7 +16,7 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://iconluxury.today"],
+    allow_origins=["https://iconluxury.shop"],
     allow_credentials=False,
     allow_methods=["GET", "OPTIONS"],
     allow_headers=["Accept"],

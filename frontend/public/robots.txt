@@ -25,4 +25,4 @@ Disallow: /privacy-request
 Disallow: /report
 
 # Sitemap
-Sitemap: https://iconluxury.today/sitemap.xml
+Sitemap: https://iconluxury.shop/sitemap.xml

@@ -74,7 +74,7 @@ function Home() {
   useEffect(() => {
     setIsLoading(true);
     axios
-      .get("https://iconluxury.today/api/v1/collections")
+      .get("https://iconluxury.shop/api/v1/collections")
       .then((res) => {
         console.log("API Response:", res.data); // Debug
         const data = Array.isArray(res.data)
@@ -99,7 +99,7 @@ function Home() {
       if (isConnected && address) {
         const message = `Sign this message to authenticate with LuxuryVerse: ${address}`;
         const signature = await signMessageAsync({ message });
-        const response = await axios.post("https://iconluxury.today/api/v1/auth/wallet", {
+        const response = await axios.post("https://iconluxury.shop/api/v1/auth/wallet", {
           address,
           signature,
           message,

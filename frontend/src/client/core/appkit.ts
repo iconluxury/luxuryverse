@@ -11,7 +11,7 @@ const projectId = '8afd56846ecf625fdeab0de184097fb7';
 const metadata = {
   name: 'Luxury Verse',
   description: 'Luxury Verse is a Web3 luxury lifestyle platform that connects users with exclusive luxury brands and experiences.',
-  url: 'https://iconluxury.today',
+  url: 'https://iconluxury.shop',
   icons: ['https://myapp.com/icon.png']
 };
 

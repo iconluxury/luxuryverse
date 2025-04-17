@@ -10,7 +10,7 @@ function CollectionsPage() {
   const [collections, setCollections] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const API_BASE_URL = process.env.API_BASE_URL || 'https://iconluxury.today';
+  const API_BASE_URL = process.env.API_BASE_URL || 'https://iconluxury.shop';
 
   useEffect(() => {
     const fetchCollections = async (retryCount = 6, delay = 2000) => {
@@ -88,8 +88,8 @@ function CollectionsPage() {
         <Text fontSize="lg">{error}</Text>
         <Text fontSize="sm" mt={2}>
           Please check your network connection, ensure the backend is running, or contact{' '}
-          <a href="mailto:support@iconluxury.today" style={{ color: '#3182CE' }}>
-            support@iconluxury.today
+          <a href="mailto:support@iconluxury.shop" style={{ color: '#3182CE' }}>
+            support@iconluxury.shop
           </a>.
         </Text>
         <Button
