@@ -1,4 +1,4 @@
-import { Box, Text, Image, Grid, Button, Heading, Skeleton } from '@chakra-ui/react';
+import { Box, Text, Image, Grid, Heading, Skeleton } from '@chakra-ui/react';
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { useState, useEffect } from 'react';
 
