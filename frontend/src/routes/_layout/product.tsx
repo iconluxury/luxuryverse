@@ -39,10 +39,13 @@ function ProductsPage() {
           });
 
           clearTimeout(timeoutId);
-          logDebug(`Response status: ${response.status}, ok: ${response.ok}`);
+          logDebug(`Response status: ${response.status}, ok: ${response.ok}, headers:`, [...response.headers.entries()]);
 
           if (!response.ok) {
             const text = await response.text();
+            if (response.status === 404) {
+              throw new Error('API route not found (404). Please contact support@iconluxury.today.');
+            }
             throw new Error(`HTTP error! status: ${response.status}, body: ${text.slice(0, 200)}`);
           }
 
@@ -74,13 +77,16 @@ function ProductsPage() {
             userErrorMessage = 'Request timed out. Please try again later.';
           } else if (err.message.includes('Failed to fetch')) {
             errorMessage = 'Unable to connect: Possible CORS, network, or server issue.';
-            userErrorMessage = 'Unable to connect to the server. Please check your network or contact support@iconluxury.today.';
+            userErrorMessage = 'Failed to load products. Please check your network or contact support@iconluxury.today.';
+          } else if (err.message.includes('API route not found')) {
+            errorMessage = 'API route not found (404).';
+            userErrorMessage = 'The product data could not be found. Please contact support@iconluxury.today.';
           }
           console.error(`Attempt ${attempt} failed: ${errorMessage}`, {
             name: err.name,
             message: err.message,
             stack: err.stack,
-            url: `${API_BASE_URL}/api/v1/products`,
+            url,
           });
           if (attempt === retryCount) {
             setError(userErrorMessage);
