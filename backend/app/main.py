@@ -1,6 +1,6 @@
-from fastapi import FastAPI
-from fastapi.routing import APIRoute
+from fastapi import FastAPI, Request
 from starlette.middleware.cors import CORSMiddleware
+from fastapi.routing import APIRoute
 from app.api.main import api_router
 from app.core.config import settings
 
@@ -13,6 +13,15 @@ app = FastAPI(
     generate_unique_id_function=custom_generate_unique_id,
     redirect_slashes=False,
 )
+
+@app.middleware("http")
+async def add_path_to_response(request: Request, call_next):
+    response = await call_next(request)
+    # Add path to response headers
+    response.headers["X-Request-Path"] = request.url.path
+    # Optionally, log the path
+    print(f"Request path: {request.url.path}")
+    return response
 
 app.add_middleware(
     CORSMiddleware,
