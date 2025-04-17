@@ -21,7 +21,8 @@ const queryClient = new QueryClient();
 // Create the Wagmi adapter
 const wagmiAdapter = new WagmiAdapter({
   networks: [mainnet, sepolia],
-  projectId
+  projectId,
+  ssr: true, 
 });
 
 // Initialize AppKit
