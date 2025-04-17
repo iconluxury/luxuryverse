@@ -1,4 +1,3 @@
-import { useAccount } from 'wagmi';
 import { Flex, Spinner, Box, Text, Tag, HStack, Divider, IconButton, Skeleton, SkeletonText } from '@chakra-ui/react';
 import { useState, useEffect, useMemo } from 'react';
 import { useParams, Link } from '@tanstack/react-router';
@@ -44,7 +43,6 @@ function ErrorFallback({ error }: { error: Error }) {
 }
 
 function ProductDetails() {
-  const { isConnected, isConnecting, error: walletError } = useAccount();
   const [product, setProduct] = useState<Product | null>(null);
   const [topProducts, setTopProducts] = useState<Product[]>([]);
   const [productLoading, setProductLoading] = useState(true);
@@ -214,23 +212,7 @@ function ProductDetails() {
 
   const validatedImages = useMemo(() => product?.images ?? [], [product?.images]);
   const validatedVariants = useMemo(() => product?.variants ?? [], [product?.variants]);
-
-  if (isConnecting) {
-    return (
-      <Flex justify="center" align="center" minH="100vh">
-        <Spinner size="xl" color="yellow.400" />
-      </Flex>
-    );
-  }
-
-  if (walletError) {
-    return (
-      <Box textAlign="center" py={16} color="red.500">
-        <Text fontSize="lg">Wallet connection failed: {walletError.message}</Text>
-      </Box>
-    );
-  }
-
+  
   if (productLoading) {
     return (
       <Flex justify="center" align="center" minH="100vh">

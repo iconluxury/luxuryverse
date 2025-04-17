@@ -8,7 +8,6 @@ import {
   HStack,
   Divider,
   Spinner,
-  Skeleton,
   Grid,
   useToast,
 } from '@chakra-ui/react';
@@ -45,17 +44,18 @@ function CollectionsDetails() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [maxDescriptionHeight, setMaxDescriptionHeight] = useState(0);
-  // Use process.env like ProductDetails for consistency
+  // Match ProductDetails' API_BASE_URL
   const API_BASE_URL = process.env.API_BASE_URL || 'https://iconluxury.shop';
   const { id } = useParams({ from: '/_layout/collection/$id' });
   const toast = useToast();
 
   useEffect(() => {
-    // Debug environment variable
+    // Debug environment and URLs
+    console.log('Environment:', process.env);
     console.log('API_BASE_URL:', API_BASE_URL);
 
     const fetchWithRetry = async (url: string, retryCount = 6) => {
-      console.log('Fetching:', url); // Debug log
+      console.log('Fetching:', url);
       for (let attempt = 1; attempt <= retryCount; attempt++) {
         try {
           const controller = new AbortController();
@@ -73,15 +73,20 @@ function CollectionsDetails() {
           clearTimeout(timeoutId);
 
           if (!response.ok) {
-            throw { status: response.status, body: { detail: `HTTP error! status: ${response.status}` } };
+            throw {
+              status: response.status,
+              body: { detail: `HTTP error! status: ${response.status}` },
+            };
           }
 
-          return await response.json();
+          const data = await response.json();
+          console.log(`Fetch successful for ${url}:`, data);
+          return data;
         } catch (err: any) {
           if (err.name === 'AbortError') {
             err.message = 'Request timed out after 30s.';
           }
-          console.error(`Attempt ${attempt} failed:`, err.message);
+          console.error(`Attempt ${attempt} failed for ${url}:`, err.message);
           if (attempt === retryCount) {
             throw err;
           }
@@ -127,16 +132,24 @@ function CollectionsDetails() {
 
         setCollection(validatedCollection);
 
-        // Fetch all collections dynamically
+        // Fetch all collections for the grid
         const allCollectionsUrl = `${API_BASE_URL}/api/v1/collections`;
-        const allCollectionsData = await fetchWithRetry(allCollectionsUrl);
-        if (!Array.isArray(allCollectionsData)) {
-          throw { status: 500, body: { detail: 'Invalid collections data received' } };
+        let allCollectionsData;
+        try {
+          allCollectionsData = await fetchWithRetry(allCollectionsUrl);
+        } catch (err: any) {
+          console.warn('Failed to fetch other collections:', err.message);
+          allCollectionsData = []; // Fallback to empty array
         }
 
-        // Filter out the current collection and limit to 6
+        if (!Array.isArray(allCollectionsData)) {
+          console.warn('Invalid collections data:', allCollectionsData);
+          allCollectionsData = [];
+        }
+
+        // Filter and validate other collections
         const otherCollectionsData = allCollectionsData
-          .filter((col: any) => col.id !== id)
+          .filter((col: any) => col && col.id && col.id !== id)
           .slice(0, 6)
           .map((data: any) => ({
             id: data.id || '',
@@ -147,6 +160,7 @@ function CollectionsDetails() {
             productCount: data.products?.length || 0,
           }));
 
+        console.log('Other collections for grid:', otherCollectionsData);
         setOtherCollections(otherCollectionsData);
 
         // Calculate max description height
