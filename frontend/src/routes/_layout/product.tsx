@@ -12,7 +12,10 @@ function ProductsPage() {
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const API_BASE_URL = (process.env.API_BASE_URL || 'https://iconluxury.today').replace(/\/+$/, ''); // Remove trailing slashes
+  // Enforce HTTPS and remove trailing slashes
+  const API_BASE_URL = (process.env.API_BASE_URL || 'https://iconluxury.today')
+    .replace(/^http:/, 'https:') // Force HTTPS
+    .replace(/\/+$/, '');
 
   // Logging utility (disabled in production)
   const logDebug = process.env.NODE_ENV === 'development' ? console.debug : () => {};
@@ -23,17 +26,18 @@ function ProductsPage() {
       if (!hasMore) return;
       setLoading(true);
       const url = `${API_BASE_URL}/api/v1/products`;
+
       for (let attempt = 1; attempt <= retryCount; attempt++) {
         try {
           logDebug(`Attempt ${attempt}: Fetching products from ${url}`);
           const controller = new AbortController();
-          const timeoutId = setTimeout(() => controller.abort(), 30000); // Increased to 30s
+          const timeoutId = setTimeout(() => controller.abort(), 30000); // 30s timeout
 
           const response = await fetch(url, {
             signal: controller.signal,
             method: 'GET',
             headers: {
-              'Accept': 'application/json', // Removed Content-Type to avoid pre-flight
+              'Accept': 'application/json',
             },
           });
 
@@ -44,6 +48,12 @@ function ProductsPage() {
             const text = await response.text();
             if (response.status === 404) {
               throw new Error('API route not found (404). Please contact support@iconluxury.today.');
+            }
+            if (response.status === 403) {
+              throw new Error('Access denied by server (403). Please contact support@iconluxury.today.');
+            }
+            if (response.status === 500) {
+              throw new Error('Server error (500). Please try again later or contact support@iconluxury.today.');
             }
             throw new Error(`HTTP error! status: ${response.status}, body: ${text.slice(0, 200)}`);
           }
@@ -65,7 +75,7 @@ function ProductsPage() {
               };
             }),
           ]);
-          setHasMore(data.length === 20); // Assume more pages if full limit returned
+          setHasMore(data.length === 20);
           setError(null);
           break;
         } catch (err) {
@@ -80,6 +90,12 @@ function ProductsPage() {
           } else if (err.message.includes('API route not found')) {
             errorMessage = 'API route not found (404).';
             userErrorMessage = 'The product data could not be found. Please contact support@iconluxury.today.';
+          } else if (err.message.includes('Access denied')) {
+            errorMessage = 'Access denied by server (403).';
+            userErrorMessage = 'Access to product data was denied. Please contact support@iconluxury.today.';
+          } else if (err.message.includes('Server error')) {
+            errorMessage = 'Server error (500).';
+            userErrorMessage = 'A server error occurred. Please try again later or contact support@iconluxury.today.';
           }
           console.error(`Attempt ${attempt} failed: ${errorMessage}`, {
             name: err.name,
