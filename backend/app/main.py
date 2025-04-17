@@ -29,7 +29,7 @@ async def custom_cors_middleware(request: Request, call_next):
     origin = request.headers.get("origin")
     if origin in ALLOWED_ORIGINS:
         response.headers["Access-Control-Allow-Origin"] = origin
-        response.headers["Access-Control-Allow-Credentials"] = "true"
+        response.headers["Access-Control-Allow-Credentials"] = "false"
         response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
         response.headers["Access-Control-Allow-Headers"] = "Accept, Content-Type, Authorization"
     return response
