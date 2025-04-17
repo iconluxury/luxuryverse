@@ -31,12 +31,12 @@ const Footer = () => {
             {/* Company Information */}
             <Box maxW={{ base: "100%", md: "400px" }}>
               <Heading as="h4" size="md" mb={4}>
-                <Link href="https://luxuryverse.com" _hover={{ textDecoration: "none", color: "red.600" }}>
+                <Link href="https://luxuryverse.com" _hover={{ textDecoration: "none", color: "purple.600" }}>
                   LuxuryVerse
                 </Link>
               </Heading>
               <Text color="gray.300" mb={4}>
-                Redefining luxury through innovation, authenticity, and global connectivity. Join us in shaping the future of exclusivity.
+                purpleefining luxury through innovation, authenticity, and global connectivity. Join us in shaping the future of exclusivity.
               </Text>
             </Box>
 
@@ -46,16 +46,16 @@ const Footer = () => {
                 Explore
               </Heading>
               <HStack wrap="wrap" spacing={4} justify={{ base: "center", md: "flex-start" }}>
-                <Link href="/roadmap" color="gray.300" _hover={{ color: "red.600" }}>
+                <Link href="/roadmap" color="gray.300" _hover={{ color: "purple.600" }}>
                   Roadmap
                 </Link>
-                <Link href="/authenticity" color="gray.300" _hover={{ color: "red.600" }}>
+                <Link href="/authenticity" color="gray.300" _hover={{ color: "purple.600" }}>
                   Authenticity
                 </Link>
-                <Link href="/faq" color="gray.300" _hover={{ color: "red.600" }}>
+                <Link href="/faq" color="gray.300" _hover={{ color: "purple.600" }}>
                   FAQ
                 </Link>
-                <Link href="/contact" color="gray.300" _hover={{ color: "red.600" }}>
+                <Link href="/contact" color="gray.300" _hover={{ color: "purple.600" }}>
                   Contact
                 </Link>
               </HStack>
@@ -73,7 +73,7 @@ const Footer = () => {
             </Heading>
             <Text color="gray.300" mb={2}>
               <strong>Email:</strong>{" "}
-              <Link href="mailto:info@luxuryverse.com" _hover={{ color: "red.600" }}>
+              <Link href="mailto:info@luxuryverse.com" _hover={{ color: "purple.600" }}>
                 info@luxuryverse.com
               </Link>
             </Text>
@@ -96,7 +96,7 @@ const Footer = () => {
         >
           <Text color="gray.400" fontSize="sm">
             © 2025{" "}
-            <Link href="https://luxuryverse.com" color="gray.200" _hover={{ color: "red.600" }}>
+            <Link href="https://luxuryverse.com" color="gray.200" _hover={{ color: "purple.600" }}>
               LuxuryVerse
             </Link>
             . All rights reserved.
@@ -106,17 +106,17 @@ const Footer = () => {
             flexWrap="wrap"
             justify={{ base: "center", md: "flex-end" }}
           >
-            <Link href="/privacy" color="gray.400" fontSize="sm" _hover={{ color: "red.600" }}>
+            <Link href="/privacy-policy" color="gray.400" fontSize="sm" _hover={{ color: "purple.600" }}>
               Privacy Policy
             </Link>
-            <Link href="/terms" color="gray.400" fontSize="sm" _hover={{ color: "red.600" }}>
+            <Link href="/terms-conditions" color="gray.400" fontSize="sm" _hover={{ color: "purple.600" }}>
               Terms and Conditions
             </Link>
-            <Link href="/cookie" color="gray.400" fontSize="sm" _hover={{ color: "red.600" }}>
+            <Link href="/cookies" color="gray.400" fontSize="sm" _hover={{ color: "purple.600" }}>
               Cookie Policy
             </Link>
-            <Link href="/do-not-sell" color="gray.400" fontSize="sm" _hover={{ color: "red.600" }}>
-              Do Not Sell My Personal Information
+            <Link href="/opt-out" color="gray.400" fontSize="sm" _hover={{ color: "purple.600" }}>
+             Opt Out
             </Link>
           </HStack>
         </Flex>
