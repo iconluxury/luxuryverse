@@ -216,7 +216,7 @@ function ProductDetails() {
                 objectFit="cover"
                 borderRadius="md"
                 mb={8}
-                onError={(e) => (e.currentTarget.src = 'https://placehold.co/400x400')}
+                onError={(e) => (e.currentTarget.src = 'https://placehold.co/275x350')}
               />
               {product.images.length > 1 && (
                 <>
