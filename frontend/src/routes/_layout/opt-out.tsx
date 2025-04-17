@@ -39,9 +39,8 @@ function OptOutPage() {
             bg="transparent"
             textDecoration="underline"
             color="purple.500"
-            _hover={{ color: "purple.600" }}
+            _hover={{ Color:"purple.600"  }}
             p={0}
-            mb={2}
             fontSize="lg"
             fontWeight="medium"
           >
