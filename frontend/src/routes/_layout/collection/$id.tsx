@@ -45,24 +45,22 @@ function CollectionsDetails() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [maxDescriptionHeight, setMaxDescriptionHeight] = useState(0);
-  // Ensure API_BASE_URL uses HTTPS
-  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://iconluxury.shop';
+  // Use process.env like ProductDetails for consistency
+  const API_BASE_URL = process.env.API_BASE_URL || 'https://iconluxury.shop';
   const { id } = useParams({ from: '/_layout/collection/$id' });
   const toast = useToast();
 
   useEffect(() => {
-    // Log environment variables for debugging
+    // Debug environment variable
     console.log('API_BASE_URL:', API_BASE_URL);
 
     const fetchWithRetry = async (url: string, retryCount = 6) => {
-      // Force HTTPS to avoid mixed content errors
-      const secureUrl = url.startsWith('http://') ? url.replace('http://', 'https://') : url;
-      console.log('Fetching:', secureUrl); // Debug log
+      console.log('Fetching:', url); // Debug log
       for (let attempt = 1; attempt <= retryCount; attempt++) {
         try {
           const controller = new AbortController();
           const timeoutId = setTimeout(() => controller.abort(), 30000);
-          const response = await fetch(secureUrl, {
+          const response = await fetch(url, {
             signal: controller.signal,
             method: 'GET',
             headers: {
@@ -83,6 +81,7 @@ function CollectionsDetails() {
           if (err.name === 'AbortError') {
             err.message = 'Request timed out after 30s.';
           }
+          console.error(`Attempt ${attempt} failed:`, err.message);
           if (attempt === retryCount) {
             throw err;
           }
@@ -94,7 +93,8 @@ function CollectionsDetails() {
     const fetchData = async () => {
       try {
         // Fetch current collection
-        const collectionData = await fetchWithRetry(`${API_BASE_URL}/api/v1/collections/${id}`);
+        const collectionUrl = `${API_BASE_URL}/api/v1/collections/${id}`;
+        const collectionData = await fetchWithRetry(collectionUrl);
         if (!collectionData || typeof collectionData !== 'object') {
           throw { status: 500, body: { detail: 'Invalid collection data received' } };
         }
@@ -127,16 +127,17 @@ function CollectionsDetails() {
 
         setCollection(validatedCollection);
 
-        // Fetch all collections dynamically (replacing hardcoded selectedCollections)
-        const allCollectionsData = await fetchWithRetry(`${API_BASE_URL}/api/v1/collections`);
+        // Fetch all collections dynamically
+        const allCollectionsUrl = `${API_BASE_URL}/api/v1/collections`;
+        const allCollectionsData = await fetchWithRetry(allCollectionsUrl);
         if (!Array.isArray(allCollectionsData)) {
           throw { status: 500, body: { detail: 'Invalid collections data received' } };
         }
 
-        // Filter out the current collection and limit to 6 other collections
+        // Filter out the current collection and limit to 6
         const otherCollectionsData = allCollectionsData
           .filter((col: any) => col.id !== id)
-          .slice(0, 6) // Limit to 6 for performance
+          .slice(0, 6)
           .map((data: any) => ({
             id: data.id || '',
             title: data.title || 'Untitled Collection',
@@ -157,7 +158,6 @@ function CollectionsDetails() {
 
         setError(null);
       } catch (err: any) {
-        // Enhanced error handling to address potential issues like "Unable to get preferred account types"
         console.error('Fetch error:', err);
         handleError(err, (title: string, description: string, status: string) => {
           toast({
@@ -175,7 +175,7 @@ function CollectionsDetails() {
     };
 
     fetchData();
-  }, [id, toast, API_BASE_URL]); // Added API_BASE_URL to dependencies for completeness
+  }, [id, toast, API_BASE_URL]);
 
   const stripHtml = (html: string) => {
     return html.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
