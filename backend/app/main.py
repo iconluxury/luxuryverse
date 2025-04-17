@@ -12,7 +12,7 @@ app = FastAPI(
     title=settings.PROJECT_NAME,
     openapi_url=f"{settings.API_V_STR}/openapi.json",
     generate_unique_id_function=custom_generate_unique_id,
-    redirect_slashes=False,  
+    redirect_slashes=False,
 )
 
 app.add_middleware(HTTPSRedirectMiddleware)
