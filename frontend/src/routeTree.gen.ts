@@ -21,7 +21,7 @@ import { Route as LayoutCookiesImport } from './routes/_layout/cookies'
 import { Route as LayoutCollectionsImport } from './routes/_layout/collections'
 import { Route as LayoutAuthCompleteImport } from './routes/_layout/auth-complete'
 import { Route as LayoutProductsIdImport } from './routes/_layout/products/$id'
-import { Route as LayoutCollectionsIdImport } from './routes/_layout/collections/$id'
+import { Route as LayoutCollectionIdImport } from './routes/_layout/collection/$id'
 import { Route as LayoutResourcesBlogsPathImport } from './routes/_layout/resources/blogs/$path'
 
 // Create/Update Routes
@@ -85,10 +85,10 @@ const LayoutProductsIdRoute = LayoutProductsIdImport.update({
   getParentRoute: () => LayoutRoute,
 } as any)
 
-const LayoutCollectionsIdRoute = LayoutCollectionsIdImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => LayoutCollectionsRoute,
+const LayoutCollectionIdRoute = LayoutCollectionIdImport.update({
+  id: '/collection/$id',
+  path: '/collection/$id',
+  getParentRoute: () => LayoutRoute,
 } as any)
 
 const LayoutResourcesBlogsPathRoute = LayoutResourcesBlogsPathImport.update({
@@ -164,12 +164,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutIndexImport
       parentRoute: typeof LayoutImport
     }
-    '/_layout/collections/$id': {
-      id: '/_layout/collections/$id'
-      path: '/$id'
-      fullPath: '/collections/$id'
-      preLoaderRoute: typeof LayoutCollectionsIdImport
-      parentRoute: typeof LayoutCollectionsImport
+    '/_layout/collection/$id': {
+      id: '/_layout/collection/$id'
+      path: '/collection/$id'
+      fullPath: '/collection/$id'
+      preLoaderRoute: typeof LayoutCollectionIdImport
+      parentRoute: typeof LayoutImport
     }
     '/_layout/products/$id': {
       id: '/_layout/products/$id'
@@ -190,39 +190,30 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
-interface LayoutCollectionsRouteChildren {
-  LayoutCollectionsIdRoute: typeof LayoutCollectionsIdRoute
-}
-
-const LayoutCollectionsRouteChildren: LayoutCollectionsRouteChildren = {
-  LayoutCollectionsIdRoute: LayoutCollectionsIdRoute,
-}
-
-const LayoutCollectionsRouteWithChildren =
-  LayoutCollectionsRoute._addFileChildren(LayoutCollectionsRouteChildren)
-
 interface LayoutRouteChildren {
   LayoutAuthCompleteRoute: typeof LayoutAuthCompleteRoute
-  LayoutCollectionsRoute: typeof LayoutCollectionsRouteWithChildren
+  LayoutCollectionsRoute: typeof LayoutCollectionsRoute
   LayoutCookiesRoute: typeof LayoutCookiesRoute
   LayoutJoinRoute: typeof LayoutJoinRoute
   LayoutOptOutRoute: typeof LayoutOptOutRoute
   LayoutPrivacyPolicyRoute: typeof LayoutPrivacyPolicyRoute
   LayoutTermsConditionsRoute: typeof LayoutTermsConditionsRoute
   LayoutIndexRoute: typeof LayoutIndexRoute
+  LayoutCollectionIdRoute: typeof LayoutCollectionIdRoute
   LayoutProductsIdRoute: typeof LayoutProductsIdRoute
   LayoutResourcesBlogsPathRoute: typeof LayoutResourcesBlogsPathRoute
 }
 
 const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutAuthCompleteRoute: LayoutAuthCompleteRoute,
-  LayoutCollectionsRoute: LayoutCollectionsRouteWithChildren,
+  LayoutCollectionsRoute: LayoutCollectionsRoute,
   LayoutCookiesRoute: LayoutCookiesRoute,
   LayoutJoinRoute: LayoutJoinRoute,
   LayoutOptOutRoute: LayoutOptOutRoute,
   LayoutPrivacyPolicyRoute: LayoutPrivacyPolicyRoute,
   LayoutTermsConditionsRoute: LayoutTermsConditionsRoute,
   LayoutIndexRoute: LayoutIndexRoute,
+  LayoutCollectionIdRoute: LayoutCollectionIdRoute,
   LayoutProductsIdRoute: LayoutProductsIdRoute,
   LayoutResourcesBlogsPathRoute: LayoutResourcesBlogsPathRoute,
 }
@@ -233,28 +224,28 @@ const LayoutRouteWithChildren =
 export interface FileRoutesByFullPath {
   '': typeof LayoutRouteWithChildren
   '/auth-complete': typeof LayoutAuthCompleteRoute
-  '/collections': typeof LayoutCollectionsRouteWithChildren
+  '/collections': typeof LayoutCollectionsRoute
   '/cookies': typeof LayoutCookiesRoute
   '/join': typeof LayoutJoinRoute
   '/opt-out': typeof LayoutOptOutRoute
   '/privacy-policy': typeof LayoutPrivacyPolicyRoute
   '/terms-conditions': typeof LayoutTermsConditionsRoute
   '/': typeof LayoutIndexRoute
-  '/collections/$id': typeof LayoutCollectionsIdRoute
+  '/collection/$id': typeof LayoutCollectionIdRoute
   '/products/$id': typeof LayoutProductsIdRoute
   '/resources/blogs/$path': typeof LayoutResourcesBlogsPathRoute
 }
 
 export interface FileRoutesByTo {
   '/auth-complete': typeof LayoutAuthCompleteRoute
-  '/collections': typeof LayoutCollectionsRouteWithChildren
+  '/collections': typeof LayoutCollectionsRoute
   '/cookies': typeof LayoutCookiesRoute
   '/join': typeof LayoutJoinRoute
   '/opt-out': typeof LayoutOptOutRoute
   '/privacy-policy': typeof LayoutPrivacyPolicyRoute
   '/terms-conditions': typeof LayoutTermsConditionsRoute
   '/': typeof LayoutIndexRoute
-  '/collections/$id': typeof LayoutCollectionsIdRoute
+  '/collection/$id': typeof LayoutCollectionIdRoute
   '/products/$id': typeof LayoutProductsIdRoute
   '/resources/blogs/$path': typeof LayoutResourcesBlogsPathRoute
 }
@@ -263,14 +254,14 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/_layout': typeof LayoutRouteWithChildren
   '/_layout/auth-complete': typeof LayoutAuthCompleteRoute
-  '/_layout/collections': typeof LayoutCollectionsRouteWithChildren
+  '/_layout/collections': typeof LayoutCollectionsRoute
   '/_layout/cookies': typeof LayoutCookiesRoute
   '/_layout/join': typeof LayoutJoinRoute
   '/_layout/opt-out': typeof LayoutOptOutRoute
   '/_layout/privacy-policy': typeof LayoutPrivacyPolicyRoute
   '/_layout/terms-conditions': typeof LayoutTermsConditionsRoute
   '/_layout/': typeof LayoutIndexRoute
-  '/_layout/collections/$id': typeof LayoutCollectionsIdRoute
+  '/_layout/collection/$id': typeof LayoutCollectionIdRoute
   '/_layout/products/$id': typeof LayoutProductsIdRoute
   '/_layout/resources/blogs/$path': typeof LayoutResourcesBlogsPathRoute
 }
@@ -287,7 +278,7 @@ export interface FileRouteTypes {
     | '/privacy-policy'
     | '/terms-conditions'
     | '/'
-    | '/collections/$id'
+    | '/collection/$id'
     | '/products/$id'
     | '/resources/blogs/$path'
   fileRoutesByTo: FileRoutesByTo
@@ -300,7 +291,7 @@ export interface FileRouteTypes {
     | '/privacy-policy'
     | '/terms-conditions'
     | '/'
-    | '/collections/$id'
+    | '/collection/$id'
     | '/products/$id'
     | '/resources/blogs/$path'
   id:
@@ -314,7 +305,7 @@ export interface FileRouteTypes {
     | '/_layout/privacy-policy'
     | '/_layout/terms-conditions'
     | '/_layout/'
-    | '/_layout/collections/$id'
+    | '/_layout/collection/$id'
     | '/_layout/products/$id'
     | '/_layout/resources/blogs/$path'
   fileRoutesById: FileRoutesById
@@ -352,6 +343,7 @@ export const routeTree = rootRoute
         "/_layout/privacy-policy",
         "/_layout/terms-conditions",
         "/_layout/",
+        "/_layout/collection/$id",
         "/_layout/products/$id",
         "/_layout/resources/blogs/$path"
       ]
@@ -362,10 +354,7 @@ export const routeTree = rootRoute
     },
     "/_layout/collections": {
       "filePath": "_layout/collections.tsx",
-      "parent": "/_layout",
-      "children": [
-        "/_layout/collections/$id"
-      ]
+      "parent": "/_layout"
     },
     "/_layout/cookies": {
       "filePath": "_layout/cookies.tsx",
@@ -391,9 +380,9 @@ export const routeTree = rootRoute
       "filePath": "_layout/index.tsx",
       "parent": "/_layout"
     },
-    "/_layout/collections/$id": {
-      "filePath": "_layout/collections/$id.tsx",
-      "parent": "/_layout/collections"
+    "/_layout/collection/$id": {
+      "filePath": "_layout/collection/$id.tsx",
+      "parent": "/_layout"
     },
     "/_layout/products/$id": {
       "filePath": "_layout/products/$id.tsx",

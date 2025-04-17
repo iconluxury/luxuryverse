@@ -17,7 +17,7 @@ import { Helmet } from 'react-helmet-async';
 import Footer from '../../../components/Common/Footer';
 import { parseHtml } from '../../../utils/htmlParser'; 
 
-export const Route = createFileRoute('/_layout/collections/$id')({
+export const Route = createFileRoute('/_layout/collection/$id')({
   component: CollectionsDetails,
 });
 
@@ -45,7 +45,7 @@ function CollectionsDetails() {
   const [error, setError] = useState<string | null>(null);
   const [maxDescriptionHeight, setMaxDescriptionHeight] = useState(0);
   const API_BASE_URL = process.env.API_BASE_URL || 'https://iconluxury.shop';
-  const { id } = useParams({ from: '/_layout/collections/$id' });
+  const { id } = useParams({ from: '/_layout/collection/$id' });
 
   // Same selected collections as in CollectionsPage
   const selectedCollections = ['461931184423', '471622844711', '488238383399'];
@@ -89,7 +89,7 @@ function CollectionsDetails() {
     const fetchData = async () => {
       try {
         // Fetch current collection
-        const collectionData = await fetchWithRetry(`${API_BASE_URL}/api/v1/collections/${id}`);
+        const collectionData = await fetchWithRetry(`${API_BASE_URL}/api/v1/collection/${id}`);
         console.log('Fetched collection data:', collectionData);
         if (!collectionData || typeof collectionData !== 'object') {
           throw new Error('Invalid collection data received');
@@ -123,7 +123,7 @@ function CollectionsDetails() {
         const collectionPromises = selectedCollections
           .filter((colId) => colId !== id)
           .map((colId) =>
-            fetchWithRetry(`${API_BASE_URL}/api/v1/collections/${colId}`).then((data) => ({
+            fetchWithRetry(`${API_BASE_URL}/api/v1/collection/${colId}`).then((data) => ({
               ...data,
               productCount: data.products?.length || 0,
             }))
@@ -212,7 +212,7 @@ function CollectionsDetails() {
             {otherCollections.map((col) => (
               <Link
                 key={col.id}
-                to={`/collections/${col.id}`}
+                to={`/collection/${col.id}`}
                 style={{ textDecoration: 'none' }}
               >
                 <Box
