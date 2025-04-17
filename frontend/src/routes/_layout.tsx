@@ -68,7 +68,6 @@ function Layout() {
             zIndex: 9999,
           }}
           buttonStyle={{
-            background: theme.colors.purple[500] || "#EF4444",
             color: theme.colors.white || "#FFFFFF",
             borderRadius: theme.radii.md || "4px",
             padding: "4px 8px",
