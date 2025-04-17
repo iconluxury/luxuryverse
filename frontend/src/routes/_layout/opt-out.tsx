@@ -39,7 +39,7 @@ function OptOutPage() {
               onClick={handleOptOut}
               bg="purple.500"
               color="white"
-              _hover={{ bg: "red.600" }}
+              _hover={{ bg: "purple.600" }}
               px={6}
               py={3}
               fontWeight="medium"
