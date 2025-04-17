@@ -1,4 +1,4 @@
-import { Box, Text, Image, Grid, Button, Heading } from '@chakra-ui/react';
+import { Box, Text, Image, Grid, Button, Heading, Skeleton } from '@chakra-ui/react';
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { useState, useEffect } from 'react';
 
@@ -9,6 +9,7 @@ export const Route = createFileRoute('/_layout/collections')({
 function CollectionsPage() {
   const [collectionsData, setCollectionsData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [maxDescriptionHeight, setMaxDescriptionHeight] = useState(0);
 
   const selectedCollections = ['461931184423', '471622844711', '488238383399'];
 
@@ -36,6 +37,11 @@ function CollectionsPage() {
 
         setCollectionsData(collections);
 
+        // Calculate the maximum description height
+        const descriptions = collections.map(col => col.description || '');
+        const maxHeight = Math.max(...descriptions.map(desc => desc.length)) * 1.5; // Adjust multiplier as needed
+        setMaxDescriptionHeight(maxHeight);
+
         const errors = results
           .filter(result => result.status === 'rejected')
           .map(result => result.reason);
@@ -56,7 +62,12 @@ function CollectionsPage() {
   if (loading) {
     return (
       <Box p={4} bg="gray.900" color="white" minH="100vh">
-        <Text>Loading...</Text>
+        <Skeleton height="20px" width="200px" mb={6} />
+        <Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={6}>
+          {selectedCollections.map((_, index) => (
+            <Skeleton key={index} height="300px" />
+          ))}
+        </Grid>
       </Box>
     );
   }
@@ -93,7 +104,8 @@ function CollectionsPage() {
               overflow="hidden"
               bg="white"
               color="gray.900"
-              _hover={{ boxShadow: 'md', cursor: 'pointer' }}
+              _hover={{ boxShadow: 'md', transform: 'scale(1.02)' }}
+              transition="all 0.2s"
             >
               <Image
                 src={collection.image || 'https://placehold.co/400x400'}
@@ -105,9 +117,11 @@ function CollectionsPage() {
                 <Text fontWeight="bold" fontSize="xl" mb={2}>
                   {collection.title || 'Untitled Collection'}
                 </Text>
-                <Text fontSize="sm" color="gray.600" mb={4} noOfLines={2}>
-                  {collection.description || 'No description available.'}
-                </Text>
+                <Box height={`${maxDescriptionHeight}px`} overflow="hidden">
+                  <Text fontSize="sm" color="gray.600" noOfLines={2}>
+                    {collection.description || 'No description available.'}
+                  </Text>
+                </Box>
               </Box>
             </Box>
           </Link>

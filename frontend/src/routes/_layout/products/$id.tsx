@@ -18,7 +18,7 @@ import { Helmet } from 'react-helmet-async';
 import parse, { domToReact } from 'html-react-parser';
 import { Element } from 'domhandler';
 import Footer from '../../../components/Common/Footer';
-
+import sanitizeHtml from 'sanitize-html';
 export const Route = createFileRoute('/_layout/products/$id')({
   component: ProductDetails,
 });
@@ -110,12 +110,19 @@ function ProductDetails() {
     fetchProduct();
   }, [id]);
 
+
+
   const parseDescription = (description: string) => {
     if (!description || typeof description !== 'string') {
       return <Text fontSize="lg" color="gray.700" mb={4}>No description available</Text>;
     }
+    const sanitizedDescription = sanitizeHtml(description, {
+      allowedTags: ['div', 'span', 'p', 'strong', 'em', 'ul', 'li', 'ol'],
+      allowedAttributes: { '*': ['class', 'style'] },
+    });
     try {
-      return parse(description, {
+      console.log('Parsing description:', sanitizedDescription);
+      return parse(sanitizedDescription, {
         replace: (domNode) => {
           if (domNode instanceof Element && (domNode.name === 'div' || domNode.name === 'span')) {
             return (
@@ -127,7 +134,7 @@ function ProductDetails() {
         },
       });
     } catch (err) {
-      console.error('Error parsing description:', err, 'Description:', description);
+      console.error('Error parsing description:', err, 'Description:', sanitizedDescription);
       return <Text fontSize="lg" color="gray.700" mb={4}>Failed to parse description</Text>;
     }
   };
