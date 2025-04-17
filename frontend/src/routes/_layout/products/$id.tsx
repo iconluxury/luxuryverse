@@ -65,15 +65,6 @@ function ProductDetails() {
   const { id } = Route.useParams();
   const isBrowser = typeof window !== 'undefined';
 
-  // Debug Shopify SDK and authentication
-  useEffect(() => {
-    console.log('ShopifyBuy available:', window.ShopifyBuy);
-    if (window.ShopifyBuy) {
-      console.log('ShopifyBuy client methods:', Object.keys(window.ShopifyBuy));
-    }
-    console.log('Customer authentication status:', window.Shopify?.customer);
-  }, []);
-
   const fetchWithRetry = async (url: string, retryCount = 6) => {
     for (let attempt = 1; attempt <= retryCount; attempt++) {
       try {
