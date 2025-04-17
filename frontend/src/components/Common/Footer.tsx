@@ -36,7 +36,7 @@ const Footer = () => {
                 </Link>
               </Heading>
               <Text color="gray.300" mb={4}>
-                purpleefining luxury through innovation, authenticity, and global connectivity. Join us in shaping the future of exclusivity.
+                Defining luxury through innovation, authenticity, and global connectivity. Join us in shaping the future of exclusivity.
               </Text>
             </Box>
 
