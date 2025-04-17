@@ -50,7 +50,7 @@ class SimpleCollection(BaseModel):
     image: str
 
 @collections_router.get("/", response_model=List[SimpleCollection])
-async def list_collections(limit: int = 50, collection_type: str = "all"):
+async def list_collections(limit: int = 100, collection_type: str = "all"):
     """
     List all available collections with basic information (ID, title, description, image).
 
