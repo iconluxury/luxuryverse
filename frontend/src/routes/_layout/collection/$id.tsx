@@ -49,8 +49,6 @@ function CollectionsDetails() {
   const { id } = useParams({ from: '/_layout/collection/$id' });
   const toast = useToast();
 
-  const selectedCollections = ['461931184423', '471622844711', '488238383399'];
-
   useEffect(() => {
     const fetchWithRetry = async (url: string, retryCount = 6) => {
       for (let attempt = 1; attempt <= retryCount; attempt++) {
@@ -122,29 +120,30 @@ function CollectionsDetails() {
 
         setCollection(validatedCollection);
 
-        // Fetch other collections
-        const collectionPromises = selectedCollections
-          .filter((colId) => colId !== id)
-          .map((colId) =>
-            fetchWithRetry(`${API_BASE_URL}/api/v1/collections/${colId}`).then((data) => ({
-              id: data.id || '',
-              title: data.title || 'Untitled Collection',
-              description: data.description || '',
-              image: data.image || 'https://placehold.co/400x400',
-              products: data.products || [],
-              productCount: data.products?.length || 0,
-            }))
-          );
-        const results = await Promise.allSettled(collectionPromises);
-        const validCollections = results
-          .filter((result) => result.status === 'fulfilled')
-          .map((result: any) => result.value);
+        // Fetch all collections
+        const allCollectionsData = await fetchWithRetry(`${API_BASE_URL}/api/v1/collections`);
+        if (!Array.isArray(allCollectionsData)) {
+          throw { status: 500, body: { detail: 'Invalid collections data received' } };
+        }
 
-        setOtherCollections(validCollections);
+        // Filter out the current collection and validate other collections
+        const otherCollectionsData = allCollectionsData
+          .filter((col: any) => col.id !== id) // Exclude current collection
+          .slice(0, 6) // Limit to 6 other collections (adjust as needed)
+          .map((data: any) => ({
+            id: data.id || '',
+            title: data.title || 'Untitled Collection',
+            description: data.description || '',
+            image: data.image || 'https://placehold.co/400x400',
+            products: data.products || [],
+            productCount: data.products?.length || 0,
+          }));
+
+        setOtherCollections(otherCollectionsData);
 
         // Calculate max description height
-        if (validCollections.length > 0) {
-          const descriptions = validCollections.map((col: Collection) => col.description || '');
+        if (otherCollectionsData.length > 0) {
+          const descriptions = otherCollectionsData.map((col: Collection) => col.description || '');
           const maxHeight = Math.max(...descriptions.map((desc: string) => desc.length)) * 1.5;
           setMaxDescriptionHeight(maxHeight);
         }
