@@ -1,8 +1,8 @@
-// src/index.tsx
+// src/main.tsx
 import { ChakraProvider } from '@chakra-ui/react';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
-import { AppKitProvider } from '@reown/appkit/react'; // Add this
+import { AppKitProvider } from '@reown/appkit/react';
 import ReactDOM from 'react-dom/client';
 import { routeTree } from './routeTree.gen';
 import { StrictMode } from 'react';
