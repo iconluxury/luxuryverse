@@ -12,26 +12,30 @@ function ProductsPage() {
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  // Enforce HTTPS and remove trailing slashes
+
+  // Ensure API_BASE_URL is always HTTPS
   const API_BASE_URL = (process.env.API_BASE_URL || 'https://iconluxury.today')
-    .replace(/^http:/, 'https:') // Force HTTPS
+    .replace(/^http:/, 'https:')
     .replace(/\/+$/, '');
+
+  // Log the URL for debugging
+  console.log('API_BASE_URL:', API_BASE_URL);
 
   // Logging utility (disabled in production)
   const logDebug = process.env.NODE_ENV === 'development' ? console.debug : () => {};
-  logDebug(`API_BASE_URL set to: ${API_BASE_URL}`);
 
   useEffect(() => {
-    const fetchProducts = async (retryCount = 3, delay = 2000) => {
+    const fetchProducts = async (retryCount = 3, delay = 3000) => {
       if (!hasMore) return;
       setLoading(true);
       const url = `${API_BASE_URL}/api/v1/products`;
+      console.log('Fetching from:', url); // Debug log
 
       for (let attempt = 1; attempt <= retryCount; attempt++) {
         try {
           logDebug(`Attempt ${attempt}: Fetching products from ${url}`);
           const controller = new AbortController();
-          const timeoutId = setTimeout(() => controller.abort(), 30000); // 30s timeout
+          const timeoutId = setTimeout(() => controller.abort(), 60000); // 60s timeout
 
           const response = await fetch(url, {
             signal: controller.signal,
@@ -42,7 +46,7 @@ function ProductsPage() {
           });
 
           clearTimeout(timeoutId);
-          logDebug(`Response status: ${response.status}, ok: ${response.ok}, headers:`, [...response.headers.entries()]);
+          logDebug(`Response status: ${response.status}, ok: ${response.ok}`);
 
           if (!response.ok) {
             const text = await response.text();
@@ -65,15 +69,12 @@ function ProductsPage() {
 
           setProducts((prev) => [
             ...prev,
-            ...data.map((product) => {
-              if (!product.id) console.warn('Product missing id:', product);
-              return {
-                id: product.id || '',
-                title: product.title || 'Untitled',
-                price: product.price || 'N/A',
-                thumbnail: product.thumbnail || null,
-              };
-            }),
+            ...data.map((product) => ({
+              id: product.id || '',
+              title: product.title || 'Untitled',
+              price: product.price || 'N/A',
+              thumbnail: product.thumbnail || null,
+            })),
           ]);
           setHasMore(data.length === 20);
           setError(null);
@@ -82,7 +83,7 @@ function ProductsPage() {
           let errorMessage = err.message || 'Unknown error';
           let userErrorMessage = 'Unable to load products. Please try again later.';
           if (err.name === 'AbortError') {
-            errorMessage = 'Request timed out after 30s.';
+            errorMessage = 'Request timed out after 60s.';
             userErrorMessage = 'Request timed out. Please try again later.';
           } else if (err.message.includes('Failed to fetch')) {
             errorMessage = 'Unable to connect: Possible CORS, network, or server issue.';
