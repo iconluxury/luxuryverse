@@ -89,7 +89,7 @@ function CollectionsDetails() {
     const fetchData = async () => {
       try {
         // Fetch current collection
-        const collectionData = await fetchWithRetry(`${API_BASE_URL}/api/v1/collection/${id}`);
+        const collectionData = await fetchWithRetry(`${API_BASE_URL}/api/v1/collections/${id}`);
         console.log('Fetched collection data:', collectionData);
         if (!collectionData || typeof collectionData !== 'object') {
           throw new Error('Invalid collection data received');
@@ -123,7 +123,7 @@ function CollectionsDetails() {
         const collectionPromises = selectedCollections
           .filter((colId) => colId !== id)
           .map((colId) =>
-            fetchWithRetry(`${API_BASE_URL}/api/v1/collection/${colId}`).then((data) => ({
+            fetchWithRetry(`${API_BASE_URL}/api/v1/collections/${colId}`).then((data) => ({
               ...data,
               productCount: data.products?.length || 0,
             }))
