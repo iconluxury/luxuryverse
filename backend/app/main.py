@@ -18,10 +18,11 @@ app = FastAPI(
 @app.middleware("http")
 async def add_path_to_response(request: Request, call_next):
     response = await call_next(request)
-    response.headers["X-Request-Path"] = request.url.path
-    print(f"Request path: {request.url.path}")
+    # Add full URL to response headers
+    response.headers["X-Request-Path"] = str(request.url)
+    # Log the full URL
+    print(f"Request URL: {request.url}")
     return response
-
 
 app.add_middleware(
     CORSMiddleware,
