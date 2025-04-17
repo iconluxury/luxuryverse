@@ -16,7 +16,7 @@ import { createFileRoute, useParams, Link } from '@tanstack/react-router';
 import { TimeIcon, ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { Helmet } from 'react-helmet-async';
 import parse, { domToReact } from 'html-react-parser';
-import { Element } from 'domhandler/lib/node';
+import { Element } from 'domhandler';
 import Footer from '../../../components/Common/Footer';
 
 export const Route = createFileRoute('/_layout/products/$id')({
