@@ -19,6 +19,7 @@ import parse, { domToReact } from 'html-react-parser';
 import { Element } from 'domhandler';
 import Footer from '../../../components/Common/Footer';
 import sanitizeHtml from 'sanitize-html';
+
 export const Route = createFileRoute('/_layout/products/$id')({
   component: ProductDetails,
 });
@@ -92,13 +93,18 @@ function ProductDetails() {
     const fetchProduct = async () => {
       try {
         const data = await fetchWithRetry(`${API_BASE_URL}/api/v1/products/${id}`);
+        console.log('Fetched product data:', data); // Debug API response
+        if (!data || typeof data !== 'object') {
+          throw new Error('Invalid product data received');
+        }
         setProduct(data);
         setError(null);
       } catch (err: any) {
         setError(`Failed to load product: ${err.message || 'Unknown error'}`);
         try {
           const topData = await fetchWithRetry(`${API_BASE_URL}/api/v1/top`);
-          setTopProducts(topData);
+          console.log('Fetched top products:', topData); // Debug top products
+          setTopProducts(topData || []);
         } catch (topErr: any) {
           setError((prev) => `${prev}\nFailed to load top products: ${topErr.message || 'Unknown error'}`);
         }
@@ -110,18 +116,29 @@ function ProductDetails() {
     fetchProduct();
   }, [id]);
 
-
-
   const parseDescription = (description: string) => {
     if (!description || typeof description !== 'string') {
       return <Text fontSize="lg" color="gray.700" mb={4}>No description available</Text>;
     }
-    const sanitizedDescription = sanitizeHtml(description, {
-      allowedTags: ['div', 'span', 'p', 'strong', 'em', 'ul', 'li', 'ol'],
-      allowedAttributes: { '*': ['class', 'style'] },
-    });
     try {
-      console.log('Parsing description:', sanitizedDescription);
+      const sanitizedDescription = sanitizeHtml(description, {
+        allowedTags: ['div', 'span', 'p', 'strong', 'em', 'ul', 'li', 'ol'],
+        allowedAttributes: {
+          '*': ['class', 'style'],
+        },
+        allowedStyles: {
+          '*': {
+            'color': [/^#(0x)?[0-9a-f]+$/i, /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/],
+            'text-align': [/^left$/, /^right$/, /^center$/],
+            'font-size': [/^\d+(?:px|em|rem|%)$/],
+          },
+        },
+        parser: {
+          lowerCaseTags: false, // Preserve case for SVG or custom tags if needed
+          lowerCaseAttributeNames: false,
+        },
+      });
+      console.log('Sanitized description:', sanitizedDescription); // Debug sanitized HTML
       return parse(sanitizedDescription, {
         replace: (domNode) => {
           if (domNode instanceof Element && (domNode.name === 'div' || domNode.name === 'span')) {
@@ -134,7 +151,7 @@ function ProductDetails() {
         },
       });
     } catch (err) {
-      console.error('Error parsing description:', err, 'Description:', sanitizedDescription);
+      console.error('Error parsing description:', err, 'Description:', description);
       return <Text fontSize="lg" color="gray.700" mb={4}>Failed to parse description</Text>;
     }
   };
@@ -144,13 +161,13 @@ function ProductDetails() {
   };
 
   const nextImage = () => {
-    if (product?.images.length) {
+    if (product?.images?.length) {
       setCurrentImage((prev) => (prev + 1) % product.images.length);
     }
   };
 
   const prevImage = () => {
-    if (product?.images.length) {
+    if (product?.images?.length) {
       setCurrentImage((prev) => (prev - 1 + product.images.length) % product.images.length);
     }
   };
@@ -205,8 +222,8 @@ function ProductDetails() {
   return (
     <Box>
       <Helmet>
-        <title>{product.title} | Icon Luxury</title>
-        <meta name="description" content={stripHtml(product.description).slice(0, 160)} />
+        <title>{product.title || 'Product'} | Icon Luxury</title>
+        <meta name="description" content={product.description ? stripHtml(product.description).slice(0, 160) : 'Product description'} />
       </Helmet>
       <Box py={16} bg="white">
         <Box maxW="800px" mx="auto" px={4}>
@@ -223,11 +240,11 @@ function ProductDetails() {
           >
             ← Back to all products
           </Link>
-          {product.images.length > 0 ? (
+          {product.images?.length > 0 ? (
             <Box position="relative">
               <Image
                 src={product.images[currentImage]}
-                alt={`${product.title} image ${currentImage + 1}`}
+                alt={`${product.title || 'Product'} image ${currentImage + 1}`}
                 w="full"
                 h="400px"
                 objectFit="cover"
@@ -268,7 +285,7 @@ function ProductDetails() {
             <Text fontSize="sm" color="gray.500">{new Date().toLocaleDateString()}</Text>
             <Flex align="center" ml={4}>
               <TimeIcon mr={1} color="gray.500" boxSize={3} />
-              <Text fontSize="sm" color="gray.500">{product.variants.length} variants</Text>
+              <Text fontSize="sm" color="gray.500">{product.variants?.length || 0} variants</Text>
             </Flex>
             {product.discount && (
               <Tag colorScheme="green" ml={4} px={3} py={1} borderRadius="full">
@@ -277,10 +294,10 @@ function ProductDetails() {
             )}
           </Flex>
           <Heading as="h1" size="2xl" mb={6} fontWeight="medium" lineHeight="1.3">
-            {product.title}
+            {product.title || 'Untitled Product'}
           </Heading>
           <Text fontSize="xl" color="gray.700" mb={4}>
-            {product.sale_price}{' '}
+            {product.sale_price || 'N/A'}{' '}
             {product.full_price && <Text as="s" color="gray.500">{product.full_price}</Text>}
           </Text>
           {product.description ? parseDescription(product.description) : (
@@ -293,20 +310,26 @@ function ProductDetails() {
               Variants
             </Heading>
             <HStack spacing={2} flexWrap="wrap" maxW="100%" gap={2}>
-              {product.variants.map((variant) => (
-                <Tag
-                  key={variant.id}
-                  colorScheme={variant.inventory_quantity > 0 ? 'gray' : 'red'}
-                  variant="subtle"
-                  size="md"
-                  mb={2}
-                >
-                  Size {variant.size} - {variant.price}{' '}
-                  {variant.inventory_quantity > 0
-                    ? `(${variant.inventory_quantity} in stock)`
-                    : '(Out of stock)'}
-                </Tag>
-              ))}
+              {product.variants?.length > 0 ? (
+                product.variants.map((variant) => (
+                  <Tag
+                    key={variant.id}
+                    colorScheme={variant.inventory_quantity > 0 ? 'gray' : 'red'}
+                    variant="subtle"
+                    size="md"
+                    mb={2}
+                  >
+                    Size {variant.size || 'N/A'} - {variant.price || 'N/A'}{' '}
+                    {variant.inventory_quantity > 0
+                      ? `(${variant.inventory_quantity} in stock)`
+                      : '(Out of stock)'}
+                  </Tag>
+                ))
+              ) : (
+                <Text fontSize="md" color="gray.500">
+                  No variants available
+                </Text>
+              )}
             </HStack>
           </Box>
           <Divider mb={8} />
