@@ -199,7 +199,7 @@ function ProductDetails() {
               full_price: p.full_price || '',
               sale_price: p.sale_price || 'N/A',
               discount: p.discount || null,
-              collection_id: p.collection_id || undefined,
+              collection_id: p.collection_id || '461931184423',
               total_inventory: variants.reduce((sum: number, v: Variant) => {
                 return sum + (typeof v.inventory_quantity === 'number' ? v.inventory_quantity : 0);
               }, 0),
