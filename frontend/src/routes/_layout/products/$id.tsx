@@ -1,11 +1,12 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { Flex, Spinner, Box, Text, Tag, HStack, Divider, IconButton, Skeleton, SkeletonText } from '@chakra-ui/react';
+import { Flex, Spinner, Box, Text, Tag, HStack, Divider, IconButton, Skeleton, SkeletonText, Button } from '@chakra-ui/react';
 import { useState, useEffect, useMemo } from 'react';
 import { Link } from '@tanstack/react-router';
 import { Helmet } from 'react-helmet-async';
 import { ErrorBoundary } from 'react-error-boundary';
-import Footer from '../../../components/Common/Footer'; // Adjusted to match CollectionDetails
+import Footer from '../../../components/Common/Footer';
 import { Heading, Image, TimeIcon, ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
+import DOMPurify from 'dompurify';
 
 // Interfaces
 interface Variant {
@@ -64,7 +65,174 @@ function ProductDetails() {
   const { id } = Route.useParams();
   const isBrowser = typeof window !== 'undefined';
 
-  // Fetch product and top products
+  // Debug Shopify SDK and authentication
+  useEffect(() => {
+    console.log('ShopifyBuy available:', window.ShopifyBuy);
+    if (window.ShopifyBuy) {
+      console.log('ShopifyBuy client methods:', Object.keys(window.ShopifyBuy));
+    }
+    console.log('Customer authentication status:', window.Shopify?.customer);
+  }, []);
+
+  const fetchWithRetry = async (url: string, retryCount = 6) => {
+    for (let attempt = 1; attempt <= retryCount; attempt++) {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 30000);
+        const response = await fetch(url, {
+          signal: controller.signal,
+          method: 'GET',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          credentials: 'omit',
+        });
+        clearTimeout(timeoutId);
+
+        if (!response.ok) {
+          if (response.status === 404) throw new Error('Resource not found.');
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        return await response.json();
+      } catch (err: any) {
+        if (err.name === 'AbortError') {
+          err.message = 'Request timed out after 30s.';
+        }
+        console.error('Fetch error:', { url, attempt, error: err.message });
+        if (attempt === retryCount) {
+          throw err;
+        }
+        await new Promise((resolve) => setTimeout(resolve, Math.min(1000 * 2 ** attempt, 10000)));
+      }
+    }
+  };
+
+  const fetchProduct = async () => {
+    try {
+      console.log('Fetching:', `${API_BASE_URL}/api/v1/products/${id}`);
+      const productData = await fetchWithRetry(`${API_BASE_URL}/api/v1/products/${id}`);
+      console.log('Fetch successful for', `${API_BASE_URL}/api/v1/products/${id}:`, productData);
+      if (!productData || typeof productData !== 'object') {
+        throw new Error('Invalid product data received');
+      }
+
+      const validatedProduct: Product = {
+        ...productData,
+        id: productData.id || '',
+        title: productData.title || 'Untitled Product',
+        description: productData.description || '',
+        brand: productData.brand || '',
+        thumbnail: productData.thumbnail || 'https://placehold.co/150x150',
+        images: Array.isArray(productData.images) ? productData.images : [],
+        variants: Array.isArray(productData.variants)
+          ? productData.variants
+              .filter((v: Variant) => {
+                const isValid =
+                  v &&
+                  typeof v === 'object' &&
+                  typeof v.id === 'string' &&
+                  typeof v.size === 'string' &&
+                  typeof v.price === 'string' &&
+                  typeof v.inventory_quantity === 'number';
+                if (!isValid) {
+                  console.warn('Invalid variant filtered:', v);
+                }
+                return isValid;
+              })
+              .map((v: Variant) => ({
+                id: v.id,
+                title: v.title || 'Unknown',
+                size: v.size || 'N/A',
+                inventory_quantity: typeof v.inventory_quantity === 'number' ? v.inventory_quantity : 0,
+                price: v.price || 'N/A',
+                compare_at_price: v.compare_at_price || '',
+              }))
+          : [],
+        full_price: productData.full_price || '',
+        sale_price: productData.sale_price || 'N/A',
+        discount: productData.discount || null,
+        collection_id: productData.collection_id || undefined,
+      };
+      setProduct(validatedProduct);
+      setError(null);
+    } catch (err: any) {
+      console.error('Failed to load product:', { error: err.message, productId: id });
+      setError(`Failed to load product: ${err.message || 'Unknown error'}`);
+    } finally {
+      setProductLoading(false);
+    }
+  };
+
+  const fetchTopProducts = async () => {
+    try {
+      const topProductsUrl = `${API_BASE_URL}/api/v1/collections/488238383399`;
+      console.log('Fetching:', topProductsUrl);
+      const collectionData = await fetchWithRetry(topProductsUrl);
+      console.log('Fetch successful for', topProductsUrl, ':', collectionData);
+
+      if (!collectionData || !Array.isArray(collectionData.products)) {
+        console.warn('Invalid collection data:', collectionData);
+        setTopProducts([]);
+        return;
+      }
+
+      const validatedTopProducts = collectionData.products
+        .filter(
+          (p: Product) =>
+            p &&
+            typeof p.id === 'string' &&
+            typeof p.title === 'string' &&
+            p.id !== id &&
+            Array.isArray(p.variants)
+        )
+        .map((p: Product) => {
+          const variants = Array.isArray(p.variants) ? p.variants : [];
+          return {
+            ...p,
+            id: p.id || '',
+            title: p.title || 'Untitled Product',
+            description: p.description || '',
+            brand: p.brand || '',
+            thumbnail: p.thumbnail || 'https://placehold.co/150x150',
+            images: Array.isArray(p.images) ? p.images : [],
+            variants: variants,
+            full_price: p.full_price || '',
+            sale_price: p.sale_price || 'N/A',
+            discount: p.discount || null,
+            collection_id: p.collection_id || undefined,
+            total_inventory: variants.reduce((sum: number, v: Variant) => {
+              return sum + (typeof v.inventory_quantity === 'number' ? v.inventory_quantity : 0);
+            }, 0),
+            discount_value: p.discount ? parseFloat(p.discount.replace('% off', '')) || 0 : 0,
+          };
+        })
+        .sort((a, b) => {
+          const aDiscount = a.discount_value || 0;
+          const bDiscount = b.discount_value || 0;
+          const aInventory = a.total_inventory || 0;
+          const bInventory = b.total_inventory || 0;
+
+          if (aDiscount !== bDiscount) {
+            return bDiscount - aDiscount;
+          }
+          return bInventory - aInventory;
+        })
+        .slice(0, 5);
+
+      console.log('Top 5 products:', validatedTopProducts);
+      setTopProducts(validatedTopProducts);
+    } catch (topErr: any) {
+      console.warn('Failed to fetch top products:', topErr.message);
+      setError((prev) => prev || `Failed to load top products: ${topErr.message || 'Unknown error'}`);
+      setTopProducts([]);
+    } finally {
+      setTopProductsLoading(false);
+    }
+  };
+
+  // Fetch product
   useEffect(() => {
     if (!id || typeof id !== 'string') {
       setError('Invalid product ID');
@@ -72,166 +240,16 @@ function ProductDetails() {
       return;
     }
 
-    const fetchWithRetry = async (url: string, retryCount = 6) => {
-      for (let attempt = 1; attempt <= retryCount; attempt++) {
-        try {
-          const controller = new AbortController();
-          const timeoutId = setTimeout(() => controller.abort(), 30000);
-          const response = await fetch(url, {
-            signal: controller.signal,
-            method: 'GET',
-            headers: {
-              Accept: 'application/json',
-              'Content-Type': 'application/json',
-            },
-            credentials: 'omit',
-          });
-          clearTimeout(timeoutId);
-
-          if (!response.ok) {
-            if (response.status === 404) throw new Error('Resource not found.');
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-
-          return await response.json();
-        } catch (err: any) {
-          if (err.name === 'AbortError') {
-            err.message = 'Request timed out after 30s.';
-          }
-          console.error('Fetch error:', { url, attempt, error: err.message });
-          if (attempt === retryCount) {
-            throw err;
-          }
-          await new Promise((resolve) => setTimeout(resolve, Math.min(1000 * 2 ** attempt, 10000)));
-        }
-      }
-    };
-
-    const fetchProduct = async () => {
-      try {
-        console.log('Fetching:', `${API_BASE_URL}/api/v1/products/${id}`);
-        const productData = await fetchWithRetry(`${API_BASE_URL}/api/v1/products/${id}`);
-        console.log('Fetch successful for', `${API_BASE_URL}/api/v1/products/${id}:`, productData);
-        if (!productData || typeof productData !== 'object') {
-          throw new Error('Invalid product data received');
-        }
-
-        const validatedProduct: Product = {
-          ...productData,
-          id: productData.id || '',
-          title: productData.title || 'Untitled Product',
-          description: productData.description || '',
-          brand: productData.brand || '',
-          thumbnail: productData.thumbnail || 'https://placehold.co/150x150',
-          images: Array.isArray(productData.images) ? productData.images : [],
-          variants: Array.isArray(productData.variants)
-            ? productData.variants
-                .filter((v: Variant) => {
-                  const isValid =
-                    v &&
-                    typeof v === 'object' &&
-                    typeof v.id === 'string' &&
-                    typeof v.size === 'string' &&
-                    typeof v.price === 'string' &&
-                    typeof v.inventory_quantity === 'number';
-                  if (!isValid) {
-                    console.warn('Invalid variant filtered:', v);
-                  }
-                  return isValid;
-                })
-                .map((v: Variant) => ({
-                  id: v.id,
-                  title: v.title || 'Unknown',
-                  size: v.size || 'N/A',
-                  inventory_quantity: typeof v.inventory_quantity === 'number' ? v.inventory_quantity : 0,
-                  price: v.price || 'N/A',
-                  compare_at_price: v.compare_at_price || '',
-                }))
-            : [],
-          full_price: productData.full_price || '',
-          sale_price: productData.sale_price || 'N/A',
-          discount: productData.discount || null,
-          collection_id: productData.collection_id || undefined,
-        };
-        setProduct(validatedProduct);
-        setError(null);
-      } catch (err: any) {
-        console.error('Failed to load product:', { error: err.message, productId: id });
-        setError(`Failed to load product: ${err.message || 'Unknown error'}`);
-      } finally {
-        setProductLoading(false);
-      }
-    };
-
-    const fetchTopProducts = async () => {
-      try {
-        const topProductsUrl = `${API_BASE_URL}/api/v1/collections/488238383399`;
-        console.log('Fetching:', topProductsUrl);
-        const collectionData = await fetchWithRetry(topProductsUrl);
-        console.log('Fetch successful for', topProductsUrl, ':', collectionData);
-
-        if (!collectionData || !Array.isArray(collectionData.products)) {
-          console.warn('Invalid collection data:', collectionData);
-          setTopProducts([]);
-          return;
-        }
-
-        const validatedTopProducts = collectionData.products
-          .filter(
-            (p: Product) =>
-              p &&
-              typeof p.id === 'string' &&
-              typeof p.title === 'string' &&
-              p.id !== id &&
-              Array.isArray(p.variants)
-          )
-          .map((p: Product) => {
-            const variants = Array.isArray(p.variants) ? p.variants : [];
-            return {
-              ...p,
-              id: p.id || '',
-              title: p.title || 'Untitled Product',
-              description: p.description || '',
-              brand: p.brand || '',
-              thumbnail: p.thumbnail || 'https://placehold.co/150x150',
-              images: Array.isArray(p.images) ? p.images : [],
-              variants: variants,
-              full_price: p.full_price || '',
-              sale_price: p.sale_price || 'N/A',
-              discount: p.discount || null,
-              collection_id: p.collection_id || '461931184423',
-              total_inventory: variants.reduce((sum: number, v: Variant) => {
-                return sum + (typeof v.inventory_quantity === 'number' ? v.inventory_quantity : 0);
-              }, 0),
-              discount_value: p.discount ? parseFloat(p.discount.replace('% off', '')) || 0 : 0,
-            };
-          })
-          .sort((a, b) => {
-            const aDiscount = a.discount_value || 0;
-            const bDiscount = b.discount_value || 0;
-            const aInventory = a.total_inventory || 0;
-            const bInventory = b.total_inventory || 0;
-
-            if (aDiscount !== bDiscount) {
-              return bDiscount - aDiscount;
-            }
-            return bInventory - aInventory;
-          })
-          .slice(0, 5);
-
-        console.log('Top 5 products:', validatedTopProducts);
-        setTopProducts(validatedTopProducts);
-      } catch (topErr: any) {
-        console.warn('Failed to fetch top products:', topErr.message);
-        setError((prev) => prev || `Failed to load top products: ${topErr.message || 'Unknown error'}`);
-        setTopProducts([]);
-      } finally {
-        setTopProductsLoading(false);
-      }
-    };
-
     fetchProduct();
   }, [id]);
+
+  // Fetch top products
+  useEffect(() => {
+    if (product && !error) {
+      setTopProductsLoading(true);
+      fetchTopProducts();
+    }
+  }, [product, error]);
 
   const validatedImages = useMemo(() => product?.images ?? [], [product?.images]);
   const validatedVariants = useMemo(() => product?.variants ?? [], [product?.variants]);
@@ -275,7 +293,7 @@ function ProductDetails() {
       </Box>
     );
   }
- 
+
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
       <Box>
@@ -290,19 +308,9 @@ function ProductDetails() {
         )}
         <Box py={16} bg="white">
           <Box maxW="800px" mx="auto" px={4}>
-            <a
-              href="/products"
-              aria-label="Back to all products"
-              style={{
-                color: '#3182CE',
-                fontWeight: 'medium',
-                textDecoration: 'none',
-                margin: '8px',
-                display: 'block',
-              }}
-            >
+            <Link to="/products" aria-label="Back to all products" style={{ color: '#3182CE', fontWeight: 'medium', textDecoration: 'none', margin: '8px', display: 'block' }}>
               ← Back to all products
-            </a>
+            </Link>
             {validatedImages.length > 0 ? (
               <Box position="relative">
                 <Image
@@ -324,9 +332,7 @@ function ProductDetails() {
                       left="8px"
                       top="50%"
                       transform="translateY(-50%)"
-                      onClick={() =>
-                        setCurrentImage((prev) => (prev - 1 + validatedImages.length) % validatedImages.length)
-                      }
+                      onClick={() => setCurrentImage((prev) => (prev - 1 + validatedImages.length) % validatedImages.length)}
                     />
                     <IconButton
                       aria-label="Next image"
@@ -366,7 +372,12 @@ function ProductDetails() {
               {product.full_price && <Text as="s" color="gray.500">{product.full_price}</Text>}
             </Text>
             {product.description ? (
-              <Text fontSize="lg" color="gray.700" mb={4}>{product.description}</Text>
+              <Text
+                fontSize="lg"
+                color="gray.700"
+                mb={4}
+                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(product.description) }}
+              />
             ) : (
               <Text fontSize="lg" color="gray.700" mb={4}>
                 No description available
@@ -388,12 +399,23 @@ function ProductDetails() {
                     fontSize="md"
                   >
                     Size {variant.size || 'N/A'} - {variant.price || 'N/A'}{' '}
-                    {variant.inventory_quantity > 0
-                      ? `(${variant.inventory_quantity} in stock)`
-                      : '(Out of stock)'}
+                    {variant.inventory_quantity > 0 ? `(${variant.inventory_quantity} in stock)` : '(Out of stock)'}
                   </Box>
                 ))}
               </HStack>
+            </Box>
+            {/* Add to Cart Button */}
+            <Box mt={4}>
+              <Button
+                colorScheme="blue"
+                onClick={() => {
+                  console.log('Add to cart clicked:', validatedVariants[0]);
+                  // Replace with actual cart logic, e.g., cart.add(validatedVariants[0]);
+                }}
+                isDisabled={validatedVariants.length === 0 || validatedVariants.every((v) => v.inventory_quantity === 0)}
+              >
+                Add to Cart
+              </Button>
             </Box>
             <Box mt={8}>
               <Heading as="h2" size="lg" mb={4}>
@@ -402,14 +424,7 @@ function ProductDetails() {
               {topProductsLoading ? (
                 <HStack spacing={4} flexWrap="wrap">
                   {[...Array(5)].map((_, index) => (
-                    <Box
-                      key={index}
-                      p={4}
-                      borderWidth="1px"
-                      borderRadius="md"
-                      textAlign="center"
-                      maxW="200px"
-                    >
+                    <Box key={index} p={4} borderWidth="1px" borderRadius="md" textAlign="center" maxW="200px">
                       <Skeleton w="150px" h="150px" mx="auto" startColor="gray.100" endColor="gray.300" />
                       <SkeletonText mt={2} noOfLines={2} spacing="2" />
                       <Skeleton mt={2} h="16px" w="100px" mx="auto" />
