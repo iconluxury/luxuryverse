@@ -32,20 +32,22 @@ function OptOutPage() {
           </Heading>
           <Box w="full">
           <Text fontSize="lg" mb={4}>
-            Clicking "Opt Me Out" will show the consent banner, allowing you to decline non-essential cookies to disable targeted advertising while keeping essential cookies active.
-            </Text>
-          </Box>
-            <Button
-              onClick={handleOptOut}
-              bg="purple.500"
-              color="white"
-              _hover={{ bg: "purple.600" }}
-              px={6}
-              py={3}
-              fontWeight="medium"
-            >
-              Opt Me Out
-            </Button>
+          Clicking{" "}
+          <Button
+            as="span"
+            onClick={handleOptOut}
+            bg="transparent"
+            color="purple.500"
+            _hover={{ textDecoration: "underline" }}
+            p={0}
+            fontSize="lg"
+            fontWeight="medium"
+          >
+            Opt Me Out
+          </Button>{" "}
+          will show the consent banner, allowing you to decline non-essential cookies to disable targeted advertising while keeping essential cookies active.
+        </Text>
+        </Box>
             <Text fontSize="md" mt={4}>
             After opting out, advertising cookies (e.g., <code>_fbp</code>, <code>_lipt</code>) will be disabled, while essential cookies will remain active.
             </Text>
