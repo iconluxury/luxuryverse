@@ -81,7 +81,7 @@ async def list_collections(limit: int = 50, collection_type: str = "all"):
                         id=str(collection_details["id"]),
                         title=collection_details["title"],
                         description=collection_details.get("body_html", "") or "",
-                        image=collection_details.get("image", {}).get("src", "https://via.placeholder.com/150")
+                        image=collection_details.get("image", {}).get("src", "https://placehold.co/400x400")
                     )
                 )
             except requests.RequestException as e:
@@ -137,7 +137,7 @@ async def get_product(product_id: str):
         
         # Collect all image URLs
         images = [img["src"] for img in product.get("images", [])]
-        thumbnail = images[0] if images else "https://via.placeholder.com/150"
+        thumbnail = images[0] if images else "https://placehold.co/400x400"
 
         result = Product(
             id=str(product["id"]),
@@ -204,7 +204,7 @@ async def get_collection(collection_id: str):
                     discount = f"{discount_percent:.0f}% off"
                 
                 images = [img["src"] for img in full_product.get("images", [])]
-                thumbnail = images[0] if images else "https://via.placeholder.com/150"
+                thumbnail = images[0] if images else "https://placehold.co/400x400"
 
                 products.append(
                     Product(
@@ -227,7 +227,7 @@ async def get_collection(collection_id: str):
             id=str(collection_details["id"]),
             title=collection_details["title"],
             description=collection_details.get("body_html", "") or "",
-            image=collection_details.get("image", {}).get("src", "https://via.placeholder.com/150"),
+            image=collection_details.get("image", {}).get("src", "https://placehold.co/400x400"),
             products=products
         )
         logger.info(f"Fetched collection {collection_id} with {len(products)} products")
