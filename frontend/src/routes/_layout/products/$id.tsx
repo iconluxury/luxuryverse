@@ -28,6 +28,7 @@ class ErrorBoundary extends Component<{ children: ReactNode }, { hasError: boole
 
   componentDidCatch(error: Error, errorInfo: any) {
     console.error('ErrorBoundary caught:', error, errorInfo);
+    console.error('Component stack:', errorInfo.componentStack);
   }
 
   render() {
@@ -246,6 +247,18 @@ function ProductDetails() {
   const { id } = useParams({ from: '/_layout/products/$id' });
   const isBrowser = typeof window !== 'undefined';
 
+  // Debug Set.prototype.add
+  useEffect(() => {
+    const originalAdd = Set.prototype.add;
+    Set.prototype.add = function (...args) {
+      console.log('Set.add called with:', args, 'this:', this);
+      return originalAdd.apply(this, args);
+    };
+    return () => {
+      Set.prototype.add = originalAdd;
+    };
+  }, []);
+
   useEffect(() => {
     const fetchWithRetry = async (url: string, retryCount = 6) => {
       for (let attempt = 1; attempt <= retryCount; attempt++) {
@@ -411,7 +424,7 @@ function ProductDetails() {
   };
 
   const variantComponents = useMemo(() => {
-    if (!product?.variants?.length) {
+    if (!product || !product.variants?.length) {
       return <Text fontSize="md" color="gray.500">No variants available</Text>;
     }
     return product.variants.map((variant, index) => {
@@ -433,7 +446,7 @@ function ProductDetails() {
         </Box>
       );
     });
-  }, [product?.variants]);
+  }, [product]);
 
   if (productLoading) {
     return (
