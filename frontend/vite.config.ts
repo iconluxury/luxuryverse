@@ -23,7 +23,7 @@ export default defineConfig({
     esbuildOptions: { define: { global: "globalThis" } },
   },
   build: {
-    sourcemap: false, // Disable sourcemaps for faster builds
+    sourcemap: true, // Disable sourcemaps for faster builds
     rollupOptions: {
       plugins: [
         visualizer({
