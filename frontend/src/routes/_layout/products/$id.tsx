@@ -296,7 +296,7 @@ function ProductDetails() {
       } catch (err: any) {
         setError(`Failed to load product: ${err.message || 'Unknown error'}`);
         try {
-          const topData = await fetchWithRetry(`${API_BASE_URL}/api/v1/top`);
+          const topData = await fetchWithRetry(`${API_BASE_URL}/api/v1/products/${id}`);
           console.log('Fetched top products:', topData);
           setTopProducts(topData && Array.isArray(topData) ? topData : []);
         } catch (topErr: any) {
