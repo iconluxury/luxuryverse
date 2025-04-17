@@ -16,10 +16,10 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://iconluxury.shop"],
-    allow_credentials=False,
-    allow_methods=["GET", "OPTIONS"],
-    allow_headers=["Accept"],
+    allow_origins=["https://iconluxury.shop"],  
+    allow_credentials=True,  # Enable if cookies are sent
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["Accept", "Content-Type", "Authorization"],
 )
 app.include_router(api_router, prefix=settings.API_V1_STR)
 
