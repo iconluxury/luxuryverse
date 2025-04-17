@@ -111,9 +111,11 @@ function CollectionsPage() {
                   {collection.title || 'Untitled Collection'}
                 </Text>
                 <Box height={`${maxDescriptionHeight}px`} overflow="hidden">
-                  <Text fontSize="sm" color="gray.600" noOfLines={2}>
-                    {collection.description || 'No description available.'}
-                  </Text>
+                <Text fontSize="sm" color="gray.600" noOfLines={2}>
+                  {collection.description
+                    ? collection.description.replace(/<\/?p>/g, '')
+                    : 'No description available.'}
+                </Text>
                 </Box>
               </Box>
             </Box>
