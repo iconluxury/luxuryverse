@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { Flex, Spinner, Box, Text, Tag, HStack, Divider, IconButton, Skeleton, SkeletonText, Button } from '@chakra-ui/react';
+import { Flex, Spinner, Box, Text, Tag, HStack, Divider, IconButton, Skeleton, SkeletonText } from '@chakra-ui/react';
 import { useState, useEffect, useMemo } from 'react';
 import { Link } from '@tanstack/react-router';
 import { Helmet } from 'react-helmet-async';
@@ -24,8 +24,8 @@ interface Product {
   description: string;
   brand: string;
   thumbnail: string;
-  images: string[];
-  variants: Variant[];
+  images?: string[];
+  variants?: Variant[];
   full_price: string;
   sale_price: string;
   discount: string | null;
@@ -63,7 +63,6 @@ function ProductDetails() {
   const [currentImage, setCurrentImage] = useState(0);
   const API_BASE_URL = 'https://iconluxury.shop';
   const { id } = Route.useParams();
-
 
   const fetchWithRetry = async (url: string, retryCount = 6) => {
     for (let attempt = 1; attempt <= retryCount; attempt++) {
@@ -116,7 +115,7 @@ function ProductDetails() {
         description: productData.description || '',
         brand: productData.brand || '',
         thumbnail: productData.thumbnail || 'https://placehold.co/150x150',
-        images: Array.isArray(productData.images) ? productData.images : [],
+        images: Array.isArray(productData.images) ? productData.images : undefined,
         variants: Array.isArray(productData.variants)
           ? productData.variants
               .filter((v: Variant) => {
@@ -140,7 +139,7 @@ function ProductDetails() {
                 price: v.price || 'N/A',
                 compare_at_price: v.compare_at_price || '',
               }))
-          : [],
+          : undefined,
         full_price: productData.full_price || '',
         sale_price: productData.sale_price || 'N/A',
         discount: productData.discount || null,
@@ -187,7 +186,7 @@ function ProductDetails() {
             description: p.description || '',
             brand: p.brand || '',
             thumbnail: p.thumbnail || 'https://placehold.co/150x150',
-            images: Array.isArray(p.images) ? p.images : [],
+            images: Array.isArray(p.images) ? p.images : undefined,
             variants: variants,
             full_price: p.full_price || '',
             sale_price: p.sale_price || 'N/A',
@@ -240,10 +239,10 @@ function ProductDetails() {
       setTopProductsLoading(true);
       fetchTopProducts();
     }
-  }, [product, error]);
+  }, [product?.id, error]);
 
-  const validatedImages = useMemo(() => product?.images ?? [], [product?.images]);
-  const validatedVariants = useMemo(() => product?.variants ?? [], [product?.variants]);
+  const validatedImages = useMemo(() => (Array.isArray(product?.images) ? product.images : undefined), [product?.images]);
+  const validatedVariants = useMemo(() => (Array.isArray(product?.variants) ? product.variants : undefined), [product?.variants]);
 
   if (productLoading) {
     return (
@@ -288,19 +287,19 @@ function ProductDetails() {
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
       <Box>
-          <Helmet>
-            <title>{product.title || 'Product'} | Icon Luxury</title>
-            <meta
-              name="description"
-              content={product.description ? product.description.slice(0, 160) : 'Product description'}
-            />
-          </Helmet>
+        <Helmet>
+          <title>{product.title || 'Product'} | Icon Luxury</title>
+          <meta
+            name="description"
+            content={product.description ? product.description.slice(0, 160) : 'Product description'}
+          />
+        </Helmet>
         <Box py={16} bg="white">
           <Box maxW="800px" mx="auto" px={4}>
             <Link to="/products" aria-label="Back to all products" style={{ color: '#3182CE', fontWeight: 'medium', textDecoration: 'none', margin: '8px', display: 'block' }}>
               ← Back to all products
             </Link>
-            {validatedImages.length > 0 ? (
+            {validatedImages ? (
               <Box position="relative">
                 <Image
                   src={validatedImages[currentImage] || 'https://placehold.co/275x350'}
@@ -345,7 +344,7 @@ function ProductDetails() {
               <Text fontSize="sm" color="gray.500">{new Date().toLocaleDateString()}</Text>
               <Flex align="center" ml={4}>
                 <TimeIcon mr={1} color="gray.500" boxSize={3} />
-                <Text fontSize="sm" color="gray.500">{validatedVariants.length || 0} variants</Text>
+                <Text fontSize="sm" color="gray.500">{validatedVariants?.length || 0} variants</Text>
               </Flex>
               {product.discount && (
                 <Tag colorScheme="green" ml={4} px={3} py={1} borderRadius="full">
@@ -372,40 +371,29 @@ function ProductDetails() {
                 No description available
               </Text>
             )}
-            <Box mt={8}>
-              <Heading as="h2" size="lg" mb={4}>
-                Variants
-              </Heading>
-              <HStack spacing={2} flexWrap="wrap" maxW="100%" gap={2}>
-                {validatedVariants.map((variant, index) => (
-                  <Box
-                    key={variant.id || `variant-${index}`}
-                    bg={variant.inventory_quantity > 0 ? 'gray.100' : 'red.100'}
-                    px={3}
-                    py={1}
-                    borderRadius="full"
-                    mb={2}
-                    fontSize="md"
-                  >
-                    Size {variant.size || 'N/A'} - {variant.price || 'N/A'}{' '}
-                    {variant.inventory_quantity > 0 ? `(${variant.inventory_quantity} in stock)` : '(Out of stock)'}
-                  </Box>
-                ))}
-              </HStack>
-            </Box>
-            {/* Add to Cart Button */}
-            <Box mt={4}>
-              <Button
-                colorScheme="blue"
-                onClick={() => {
-                  console.log('Add to cart clicked:', validatedVariants[0]);
-                  // Replace with actual cart logic, e.g., cart.add(validatedVariants[0]);
-                }}
-                isDisabled={validatedVariants.length === 0 || validatedVariants.every((v) => v.inventory_quantity === 0)}
-              >
-                Add to Cart
-              </Button>
-            </Box>
+            {validatedVariants && (
+              <Box mt={8}>
+                <Heading as="h2" size="lg" mb={4}>
+                  Variants
+                </Heading>
+                <HStack spacing={2} flexWrap="wrap" maxW="100%" gap={2}>
+                  {validatedVariants.map((variant, index) => (
+                    <Box
+                      key={variant.id || `variant-${index}`}
+                      bg={variant.inventory_quantity > 0 ? 'gray.100' : 'red.100'}
+                      px={3}
+                      py={1}
+                      borderRadius="full"
+                      mb={2}
+                      fontSize="md"
+                    >
+                      Size {variant.size || 'N/A'} - {variant.price || 'N/A'}{' '}
+                      {variant.inventory_quantity > 0 ? `(${variant.inventory_quantity} in stock)` : '(Out of stock)'}
+                    </Box>
+                  ))}
+                </HStack>
+              </Box>
+            )}
             <Box mt={8}>
               <Heading as="h2" size="lg" mb={4}>
                 Related Products
