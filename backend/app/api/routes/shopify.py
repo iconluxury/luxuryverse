@@ -8,59 +8,52 @@ import requests
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
-
-# Main router for Shopify endpoints
 shopify_router = APIRouter()
-
-# Sub-routers for products and collections
 products_router = APIRouter(prefix="/products", tags=["products"])
 collections_router = APIRouter(prefix="/collections", tags=["collections"])
 
 class Variant(BaseModel):
     id: str
     title: str
-    size: Optional[str] = None  # Extracted from option1, option2, or option3 if applicable
+    size: Optional[str] = None
     inventory_quantity: int
-    price: str  # Current price (sale price if applicable)
-    compare_at_price: Optional[str] = None  # Full price for discount calculation
+    price: str
+    compare_at_price: Optional[str] = None
 
 class Product(BaseModel):
     id: str
     title: str
     description: str
-    brand: Optional[str] = None  # Vendor field in Shopify
+    brand: Optional[str] = None
     thumbnail: str
-    images: List[str] = []  # All image URLs
+    images: List[str] = []
     variants: List[Variant]
-    full_price: str  # Highest compare_at_price or price
-    sale_price: str  # Lowest price among variants
-    discount: Optional[str] = None  # e.g., "40% off"
+    full_price: str
+    sale_price: str
+    discount: Optional[str] = None
 
 class Collection(BaseModel):
     id: str
     title: str
-    description: Optional[str] = "" 
+    description: Optional[str] = ""
     image: str
     products: List[Product]
 
 class SimpleCollection(BaseModel):
     id: str
     title: str
-    description: Optional[str] = ""  # Ensure string, default to empty
+    description: Optional[str] = ""
     image: str
+
+# Initialize ShopifyWrapper (replace with your credentials)
+wrapper = ShopifyWrapper(
+    shop_url="accessxprive.myshopify.com",
+    access_token="your_access_token",
+    webhook_secret="your_webhook_secret"
+)
 
 @collections_router.get("/", response_model=List[SimpleCollection])
 async def list_collections(limit: int = 100, collection_type: str = "all"):
-    """
-    List all available collections with basic information (ID, title, description, image).
-
-    Args:
-        limit (int): Number of collections to fetch (max 250, default 50).
-        collection_type (str): Filter by 'custom', 'smart', or 'all' (default 'all').
-
-    Returns:
-        List[SimpleCollection]: List of collections with basic details.
-    """
     try:
         if collection_type not in ["all", "custom", "smart"]:
             raise HTTPException(status_code=400, detail="Invalid collection_type. Must be 'all', 'custom', or 'smart'.")
@@ -71,11 +64,14 @@ async def list_collections(limit: int = 100, collection_type: str = "all"):
             logger.info("No collections found, returning empty list")
             return result
         
-        for collection, collection_type in collections:
+        for collection, coll_type in collections:
             try:
-                collection_details = wrapper.get_collection_details(
-                    collection["id"], collection_type=collection_type
-                )
+                # Reuse cached collection details if available
+                cache_key = f"GET:/admin/api/{wrapper.api_version}/{'custom_collections' if coll_type == 'custom' else 'smart_collections'}/{collection['id']}.json:None"
+                collection_details = wrapper.cache.get(cache_key)
+                if not collection_details:
+                    collection_details = wrapper.get_collection_details(collection["id"], collection_type=coll_type)
+                
                 result.append(
                     SimpleCollection(
                         id=str(collection_details["id"]),
@@ -95,9 +91,6 @@ async def list_collections(limit: int = 100, collection_type: str = "all"):
 
 @products_router.get("/{product_id}", response_model=Product)
 async def get_product(product_id: str):
-    """
-    Fetch details for a specific product by ID, including description, brand, sizes, available sizes, images, prices, and discount.
-    """
     try:
         product = wrapper.get_product_details(int(product_id))
         if not product:
@@ -108,7 +101,6 @@ async def get_product(product_id: str):
             logger.warning(f"Product {product['id']} has no variants")
             raise HTTPException(status_code=404, detail="Product has no variants")
         
-        # Extract variant details
         variant_list = []
         for v in variants:
             size = v.get("option1") or v.get("title")
@@ -123,7 +115,6 @@ async def get_product(product_id: str):
                 )
             )
         
-        # Calculate prices and discount
         prices = [float(v["price"]) for v in variants]
         compare_at_prices = [
             float(v["compare_at_price"]) for v in variants if v.get("compare_at_price")
@@ -135,7 +126,6 @@ async def get_product(product_id: str):
             discount_percent = ((full_price - sale_price) / full_price) * 100
             discount = f"{discount_percent:.0f}% off"
         
-        # Collect all image URLs
         images = [img["src"] for img in product.get("images", [])]
         thumbnail = images[0] if images else "https://placehold.co/400x400"
 
@@ -159,20 +149,32 @@ async def get_product(product_id: str):
 
 @collections_router.get("/{collection_id}", response_model=Collection)
 async def get_collection(collection_id: str):
-    """
-    Fetch a single collection by ID from Shopify, including detailed product information.
-    """
     try:
-        try:
-            collection_details = wrapper.get_collection_details(int(collection_id), collection_type="custom")
-        except requests.RequestException:
-            collection_details = wrapper.get_collection_details(int(collection_id), collection_type="smart")
+        # Try custom collection first, fallback to smart
+        cache_key_custom = f"GET:/admin/api/{wrapper.api_version}/custom_collections/{collection_id}.json:None"
+        cache_key_smart = f"GET:/admin/api/{wrapper.api_version}/smart_collections/{collection_id}.json:None"
+        
+        collection_details = wrapper.cache.get(cache_key_custom)
+        collection_type = "custom"
+        if not collection_details:
+            try:
+                collection_details = wrapper.get_collection_details(int(collection_id), collection_type="custom")
+            except requests.RequestException:
+                collection_details = wrapper.get_collection_details(int(collection_id), collection_type="smart")
+                collection_type = "smart"
+                if not wrapper.cache.get(cache_key_smart):
+                    wrapper.cache.set(cache_key_smart, collection_details)
         
         collection_products = wrapper.list_collection_products(int(collection_id), limit=10)
         products = []
         for prod in collection_products:
             try:
-                full_product = wrapper.get_product_details(prod["id"])
+                # Reuse cached product details if available
+                cache_key_product = f"GET:/admin/api/{wrapper.api_version}/products/{prod['id']}.json:None"
+                full_product = wrapper.cache.get(cache_key_product)
+                if not full_product:
+                    full_product = wrapper.get_product_details(prod["id"])
+                
                 variants = full_product.get("variants", [])
                 if not variants:
                     logger.warning(f"Product {full_product['id']} in collection {collection_id} has no variants")

@@ -5,28 +5,40 @@ import hashlib
 import base64
 from typing import Dict, List, Optional
 import time
+from datetime import datetime, timedelta
+from queue import Queue
+from threading import Lock
+from functools import lru_cache
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
+class ShopifyCache:
+    def __init__(self, ttl_seconds=300):
+        self.cache = {}
+        self.ttl = ttl_seconds
+
+    def get(self, key):
+        """Retrieve cached data if not expired."""
+        if key in self.cache:
+            data, timestamp = self.cache[key]
+            if datetime.now() - timestamp < timedelta(seconds=self.ttl):
+                return data
+            del self.cache[key]
+        return None
+
+    def set(self, key, data):
+        """Store data in cache with timestamp."""
+        self.cache[key] = (data, datetime.now())
+
 class ShopifyWrapper:
     """
-    A Python wrapper for Shopify's Admin API (version 2025-04), supporting products, draft orders, collections,
-    and webhooks for draft order events.
+    A Python wrapper for Shopify's Admin API (version 2025-04) with caching and rate limit handling.
     """
     def __init__(self, shop_url: str, access_token: str, webhook_secret: Optional[str] = None):
-        """
-        Initialize the Shopify wrapper.
-
-        Args:
-            shop_url (str): The Shopify store URL (e.g., 'accessxprive.myshopify.com').
-            access_token (str): Access token for Admin API authentication.
-            webhook_secret (str, optional): Secret for verifying webhook signatures.
-
-        Raises:
-            ValueError: If access_token is missing or empty.
-        """
         if not access_token:
             raise ValueError("Access token is required for Admin API")
         self.shop_url = shop_url.rstrip('/')
@@ -38,27 +50,46 @@ class ShopifyWrapper:
             "X-Shopify-Access-Token": self.access_token,
             "Content-Type": "application/json"
         }
+        self.cache = ShopifyCache(ttl_seconds=300)
+        self.bucket_size = 40  # Shopify default bucket size
+        self.bucket_remaining = 40
+        self.lock = Lock()
+        self.request_queue = Queue()
+        self.last_request_time = 0
+
+    def _update_rate_limit(self, response):
+        """Update rate limit based on response headers."""
+        limit_header = response.headers.get('X-Shopify-Shop-Api-Call-Limit')
+        if limit_header:
+            used, total = map(int, limit_header.split('/'))
+            with self.lock:
+                self.bucket_remaining = total - used
+                logger.debug(f"Rate limit: {used}/{total} credits used")
+
+    def _throttle(self):
+        """Ensure requests don't exceed 2 per second."""
+        with self.lock:
+            elapsed = time.time() - self.last_request_time
+            if elapsed < 0.5:  # 500ms for 2 requests/sec
+                time.sleep(0.5 - elapsed)
+            self.last_request_time = time.time()
 
     def _make_request(self, method: str, endpoint: str, params: Dict = None, json: Dict = None, retries: int = 3, backoff: float = 1.0) -> Dict:
         """
-        Make an HTTP request to the Shopify Admin API with retry on rate limit.
-
-        Args:
-            method (str): HTTP method ('GET', 'POST', etc.).
-            endpoint (str): API endpoint (e.g., '/admin/api/2025-04/products.json').
-            params (Dict, optional): Query parameters.
-            json (Dict, optional): JSON payload for POST/PUT requests.
-            retries (int): Number of retries for 429 errors (default: 3).
-            backoff (float): Initial backoff delay in seconds (default: 1.0).
-
-        Returns:
-            Dict: JSON response from the API.
-
-        Raises:
-            requests.RequestException: If the request fails after retries.
+        Make an HTTP request with caching and rate limit handling.
         """
+        cache_key = f"{method}:{endpoint}:{str(params)}"
+        cached_data = self.cache.get(cache_key)
+        if cached_data:
+            logger.debug(f"Cache hit for {cache_key}")
+            return cached_data
+
         url = f"{self.base_url}{endpoint}"
         for attempt in range(retries):
+            if self.bucket_remaining < 5:  # Pause if low on credits
+                logger.warning(f"Low on credits ({self.bucket_remaining}/{self.bucket_size}), pausing...")
+                time.sleep(backoff * (2 ** attempt))
+            self._throttle()
             try:
                 response = requests.request(
                     method=method,
@@ -68,13 +99,16 @@ class ShopifyWrapper:
                     json=json,
                     timeout=10
                 )
+                self._update_rate_limit(response)
                 if response.status_code == 429:
                     retry_after = float(response.headers.get("Retry-After", backoff * (2 ** attempt)))
                     logger.warning(f"Rate limit hit for {url}, retrying after {retry_after} seconds")
                     time.sleep(retry_after)
                     continue
                 response.raise_for_status()
-                return response.json()
+                data = response.json()
+                self.cache.set(cache_key, data)
+                return data
             except requests.RequestException as e:
                 if attempt == retries - 1:
                     logger.error(f"Request to {url} failed after {retries} retries: {e}")
@@ -84,76 +118,23 @@ class ShopifyWrapper:
         raise requests.RequestException(f"Failed to complete request to {url} after {retries} retries")
 
     def list_products(self, limit: int = 50, since_id: int = 0) -> List[Dict]:
-        """
-        List products using the Admin API.
-
-        Args:
-            limit (int): Number of products to fetch (max 250).
-            since_id (int): Fetch products after this ID.
-
-        Returns:
-            List[Dict]: List of product dictionaries.
-
-        Example:
-            wrapper.list_products(limit=10)
-        """
         endpoint = f"/admin/api/{self.api_version}/products.json"
         params = {"limit": min(limit, 250), "since_id": since_id}
         logger.info(f"Listing products with limit={limit}, since_id={since_id}")
-        response = self._make_request("GET", endpoint, params=params)
-        return response.get("products", [])
+        return self._make_request("GET", endpoint, params=params).get("products", [])
 
     def get_product_details(self, product_id: int) -> Dict:
-        """
-        Fetch detailed product information for a product details page using the Admin API.
-
-        Args:
-            product_id (int): The ID of the product to fetch.
-
-        Returns:
-            Dict: Detailed product data including title, description, images, variants, etc.
-
-        Example:
-            wrapper.get_product_details(123456789)
-        """
         endpoint = f"/admin/api/{self.api_version}/products/{product_id}.json"
         logger.info(f"Fetching detailed product with ID: {product_id}")
-        response = self._make_request("GET", endpoint)
-        return response.get("product", {})
+        return self._make_request("GET", endpoint).get("product", {})
 
     def list_variants(self, product_id: int) -> List[Dict]:
-        """
-        Fetch all variants for a specific product.
-
-        Args:
-            product_id (int): The ID of the product.
-
-        Returns:
-            List[Dict]: List of variant dictionaries.
-
-        Example:
-            wrapper.list_variants(123456789)
-        """
         product = self.get_product_details(product_id)
         variants = product.get("variants", [])
         logger.info(f"Fetched {len(variants)} variants for product ID: {product_id}")
         return variants
 
     def create_draft_order(self, variant_id: int, email: str = "nik@luxuryverse.com", quantity: int = 1) -> Dict:
-        """
-        Create a draft order with a specific variant and email.
-
-        Args:
-            variant_id (int): The ID of the variant to include.
-            email (str): Email for the draft order (default: 'nik@luxuryverse.com').
-            quantity (int): Quantity of the variant (default: 1).
-
-        Returns:
-            Dict: Created draft order details.
-
-        Example:
-            wrapper.create_draft_order(variant_id=47003275755815)
-        """
         endpoint = f"/admin/api/{self.api_version}/draft_orders.json"
         draft_order = {
             "draft_order": {
@@ -167,24 +148,9 @@ class ShopifyWrapper:
             }
         }
         logger.info(f"Creating draft order with variant ID: {variant_id}, email: {email}")
-        response = self._make_request("POST", endpoint, json=draft_order)
-        return response.get("draft_order", {})
+        return self._make_request("POST", endpoint, json=draft_order).get("draft_order", {})
 
     def list_collections(self, limit: int = 50, since_id: int = 0, collection_type: str = "all") -> List[Dict]:
-        """
-        Fetch a list of collections (custom or smart) for featured sections.
-
-        Args:
-            limit (int): Number of collections to fetch (max 250).
-            since_id (int): Fetch collections after this ID.
-            collection_type (str): 'custom', 'smart', or 'all' (default: 'all').
-
-        Returns:
-            List[Dict]: List of collection dictionaries.
-
-        Example:
-            wrapper.list_collections(limit=10, collection_type='custom')
-        """
         collections = []
         if collection_type in ["all", "custom"]:
             endpoint = f"/admin/api/{self.api_version}/custom_collections.json"
@@ -195,7 +161,7 @@ class ShopifyWrapper:
                 collections.extend([(c, "custom") for c in response.get("custom_collections", [])])
             except requests.RequestException as e:
                 logger.warning(f"Failed to fetch custom collections: {e}")
-        
+
         if collection_type in ["all", "smart"]:
             endpoint = f"/admin/api/{self.api_version}/smart_collections.json"
             params = {"limit": min(limit, 250), "since_id": since_id}
@@ -205,63 +171,22 @@ class ShopifyWrapper:
                 collections.extend([(c, "smart") for c in response.get("smart_collections", [])])
             except requests.RequestException as e:
                 logger.warning(f"Failed to fetch smart collections: {e}")
-        
+
         logger.info(f"Fetched {len(collections)} total collections")
         return collections
 
     def get_collection_details(self, collection_id: int, collection_type: str = "custom") -> Dict:
-        """
-        Fetch detailed information for a specific collection.
-
-        Args:
-            collection_id (int): The ID of the collection.
-            collection_type (str): 'custom' or 'smart' (default: 'custom').
-
-        Returns:
-            Dict: Collection details including title, description, etc.
-
-        Example:
-            wrapper.get_collection_details(123456789, collection_type='custom')
-        """
         endpoint = f"/admin/api/{self.api_version}/{'custom_collections' if collection_type == 'custom' else 'smart_collections'}/{collection_id}.json"
         logger.info(f"Fetching {collection_type} collection with ID: {collection_id}")
-        response = self._make_request("GET", endpoint)
-        return response.get("custom_collection" if collection_type == "custom" else "smart_collection", {})
+        return self._make_request("GET", endpoint).get("custom_collection" if collection_type == "custom" else "smart_collection", {})
 
     def list_collection_products(self, collection_id: int, limit: int = 50) -> List[Dict]:
-        """
-        Fetch products associated with a specific collection.
-
-        Args:
-            collection_id (int): The ID of the collection.
-            limit (int): Number of products to fetch (max 250).
-
-        Returns:
-            List[Dict]: List of product dictionaries in the collection.
-
-        Example:
-            wrapper.list_collection_products(452814242087, limit=10)
-        """
         endpoint = f"/admin/api/{self.api_version}/collections/{collection_id}/products.json"
         params = {"limit": min(limit, 250)}
         logger.info(f"Fetching products for collection ID: {collection_id} with limit={limit}")
-        response = self._make_request("GET", endpoint, params=params)
-        return response.get("products", [])
+        return self._make_request("GET", endpoint, params=params).get("products", [])
 
     def create_webhook(self, topic: str, callback_url: str) -> Dict:
-        """
-        Create a webhook for a specific topic.
-
-        Args:
-            topic (str): The webhook topic (e.g., 'draft_orders/create').
-            callback_url (str): The URL to receive webhook payloads.
-
-        Returns:
-            Dict: Created webhook details.
-
-        Example:
-            wrapper.create_webhook('draft_orders/create', 'https://yourapp.com/webhooks')
-        """
         endpoint = f"/admin/api/{self.api_version}/webhooks.json"
         webhook = {
             "webhook": {
@@ -271,23 +196,9 @@ class ShopifyWrapper:
             }
         }
         logger.info(f"Creating webhook for topic: {topic}, callback: {callback_url}")
-        response = self._make_request("POST", endpoint, json=webhook)
-        return response.get("webhook", {})
+        return self._make_request("POST", endpoint, json=webhook).get("webhook", {})
 
     def verify_webhook(self, data: bytes, hmac_header: str) -> bool:
-        """
-        Verify a Shopify webhook's authenticity.
-
-        Args:
-            data (bytes): The raw webhook payload.
-            hmac_header (str): The X-Shopify-Hmac-Sha256 header value.
-
-        Returns:
-            bool: True if the webhook is authentic, False otherwise.
-
-        Example:
-            wrapper.verify_webhook(request.body, request.headers['X-Shopify-Hmac-Sha256'])
-        """
         if not self.webhook_secret:
             logger.error("Webhook secret is required for verification")
             return False
@@ -298,4 +209,3 @@ class ShopifyWrapper:
         ).digest()
         computed_hmac = base64.b64encode(digest).decode('utf-8')
         return hmac.compare_digest(computed_hmac, hmac_header)
-
