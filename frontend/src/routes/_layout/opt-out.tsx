@@ -31,7 +31,7 @@ function OptOutPage() {
             Opt Out of Cookies 
           </Heading>
           <Box w="full">
-          <Text fontSize="lg" mb={4}>
+          <Text fontSize="lg" mb={2}>
           Clicking{" "}
           <Button
             as="span"
@@ -43,7 +43,7 @@ function OptOutPage() {
             fontSize="lg"
             fontWeight="medium"
           >
-            Opt Me Out
+        opt me out
           </Button>{" "}
           will show the consent banner, allowing you to decline non-essential cookies to disable targeted advertising while keeping essential cookies active.
         </Text>
