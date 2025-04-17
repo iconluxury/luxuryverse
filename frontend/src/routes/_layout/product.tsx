@@ -12,7 +12,7 @@ function ProductsPage() {
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const API_BASE_URL = process.env.API_BASE_URL || 'https://iconluxury.today';
+  const API_BASE_URL = (process.env.API_BASE_URL || 'https://iconluxury.today').replace(/\/+$/, ''); // Remove trailing slashes
 
   // Logging utility (disabled in production)
   const logDebug = process.env.NODE_ENV === 'development' ? console.debug : () => {};
@@ -25,16 +25,16 @@ function ProductsPage() {
 
       for (let attempt = 1; attempt <= retryCount; attempt++) {
         try {
-          logDebug(`Attempt ${attempt}: Fetching products from ${API_BASE_URL}/api/v1/products`);
+          const url = `${API_BASE_URL}/api/v1/products`;
+          logDebug(`Attempt ${attempt}: Fetching products from ${url}`);
           const controller = new AbortController();
-          const timeoutId = setTimeout(() => controller.abort(), 15000);
+          const timeoutId = setTimeout(() => controller.abort(), 30000); // Increased to 30s
 
-          const response = await fetch(`${API_BASE_URL}/api/v1/products`, {
+          const response = await fetch(url, {
             signal: controller.signal,
             method: 'GET',
             headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
+              'Accept': 'application/json', // Removed Content-Type to avoid pre-flight
             },
           });
 
@@ -70,21 +70,25 @@ function ProductsPage() {
           let errorMessage = err.message || 'Unknown error';
           let userErrorMessage = 'Unable to load products. Please try again later.';
           if (err.name === 'AbortError') {
-            errorMessage = 'Request timed out after 15s.';
+            errorMessage = 'Request timed out after 30s.';
+            userErrorMessage = 'Request timed out. Please try again later.';
           } else if (err.message.includes('Failed to fetch')) {
-            errorMessage = 'Unable to connect: Possible DNS, CORS, or server issue.';
-            userErrorMessage = 'Unable to connect to the server. Please check your network.';
+            errorMessage = 'Unable to connect: Possible CORS, network, or server issue.';
+            userErrorMessage = 'Unable to connect to the server. Please check your network or contact support@iconluxury.today.';
           }
-          console.error(`Attempt ${attempt} failed: ${errorMessage}`, err);
+          console.error(`Attempt ${attempt} failed: ${errorMessage}`, {
+            name: err.name,
+            message: err.message,
+            stack: err.stack,
+            url: `${API_BASE_URL}/api/v1/products`,
+          });
           if (attempt === retryCount) {
             setError(userErrorMessage);
           } else {
             await new Promise((resolve) => setTimeout(resolve, delay * Math.pow(2, attempt)));
           }
         } finally {
-          if (attempt === retryCount || !error) {
-            setLoading(false);
-          }
+          setLoading(false);
         }
       }
     };
@@ -100,7 +104,7 @@ function ProductsPage() {
 
   if (error) {
     return (
-      <Box textAlign="center" py={16} color="red PSU Football.500">
+      <Box textAlign="center" py={16} color="red.500">
         <Text fontSize="lg">{error}</Text>
         <Text fontSize="sm" mt={2}>
           Please check your network connection, ensure the backend is running, or contact{' '}
