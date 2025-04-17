@@ -296,7 +296,7 @@ function ProductDetails() {
 
         // Fetch top 5 products from the featured collection
         try {
-          const topProductsUrl = `${API_BASE_URL}/api/v1/collections/8789669282087`;
+          const topProductsUrl = `${API_BASE_URL}/api/v1/collections/488238383399`;
           const collectionData = await fetchWithRetry(topProductsUrl);
           console.log('Fetched collection products:', collectionData);
 
@@ -339,7 +339,7 @@ function ProductDetails() {
         setError(`Failed to load product: ${err.message || 'Unknown error'}`);
         try {
           // Fallback: Fetch top 5 products from featured collection
-          const topProductsUrl = `${API_BASE_URL}/api/v1/collections/8789669282087`;
+          const topProductsUrl = `${API_BASE_URL}/api/v1/collections/488238383399`;
           const collectionData = await fetchWithRetry(topProductsUrl);
           console.log('Fetched collection products (fallback):', collectionData);
 
