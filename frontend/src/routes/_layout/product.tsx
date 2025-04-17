@@ -136,7 +136,7 @@ function ProductsPage() {
         {products.map((product) => (
           <Link
             key={product.id}
-            to={`/product/${product.id}`}
+            to={`/products/${product.id}`}
             aria-label={`View ${product.title}`}
           >
             <Box
