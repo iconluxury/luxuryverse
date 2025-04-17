@@ -18,7 +18,7 @@ import { Helmet } from 'react-helmet-async';
 import parse from 'html-react-parser';
 import Footer from '../../../components/Common/Footer';
 
-export const Route = createFileRoute('/_layout/products/ProductDetails')({
+export const Route = createFileRoute('/_layout/products/$id')({
   component: ProductDetails,
 });
 
