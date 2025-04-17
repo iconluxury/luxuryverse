@@ -166,7 +166,7 @@ async def submit_privacy_request(form_data: PrivacyRequestForm) -> Message:
                     specific_details += f"<h3>Additional Details:</h3><p>{form_data.deletion_details}</p>"
             
             team_notification_sent = send_email(
-                email_to="privacy@iconluxury.shop",
+                email_to="privacy@luxuryverse.com",
                 subject=f"New Privacy Request: {request_type_readable} - #{request_ref}",
                 html_content=f"""
                 <html>

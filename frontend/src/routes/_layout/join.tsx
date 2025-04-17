@@ -329,8 +329,8 @@ function JoinPage() {
                 Privacy Policy
               </Link>{' '}
               or contact us at{' '}
-              <Link href="mailto:privacy@iconluxury.shop" color="yellow.400" textDecoration="underline">
-                privacy@iconluxury.shop
+              <Link href="mailto:privacy@luxuryverse.com" color="yellow.400" textDecoration="underline">
+                privacy@luxuryverse.com
               </Link>.
             </Text>
           </Box>
