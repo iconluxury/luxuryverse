@@ -21,7 +21,7 @@ const Footer = () => {
           textAlign={{ base: "center", md: "left" }}
           gap={{ base: 8, md: 4 }}
         >
-          {/* Left Section: Company Info and Explore */}
+          {/* Left Section: Company Info, Explore, and Shop */}
           <Flex
             direction={{ base: "column", md: "row" }}
             gap={{ base: 8, md: 12 }}
@@ -57,6 +57,21 @@ const Footer = () => {
                 </Link>
                 <Link href="/contact" color="gray.300" _hover={{ color: "purple.600" }}>
                   Contact
+                </Link>
+              </HStack>
+            </Box>
+
+            {/* Shop Links */}
+            <Box>
+              <Heading as="h4" size="md" mb={4}>
+                Shop
+              </Heading>
+              <HStack wrap="wrap" spacing={4} justify={{ base: "center", md: "flex-start" }}>
+                <Link href="/join" color="gray.300" _hover={{ color: "purple.600" }}>
+                  Join
+                  </Link>
+                <Link href="/collections" color="gray.300" _hover={{ color: "purple.600" }}>
+                  Collections
                 </Link>
               </HStack>
             </Box>
@@ -116,7 +131,7 @@ const Footer = () => {
               Cookie Policy
             </Link>
             <Link href="/opt-out" color="gray.400" fontSize="sm" _hover={{ color: "purple.600" }}>
-             Opt Out
+              Opt Out
             </Link>
           </HStack>
         </Flex>
