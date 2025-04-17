@@ -18,6 +18,7 @@ import { Helmet } from 'react-helmet-async';
 import parse from 'html-react-parser';
 import Footer from '../../../components/Common/Footer';
 import { Element } from 'domhandler/lib/node';
+import { domToReact } from 'html-react-parser';
 
 export const Route = createFileRoute('/_layout/products/$id')({
   component: ProductDetails,
@@ -115,17 +116,19 @@ function ProductDetails() {
       return <Text fontSize="lg" color="gray.700" mb={4}>No description available</Text>;
     }
     return parse(description, {
-      replace: (domNode) => {
-        if (domNode instanceof Element && (domNode.name === 'div' || domNode.name === 'span')) {
-          return (
-            <Text fontSize="lg" color="gray.700" mb={2}>
-              {domToReact(domNode.children)}
-            </Text>
-          );
-        }
-      },
-    });
-  };
+  replace: (domNode) => {
+    if (domNode instanceof Element && (domNode.name === 'div' || domNode.name === 'span')) {
+      return (
+        <Text fontSize="lg" color="gray.700" mb={2}>
+          {domToReact(domNode.children, { replace: (childNode) => {
+            // Add custom logic for nested nodes if needed
+            return undefined; // Let default parsing handle it
+          }})}
+        </Text>
+      );
+    }
+  },
+});
 
   const stripHtml = (html: string) => {
     return html.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
