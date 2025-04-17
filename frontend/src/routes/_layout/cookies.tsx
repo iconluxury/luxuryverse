@@ -30,11 +30,11 @@ function CookiePolicyPage() {
 
           {/* 9. Contact Information */}
           <Box w="full" id="contact-information">
-            <Heading as="h2" size="lg" fontWeight="medium" mb={4}>
-              9. Contact Information
+          <Heading as="h2" size="lg" fontWeight="medium" mb={4}>
+              Contact
             </Heading>
             <Text fontSize="md" mb={4}>
-              If you have any questions about these Terms, or if you need to contact us for any reason, please reach out to us at:
+              If you have any questions, please reach out to us:
             </Text>
             <VStack align="start" spacing={2} pl={4}>
               <Text><strong>Email:</strong> support@luxuryverse.com</Text>

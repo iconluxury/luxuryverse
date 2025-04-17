@@ -35,18 +35,11 @@ function OptOutPage() {
             Clicking "Opt Me Out" will show the consent banner, allowing you to decline non-essential cookies to disable targeted advertising while keeping essential cookies active.
             </Text>
           </Box>
-          <Divider />
-          <Box w="full" id="opt-out-instructions">
-            <Heading as="h2" size="lg" fontWeight="medium" mb={4}>
-            How to Opt Out of Non Essential Cookies
-            </Heading>
-            <Text fontSize="md" mb={4}> Click below to open the consent banner and opt out of targeted advertising cookies. </Text>
             <Button
               onClick={handleOptOut}
-              bg="red.500"
+              bg="purple.500"
               color="white"
               _hover={{ bg: "red.600" }}
-              borderRadius="md"
               px={6}
               py={3}
               fontWeight="medium"
@@ -56,7 +49,6 @@ function OptOutPage() {
             <Text fontSize="md" mt={4}>
             After opting out, advertising cookies (e.g., <code>_fbp</code>, <code>_lipt</code>) will be disabled, while essential cookies will remain active.
             </Text>
-          </Box>
         </VStack>
       </Container>
       <Footer />
