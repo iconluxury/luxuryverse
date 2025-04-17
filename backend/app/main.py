@@ -23,8 +23,8 @@ async def enforce_https(request: Request, call_next):
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://iconluxury.shop", "https://iconluxury.today"],
-    allow_credentials=True,
+    allow_origins=["https://iconluxury.shop"],
+    allow_credentials=False,
     allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["Accept", "Content-Type", "Authorization"],
 )
