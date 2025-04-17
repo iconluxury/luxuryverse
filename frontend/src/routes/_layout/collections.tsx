@@ -2,6 +2,7 @@ import { Box, Text, Image, Grid, Heading, Skeleton } from '@chakra-ui/react';
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
 import { useState, useEffect } from 'react';
+import Footer from "@/components/Common/Footer";
 
 export const Route = createFileRoute('/_layout/collections')({
   component: CollectionsPage,
@@ -116,6 +117,7 @@ function CollectionsPage() {
           </Link>
         ))}
       </Grid>
+          <Footer />
     </Box>
   );
 }

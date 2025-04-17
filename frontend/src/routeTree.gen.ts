@@ -20,7 +20,6 @@ import { Route as LayoutJoinImport } from './routes/_layout/join'
 import { Route as LayoutCookiesImport } from './routes/_layout/cookies'
 import { Route as LayoutCollectionsImport } from './routes/_layout/collections'
 import { Route as LayoutAuthCompleteImport } from './routes/_layout/auth-complete'
-import { Route as LayoutResourcesBlogImport } from './routes/_layout/resources/blog'
 import { Route as LayoutProductsIdImport } from './routes/_layout/products/$id'
 import { Route as LayoutResourcesBlogsPathImport } from './routes/_layout/resources/blogs/$path'
 
@@ -76,12 +75,6 @@ const LayoutCollectionsRoute = LayoutCollectionsImport.update({
 const LayoutAuthCompleteRoute = LayoutAuthCompleteImport.update({
   id: '/auth-complete',
   path: '/auth-complete',
-  getParentRoute: () => LayoutRoute,
-} as any)
-
-const LayoutResourcesBlogRoute = LayoutResourcesBlogImport.update({
-  id: '/resources/blog',
-  path: '/resources/blog',
   getParentRoute: () => LayoutRoute,
 } as any)
 
@@ -171,13 +164,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutProductsIdImport
       parentRoute: typeof LayoutImport
     }
-    '/_layout/resources/blog': {
-      id: '/_layout/resources/blog'
-      path: '/resources/blog'
-      fullPath: '/resources/blog'
-      preLoaderRoute: typeof LayoutResourcesBlogImport
-      parentRoute: typeof LayoutImport
-    }
     '/_layout/resources/blogs/$path': {
       id: '/_layout/resources/blogs/$path'
       path: '/resources/blogs/$path'
@@ -200,7 +186,6 @@ interface LayoutRouteChildren {
   LayoutTermsConditionsRoute: typeof LayoutTermsConditionsRoute
   LayoutIndexRoute: typeof LayoutIndexRoute
   LayoutProductsIdRoute: typeof LayoutProductsIdRoute
-  LayoutResourcesBlogRoute: typeof LayoutResourcesBlogRoute
   LayoutResourcesBlogsPathRoute: typeof LayoutResourcesBlogsPathRoute
 }
 
@@ -214,7 +199,6 @@ const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutTermsConditionsRoute: LayoutTermsConditionsRoute,
   LayoutIndexRoute: LayoutIndexRoute,
   LayoutProductsIdRoute: LayoutProductsIdRoute,
-  LayoutResourcesBlogRoute: LayoutResourcesBlogRoute,
   LayoutResourcesBlogsPathRoute: LayoutResourcesBlogsPathRoute,
 }
 
@@ -232,7 +216,6 @@ export interface FileRoutesByFullPath {
   '/terms-conditions': typeof LayoutTermsConditionsRoute
   '/': typeof LayoutIndexRoute
   '/products/$id': typeof LayoutProductsIdRoute
-  '/resources/blog': typeof LayoutResourcesBlogRoute
   '/resources/blogs/$path': typeof LayoutResourcesBlogsPathRoute
 }
 
@@ -246,7 +229,6 @@ export interface FileRoutesByTo {
   '/terms-conditions': typeof LayoutTermsConditionsRoute
   '/': typeof LayoutIndexRoute
   '/products/$id': typeof LayoutProductsIdRoute
-  '/resources/blog': typeof LayoutResourcesBlogRoute
   '/resources/blogs/$path': typeof LayoutResourcesBlogsPathRoute
 }
 
@@ -262,7 +244,6 @@ export interface FileRoutesById {
   '/_layout/terms-conditions': typeof LayoutTermsConditionsRoute
   '/_layout/': typeof LayoutIndexRoute
   '/_layout/products/$id': typeof LayoutProductsIdRoute
-  '/_layout/resources/blog': typeof LayoutResourcesBlogRoute
   '/_layout/resources/blogs/$path': typeof LayoutResourcesBlogsPathRoute
 }
 
@@ -279,7 +260,6 @@ export interface FileRouteTypes {
     | '/terms-conditions'
     | '/'
     | '/products/$id'
-    | '/resources/blog'
     | '/resources/blogs/$path'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -292,7 +272,6 @@ export interface FileRouteTypes {
     | '/terms-conditions'
     | '/'
     | '/products/$id'
-    | '/resources/blog'
     | '/resources/blogs/$path'
   id:
     | '__root__'
@@ -306,7 +285,6 @@ export interface FileRouteTypes {
     | '/_layout/terms-conditions'
     | '/_layout/'
     | '/_layout/products/$id'
-    | '/_layout/resources/blog'
     | '/_layout/resources/blogs/$path'
   fileRoutesById: FileRoutesById
 }
@@ -344,7 +322,6 @@ export const routeTree = rootRoute
         "/_layout/terms-conditions",
         "/_layout/",
         "/_layout/products/$id",
-        "/_layout/resources/blog",
         "/_layout/resources/blogs/$path"
       ]
     },
@@ -382,10 +359,6 @@ export const routeTree = rootRoute
     },
     "/_layout/products/$id": {
       "filePath": "_layout/products/$id.tsx",
-      "parent": "/_layout"
-    },
-    "/_layout/resources/blog": {
-      "filePath": "_layout/resources/blog.tsx",
       "parent": "/_layout"
     },
     "/_layout/resources/blogs/$path": {
