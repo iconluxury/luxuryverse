@@ -138,11 +138,6 @@ function LatestDropsPage() {
           >
         NOTIFY
           </ChakraLink>
-          <br />
-          <Text as="span" color="gray.400">
-            until sold out.
-          </Text>
-   
         </Text>
       </VStack>
     </Box>
