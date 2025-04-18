@@ -88,7 +88,7 @@ function ProductDetails() {
         if (attempt === retryCount) {
           throw err;
         }
-        await new Promise((resolve) => setTimeout(resolve, Math.min(1000 * 2 ** attempt, 10000)));
+        await new Promise((resolve) => setTimeout(resolve, 1000 * 2 ** attempt));
       }
     }
   };
@@ -349,7 +349,7 @@ function ProductDetails() {
                         icon={<ChevronLeftIcon boxSize={5} />}
                         position="absolute"
                         left={{ base: '4px', md: '8px' }}
-                        top="50%"
+                        top="250px"
                         transform="translateY(-50%)"
                         bg="gray.700"
                         color="white"
@@ -363,7 +363,7 @@ function ProductDetails() {
                         icon={<ChevronRightIcon boxSize={5} />}
                         position="absolute"
                         right={{ base: '4px', md: '8px' }}
-                        top="50%"
+                        top="250px"
                         transform="translateY(-50%)"
                         bg="gray.700"
                         color="white"
@@ -392,14 +392,14 @@ function ProductDetails() {
                   </Tag>
                 )}
                 <HStack spacing={2} align="center">
+                  <Text fontSize={{ base: '2xl', md: '3xl' }} fontWeight="bold" color="yellow.400">
+                    {product.sale_price || 'N/A'}
+                  </Text>
                   {product.full_price && (
                     <Text fontSize={{ base: 'lg', md: 'xl' }} color="gray.500">
                       MSRP: {product.full_price}
                     </Text>
                   )}
-                  <Text fontSize={{ base: '2xl', md: '3xl' }} fontWeight="bold" color="yellow.400">
-                    {product.sale_price || 'N/A'}
-                  </Text>
                 </HStack>
                 {product.description ? (
                   <Text

@@ -5,12 +5,12 @@
 :root {
   /* Colors */
   --color-background: #0A0A0A; /* Deep black */
-  --color-text: #c2a0e5d9; /* Light purple */
-  --color-muted: #c2a0e5d9; /* Light purple for body text */
-  --color-primary: #c2a0e5d9; /* Light purple */
-  --color-primary-hover: #a082c4d9; /* Darker purple */
+  --color-text: #58fb6cd9; /* Green */
+  --color-muted: #58fb6cd9; /* Green for body text */
+  --color-primary: #58fb6cd9; /* Green */
+  --color-primary-hover: #3cd950d9; /* Darker green */
   --color-accent: #FFFFFF; /* White for glitch top */
-  --color-accent-blue: #a082c4d9; /* Neon blue for glitch bottom */
+  --color-accent-blue: #00B7EB; /* Neon blue for glitch bottom */
   --color-secondary: #1A2526; /* Dark blue-gray */
   --color-border: #3A4A4F; /* Medium blue-gray */
 
@@ -96,7 +96,7 @@ h2 { font-size: var(--font-size-7xl); }
 h3 { font-size: var(--font-size-6xl); }
 h4 { font-size: var(--font-size-5xl); }
 h5 { font-size: var(--font-size-4xl); }
-h6 { font-size: var(--font-size-3xl); }
+h6 { font-size: var(--font-size-2xl); }
 
 p {
   font-size: var(--font-size-base);
@@ -244,17 +244,15 @@ input::placeholder, textarea::placeholder {
   left: 0;
   width: 100%;
   height: 100%;
-  animation: glitch-color 4s linear infinite;
+  color: var(--color-primary); /* Matches base text */
 }
 
 .glitch-exclusive::before {
-  color: var(--color-accent); /* White */
   animation: glitch-exclusive-top 0.8s linear infinite, glitch-color 4s linear infinite;
   clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
 }
 
 .glitch-exclusive::after {
-  color: var(--color-accent-blue); /* Neon blue */
   animation: glitch-exclusive-bottom 1.2s linear infinite, glitch-color 4s linear infinite;
   clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%);
 }
@@ -271,28 +269,26 @@ input::placeholder, textarea::placeholder {
   left: 0;
   width: 100%;
   height: 100%;
-  animation: glitch-color 4s linear infinite 0.3s;
+  color: var(--color-primary); /* Matches base text */
 }
 
 .glitch-brands::before {
-  color: var(--color-accent); /* White */
   animation: glitch-brands-top 0.9s linear infinite 0.3s, glitch-color 4s linear infinite 0.3s;
   clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
 }
 
 .glitch-brands::after {
-  color: var(--color-accent-blue); /* Neon blue */
   animation: glitch-brands-bottom 1.3s linear infinite 0.3s, glitch-color 4s linear infinite 0.3s;
   clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%);
 }
 
-/* Color cycling animation */
+/* Color cycling animation for glitch effect */
 @keyframes glitch-color {
-  0% { color: #c2a0e5d9; } /* Light purple */
-  25% { color: #00B7EB; } /* Neon blue */
-  50% { color: #FFFFFF; } /* White */
-  75% { color: #00B7EB; } /* Neon blue */
-  100% { color: #c2a0e5d9; } /* Light purple */
+  0%, 20% { color: #58fb6cd9; } /* Green */
+  21%, 25% { color: #a058fbd9; } /* Purple (split complement) */
+  26%, 45% { color: #58fb6cd9; } /* Green */
+  46%, 50% { color: #fb58a0d9; } /* Red (split complement) */
+  51%, 100% { color: #58fb6cd9; } /* Green */
 }
 
 /* Random-like movement for Exclusive */

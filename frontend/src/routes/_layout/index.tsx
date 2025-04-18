@@ -133,6 +133,7 @@ function Home() {
 
   return (
     <Box bg="black.900">
+
       {/* Hero Section: Exclusive Brands */}
       <Box
         bgImage="url('/images/hero-bg.jpg')"
@@ -172,18 +173,18 @@ function Home() {
             >
               Brands
             </Heading>
-            <Text fontFamily="'DM Sans', sans-serif" fontSize={{ base: "xl", md: "2xl" }} color="purple.500">
+            <Text fontFamily="'DM Sans', sans-serif" fontSize={{ base: "xl", md: "2xl" }} color="green.500">
               Exclusive Access
             </Text>
-            <Text fontSize={{ base: "lg", md: "xl" }} color="purple.500">
+            <Text fontSize={{ base: "lg", md: "xl" }} color="green.500">
               Authenticated luxury goods, fully verified on the blockchain
             </Text>
             <Button
               size="lg"
               variant="solid"
-              bg="purple.500"
+              bg="green.500"
               color="black.900"
-              _hover={{ bg: "purple.600" }}
+              _hover={{ bg: "green.600" }}
               onClick={handleJoinWaitlist}
               fontSize="xl"
               py={8}
@@ -237,12 +238,12 @@ function Home() {
             flex="1"
             align="start"
             transition="all 0.3s"
-            _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "purple.500" }}
+            _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
           >
-            <Heading as="h3" size="lg" mb={4} color="purple.500">
+            <Heading as="h3" size="lg" mb={4} color="green.500">
               Luxury Brands
             </Heading>
-            <Text color="purple.500">
+            <Text color="green.500">
               LuxuryVerse has direct access to the world's top luxury brands. We have built our
               industry relationships over decades, ensuring that we have the best styles at the prices.
             </Text>
@@ -256,12 +257,12 @@ function Home() {
             flex="1"
             align="start"
             transition="all 0.3s"
-            _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "purple.500" }}
+            _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
           >
-            <Heading as="h3" size="lg" mb={4} color="purple.500">
+            <Heading as="h3" size="lg" mb={4} color="green.500">
               Exclusive Drops
             </Heading>
-            <Text color="purple.500">
+            <Text color="green.500">
               Each week, LuxuryVerse releases a limited selection of luxury goods to our members. We
               announce these drops one day in advance on X, releasing goods on a first come first serve
               basis exclusive to our members.
@@ -276,12 +277,12 @@ function Home() {
             flex="1"
             align="start"
             transition="all 0.3s"
-            _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "purple.500" }}
+            _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
           >
-            <Heading as="h3" size="lg" mb={4} color="purple.500">
+            <Heading as="h3" size="lg" mb={4} color="green.500">
               Authentic Goods
             </Heading>
-            <Text color="purple.500">
+            <Text color="green.500">
               LuxuryVerse goods are 100% authentic and guaranteed on the blockchain. Our goods and
               services are also supported by the Authentication Council.
             </Text>
@@ -301,12 +302,12 @@ function Home() {
           mx="auto"
           spacing={6}
           transition="all 0.3s"
-          _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "purple.500" }}
+          _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
         >
-          <Heading as="h2" size="xl" color="purple.500">
+          <Heading as="h2" size="xl" color="green.500">
             Launching September 2025
           </Heading>
-          <Text color="purple.500">First Drop: September 5th, 2025</Text>
+          <Text color="green.500">First Drop: September 5th, 2025</Text>
           <Flex gap={8} justify="center" wrap="wrap">
             {[
               { value: countdown.days, label: "Days" },
@@ -315,10 +316,10 @@ function Home() {
               { value: countdown.seconds, label: "Seconds" },
             ].map(({ value, label }) => (
               <VStack key={label}>
-                <Text fontSize="4xl" fontWeight="bold" color="purple.500">
+                <Text fontSize="4xl" fontWeight="bold" color="green.500">
                   {value}
                 </Text>
-                <Text color="purple.500">{label}</Text>
+                <Text color="green.500">{label}</Text>
               </VStack>
             ))}
           </Flex>
@@ -335,21 +336,21 @@ function Home() {
           p={8}
           spacing={6}
           transition="all 0.3s"
-          _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "purple.500" }}
+          _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
         >
-          <Heading as="h2" size="xl" color="purple.500">
+          <Heading as="h2" size="xl" color="green.500">
             Recent Drops
           </Heading>
-          <Text maxW="600px" textAlign="center" color="purple.500">
+          <Text maxW="600px" textAlign="center" color="green.500">
             Each week, LuxuryVerse releases a limited selection of luxury goods to our members.
           </Text>
           {error && <Text color="red.300">{error}</Text>}
-          {isLoading && <Text color="purple.500">Loading drops...</Text>}
+          {isLoading && <Text color="green.500">Loading drops...</Text>}
           {!isLoading && !Array.isArray(collections) && (
-            <Text color="purple.500">No valid collections available</Text>
+            <Text color="green.500">No valid collections available</Text>
           )}
           {!isLoading && Array.isArray(collections) && collections.length === 0 && (
-            <Text color="purple.500">No drops available</Text>
+            <Text color="green.500">No drops available</Text>
           )}
           {!isLoading && Array.isArray(collections) && collections.length > 0 && (
             <Grid
@@ -368,7 +369,7 @@ function Home() {
                     p={4}
                     align="start"
                     transition="all 0.3s"
-                    _hover={{ borderColor: "purple.500", shadow: "md" }}
+                    _hover={{ borderColor: "green.500", shadow: "md" }}
                   >
                     <Image
                       src={product.thumbnail}
@@ -379,18 +380,18 @@ function Home() {
                       w="100%"
                       fallbackSrc="/images/placeholder.jpg"
                     />
-                    <Text fontSize="md" fontWeight="bold" color="purple.500">
+                    <Text fontSize="md" fontWeight="bold" color="green.500">
                       {product.title}
                     </Text>
-                    <Text color="purple.500">{product.price}</Text>
+                    <Text color="green.500">{product.price}</Text>
                     <Button
                       size="sm"
                       variant="outline"
-                      borderColor="purple.500"
-                      color="purple.500"
+                      borderColor="green.500"
+                      color="green.500"
                       w="full"
                       mt={2}
-                      _hover={{ bg: "purple.500", color: "black.900" }}
+                      _hover={{ bg: "green.500", color: "black.900" }}
                     >
                       View Details
                     </Button>
@@ -405,7 +406,7 @@ function Home() {
       {/* FAQs */}
       <Box py={16} bg="gray.800" px={{ base: 4, md: 8 }}>
         <VStack maxW="1200px" mx="auto" spacing={8}>
-          <Heading as="h2" size="xl" color="purple.500">
+          <Heading as="h2" size="xl" color="green.500">
             Frequently Asked Questions
           </Heading>
           <Accordion allowToggle w="100%">
@@ -441,12 +442,12 @@ function Home() {
             ].map(({ question, answer }) => (
               <AccordionItem key={question}>
                 <AccordionButton>
-                  <Box flex="1" textAlign="left" color="purple.500">
+                  <Box flex="1" textAlign="left" color="green.500">
                     {question}
                   </Box>
-                  <AccordionIcon color="purple.500" />
+                  <AccordionIcon color="green.500" />
                 </AccordionButton>
-                <AccordionPanel color="purple.500">
+                <AccordionPanel color="green.500">
                   {answer}
                 </AccordionPanel>
               </AccordionItem>
@@ -456,9 +457,9 @@ function Home() {
             as={Link}
             to="/faq"
             variant="outline"
-            borderColor="purple.500"
-            color="purple.500"
-            _hover={{ bg: "purple.500", color: "black.900" }}
+            borderColor="green.500"
+            color="green.500"
+            _hover={{ bg: "green.500", color: "black.900" }}
           >
             See All FAQ
           </Button>
@@ -468,7 +469,7 @@ function Home() {
       {/* Documents */}
       <Box py={16} px={{ base: 4, md: 8 }} maxW="1200px" mx="auto">
         <VStack spacing={8}>
-          <Heading as="h2" size="xl" color="purple.500">
+          <Heading as="h2" size="xl" color="green.500">
             Read Documents
           </Heading>
           <Flex gap={8} wrap="wrap" justify="center">
@@ -482,9 +483,9 @@ function Home() {
                 as="a"
                 href={href}
                 variant="outline"
-                borderColor="purple.500"
-                color="purple.500"
-                _hover={{ bg: "purple.500", color: "black.900" }}
+                borderColor="green.500"
+                color="green.500"
+                _hover={{ bg: "green.500", color: "black.900" }}
               >
                 {label}
               </Button>
@@ -496,10 +497,10 @@ function Home() {
       {/* Authentication Council */}
       <Box py={16} px={{ base: 4, md: 8 }} maxW="1200px" mx="auto">
         <VStack spacing={8}>
-          <Heading as="h2" size="xl" color="purple.500">
+          <Heading as="h2" size="xl" color="green.500">
             Trust in Every Purchase
           </Heading>
-          <Text textAlign="center" maxW="600px" color="purple.500">
+          <Text textAlign="center" maxW="600px" color="green.500">
             LuxuryVerse partners with former members of Interpol, the FBI, and other agencies to guarantee authentic merchandise. All goods are transported, stored, and shipped from secure facilities.
           </Text>
         </VStack>
