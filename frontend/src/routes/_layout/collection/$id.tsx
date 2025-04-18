@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { Box, Text, Image, SimpleGrid, VStack, Heading, Skeleton, SkeletonText, Button,Flex } from '@chakra-ui/react';
+import { Box, Text, Image, SimpleGrid, VStack, Heading, Skeleton, SkeletonText, Button, Flex } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -201,59 +201,52 @@ function CollectionDetails() {
                     : product.title;
                   return (
                     <Link key={product.id} to={`/products/${product.id}`}>
-                    <Box
-                      borderWidth="1px"
-                      borderColor="gray.600"
-                      borderRadius="lg"
-                      overflow="hidden"
-                      bg="transparent"
-                      _hover={{ shadow: 'md', transform: 'translateY(-4px)', borderColor: 'gray.500' }}
-                      transition="all 0.2s"
-                    >
                       <Box
-                        position="relative"
-                        w="full"
-                        style={{ aspectRatio: '3 / 4' }} // Fixed container aspect ratio
-                        bg="white" // Background for letterboxing
+                        borderWidth="1px"
+                        borderColor="gray.600"
+                        borderRadius="lg"
+                        overflow="hidden"
+                        bg="transparent"
+                        _hover={{ shadow: 'md', transform: 'translateY(-4px)', borderColor: 'gray.500' }}
+                        transition="all 0.2s"
                       >
-                        <Image
-                          src={product.thumbnail}
-                          alt={product.title}
+                        <Box
+                          position="relative"
                           w="full"
-                          h="full"
-                          objectFit="contain" // Show full image
-                          position="absolute"
-                          top="0"
-                          left="0"
-                          loading="lazy"
-                          onError={(e) => (e.currentTarget.src = 'https://placehold.co/225x300')}
-                        />
-                      </Box>
-                      <Box p={4}>
-                        <Text fontWeight="bold" fontSize="md" color="white" noOfLines={1}>
-                          {cleanTitle}
-                        </Text>
-                        <Flex justify="space-between" align="center" mt={1}>
-                          <Text fontSize="sm" color="gray.300" noOfLines={1}>
+                          style={{ aspectRatio: '3 / 4' }} // Fixed container aspect ratio
+                          bg="white" // Background for letterboxing
+                        >
+                          <Image
+                            src={product.thumbnail}
+                            alt={product.title}
+                            w="full"
+                            h="full"
+                            objectFit="contain" // Show full image
+                            position="absolute"
+                            top="0"
+                            left="0"
+                            loading="lazy"
+                            onError={(e) => (e.currentTarget.src = 'https://placehold.co/225x300')}
+                          />
+                        </Box>
+                        <Box p={4}>
+                          <Text fontWeight="bold" fontSize="md" color="white" noOfLines={1}>
                             {product.brand}
                           </Text>
-                          {product.discount && (
-                            <Text fontSize="xs" color="red.400">
-                              {product.discount}
+                          <Text fontSize="sm" color="gray.300" noOfLines={1}>
+                            {cleanTitle}
+                          </Text>
+                          <Flex mt={2} justify="space-between" align="center">
+                            <Text fontWeight="bold" fontSize="xl" color="var(--color-primary-hover)">
+                              {product.sale_price}
                             </Text>
-                          )}
-                        </Flex>
-                        <Flex mt={2} justify="space-between" align="center">
-                          <Text fontWeight="bold" fontSize="lg" color="var(--color-primary-hover)">
-                            {product.sale_price}
-                          </Text>
-                          <Text fontSize="sm" color="gray.400">
-                            {product.full_price}
-                          </Text>
-                        </Flex>
+                            <Text fontSize="lg" color="gray.400">
+                              MSRP: {product.full_price}
+                            </Text>
+                          </Flex>
+                        </Box>
                       </Box>
-                    </Box>
-                  </Link>
+                    </Link>
                   );
                 })}
               </SimpleGrid>
