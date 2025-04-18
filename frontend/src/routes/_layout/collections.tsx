@@ -1,8 +1,7 @@
-import { Box, Text, Grid, Heading, Skeleton, Flex, Icon, Button } from '@chakra-ui/react';
+import { Box, Text, Grid, Heading, Skeleton } from '@chakra-ui/react';
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
 import { useState, useEffect } from 'react';
-import { TimeIcon } from '@chakra-ui/icons';
 import Footer from "@/components/Common/Footer";
 
 export const Route = createFileRoute('/_layout/collections')({
@@ -13,7 +12,7 @@ function LatestDropsPage() {
   const selectedDrops = ['461931184423', '471622844711', '488238383399'];
   const [maxDescriptionHeight, setMaxDescriptionHeight] = useState(0);
 
-  const { data: dropsData = [], isLoading } = useQuery({
+  const { data: dropsData = { upcoming: [], past: [] }, isLoading } = useQuery({
     queryKey: ['drops', selectedDrops],
     queryFn: async () => {
       const dropPromises = selectedDrops.map(id =>
@@ -43,9 +42,9 @@ function LatestDropsPage() {
       const upcomingDrop = {
         id: 'future-1',
         title: 'Next Exclusive Drop',
-        description: 'Our next premium collection is almost here!',
+        description:
+          'Our next premium collection is almost here! Shop opens for shopping 2025-05-01 10:00 AM until items sold.',
         isLocked: true,
-        unlockDate: '2025-05-01', // Fixed future date
       };
 
       return {
@@ -58,13 +57,13 @@ function LatestDropsPage() {
   });
 
   useEffect(() => {
-    if (dropsData.past?.length > 0 || dropsData.upcoming?.length > 0) {
-      const allDrops = [...(dropsData.upcoming || []), ...(dropsData.past || [])];
+    const allDrops = [...dropsData.upcoming, ...dropsData.past];
+    if (allDrops.length > 0) {
       const descriptions = allDrops.map(col => col.description || '');
       const maxHeight = Math.max(...descriptions.map(desc => desc.length)) * 1.5;
       setMaxDescriptionHeight(maxHeight);
     }
-  }, [dropsData]);
+  }, [dropsData.upcoming, dropsData.past]);
 
   if (isLoading) {
     return (
@@ -85,7 +84,7 @@ function LatestDropsPage() {
     );
   }
 
-  if (!dropsData.upcoming?.length && !dropsData.past?.length) {
+  if (!dropsData.upcoming.length && !dropsData.past.length) {
     return (
       <Box p={4} bg="gray.900" color="white" minH="100vh" display="flex" justifyContent="center" alignItems="center">
         <Text>No drops available.</Text>
@@ -104,7 +103,7 @@ function LatestDropsPage() {
     >
       <Box maxW="1400px" w="full" px={6} pt={8}>
         {/* Upcoming Drops Section */}
-        {dropsData.upcoming?.length > 0 && (
+        {dropsData.upcoming.length > 0 && (
           <Box mb={16}>
             <Heading
               fontSize={{ base: '2xl', md: '3xl' }}
@@ -137,7 +136,7 @@ function LatestDropsPage() {
                     >
                       {drop.title || 'Untitled Drop'}
                     </Text>
-                    <Box height={`${maxDescriptionHeight}px`} overflow="hidden" mb={3}>
+                    <Box height={`${maxDescriptionHeight}px`} overflow="hidden">
                       <Text
                         fontSize="sm"
                         color="gray.600"
@@ -149,32 +148,6 @@ function LatestDropsPage() {
                           : 'No description available.'}
                       </Text>
                     </Box>
-                    {drop.isLocked && (
-                      <>
-                        <Flex align="center" gap={3} mb={3}>
-                          <Icon as={TimeIcon} boxSize={6} color="gray.600" />
-                          <Text
-                            fontSize={{ base: 'md', md: 'lg' }}
-                            fontWeight="medium"
-                            color="gray.600"
-                          >
-                            Shop Opens: {drop.unlockDate}
-                          </Text>
-                        </Flex>
-                        <Button
-                          size="md"
-                          colorScheme="purple"
-                          variant="outline"
-                          borderColor="gray.600"
-                          color="gray.600"
-                          width="full"
-                          fontSize={{ base: 'md', md: 'lg' }}
-                          _hover={{ bg: 'purple.600', borderColor: 'purple.600', color: 'white' }}
-                        >
-                          Notify Me
-                        </Button>
-                      </>
-                    )}
                   </Box>
                 </Box>
               ))}
@@ -183,7 +156,7 @@ function LatestDropsPage() {
         )}
 
         {/* Past Drops Section */}
-        {dropsData.past?.length > 0 && (
+        {dropsData.past.length > 0 && (
           <Box>
             <Heading
               fontSize={{ base: '2xl', md: '3xl' }}
