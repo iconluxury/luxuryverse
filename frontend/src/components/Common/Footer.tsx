@@ -10,7 +10,7 @@ import {
 
 const Footer = () => {
   return (
-    <Box bg="rgba(10, 10, 10, 0.5)" color="white" py={6} backdropFilter="blur(5px)" width="100%">
+    <Box bg="black.900" color="white" py={6} width="100%">
       <Box maxW="80rem" mx="auto" px={{ base: 4, md: 8 }}>
         {/* Main Footer Content */}
         <Flex
@@ -27,9 +27,9 @@ const Footer = () => {
             fontSize={{ base: '0.5rem', md: '0.75rem' }}
             color="white"
             fontFamily="'Special Gothic Expanded One', sans-serif"
-            lineHeight="1.1"
+            lineHeight="1.2"
           >
-            <Link to="/" _hover={{ color: '#E0E0E0' }}>
+            <Link href="https://luxuryverse.com">
               <Flex align="center" gap={0.5}>
                 <span>Luxury</span>
                 <span>Verse</span>
@@ -62,7 +62,7 @@ const Footer = () => {
                 fontWeight="normal"
                 textTransform="uppercase"
                 fontSize={{ base: '0.75rem', md: '0.875rem' }}
-                _hover={{ color: '#E0E0E0' }}
+                _hover={{ color: 'gray.200' }}
               >
                 {label}
               </Link>
@@ -73,33 +73,39 @@ const Footer = () => {
         {/* Bottom Footer - Copyright and Legal Links */}
         <Flex
           justify="center"
-          align="center"
+          align="baseline"
           borderTop="1px solid"
           borderColor="gray.700"
           pt={4}
           flexWrap="wrap"
-          gap={4}
+          gap={{ base: 2, md: 4 }}
         >
           <HStack
             spacing={{ base: 2, md: 4 }}
             flexWrap="wrap"
             justify="center"
-            align="center"
+            align="baseline"
           >
-            <Text color="gray.400" fontSize="sm">
-              © 2025{" "}
-              <Link href="https://luxuryverse.com" color="gray.200" _hover={{ color: "#E0E0E0" }}>
+            <Text
+              fontSize="sm"
+              color="gray.400"
+              lineHeight="1.5"
+              fontFamily="'Special Gothic Expanded One', sans-serif"
+            >
+              © 2025{' '}
+              <Link href="https://luxuryverse.com" color="gray.200" _hover={{ color: 'gray.200' }}>
                 LuxuryVerse
               </Link>
               . All rights reserved.
             </Text>
-            <HStack spacing={{ base: 2, md: 4 }} justify="center" align="center">
+            <HStack spacing={{ base: 2, md: 4 }} justify="center" align="baseline">
               <Link
                 href="/privacy-policy"
                 color="gray.400"
                 fontSize="sm"
                 fontFamily="'Special Gothic Expanded One', sans-serif"
-                _hover={{ color: "#E0E0E0" }}
+                lineHeight="1.5"
+                _hover={{ color: 'gray.200' }}
               >
                 Privacy Policy
               </Link>
@@ -108,7 +114,8 @@ const Footer = () => {
                 color="gray.400"
                 fontSize="sm"
                 fontFamily="'Special Gothic Expanded One', sans-serif"
-                _hover={{ color: "#E0E0E0" }}
+                lineHeight="1.5"
+                _hover={{ color: 'gray.200' }}
               >
                 Terms and Conditions
               </Link>
@@ -117,7 +124,8 @@ const Footer = () => {
                 color="gray.400"
                 fontSize="sm"
                 fontFamily="'Special Gothic Expanded One', sans-serif"
-                _hover={{ color: "#E0E0E0" }}
+                lineHeight="1.5"
+                _hover={{ color: 'gray.200' }}
               >
                 Cookie Policy
               </Link>
@@ -126,7 +134,8 @@ const Footer = () => {
                 color="gray.400"
                 fontSize="sm"
                 fontFamily="'Special Gothic Expanded One', sans-serif"
-                _hover={{ color: "#E0E0E0" }}
+                lineHeight="1.5"
+                _hover={{ color: 'gray.200' }}
               >
                 Opt Out
               </Link>
