@@ -158,7 +158,7 @@ function LatestDropsPage() {
             >
               Past
             </Heading>
-            <Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={8}>
+            <Grid templateColumns="1fr" gap={8}>
             {dropsData.past.map(drop => (
               <Box key={drop.id}>
                 <Link
