@@ -214,7 +214,7 @@ function CollectionDetails() {
                         position="relative"
                         w="full"
                         style={{ aspectRatio: '3 / 4' }} // Fixed container aspect ratio
-                        bg="gray.800" // Background for letterboxing
+                        bg="white" // Background for letterboxing
                       >
                         <Image
                           src={product.thumbnail}
