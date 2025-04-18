@@ -537,8 +537,8 @@ function Home() {
       </Box>
 
       {/* Second Section (Three Cards) */}
-      <Box
-  py={{ base: 2, md: 4 }} // Reduced from 4/6 to 2/4
+<Box
+  py={0} // Changed from { base: 2, md: 4 } to 0
   px={{ base: 4, md: 8 }}
   maxW={{ base: "1200px", lg: "1600px" }}
   mx="auto"
@@ -550,7 +550,7 @@ function Home() {
           align="stretch"
         >
           <VStack
-            bg="gray.900"
+            bg="gray.900"c
             border="1px solid"
             borderColor="gray.700"
             borderRadius="md"
