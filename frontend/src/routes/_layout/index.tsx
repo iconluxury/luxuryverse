@@ -460,29 +460,30 @@ function Home() {
             mt={{ base: 8, lg: 0 }}
             maxW={{ base: "100%", lg: "700px" }} // Match left section width
           >
-            <Flex gap={{ base: 4, md: 10 }} flexWrap="wrap" justify="center"> {/* Increased gap */}
-              {[
-                { src: "https://github.com/iconluxurygroup/legacy-test-luxuryverse/raw/dev/frontend/public/assets/img/brand/brand_img01.png", alt: "Balmain Logo" },
-                { src: "https://github.com/iconluxurygroup/legacy-test-luxuryverse/raw/dev/frontend/public/assets/img/brand/brand_img02.png", alt: "Ferragamo Logo" },
-                { src: "https://github.com/iconluxurygroup/legacy-test-luxuryverse/raw/dev/frontend/public/assets/img/brand/brand_img03.png", alt: "The Row Logo" },
-                { src: "https://github.com/iconluxurygroup/legacy-test-luxuryverse/raw/dev/frontend/public/assets/img/brand/brand_img04.png", alt: "Gianvito Rossi Logo" },
-                { src: "https://github.com/iconluxurygroup/legacy-test-luxuryverse/raw/dev/frontend/public/assets/img/brand/brand_img05.png", alt: "Roger Vivier Logo" },
-                { src: "https://github.com/iconluxurygroup/legacy-test-luxuryverse/raw/dev/frontend/public/assets/img/brand/brand_img06.png", alt: "Etro Logo" },
-                { src: "https://github.com/iconluxurygroup/legacy-test-luxuryverse/raw/dev/frontend/public/assets/img/brand/brand_img07.png", alt: "Moschino Logo" },
-              ].map((img) => (
-                <Image
-                  key={img.alt}
-                  src={img.src}
-                  alt={img.alt}
-                  boxSize={{ base: "50px", md: "100px" }} // Increased size for visibility
-                  objectFit="contain"
-                  fallbackSrc="/images/placeholder.jpg"
-                  filter="grayscale(100%)"
-                  _hover={{ filter: "grayscale(0%)" }}
-                  transition="filter 0.3s ease"
-                />
-              ))}
-            </Flex>
+            <Flex gap={{ base: 4, md: 10 }} flexWrap="wrap" justify="center">
+  {[
+    { src: "https://raw.githubusercontent.com/iconluxurygroup/legacy-test-luxuryverse/dev/frontend/public/assets/img/brand/brand_img01.png", alt: "Balmain Logo" },
+    { src: "https://raw.githubusercontent.com/iconluxurygroup/legacy-test-luxuryverse/dev/frontend/public/assets/img/brand/brand_img02.png", alt: "Ferragamo Logo" },
+    { src: "https://raw.githubusercontent.com/iconluxurygroup/legacy-test-luxuryverse/dev/frontend/public/assets/img/brand/brand_img03.png", alt: "The Row Logo" },
+    { src: "https://raw.githubusercontent.com/iconluxurygroup/legacy-test-luxuryverse/dev/frontend/public/assets/img/brand/brand_img04.png", alt: "Gianvito Rossi Logo" },
+    { src: "https://raw.githubusercontent.com/iconluxurygroup/legacy-test-luxuryverse/dev/frontend/public/assets/img/brand/brand_img05.png", alt: "Roger Vivier Logo" },
+    { src: "https://raw.githubusercontent.com/iconluxurygroup/legacy-test-luxuryverse/dev/frontend/public/assets/img/brand/brand_img06.png", alt: "Etro Logo" },
+    { src: "https://raw.githubusercontent.com/iconluxurygroup/legacy-test-luxuryverse/dev/frontend/public/assets/img/brand/brand_img07.png", alt: "Moschino Logo" },
+  ].map((img) => (
+    <Image
+      key={img.alt}
+      src={img.src}
+      alt={img.alt}
+      boxSize={{ base: "50px", md: "100px" }}
+      objectFit="contain"
+      fallbackSrc="https://via.placeholder.com/100"
+      onError={(e) => console.error(`Failed to load image: ${e.currentTarget.src}, alt: ${img.alt}`)}
+      filter="grayscale(100%)"
+      _hover={{ filter: "grayscale(0%)" }}
+      transition="filter 0.3s ease"
+    />
+  ))}
+</Flex>
           </Flex>
         </Flex>
       </Box>
