@@ -342,14 +342,15 @@ function Home() {
         bgImage="url('/images/hero-bg.jpg')"
         bgSize="cover"
         bgPosition="center"
-        py={{ base: 8, md: 20 }} // Increased padding for more vertical space
+        py={{ base: 4, md: 8 }} // Reduced padding to decrease top space
         px={{ base: 4, md: 8 }}
         position="relative"
         width="100%"
-        minH={{ base: "100vh", lg: "120vh" }} // Slightly taller on desktop for fuller appearance
+        minH={{ base: "80vh", lg: "100vh" }} // Reduced height for less top space
         display="flex"
         justifyContent="center"
-        alignItems="center"
+        alignItems="flex-start" // Changed to flex-start to bring content closer to top
+        pt={{ base: 4, md: 6 }} // Added small padding-top for fine-tuning
         _before={{
           content: '""',
           position: "absolute",
@@ -366,7 +367,7 @@ function Home() {
           maxW="1400px" // Increased max-width for wider desktop layout
           mx="auto"
           direction={{ base: "column", lg: "row" }}
-          align={{ base: "center", lg: "center" }}
+          align={{ base: "center", lg: "flex-start" }} // Align top on desktop
           gap={{ base: 6, md: 16 }} // Increased gap for better spacing
           position="relative"
           zIndex={2}
