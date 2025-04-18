@@ -218,7 +218,7 @@ function Home() {
 
     // Start glitch animations after typewriter effect
     gsap.delayedCall(exclusiveText.length * 0.2 + 0.5, glitchExclusive);
-    gsap.delayedCall((exclusiveText.length + brandsText.length) * 0.っていう2 + 0.5, glitchBrands);
+    gsap.delayedCall((exclusiveText.length + brandsText.length) * 0.2 + 0.5, glitchBrands);
   }, []);
 
   // Countdown logic for September 5, 2025 launch
