@@ -234,9 +234,9 @@ function CollectionDetails() {
   position="relative"
   w="full"
   style={{ aspectRatio: '3 / 4' }}
-  bg="white"
-  filter="brightness(0.25)" // Reduces brightness to 85% of original
->
+  bg="#00FF00"
+  filter="brightness(0.65)" // Reduces brightness to 85% of original
+>4
   <Image
     src={product.thumbnail}
     alt={`${cleanedTitle} by ${product.brand || 'Unknown'}`}
