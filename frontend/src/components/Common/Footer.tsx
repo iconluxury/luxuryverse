@@ -86,7 +86,7 @@ const Footer = () => {
               >
                 LuxuryVerse
               </Link>
-              All rights reserved.
+              {' '}All rights reserved.
             </Text>
             <HStack spacing={{ base: 2, md: 4 }} justify="center" align="baseline">
               <Link
