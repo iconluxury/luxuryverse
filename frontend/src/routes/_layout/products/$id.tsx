@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { Flex, Spinner, Box, Text, Tag, HStack, Divider, IconButton, Skeleton, SkeletonText } from '@chakra-ui/react';
+import { Flex, Spinner, Box, Text, Tag, HStack, Divider, IconButton, Skeleton, SkeletonText, Breadcrumb, BreadcrumbItem, BreadcrumbLink } from '@chakra-ui/react';
 import { useState, useEffect, useMemo } from 'react';
 import { Link } from '@tanstack/react-router';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -154,29 +154,28 @@ function ProductDetails() {
 
   const fetchTopProducts = async () => {
     try {
-      // Use a more specific endpoint for related products if available
       const topProductsUrl = product?.collection_id
         ? `${API_BASE_URL}/api/v1/collections/${product.collection_id}`
-        : `${API_BASE_URL}/api/v1/collections/488238383399`; // Fallback to default collection
+        : `${API_BASE_URL}/api/v1/collections/488238383399`;
       console.log('Fetching:', topProductsUrl);
       const collectionData = await fetchWithRetry(topProductsUrl);
       console.log('Fetch successful for', topProductsUrl, ':', collectionData);
-  
+
       if (!collectionData || !Array.isArray(collectionData.products)) {
         console.warn('Invalid collection data:', collectionData);
         setTopProducts([]);
         return;
       }
-  
+
       const validatedTopProducts = collectionData.products
         .filter(
           (p: Product) =>
             p &&
             typeof p.id === 'string' &&
             typeof p.title === 'string' &&
-            p.id !== id && // Exclude the current product
+            p.id !== id &&
             Array.isArray(p.variants) &&
-            p.variants.some((v: Variant) => v.inventory_quantity > 0) // Ensure in-stock variants
+            p.variants.some((v: Variant) => v.inventory_quantity > 0)
         )
         .map((p: Product) => {
           const variants = Array.isArray(p.variants)
@@ -216,14 +215,14 @@ function ProductDetails() {
           const bDiscount = b.discount_value || 0;
           const aInventory = a.total_inventory || 0;
           const bInventory = b.total_inventory || 0;
-  
+
           if (aDiscount !== bDiscount) {
-            return bDiscount - aDiscount; // Prioritize higher discounts
+            return bDiscount - aDiscount;
           }
-          return bInventory - aInventory; // Then higher inventory
+          return bInventory - aInventory;
         })
-        .slice(0, 5); // Limit to 5 products
-  
+        .slice(0, 5);
+
       console.log('Top 5 products:', validatedTopProducts);
       setTopProducts(validatedTopProducts);
     } catch (topErr: any) {
@@ -233,6 +232,7 @@ function ProductDetails() {
       setTopProductsLoading(false);
     }
   };
+
   // Fetch product
   useEffect(() => {
     if (!id || typeof id !== 'string') {
@@ -245,16 +245,16 @@ function ProductDetails() {
 
   // Fetch top products
   useEffect(() => {
-    if (product) {
+    if (product?.collection_id) {
       setTopProductsLoading(true);
       fetchTopProducts();
     }
-  }, [product?.id]);
+  }, [product?.collection_id]);
 
   const validatedImages = useMemo(() => (Array.isArray(product?.images) ? product.images : undefined), [product?.images]);
   const validatedVariants = useMemo(() => (Array.isArray(product?.variants) ? product.variants : undefined), [product?.variants]);
 
-  if (productLoading) {
+  if (productLoading || topProductsLoading) {
     return (
       <Flex justify="center" align="center" minH="100vh" bg="transparent">
         <Spinner size="xl" color="yellow.400" />
@@ -299,13 +299,30 @@ function ProductDetails() {
       <Box bg="transparent" w="100%">
         <Box py={8} px={{ base: 4, md: 8 }}>
           <Box maxW="1200px" mx="auto" w="100%">
-            <Link
-              to="/products"
-              aria-label="Back to all products"
-              style={{ color: '#3182CE', fontWeight: 'medium', textDecoration: 'none', marginBottom: '16px', display: 'block' }}
-            >
-              ← Back to all products
-            </Link>
+            {/* Breadcrumb Navigation */}
+            <Breadcrumb mb={6} fontSize="sm" color="gray.600">
+              <BreadcrumbItem>
+                <BreadcrumbLink as={Link} to="/" color="#3182CE" _hover={{ textDecoration: 'underline' }}>
+                  Home
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbItem>
+                <BreadcrumbLink as={Link} to="/products" color="#3182CE" _hover={{ textDecoration: 'underline' }}>
+                  Products
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbItem isCurrentPage>
+                <Text noOfLines={1} maxW={{ base: '200px', md: '400px' }}>
+                  {product.title || 'Untitled Product'}
+                </Text>
+              </BreadcrumbItem>
+            </Breadcrumb>
+            {/* Brand Name */}
+            {product.brand && (
+              <Text fontSize={{ base: 'xl', md: '2xl' }} fontWeight="bold" color="gray.800" mb={4}>
+                {product.brand}
+              </Text>
+            )}
             {validatedImages ? (
               <Box position="relative" mb={8}>
                 <Image
@@ -369,11 +386,26 @@ function ProductDetails() {
               <Skeleton w="100%" maxW="300px" h="400px" mx="auto" mb={8} />
             )}
             <Flex align="center" mb={4}>
-              <Tag colorScheme="gray" px={3} py={1} borderRadius="full">
-                Product
-              </Tag>
+              {product.collection_id && (
+                <Tag
+                  colorScheme="blue"
+                  px={3}
+                  py={1}
+                  borderRadius="full"
+                  cursor="pointer"
+                  onClick={() => console.log(`Navigate to collection: ${product.collection_id}`)}
+                  aria-label={`View ${product.collection_id === '488238383399' ? 'Top Picks' : 'Collection'} collection`}
+                >
+                  {product.collection_id === '488238383399' ? 'Top Picks' : 'Collection'}
+                </Tag>
+              )}
+              {product.variants && product.variants[0]?.size && (
+                <Tag colorScheme="gray" ml={2} px={3} py={1} borderRadius="full">
+                  Size: {product.variants[0].size}
+                </Tag>
+              )}
               {product.discount && (
-                <Tag colorScheme="green" ml={4} px={3} py={1} borderRadius="full">
+                <Tag colorScheme="green" ml={2} px={3} py={1} borderRadius="full">
                   {product.discount}
                 </Tag>
               )}
@@ -381,19 +413,29 @@ function ProductDetails() {
             <Text as="h1" fontSize={{ base: '2xl', md: '3xl' }} mb={6} fontWeight="medium" lineHeight="1.3">
               {product.title || 'Untitled Product'}
             </Text>
-            <Text fontSize="xl" color="gray.700" mb={4}>
-              {product.sale_price || 'N/A'}{' '}
-              {product.full_price && <Text as="s" color="gray.500">{product.full_price}</Text>}
+            <Text fontSize="xl" mb={4}>
+              <Text as="span" fontWeight="bold" color="green.400">
+                {product.sale_price || 'N/A'}
+              </Text>
+              {product.full_price && (
+                <Text as="s" color="gray.500" ml={2}>
+                  {product.full_price}
+                </Text>
+              )}
             </Text>
             {product.description ? (
               <Text
                 fontSize="lg"
-                color="gray.700"
+                color="gray.800"
                 mb={4}
+                css={{
+                  '& h1, & h2, & h3': { color: 'blue.600' },
+                  '& p': { color: 'gray.800' },
+                }}
                 dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(product.description) }}
               />
             ) : (
-              <Text fontSize="lg" color="gray.700" mb={4}>
+              <Text fontSize="lg" color="gray.800" mb={4}>
                 No description available
               </Text>
             )}
@@ -475,7 +517,7 @@ function ProductDetails() {
                 </HStack>
               ) : (
                 <Text fontSize="md" color="gray.400">
-                  No related products available.
+                  Explore more products in our <Link to="/products" style={{ color: '#3182CE' }}>catalog</Link>.
                 </Text>
               )}
             </Box>
