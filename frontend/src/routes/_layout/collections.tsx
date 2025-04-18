@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import { LockIcon } from '@chakra-ui/icons';
 import Footer from "@/components/Common/Footer";
 
-export const Route = createFileRoute('/_layout/latest-drops')({
+export const Route = createFileRoute('/_layout/collections')({
   component: LatestDropsPage,
 });
 
