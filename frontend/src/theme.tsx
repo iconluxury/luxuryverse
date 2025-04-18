@@ -70,6 +70,7 @@ const theme = extendTheme({
     "6xl": "3.75rem",
     "7xl": "4.5rem",
     "8xl": "5.5rem", // For hero text
+    "9xl": "6.5rem", // Larger than 8xl for glitch variant
   },
   fontWeights: {
     light: 300,
@@ -126,7 +127,8 @@ const theme = extendTheme({
         color: "purple.500",
         lineHeight: "short",
       },
-      sizes: {
+     sizes: {
+  "9xl": { fontSize: "9xl" },  
         "8xl": { fontSize: "8xl" },
         "7xl": { fontSize: "7xl" },
         "6xl": { fontSize: "6xl" },

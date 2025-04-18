@@ -340,225 +340,231 @@ function Home() {
       bg="black.900"
     >
       {/* Hero Section */}
-<Box
-  bgImage="url('/images/hero-bg.jpg')"
-  bgSize="cover"
-  bgPosition="center"
-  py={{ base: 4, md: 6 }} // Reduced from 6, 8 to 4, 6
-  px={{ base: 4, md: 8 }}
-  position="relative"
-  width="100%"
-  minH={{ base: "70vh", lg: "90vh" }}
-  display="flex"
-  justifyContent="center"
-  alignItems="flex-start"
-  pt={{ base: 4, md: 6 }}
-  _before={{
-    content: '""',
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    bg: "black.900",
-    opacity: 0.7,
-    zIndex: 1,
-  }}
->
-  <Flex
-    maxW="1400px"
-    mx="auto"
-    direction={{ base: "column", lg: "row" }}
-    align={{ base: "center", lg: "flex-start" }}
-    gap={{ base: 6, md: 12 }}
-    position="relative"
-    zIndex={2}
-    justifyContent="space-between"
-    width="100%"
-    px={{ base: 4, md: 0 }}
-  >
-    <VStack
-      align="flex-start"
-      spacing={{ base: 4, md: 10 }}
-      flex={{ base: "1", lg: "0 0 50%" }}
-      maxW={{ base: "100%", lg: "700px" }}
-      textAlign={{ base: "center", lg: "left" }}
-    >
-      <Box position="relative" display="inline-block" whiteSpace="nowrap">
-        <Heading
-          as="h2"
-          variant="glitch"
-          size={{ base: "3xl", md: "9xl" }}
-          className="glitch glitch-exclusive"
-          data-text="EXCLUSIVE"
-          ref={exclusiveRef}
-        >
-          EXCLUSIVE
-        </Heading>
-        <Box
-          as="span"
-          ref={exclusiveCursorRef}
-          className="terminal-cursor"
-          position="absolute"
-          top={{ base: "5%", md: "10%" }}
-          left="0"
-          color="#58fb6cd9"
-          fontSize={{ base: "1rem", md: "5.5rem" }}
-          lineHeight="1"
-          fontWeight="normal"
-          ml="0.05em"
-        >
-          |
-        </Box>
-      </Box>
-      <Box position="relative" display="inline-block" whiteSpace="nowrap">
-        <Heading
-          as="h2"
-          variant="glitch"
-          size={{ base: "3xl", md: "9xl" }}
-          className="glitch glitch-brands"
-          data-text="BRANDS"
-          ref={brandsRef}
-        >
-          BRANDS
-        </Heading>
-        <Box
-          as="span"
-          ref={brandsCursorRef}
-          className="terminal-cursor"
-          position="absolute"
-          top={{ base: "5%", md: "10%" }}
-          left="0"
-          color="#58fb6cd9"
-          fontSize={{ base: "1rem", md: "5.5rem" }}
-          lineHeight="1"
-          fontWeight="normal"
-          ml="0.05em"
-        >
-          |
-        </Box>
-      </Box>
-      <Text fontSize={{ base: "md", md: "2xl" }} color="purple.500">
-        Exclusive Access to authenticated luxury goods, verified on the blockchain
-      </Text>
-      <Button
-        size="lg"
-        variant="solid"
-        bg="green.500"
-        color="black.900"
-        _hover={{ bg: "green.600" }}
-        onClick={handleJoinWaitlist}
-        fontSize={{ base: "md", md: "xl" }}
-        py={{ base: 6, md: 8 }}
-        px={{ base: 8, md: 12 }}
+      <Box
+        bgImage="url('/images/hero-bg.jpg')"
+        bgSize="cover"
+        bgPosition="center"
+        py={{ base: 2, md: 4 }} // Reduced from 4, 6 to 2, 4
+        px={{ base: 4, md: 8 }}
+        position="relative"
+        width="100%"
+        minH={{ base: "70vh", lg: "90vh" }}
+        display="flex"
+        justifyContent="center"
+        alignItems="flex-start"
+        pt={{ base: 4, md: 6 }}
+        _before={{
+          content: '""',
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          bg: "black.900",
+          opacity: 0.7,
+          zIndex: 1,
+        }}
       >
-        Join The Waitlist
-      </Button>
-    </VStack>
-    <Flex
-      flex={{ base: "1", lg: "0 0 50%" }}
-      justify="center"
-      align="center"
-      mt={{ base: 4, lg: 0 }} // Reduced from 6 to 4 on base
-      maxW={{ base: "100%", lg: "700px" }}
-      overflowX="hidden"
-    >
-      <Flex
-        gap={{ base: 3, md: 8 }}
-        flexWrap="wrap"
-        justify="center"
-        w="100%"
-        maxW={{ base: "90%", md: "100%" }}
-      >
-        {brandLogos.map((img) => (
-          <Image
-            key={img.alt}
-            src={img.src}
-            alt={img.alt}
-            boxSize={{ base: "40px", md: "90px" }}
-            objectFit="contain"
-            fallbackSrc="https://via.placeholder.com/90"
-            onError={(e) => {
-              console.error(`Failed to load image: ${e.currentTarget.src}, alt: ${img.alt}`);
-              e.currentTarget.src = "/images/placeholder.jpg";
-            }}
-            filter="grayscale(100%)"
-            _hover={{ filter: "grayscale(0%)" }}
-            transition="filter 0.3s ease"
-          />
-        ))}
-      </Flex>
-    </Flex>
-  </Flex>
-</Box>
+        <Flex
+          maxW={{ base: "1200px", lg: "1600px" }} // Increased from 1400px to 1600px on lg
+          mx="auto"
+          direction={{ base: "column", lg: "row" }}
+          align={{ base: "center", lg: "flex-start" }}
+          gap={{ base: 6, md: 12 }}
+          position="relative"
+          zIndex={2}
+          justifyContent="space-between"
+          width="100%"
+          px={{ base: 4, md: 0 }}
+        >
+          <VStack
+            align="flex-start"
+            spacing={{ base: 4, md: 10 }}
+            flex={{ base: "1", lg: "0 0 50%" }}
+            maxW={{ base: "100%", lg: "800px" }} // Increased from 700px to 800px
+            textAlign={{ base: "center", lg: "left" }}
+          >
+            <Box position="relative" display="inline-block" whiteSpace="nowrap">
+              <Heading
+                as="h2"
+                variant="glitch"
+                size={{ base: "3xl", md: "9xl" }} // Use 9xl on desktop
+                className="glitch glitch-exclusive"
+                data-text="EXCLUSIVE"
+                ref={exclusiveRef}
+              >
+                EXCLUSIVE
+              </Heading>
+              <Box
+                as="span"
+                ref={exclusiveCursorRef}
+                className="terminal-cursor"
+                position="absolute"
+                top={{ base: "5%", md: "10%" }}
+                left="0"
+                color="#58fb6cd9"
+                fontSize={{ base: "1rem", md: "5.5rem" }}
+                lineHeight="1"
+                fontWeight="normal"
+                ml="0.05em"
+              >
+                |
+              </Box>
+            </Box>
+            <Box position="relative" display="inline-block" whiteSpace="nowrap">
+              <Heading
+                as="h2"
+                variant="glitch"
+                size={{ base: "3xl", md: "9xl" }} // Use 9xl on desktop
+                className="glitch glitch-brands"
+                data-text="BRANDS"
+                ref={brandsRef}
+              >
+                BRANDS
+              </Heading>
+              <Box
+                as="span"
+                ref={brandsCursorRef}
+                className="terminal-cursor"
+                position="absolute"
+                top={{ base: "5%", md: "10%" }}
+                left="0"
+                color="#58fb6cd9"
+                fontSize={{ base: "1rem", md: "5.5rem" }}
+                lineHeight="1"
+                fontWeight="normal"
+                ml="0.05em"
+              >
+                |
+              </Box>
+            </Box>
+            <Text fontSize={{ base: "md", md: "2xl" }} color="purple.500">
+              Exclusive Access to authenticated luxury goods, verified on the blockchain
+            </Text>
+            <Button
+              size="lg"
+              variant="solid"
+              bg="green.500"
+              color="black.900"
+              _hover={{ bg: "green.600" }}
+              onClick={handleJoinWaitlist}
+              fontSize={{ base: "md", md: "xl" }}
+              py={{ base: 6, md: 8 }}
+              px={{ base: 8, md: 12 }}
+            >
+              Join The Waitlist
+            </Button>
+          </VStack>
+          <Flex
+            flex={{ base: "1", lg: "0 0 50%" }}
+            justify="center"
+            align="center"
+            mt={{ base: 4, lg: 0 }}
+            maxW={{ base: "100%", lg: "800px" }} // Increased from 700px to 800px
+            overflowX="hidden"
+          >
+            <Flex
+              gap={{ base: 3, md: 8 }}
+              flexWrap="wrap"
+              justify="center"
+              w="100%"
+              maxW={{ base: "90%", md: "100%" }}
+            >
+              {brandLogos.map((img) => (
+                <Image
+                  key={img.alt}
+                  src={img.src}
+                  alt={img.alt}
+                  boxSize={{ base: "40px", md: "90px" }}
+                  objectFit="contain"
+                  fallbackSrc="https://via.placeholder.com/90"
+                  onError={(e) => {
+                    console.error(`Failed to load image: ${e.currentTarget.src}, alt: ${img.alt}`);
+                    e.currentTarget.src = "/images/placeholder.jpg";
+                  }}
+                  filter="grayscale(100%)"
+                  _hover={{ filter: "grayscale(0%)" }}
+                  transition="filter 0.3s ease"
+                />
+              ))}
+            </Flex>
+          </Flex>
+        </Flex>
+      </Box>
 
-<Box py={{ base: 6, md: 8 }} px={{ base: 4, md: 8 }} maxW="1400px" mx="auto"> {/* Reduced from 8, 12 to 6, 8 */}
-  <Flex
-    direction={{ base: "column", lg: "row" }}
-    gap={8}
-    justify="space-between"
-    align="stretch"
-  >
-    <VStack
-      bg="gray.900"
-      border="1px solid"
-      borderColor="gray.700"
-      borderRadius="md"
-      p={6}
-      flex="1"
-      align="start"
-      transition="all 0.3s"
-      _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
-    >
-      <Heading as="h3" size="xl" mb={4} color="purple.500">
-        Luxury Brands
-      </Heading>
-      <Text fontSize="lg" color="purple.500">
-        LuxuryVerse has direct access to the world's top luxury brands. We have built our
-        industry relationships over decades, ensuring that we have the best styles at the prices.
-      </Text>
-    </VStack>
-    <VStack
-      bg="gray.900"
-      border="1px solid"
-      borderColor="gray.700"
-      borderRadius="md"
-      p={6}
-      flex="1"
-      align="start"
-      transition="all 0.3s"
-      _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
-    >
-      <Heading as="h3" size="xl" mb={4} color="purple.500">
-        Exclusive Drops
-      </Heading>
-      <Text fontSize="lg" color="purple.500">
-        Each week, LuxuryVerse releases a limited selection of luxury goods to our members. We
-        announce these drops one day in advance on X, releasing goods on a first come first serve
-        basis exclusive to our members.
-      </Text>
-    </VStack>
-    <VStack
-      bg="gray.900"
-      border="1px solid"
-      borderColor="gray.700"
-      borderRadius="md"
-      p={6}
-      flex="1"
-      align="start"
-      transition="all 0.3s"
-      _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
-    >
-      <Heading as="h3" size="xl" mb={4} color="purple.500">
-        Authentic Goods
-      </Heading>
-      <Text fontSize="lg" color="purple.500">
-        LuxuryVerse goods are 100% authentic and guaranteed on the blockchain. Our goods and
-        services are also supported by the Authentication Council.
-      </Text>
-    </VStack>
-  </Flex>
-</Box>
+      {/* Second Section (Three Cards) */}
+      <Box
+        py={{ base: 4, md: 6 }} // Reduced from 6, 8 to 4, 6
+        px={{ base: 4, md: 8 }}
+        maxW={{ base: "1200px", lg: "1600px" }} // Increased from 1400px to 1600px on lg
+        mx="auto"
+      >
+        <Flex
+          direction={{ base: "column", lg: "row" }}
+          gap={8}
+          justify="space-between"
+          align="stretch"
+        >
+          <VStack
+            bg="gray.900"
+            border="1px solid"
+            borderColor="gray.700"
+            borderRadius="md"
+            p={6}
+            flex="1"
+            align="start"
+            transition="all 0.3s"
+            _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
+          >
+            <Heading as="h3" size="xl" mb={4} color="purple.500">
+              Luxury Brands
+            </Heading>
+            <Text fontSize="lg" color="purple.500">
+              LuxuryVerse has direct access to the world's top luxury brands. We have built our
+              industry relationships over decades, ensuring that we have the best styles at the prices.
+            </Text>
+          </VStack>
+          <VStack
+            bg="gray.900"
+            border="1px solid"
+            borderColor="gray.700"
+            borderRadius="md"
+            p={6}
+            flex="1"
+            align="start"
+            transition="all 0.3s"
+            _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
+          >
+            <Heading as="h3" size="xl" mb={4} color="purple.500">
+              Exclusive Drops
+            </Heading>
+            <Text fontSize="lg" color="purple.500">
+              Each week, LuxuryVerse releases a limited selection of luxury goods to our members. We
+              announce these drops one day in advance on X, releasing goods on a first come first serve
+              basis exclusive to our members.
+            </Text>
+          </VStack>
+          <VStack
+            bg="gray.900"
+            border="1px solid"
+            borderColor="gray.700"
+            borderRadius="md"
+            p={6}
+            flex="1"
+            align="start"
+            transition="all 0.3s"
+            _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
+          >
+            <Heading as="h3" size="xl" mb={4} color="purple.500">
+              Authentic Goods
+            </Heading>
+            <Text fontSize="lg" color="purple.500">
+              LuxuryVerse goods are 100% authentic and guaranteed on the blockchain. Our goods and
+              services are also supported by the Authentication Council.
+            </Text>
+          </VStack>
+        </Flex>
+      </Box>
 
       {/* Launch Card */}
       <Box py={{ base: 12, md: 16 }} bg="gray.800" textAlign="center">
@@ -568,7 +574,7 @@ function Home() {
           borderColor="gray.700"
           borderRadius="md"
           p={6}
-          maxW="700px"
+          maxW={{ base: "700px", lg: "900px" }} // Increased from 700px to 900px on lg
           mx="auto"
           spacing={6}
           transition="all 0.3s"
@@ -601,7 +607,12 @@ function Home() {
       </Box>
 
       {/* Recent Drops Card */}
-      <Box py={{ base: 12, md: 16 }} px={{ base: 4, md: 8 }} maxW="1400px" mx="auto">
+      <Box
+        py={{ base: 12, md: 16 }}
+        px={{ base: 4, md: 8 }}
+        maxW={{ base: "1200px", lg: "1600px" }} // Increased from 1400px to 1600px on lg
+        mx="auto"
+      >
         <VStack
           bg="gray.900"
           border="1px solid"
@@ -682,8 +693,13 @@ function Home() {
       </Box>
 
       {/* FAQs */}
-      <Box py={{ base: 12, md: 16 }} bg="gray.800" px={{ base: 4, md: 8 }}>
-        <VStack maxW="1400px" mx="auto" spacing={8}>
+      <Box
+        py={{ base: 12, md: 16 }}
+        bg="gray.800"
+        px={{ base: 4, md: 8 }}
+        maxW={{ base: "1200px", lg: "1600px" }} // Increased from 1400px to 1600px on lg
+      >
+        <VStack spacing={8}>
           <Heading as="h2" size="2xl" color="purple.500">
             Frequently Asked Questions
           </Heading>
@@ -746,7 +762,12 @@ function Home() {
       </Box>
 
       {/* Documents */}
-      <Box py={{ base: 12, md: 16 }} px={{ base: 4, md: 8 }} maxW="1400px" mx="auto">
+      <Box
+        py={{ base: 12, md: 16 }}
+        px={{ base: 4, md: 8 }}
+        maxW={{ base: "1200px", lg: "1600px" }} // Increased from 1400px to 1600px on lg
+        mx="auto"
+      >
         <VStack spacing={8}>
           <Heading as="h2" size="2xl" color="purple.500">
             Read Documents
@@ -775,12 +796,22 @@ function Home() {
       </Box>
 
       {/* Authentication Council */}
-      <Box py={{ base: 12, md: 16 }} px={{ base: 4, md: 8 }} maxW="1400px" mx="auto">
+      <Box
+        py={{ base: 12, md: 16 }}
+        px={{ base: 4, md: 8 }}
+        maxW={{ base: "1200px", lg: "1600px" }} // Increased from 1400px to 1600px on lg
+        mx="auto"
+      >
         <VStack spacing={8}>
           <Heading as="h2" size="2xl" color="purple.500">
             Trust in Every Purchase
           </Heading>
-          <Text textAlign="center" maxW="700px" fontSize="lg" color="purple.500">
+          <Text
+            textAlign="center"
+            maxW={{ base: "700px", lg: "900px" }} // Increased from 700px to 900px on lg
+            fontSize="lg"
+            color="purple.500"
+          >
             LuxuryVerse partners with former members of Interpol, the FBI, and other agencies to guarantee authentic merchandise. All goods are transported, stored, and shipped from secure facilities.
           </Text>
         </VStack>
