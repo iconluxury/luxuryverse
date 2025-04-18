@@ -263,6 +263,11 @@ input::placeholder, textarea::placeholder {
   clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%);
 }
 
+.terminal-cursor {
+  display: inline-block;
+  font-family: var(--font-family-glitch);
+}
+
 /* Logo Styling */
 .luxuryverse-logo {
   font-family: var(--font-family-logo);
@@ -295,6 +300,7 @@ input::placeholder, textarea::placeholder {
   h5 { font-size: var(--font-size-3xl); }
   h6 { font-size: var(--font-size-2xl); }
   p { font-size: var(--font-size-sm); }
+  .terminal-cursor { font-size: var(--font-size-7xl); }
 }
 
 @media (max-width: 30em) {
@@ -304,6 +310,7 @@ input::placeholder, textarea::placeholder {
   h4 { font-size: var(--font-size-3xl); }
   h5 { font-size: var(--font-size-2xl); }
   h6 { font-size: var(--font-size-xl); }
+  .terminal-cursor { font-size: var(--font-size-6xl); }
 }
 
 /* Chakra UI alert styling */

@@ -1,18 +1,10 @@
 import { Flex, Heading, Button } from '@chakra-ui/react';
 import { Link, useNavigate } from '@tanstack/react-router';
-import { createContext, useContext, useState } from 'react';
-
-// AuthContext
-export const AuthProvider = createContext({
-  user: null,
-  isJoining: false,
-  login: () => {},
-  logout: () => {},
-  setJoining: () => {},
-});
+import { useContext } from 'react';
+import { AuthContext } from './AuthContext';
 
 export default function TopNav() {
-  const { user, isJoining } = useContext(AuthProvider);
+  const { user, isJoining } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const getButtonProps = () => {
@@ -25,17 +17,8 @@ export default function TopNav() {
         _hover: { bg: 'var(--color-primary-hover)' }, // #58fb6cd9 (green)
       };
     }
-    if (isJoining) {
-      return {
-        text: 'Join',
-        onClick: () => navigate({ to: '/join' }),
-        bg: 'var(--color-primary)', // #c2a0e5d9
-        color: 'var(--color-background)', // #0A0A0A
-        _hover: { bg: 'var(--color-primary-hover)' }, // #58fb6cd9
-      };
-    }
     return {
-      text: 'Login',
+      text: isJoining ? 'Join' : 'Login',
       onClick: () => navigate({ to: '/join' }),
       bg: 'var(--color-primary)', // #c2a0e5d9
       color: 'var(--color-background)', // #0A0A0A
@@ -60,10 +43,10 @@ export default function TopNav() {
         maxW="80rem" // Match .container
         width="100%"
         px={{ base: '1rem', md: '1rem' }} // --spacing-md
-        justify={{ base: 'space-between', md: 'space-between' }} // Spread items evenly
-        align="center" // Vertically center all items
-        direction={{ base: 'row', md: 'row' }} // Row layout on all screens
-        gap={{ base: 2, md: 4 }} // Spacing between items
+        justify={{ base: 'space-between', md: 'space-between' }}
+        align="center"
+        direction={{ base: 'row', md: 'row' }}
+        gap={{ base: 2, md: 4 }}
       >
         {/* Logo */}
         <Heading
