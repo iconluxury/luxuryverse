@@ -492,7 +492,6 @@ function Home() {
   </Flex>
 </Box>
 
-// Cards Section
 <Box py={{ base: 6, md: 8 }} px={{ base: 4, md: 8 }} maxW="1400px" mx="auto"> {/* Reduced from 8, 12 to 6, 8 */}
   <Flex
     direction={{ base: "column", lg: "row" }}
