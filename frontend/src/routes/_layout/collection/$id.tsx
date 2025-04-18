@@ -210,7 +210,7 @@ function CollectionDetails() {
             {collection.description && (
              <Box 
              fontSize="lg" 
-             color="gray.800"
+             color="gray.200"
              sx={{ '& *': { color: 'inherit' } }} // Force child elements to inherit color
              dangerouslySetInnerHTML={{ __html: collection.description }} 
            />
