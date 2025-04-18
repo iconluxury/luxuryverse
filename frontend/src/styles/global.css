@@ -4,14 +4,12 @@
 /* Define CSS custom properties */
 :root {
   /* Colors */
-  --color-background: #0A0A0A; /* Deep black */
-  --color-text: #c2a0e5d9; /* Light purple */
-  --color-muted: #c2a0e5d9; /* Light purple for body text */
-  --color-primary: #c2a0e5d9; /* Light purple */
-  --color-primary-hover: #58fb6cd9; /* Green */
-  --color-secondary: #1A2526; /* Dark blue-gray */
-  --color-border: #3A4A4F; /* Medium blue-gray */
-
+    --color-background: #0A0A0A; /* Deep black */
+    --color-text: #a0a7e5d9; /* Blue-grey, was #c2a0e5d9 (light purple) */
+    --color-muted: #a0a7e5d9; /* Blue-grey, unchanged */
+    --color-primary-hover: #58fb6cd9; /* Green */
+    --color-secondary: #1A2526; /* Dark blue-grey */
+    --color-border: #3A4A4F; /* Medium blue-grey */
   /* Typography */
   --font-family-body: 'DM Sans', sans-serif;
   --font-family-heading: 'Special Gothic Expanded One', sans-serif;
