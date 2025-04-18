@@ -262,7 +262,7 @@ function CollectionDetails() {
                           >
                             {product.brand || 'Unknown'}
                           </Text>
-                          <Text fontWeight="bold" fontSize="md" color="white">
+                          <Text fontWeight="bold" fontSize="md" color="white" noOfLines={2}>
                             {cleanedTitle}
                           </Text>
                           <Flex mt={2} justify="space-between" align="center">
