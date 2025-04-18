@@ -5,12 +5,13 @@
 :root {
   /* Colors */
   --color-background: #0A0A0A; /* Deep black */
-  --color-text: #E6E6E6; /* Off-white */
-  --color-muted: #99A8B2; /* Light gray-blue */
+  --color-text: #00E5FF; /* Light cyan */
+  --color-muted: #00E5FF; /* Light cyan for body text */
   --color-primary: #00E5FF; /* Light cyan */
   --color-primary-hover: #00B8CC; /* Darker cyan */
-  --color-accent: #FFFFFF; /* White for glitch */
-  --color-accent-hover: #E6E6E6; /* Light gray for glitch */
+  --color-accent: #FFFFFF; /* White for glitch top */
+  --color-accent-hover: #E6E6E6; /* Light gray for glitch bottom (Exclusive) */
+  --color-accent-blue: #00B7EB; /* Neon blue for glitch bottom (Brands) */
   --color-secondary: #1A2526; /* Dark blue-gray */
   --color-border: #3A4A4F; /* Medium blue-gray */
 
@@ -245,14 +246,14 @@ input::placeholder, textarea::placeholder {
 }
 
 .glitch-exclusive::before {
-  color: var(--color-accent);
+  color: var(--color-accent); /* White */
   animation: glitch-exclusive-top 0.8s linear infinite;
   clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
   transform: translate(4px, -4px);
 }
 
 .glitch-exclusive::after {
-  color: var(--color-accent-hover);
+  color: var(--color-accent-hover); /* Light gray */
   animation: glitch-exclusive-bottom 1.2s linear infinite;
   clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%);
   transform: translate(-4px, 4px);
@@ -273,14 +274,14 @@ input::placeholder, textarea::placeholder {
 }
 
 .glitch-brands::before {
-  color: var(--color-accent);
+  color: var(--color-accent); /* White */
   animation: glitch-brands-top 0.9s linear infinite 0.3s;
   clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
   transform: translate(5px, -5px);
 }
 
 .glitch-brands::after {
-  color: var(--color-accent-hover);
+  color: var(--color-accent-blue); /* Neon blue */
   animation: glitch-brands-bottom 1.3s linear infinite 0.3s;
   clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%);
   transform: translate(-5px, 5px);

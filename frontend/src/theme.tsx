@@ -17,7 +17,7 @@ const theme = extendTheme({
       50: "#E6E6E6", // Off-white
       100: "#D4D4D4",
       200: "#B2B2B2",
-      300: "#99A8B2", // Light gray-blue
+      300: "#00E5FF", // Light cyan for body text
       400: "#7A8A94",
       500: "#5C6A74",
       600: "#465056",
@@ -31,6 +31,10 @@ const theme = extendTheme({
       500: "#00E5FF", // Light cyan
       600: "#00B8CC",
       700: "#0088A3",
+    },
+    blue: {
+      500: "#00B7EB", // Neon blue for glitch
+      600: "#009BC7",
     },
     white: "#FFFFFF",
     lightGray: "#E6E6E6",
@@ -286,7 +290,7 @@ const theme = extendTheme({
     global: {
       "html, body": {
         bg: "black.900",
-        color: "white",
+        color: "cyan.500",
         fontFamily: "'DM Sans', sans-serif",
         lineHeight: "base",
         scrollBehavior: "smooth",
