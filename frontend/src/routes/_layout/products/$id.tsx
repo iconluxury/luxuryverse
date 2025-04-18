@@ -380,16 +380,42 @@ function ProductDetails() {
               )}
               {/* Product Details Section */}
               <VStack align="start" spacing={4}>
-                <Text fontSize="lg" color="gray.300" fontWeight="bold">
-                  {product.brand || 'Unknown Brand'}
-                </Text>
+                <HStack spacing={2} align="center">
+                  <Text fontSize="lg" color="gray.300" fontWeight="bold">
+                    {product.brand || 'Unknown Brand'}
+                  </Text>
+                  {product.discount && (
+                    <>
+                      <Text fontSize="lg" color="gray.300">
+                        |
+                      </Text>
+                      <Tag colorScheme="green" px={3} py={1} borderRadius="full">
+                        {product.discount}
+                      </Tag>
+                    </>
+                  )}
+                </HStack>
                 <Text as="h1" fontSize={{ base: '2xl', md: '3xl' }} fontWeight="medium" lineHeight="1.3">
                   {product.title || 'Untitled Product'}
                 </Text>
-                {product.discount && (
-                  <Tag colorScheme="green" px={3} py={1} borderRadius="full">
-                    {product.discount}
-                  </Tag>
+                {validatedVariants && validatedVariants.length > 0 && (
+                  <HStack spacing={2} flexWrap="wrap" maxW="100%" gap={2}>
+                    {validatedVariants.map((variant, index) => (
+                      <Box
+                        key={variant.id || `variant-${index}`}
+                        bg={variant.inventory_quantity > 0 ? 'gray.700' : 'red.900'}
+                        color="white"
+                        px={3}
+                        py={1}
+                        borderRadius="md"
+                        fontSize="md"
+                        cursor="pointer"
+                        _hover={{ bg: variant.inventory_quantity > 0 ? 'gray.600' : 'red.800' }}
+                      >
+                        {variant.size}
+                      </Box>
+                    ))}
+                  </HStack>
                 )}
                 <HStack spacing={2} align="center">
                   <Text fontSize={{ base: '2xl', md: '3xl' }} fontWeight="bold" color="yellow.400">
