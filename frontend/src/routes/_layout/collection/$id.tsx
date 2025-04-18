@@ -193,7 +193,7 @@ function CollectionDetails() {
               {collection.title}
             </Heading>
             {collection.description && (
-              <Box fontSize="md" color="gray.200" dangerouslySetInnerHTML={{ __html: collection.description }} />
+              <Box fontSize="md" color="gray.400" dangerouslySetInnerHTML={{ __html: collection.description }} />
             )}
             {collection.products.length > 0 ? (
               <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing={6} w="100%">
@@ -201,6 +201,20 @@ function CollectionDetails() {
                   const cleanTitle = product.brand
                     ? product.title.replace(new RegExp(`\\b${product.brand}\\b`, 'i'), '').trim()
                     : product.title;
+
+                    f (product?.title && product?.brand) {
+                      // Create regex for brand
+                      const brandRegex = new RegExp(`\\b${product.brand}\\b`, 'i');
+                      // Create regex for men/mens/men's variations
+                      const menRegex = /\b(men'?s|men)\b/i;
+                      // Remove brand and men-related words, then trim
+                      return product.title
+                        .replace(brandRegex, '')
+                        .replace(menRegex, '')
+                        .trim()
+                        .replace(/\s+/g, ' '); // Normalize multiple spaces
+                    }
+                    return product?.title || 'Untitled Product';
                   return (
                     <Link key={product.id} to={`/products/${product.id}`}>
                       <Box
