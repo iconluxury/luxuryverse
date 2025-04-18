@@ -256,7 +256,7 @@ function CollectionDetails() {
   />
 </Box>
                         <Box p={4}>
-                          <Text fontWeight="bold" fontSize="md" color="white" noOfLines={1}>
+                          <Text fontWeight="bold" fontSize="md" color="gray.200" noOfLines={1}>
                             {product.brand || 'Unknown'}
                           </Text>
                           <Text fontWeight="bold" fontSize="md" color="white">
