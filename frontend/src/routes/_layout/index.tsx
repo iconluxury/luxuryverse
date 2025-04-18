@@ -500,8 +500,7 @@ function Home() {
   overflow="hidden"
   width="100%"
   maxW={{ base: "1200px", lg: "1600px" }}
-  mx="auto"
->
+  mx="auto">
             <Box
               ref={logosWrapperRef}
               display="flex"
