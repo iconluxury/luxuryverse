@@ -478,7 +478,7 @@ function Home() {
                 |
               </Box>
             </Box>
-            <Text fontSize={{ base: "md", md: "2xl" }} color="purple.500">
+            <Text fontSize={{ base: "md", md: "2xl" }} color="gray.400">
               Exclusive Access to authenticated luxury goods, verified on the blockchain
             </Text>
             <Button
@@ -560,10 +560,10 @@ function Home() {
             transition="all 0.3s"
             _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
           >
-            <Heading as="h3" size="xl" mb={4} color="purple.500">
+            <Heading as="h3" size="xl" mb={4} color="gray.400">
               Luxury Brands
             </Heading>
-            <Text fontSize="lg" color="purple.500">
+            <Text fontSize="lg" color="gray.400">
               LuxuryVerse has direct access to the world's top luxury brands. We have built our
               industry relationships over decades, ensuring that we have the best styles at the prices.
             </Text>
@@ -579,10 +579,10 @@ function Home() {
             transition="all 0.3s"
             _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
           >
-            <Heading as="h3" size="xl" mb={4} color="purple.500">
+            <Heading as="h3" size="xl" mb={4} color="gray.400">
               Exclusive Drops
             </Heading>
-            <Text fontSize="lg" color="purple.500">
+            <Text fontSize="lg" color="gray.400">
               Each week, LuxuryVerse releases a limited selection of luxury goods to our members. We
               announce these drops one day in advance on X, releasing goods on a first come first serve
               basis exclusive to our members.
@@ -599,10 +599,10 @@ function Home() {
             transition="all 0.3s"
             _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
           >
-            <Heading as="h3" size="xl" mb={4} color="purple.500">
+            <Heading as="h3" size="xl" mb={4} color="gray.400">
               Authentic Goods
             </Heading>
-            <Text fontSize="lg" color="purple.500">
+            <Text fontSize="lg" color="gray.400">
               LuxuryVerse goods are 100% authentic and guaranteed on the blockchain. Our goods and
               services are also supported by the Authentication Council.
             </Text>
@@ -624,10 +624,10 @@ function Home() {
           transition="all 0.3s"
           _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
         >
-          <Heading as="h2" size="2xl" color="purple.500">
+          <Heading as="h2" size="2xl" color="gray.400">
             Launch Countdown
           </Heading>
-          <Text fontSize="lg" color="purple.500">
+          <Text fontSize="lg" color="gray.400">
             First Drop: September 5th, 2025
           </Text>
           <Flex gap={8} justify="center" wrap="wrap">
@@ -638,10 +638,10 @@ function Home() {
               { value: countdown.seconds, label: "Seconds" },
             ].map(({ value, label }) => (
               <VStack key={label}>
-                <Text fontSize="5xl" fontWeight="bold" color="purple.500">
+                <Text fontSize="5xl" fontWeight="bold" color="gray.400">
                   {value}
                 </Text>
-                <Text fontSize="lg" color="purple.500">
+                <Text fontSize="lg" color="gray.400">
                   {label}
                 </Text>
               </VStack>
@@ -665,10 +665,10 @@ function Home() {
           _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
           h={{ base: "auto", lg: "600px" }} // Square-ish on desktop
         >
-          <Heading as="h2" size="2xl" color="purple.500">
+          <Heading as="h2" size="2xl" color="gray.400">
             Roadmap
           </Heading>
-          <Text fontSize="lg" color="purple.500" maxW="700px">
+          <Text fontSize="lg" color="gray.400" maxW="700px">
             Roadmap Coming Soon. Stay tuned for our detailed plans for LuxuryVerse, including new
             features, partnerships, and expansion milestones.
           </Text>
@@ -692,19 +692,19 @@ function Home() {
           transition="all 0.3s"
           _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
         >
-          <Heading as="h2" size="2xl" color="purple.500">
+          <Heading as="h2" size="2xl" color="gray.400">
             Recent Drops
           </Heading>
-          <Text maxW="700px" textAlign="center" fontSize="lg" color="purple.500">
+          <Text maxW="700px" textAlign="center" fontSize="lg" color="gray.400">
             Each week, LuxuryVerse releases a limited selection of luxury goods to our members.
           </Text>
           {error && <Text color="red.300" fontSize="lg">{error}</Text>}
-          {isLoading && <Text color="purple.500" fontSize="lg">Loading drops...</Text>}
+          {isLoading && <Text color="gray.400" fontSize="lg">Loading drops...</Text>}
           {!isLoading && !Array.isArray(collections) && (
-            <Text color="purple.500" fontSize="lg">No valid collections available</Text>
+            <Text color="gray.400" fontSize="lg">No valid collections available</Text>
           )}
           {!isLoading && Array.isArray(collections) && collections.length === 0 && (
-            <Text color="purple.500" fontSize="lg">No drops available</Text>
+            <Text color="gray.400" fontSize="lg">No drops available</Text>
           )}
           {!isLoading && Array.isArray(collections) && collections.length > 0 && (
             <Grid
@@ -735,15 +735,15 @@ function Home() {
                         w="100%"
                         fallbackSrc="/images/placeholder.jpg"
                       />
-                      <Text fontSize="lg" fontWeight="bold" color="purple.500">
+                      <Text fontSize="lg" fontWeight="bold" color="gray.400">
                         {product.title}
                       </Text>
-                      <Text fontSize="md" color="purple.500">{product.price}</Text>
+                      <Text fontSize="md" color="gray.400">{product.price}</Text>
                       <Button
                         size="md"
                         variant="outline"
-                        borderColor="purple.500"
-                        color="purple.500"
+                        borderColor="gray.400"
+                        color="gray.400"
                         w="full"
                         mt={4}
                         _hover={{ bg: "green.500", color: "black.900" }}
@@ -779,7 +779,7 @@ function Home() {
           transition="all 0.3s"
           _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
         >
-          <Heading as="h2" size="2xl" color="purple.500">
+          <Heading as="h2" size="2xl" color="gray.400">
             Frequently Asked Questions
           </Heading>
           <Accordion allowToggle w="100%">
@@ -815,12 +815,12 @@ function Home() {
             ].map(({ question, answer }) => (
               <AccordionItem key={question}>
                 <AccordionButton>
-                  <Box flex="1" textAlign="left" color="purple.500" fontSize="lg">
+                  <Box flex="1" textAlign="left" color="gray.400" fontSize="lg">
                     {question}
                   </Box>
-                  <AccordionIcon color="purple.500" />
+                  <AccordionIcon color="gray.400" />
                 </AccordionButton>
-                <AccordionPanel color="purple.500" fontSize="lg">
+                <AccordionPanel color="gray.400" fontSize="lg">
                   {answer}
                 </AccordionPanel>
               </AccordionItem>
@@ -830,8 +830,8 @@ function Home() {
             as={Link}
             to="/faq"
             variant="outline"
-            borderColor="purple.500"
-            color="purple.500"
+            borderColor="gray.400"
+            color="gray.400"
             size="lg"
             _hover={{ bg: "green.500", color: "black.900" }}
           >
@@ -848,7 +848,7 @@ function Home() {
         mx="auto"
       >
         <VStack spacing={8}>
-          <Heading as="h2" size="2xl" color="purple.500">
+          <Heading as="h2" size="2xl" color="gray.400">
             Read Documents
           </Heading>
           <Flex gap={8} wrap="wrap" justify="center">
@@ -862,8 +862,8 @@ function Home() {
                 as="a"
                 href={href}
                 variant="outline"
-                borderColor="purple.500"
-                color="purple.500"
+                borderColor="gray.400"
+                color="gray.400"
                 size="lg"
                 _hover={{ bg: "green.500", color: "black.900" }}
               >
@@ -882,14 +882,14 @@ function Home() {
         mx="auto"
       >
         <VStack spacing={8}>
-          <Heading as="h2" size="2xl" color="purple.500">
+          <Heading as="h2" size="2xl" color="gray.400">
             Trust in Every Purchase
           </Heading>
           <Text
             textAlign="center"
             maxW={{ base: "700px", lg: "900px" }}
             fontSize="lg"
-            color="purple.500"
+            color="gray.400"
           >
             LuxuryVerse partners with former members of Interpol, the FBI, and other agencies to guarantee authentic merchandise. All goods are transported, stored, and shipped from secure facilities.
           </Text>
