@@ -678,17 +678,6 @@ function Home() {
               </AccordionItem>
             ))}
           </Accordion>
-          <Button
-            as={Link}
-            to="/faq"
-            variant="outline"
-            borderColor="gray.400"
-            color="gray.400"
-            size="lg"
-            _hover={{ bg: "green.500", color: "black.900" }}
-          >
-            See All FAQ
-          </Button>
         </VStack>
       </Box>
 
