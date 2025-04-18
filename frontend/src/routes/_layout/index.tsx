@@ -614,7 +614,7 @@ function Home() {
       </Box>
       {/* FAQs Section */}
       <Box
-        py={{ base: 12, md: 16 }}
+        py={{ base: 8, md: 12 }}
         px={{ base: 4, md: 8 }}
         width="100%"
       >
