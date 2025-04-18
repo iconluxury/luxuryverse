@@ -526,6 +526,7 @@ function Home() {
           maxW={{ base: "100%", lg: "100%" }}
           mx="auto"
           px={{ base: 4, md: 8 }}
+          py={{ base: 12, md: 16 }}
         >
           <VStack
             bg="gray.900"
