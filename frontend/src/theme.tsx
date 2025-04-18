@@ -37,7 +37,6 @@ const theme = extendTheme({
       600: "#009BC7",
     },
     white: "#FFFFFF",
-    lightGray: "#E6E6E6",
     black: {
       900: "#0A0A0A", // Deep black
     },
@@ -145,7 +144,7 @@ const theme = extendTheme({
     Text: {
       baseStyle: {
         fontFamily: "'DM Sans', sans-serif",
-        color: "gray.300",
+        color: "cyan.500",
         lineHeight: "base",
       },
     },
@@ -269,7 +268,7 @@ const theme = extendTheme({
             fontFamily: "'Special Gothic Expanded One', sans-serif",
           },
           description: {
-            color: "gray.300",
+            color: "cyan.500",
             fontFamily: "'DM Sans', sans-serif",
           },
         },
