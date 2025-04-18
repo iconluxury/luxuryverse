@@ -10,7 +10,7 @@ const theme = extendTheme({
   fonts: {
     heading: "'Special Gothic Expanded One', sans-serif",
     body: "'DM Sans', sans-serif",
-    glitch: "'Micro 5', sans-serif", // Updated to Micro 5 for glitch effect
+    glitch: "'Jersey 15', sans-serif", // Updated to Jersey 15 for glitch effect
   },
   colors: {
     gray: {
@@ -149,7 +149,7 @@ const theme = extendTheme({
           textTransform: "uppercase",
         },
         glitch: {
-          fontFamily: "'Micro 5', sans-serif", // Updated to Micro 5
+          fontFamily: "'Jersey 15', sans-serif", // Updated to Jersey 15
           fontWeight: "normal",
           color: "purple.500",
         },
