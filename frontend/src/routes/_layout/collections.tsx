@@ -1,65 +1,77 @@
-import { Box, Text, Image, Grid, Heading, Skeleton } from '@chakra-ui/react';
+import { Box, Text, Image, Grid, Heading, Skeleton, Flex, Icon } from '@chakra-ui/react';
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
 import { useState, useEffect } from 'react';
+import { LockIcon } from '@chakra-ui/icons';
 import Footer from "@/components/Common/Footer";
 
-export const Route = createFileRoute('/_layout/collections')({
-  component: CollectionsPage,
+export const Route = createFileRoute('/_layout/latest-drops')({
+  component: LatestDropsPage,
 });
 
-function CollectionsPage() {
-  const selectedCollections = ['461931184423', '471622844711', '488238383399'];
+function LatestDropsPage() {
+  const selectedDrops = ['461931184423', '471622844711', '488238383399'];
   const [maxDescriptionHeight, setMaxDescriptionHeight] = useState(0);
 
-  const { data: collectionsData = [], isLoading } = useQuery({
-    queryKey: ['collections', selectedCollections],
+  const { data: dropsData = [], isLoading } = useQuery({
+    queryKey: ['drops', selectedDrops],
     queryFn: async () => {
-      const collectionPromises = selectedCollections.map(id =>
+      const dropPromises = selectedDrops.map(id =>
         fetch(`https://iconluxury.shop/api/v1/collections/${id}`, {
           cache: 'force-cache',
         }).then(res => {
-          if (!res.ok) throw new Error(`Failed to fetch collection ${id}`);
+          if (!res.ok) throw new Error(`Failed to fetch drop ${id}`);
           return res.json();
         })
       );
-      const results = await Promise.allSettled(collectionPromises);
-      const collections = results
+      const results = await Promise.allSettled(dropPromises);
+      const drops = results
         .filter(result => result.status === 'fulfilled')
         .map(result => ({
           ...result.value,
-          productCount: result.value.products?.length || 0,
+          isLocked: false,
         }));
 
       const errors = results
         .filter(result => result.status === 'rejected')
         .map(result => result.reason);
       if (errors.length > 0) {
-        console.error('Some collections failed to fetch:', errors);
+        console.error('Some drops failed to fetch:', errors);
       }
 
-      return collections;
+      // Add a placeholder for a future locked drop with a specific unlock date
+      const futureDrop = {
+        id: 'future-1',
+        title: 'Upcoming Drop',
+        description: 'Get ready for our next exclusive drop!',
+        image: 'https://placehold.co/400x400?text=Locked',
+        isLocked: true,
+        unlockDate: '2025-05-01', // Fixed future date
+      };
+
+      // Sort to put locked drop first
+      return [futureDrop, ...drops];
     },
     staleTime: 1000 * 60 * 5,
     cacheTime: 1000 * 60 * 30,
   });
 
   useEffect(() => {
-    if (collectionsData.length > 0) {
-      const descriptions = collectionsData.map(col => col.description || '');
+    if (dropsData.length > 0) {
+      const descriptions = dropsData.map(col => col.description || '');
       const maxHeight = Math.max(...descriptions.map(desc => desc.length)) * 1.5;
       setMaxDescriptionHeight(maxHeight);
     }
-  }, [collectionsData]);
+  }, [dropsData]);
 
   if (isLoading) {
     return (
       <Box p={4} bg="gray.900" color="white" minH="100vh" display="flex" justifyContent="center" alignItems="center">
-        <Box maxW="1200px" w="full">
-          <Skeleton height="20px" width="200px" mb={8} />
-          <Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={6}>
-            {selectedCollections.map((_, index) => (
-              <Skeleton key={index} height="300px" />
+        <Box maxW="1400px" w="full">
+          <Skeleton height="30px" width="250px" mb={10} />
+          <Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={8}>
+            {selectedDrops.map((_, index) => (
+              <Skeleton key={index} height="400px" borderRadius="lg" />
             ))}
           </Grid>
         </Box>
@@ -67,10 +79,10 @@ function CollectionsPage() {
     );
   }
 
-  if (collectionsData.length === 0) {
+  if (dropsData.length === 0) {
     return (
       <Box p={4} bg="gray.900" color="white" minH="100vh" display="flex" justifyContent="center" alignItems="center">
-        <Text>No collections available.</Text>
+        <Text>No drops available.</Text>
       </Box>
     );
   }
@@ -84,54 +96,98 @@ function CollectionsPage() {
       flexDirection="column"
       alignItems="center"
     >
-      <Box maxW="1200px" w="full" px={4} pt={4}>
-        <Heading fontSize="2xl" mb={10} textAlign="center">Collections</Heading>
-        <Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={6}>
-          {collectionsData.map(collection => (
-            <Link
-              key={collection.id}
-              to={`/collection/${collection.id}`}
-              style={{ textDecoration: 'none' }}
-            >
-              <Box
-                role="link"
-                borderWidth="1px"
-                borderRadius="lg"
-                overflow="hidden"
-                bg="white"
-                color="gray.900"
-                _hover={{ boxShadow: 'md', transform: 'scale(1.02)' }}
-                transition="all 0.2s"
+      <Box maxW="1400px" w="full" px={6} pt={8}>
+        <Heading
+          fontSize={{ base: '3xl', md: '4xl' }}
+          mb={12}
+          textAlign="center"
+          bgGradient="linear(to-r, purple.400, pink.400)"
+          bgClip="text"
+        >
+          Latest Drops
+        </Heading>
+        <Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={8}>
+          {dropsData.map(drop => (
+            <Box key={drop.id} position="relative">
+              <Link
+                to={drop.isLocked ? undefined : `/collection/${drop.id}`}
+                style={{ textDecoration: 'none', pointerEvents: drop.isLocked ? 'none' : 'auto' }}
               >
-                <Image
-                  src={collection.image || 'https://placehold.co/400x400'}
-                  alt={collection.title || 'Collection Image'}
-                  style={{ aspectRatio: '4 / 3', objectFit: 'cover' }}
-                  w="full"
-                  loading="lazy"
-                />
-                <Box p={4}>
-                  <Text fontWeight="bold" fontSize="xl" mb={2}>
-                    {collection.title || 'Untitled Collection'}
-                  </Text>
-                  <Box height={`${maxDescriptionHeight}px`} overflow="hidden">
-                    <Text fontSize="sm" color="gray.600" noOfLines={2}>
-                      {collection.description
-                        ? collection.description.replace(/<\/?p>/g, '')
-                        : 'No description available.'}
+                <Box
+                  role="link"
+                  borderWidth="1px"
+                  borderColor="gray.700"
+                  borderRadius="xl"
+                  overflow="hidden"
+                  bg="white"
+                  color="gray.900"
+                  opacity={drop.isLocked ? 0.7 : 1}
+                  _hover={!drop.isLocked ? { boxShadow: 'lg', transform: 'scale(1.03)' } : {}}
+                  transition="all 0.3s ease"
+                  boxShadow="0 4px 15px rgba(0, 0, 0, 0.2)"
+                >
+                  <Box position="relative">
+                    <Image
+                      src={drop.image || 'https://placehold.co/400x400'}
+                      alt={drop.title || 'Drop Image'}
+                      style={{ aspectRatio: '4 / 3', objectFit: 'cover' }}
+                      w="full"
+                      loading="lazy"
+                      filter={drop.isLocked ? 'grayscale(50%)' : 'none'}
+                    />
+                    {drop.isLocked && (
+                      <Flex
+                        position="absolute"
+                        top={0}
+                        left={0}
+                        right={0}
+                        bottom={0}
+                        bg="blackAlpha.600"
+                        align="center"
+                        justify="center"
+                        flexDirection="column"
+                        gap={2}
+                      >
+                        <Icon as={LockIcon} boxSize={10} color="white" />
+                        <Text color="white" fontWeight="bold" fontSize="sm">
+                          Unlocks: {drop.unlockDate}
+                        </Text>
+                      </Flex>
+                    )}
+                  </Box>
+                  <Box p={6}>
+                    <Text
+                      fontWeight="bold"
+                      fontSize={{ base: 'lg', md: 'xl' }}
+                      mb={3}
+                      noOfLines={1}
+                    >
+                      {drop.title || 'Untitled Drop'}
                     </Text>
+                    <Box height={`${maxDescriptionHeight}px`} overflow="hidden">
+                      <Text
+                        fontSize="sm"
+                        color="gray.600"
+                        noOfLines={2}
+                        lineHeight="1.5"
+                      >
+                        {drop.description
+                          ? drop.description.replace(/<\/?p>/g, '')
+                          : 'No description available.'}
+                      </Text>
+                    </Box>
                   </Box>
                 </Box>
-              </Box>
-            </Link>
+              </Link>
+            </Box>
           ))}
         </Grid>
       </Box>
-      <Box w="full" mt={10}>
+      <Box w="full" mt={16}>
         <Footer />
       </Box>
     </Box>
   );
 }
 
-export default CollectionsPage;
+export default LatestDropsPage;
