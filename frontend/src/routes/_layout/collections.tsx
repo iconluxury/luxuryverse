@@ -131,7 +131,7 @@ function LatestDropsPage() {
     10:00 AM -
   </Text>
   <Text as="span" fontSize="lg" color="gray.200">
-    {' '}until sold out.
+    {' '}until sold out
   </Text>
   <br />
   <ChakraLink
