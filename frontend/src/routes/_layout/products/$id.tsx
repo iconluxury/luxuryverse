@@ -426,7 +426,7 @@ function ProductDetails() {
                   </HStack>
                 )}
                 <HStack spacing={2} align="center">
-                  <Text fontSize={{ base: '2xl', md: '3xl' }} fontWeight="bold" color="yellow.400">
+                  <Text fontSize={{ base: '3xl', md: '4xl' }} fontWeight="bold" color="yellow.400">
                     {product.sale_price || 'N/A'}
                   </Text>
                   {product.full_price && (
