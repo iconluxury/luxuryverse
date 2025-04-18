@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { Box, Text, Image, SimpleGrid, VStack, Heading, Skeleton, SkeletonText, Button, Flex } from '@chakra-ui/react';
-import { useQuery, useMemo } from '@tanstack/react-query'; // Add useMemo import
+import { useQuery } from '@tanstack/react-query';
+import { useMemo } from 'react';
 import { Link } from '@tanstack/react-router';
 import { ErrorBoundary } from 'react-error-boundary';
 import Footer from '../../../components/Common/Footer';
