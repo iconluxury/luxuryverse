@@ -1,10 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { Box, Text, Image, SimpleGrid, VStack, Heading, Skeleton, SkeletonText, Button, Flex } from '@chakra-ui/react';
+import { Box, Text, Image, SimpleGrid, VStack, Heading, Skeleton, SkeletonText, Button,Flex } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 import { ErrorBoundary } from 'react-error-boundary';
 import Footer from '../../../components/Common/Footer';
-import { useMemo } from 'react';
 
 // Interfaces (unchanged)
 interface Variant {
@@ -75,7 +74,7 @@ function CollectionDetails() {
           Expires: '0',
         },
         credentials: 'omit',
-        cache: 'force-cache',
+        cache: 'force-cache', // Leverage browser cache
       });
 
       if (!response.ok) {
@@ -83,6 +82,7 @@ function CollectionDetails() {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
+      // Stream response for large or chunked data
       const reader = response.body?.getReader();
       if (!reader) throw new Error('Response body is not readable.');
 
@@ -101,6 +101,7 @@ function CollectionDetails() {
         throw new Error('Invalid collection data received');
       }
 
+      // Validate and transform data
       const validatedCollection: Collection = {
         id: collectionData.id || id,
         title: collectionData.title || 'Untitled Collection',
@@ -131,13 +132,14 @@ function CollectionDetails() {
           : [],
       };
 
+      // Store in localStorage as fallback
       localStorage.setItem(`collection-${id}`, JSON.stringify(validatedCollection));
       return validatedCollection;
     },
-    staleTime: 1000 * 60 * 5,
-    cacheTime: 1000 * 60 * 30,
-    retry: 3,
-    retryDelay: (attempt) => 1000 * 2 ** attempt,
+    staleTime: 1000 * 60 * 5, // 5 minutes
+    cacheTime: 1000 * 60 * 30, // 30 minutes
+    retry: 3, // Retry 3 times on failure
+    retryDelay: (attempt) => 1000 * 2 ** attempt, // Exponential backoff
   });
 
   if (isLoading) {
@@ -185,83 +187,73 @@ function CollectionDetails() {
       <Box bg="transparent" w="100%">
         <Box py={8} px={{ base: 4, md: 8 }} maxW="1200px" mx="auto" bg="transparent" borderRadius="lg">
           <VStack spacing={6} align="start">
-            <Heading as="h1" size="xl" color="green.500" textTransform="uppercase">
+            <Heading as="h1" size="xl" color="white">
               {collection.title}
             </Heading>
             {collection.description && (
-              <Box fontSize="md" color="white" dangerouslySetInnerHTML={{ __html: collection.description }} />
+              <Box fontSize="md" color="gray.300" dangerouslySetInnerHTML={{ __html: collection.description }} />
             )}
             {collection.products.length > 0 ? (
               <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing={6} w="100%">
                 {collection.products.map((product) => {
-                  const cleanTitle = useMemo(() => {
-                    if (product?.title && product?.brand) {
-                      const brandRegex = new RegExp(`\\b${product.brand}\\b`, 'i');
-                      const menRegex = /\b(men'?s|men)\b/i;
-                      return product.title
-                        .replace(brandRegex, '')
-                        .replace(menRegex, '')
-                        .trim()
-                        .replace(/\s+/g, ' ');
-                    }
-                    return product?.title || 'Untitled Product';
-                  }, [product?.title, product?.brand]);
-
+                  const cleanTitle = product.brand
+                    ? product.title.replace(new RegExp(`\\b${product.brand}\\b`, 'i'), '').trim()
+                    : product.title;
                   return (
                     <Link key={product.id} to={`/products/${product.id}`}>
+                    <Box
+                      borderWidth="1px"
+                      borderColor="gray.600"
+                      borderRadius="lg"
+                      overflow="hidden"
+                      bg="transparent"
+                      _hover={{ shadow: 'md', transform: 'translateY(-4px)', borderColor: 'gray.500' }}
+                      transition="all 0.2s"
+                    >
                       <Box
-                        borderWidth="1px"
-                        borderColor="gray.600"
-                        borderRadius="lg"
-                        overflow="hidden"
-                        bg="transparent"
-                        _hover={{ shadow: 'md', transform: 'translateY(-4px)', borderColor: 'gray.500' }}
-                        transition="all 0.2s"
+                        position="relative"
+                        w="full"
+                        style={{ aspectRatio: '3 / 4' }} // Fixed container aspect ratio
+                        bg="white" // Background for letterboxing
                       >
-                        <Box
-                          position="relative"
+                        <Image
+                          src={product.thumbnail}
+                          alt={product.title}
                           w="full"
-                          style={{ aspectRatio: '3 / 4' }}
-                          bg="white"
-                        >
-                          <Image
-                            src={product.thumbnail}
-                            alt={product.title}
-                            w="full"
-                            h="full"
-                            objectFit="contain"
-                            position="absolute"
-                            top="0"
-                            left="0"
-                            loading="lazy"
-                            onError={(e) => (e.currentTarget.src = 'https://placehold.co/225x300')}
-                          />
-                        </Box>
-                        <Box p={4}>
-                          <Text fontSize="md" fontWeight="medium" color="gray.400" noOfLines={1}>
+                          h="full"
+                          objectFit="contain" // Show full image
+                          position="absolute"
+                          top="0"
+                          left="0"
+                          loading="lazy"
+                          onError={(e) => (e.currentTarget.src = 'https://placehold.co/225x300')}
+                        />
+                      </Box>
+                      <Box p={4}>
+                        <Text fontWeight="bold" fontSize="md" color="white" noOfLines={1}>
+                          {cleanTitle}
+                        </Text>
+                        <Flex justify="space-between" align="center" mt={1}>
+                          <Text fontSize="sm" color="gray.300" noOfLines={1}>
                             {product.brand}
                           </Text>
-                          <Text fontWeight="bold" fontSize="md" color="white" noOfLines={1}>
-                            {cleanTitle}
+                          {product.discount && (
+                            <Text fontSize="xs" color="red.400">
+                              {product.discount}
+                            </Text>
+                          )}
+                        </Flex>
+                        <Flex mt={2} justify="space-between" align="center">
+                          <Text fontWeight="bold" fontSize="lg" color="var(--color-primary-hover)">
+                            {product.sale_price}
                           </Text>
-                          <Flex justify="space-between" align="center" mt={1}>
-                            {product.discount && (
-                              <Text fontSize="xs" color="red.400">
-                                {product.discount}
-                              </Text>
-                            )}
-                          </Flex>
-                          <Flex mt={2} justify="space-between" align="center">
-                            <Text fontWeight="bold" fontSize="lg" color="var(--color-primary-hover)">
-                              {product.sale_price}
-                            </Text>
-                            <Text fontSize="sm" color="gray.400">
-                              {product.full_price}
-                            </Text>
-                          </Flex>
-                        </Box>
+                          <Text fontSize="sm" color="gray.400">
+                            {product.full_price}
+                          </Text>
+                        </Flex>
                       </Box>
-                    </Link>
+                    </Box>
+                  </Link>
                   );
                 })}
               </SimpleGrid>

@@ -1,5 +1,5 @@
-import { Box, Text, Grid, Heading, Skeleton, Flex } from '@chakra-ui/react';
-import { createFileRoute, Link } from '@tanstack/react-router';
+import { Box, Text, Grid, Heading, Skeleton, Flex, Link } from '@chakra-ui/react';
+import { createFileRoute } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
 import { useState, useEffect } from 'react';
 import Footer from "@/components/Common/Footer";
@@ -114,37 +114,34 @@ function LatestDropsPage() {
             </Heading>
             <Flex justify="center" gap={8} flexWrap="wrap">
               {dropsData.upcoming.map(drop => (
-                <Box key={drop.id} width={{ base: '100%', md: '33.33%' }} maxW="400px">
-                  <Box
-                    border="1px solid"
-                    borderColor="gray.700"
-                    borderRadius="md"
-                    overflow="hidden"
-                    bg="gray.900"
-                    color="gray.400"
-                    opacity={0.6}
-                    p={6}
+                <Box key={drop.id} width={{ base: '100%', md: '33.33%' }} maxW="400px" textAlign="center">
+                  <Text
+                    fontWeight="bold"
+                    fontSize={{ base: '2xl', md: '2xl' }}
+                    mb={4}
+                    color="white"
+                    noOfLines={1}
                   >
-                    <Text
-                      fontWeight="bold"
-                      fontSize={{ base: '2xl', md: '2xl' }}
-                      mb={4}
-                      noOfLines={1}
-                    >
-                      {drop.title || 'Untitled Drop'}
-                    </Text>
-                    <Box height={`${maxDescriptionHeight}px`} overflow="hidden">
-                      <Text
-                        fontSize={{ base: 'lg', md: 'lg' }}
-                        color="gray.400"
-                        noOfLines={2}
-                        lineHeight="1.5"
-                        dangerouslySetInnerHTML={{
-                          __html: drop.description || 'No description available.',
-                        }}
-                      />
-                    </Box>
-                  </Box>
+                    {drop.title || 'Untitled Drop'}
+                  </Text>
+                  <Text
+                    fontSize={{ base: 'lg', md: 'lg' }}
+                    color="gray.400"
+                    mb={4}
+                    lineHeight="1.5"
+                    dangerouslySetInnerHTML={{
+                      __html: drop.description || 'No description available.',
+                    }}
+                  />
+                  <Link
+                    color="green.500"
+                    fontSize={{ base: 'lg', md: 'lg' }}
+                    fontWeight="bold"
+                    textDecoration="underline"
+                    _hover={{ color: 'green.400' }}
+                  >
+                    Notify Me
+                  </Link>
                 </Box>
               ))}
             </Flex>
