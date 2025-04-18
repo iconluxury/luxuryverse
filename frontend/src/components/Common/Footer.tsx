@@ -61,62 +61,52 @@ const Footer = () => {
           flexWrap="wrap"
           gap={{ base: 2, md: 4 }}
         >
-          <HStack
-            spacing={{ base: 2, md: 4 }}
-            flexWrap="wrap"
-            justify="center"
+          <Flex
+            width="100%"
+            maxW="80rem"
+            justify="space-between"
             align="baseline"
+            flexWrap="wrap"
+            gap={{ base: 2, md: 4 }}
           >
-            <Link
-              href="/privacy-policy"
-              color="gray.400"
-              fontSize="sm"
-              fontFamily="'Special Gothic Expanded One', sans-serif"
-              lineHeight="1.5"
-              textTransform="uppercase"
-              _hover={{ color: 'white' }}
+            {/* Left Side - Privacy and Cookie Policy */}
+            <HStack
+              spacing={{ base: 2, md: 4 }}
+              justify="flex-start"
+              align="baseline"
             >
-              Privacy Policy
-            </Link>
-            <Link
-              href="/terms-conditions"
-              color="gray.400"
-              fontSize="sm"
-              fontFamily="'Special Gothic Expanded One', sans-serif"
-              lineHeight="1.5"
-              textTransform="uppercase"
-              _hover={{ color: 'white' }}
-            >
-              Terms and Conditions
-            </Link>
-            <Link
-              href="/cookies"
-              color="gray.400"
-              fontSize="sm"
-              fontFamily="'Special Gothic Expanded One', sans-serif"
-              lineHeight="1.5"
-              textTransform="uppercase"
-              _hover={{ color: 'white' }}
-            >
-              Cookie Policy
-            </Link>
-            <Link
-              href="/opt-out"
-              color="gray.400"
-              fontSize="sm"
-              fontFamily="'Special Gothic Expanded One', sans-serif"
-              lineHeight="1.5"
-              textTransform="uppercase"
-              _hover={{ color: 'white' }}
-            >
-              Opt Out
-            </Link>
+              <Link
+                href="/privacy-policy"
+                color="gray.400"
+                fontSize="sm"
+                fontFamily="'Special Gothic Expanded One', sans-serif"
+                lineHeight="1.5"
+                textTransform="uppercase"
+                _hover={{ color: 'white' }}
+              >
+                Privacy Policy
+              </Link>
+              <Link
+                href="/cookies"
+                color="gray.400"
+                fontSize="sm"
+                fontFamily="'Special Gothic Expanded One', sans-serif"
+                lineHeight="1.5"
+                textTransform="uppercase"
+                _hover={{ color: 'white' }}
+              >
+                Cookie Policy
+              </Link>
+            </HStack>
+
+            {/* Center - Copyright */}
             <Text
               fontSize="sm"
               color="gray.500"
               lineHeight="1.5"
               fontFamily="'Special Gothic Expanded One', sans-serif"
               textTransform="uppercase"
+              textAlign="center"
             >
               © 2025{' '}
               <Link
@@ -132,7 +122,37 @@ const Footer = () => {
               </Link>
               {' '}All rights reserved.
             </Text>
-          </HStack>
+
+            {/* Right Side - Terms and Opt Out */}
+            <HStack
+              spacing={{ base: 2, md: 4 }}
+              justify="flex-end"
+              align="baseline"
+            >
+              <Link
+                href="/terms-conditions"
+                color="gray.400"
+                fontSize="sm"
+                fontFamily="'Special Gothic Expanded One', sans-serif"
+                lineHeight="1.5"
+                textTransform="uppercase"
+                _hover={{ color: 'white' }}
+              >
+                Terms and Conditions
+              </Link>
+              <Link
+                href="/opt-out"
+                color="gray.400"
+                fontSize="sm"
+                fontFamily="'Special Gothic Expanded One', sans-serif"
+                lineHeight="1.5"
+                textTransform="uppercase"
+                _hover={{ color: 'white' }}
+              >
+                Opt Out
+              </Link>
+            </HStack>
+          </Flex>
         </Flex>
       </Box>
     </Box>
