@@ -116,7 +116,7 @@ function LatestDropsPage() {
             </Heading>
             <Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={8}>
               {dropsData.upcoming.map(drop => (
-                <Box key={drop.id} position="relative">
+                <Box key={drop.id}>
                   <Box
                     borderWidth="1px"
                     borderColor="gray.700"
@@ -137,7 +137,7 @@ function LatestDropsPage() {
                     >
                       {drop.title || 'Untitled Drop'}
                     </Text>
-                    <Box height={`${maxDescriptionHeight}px`} overflow="hidden" mb={4}>
+                    <Box height={`${maxDescriptionHeight}px`} overflow="hidden" mb={3}>
                       <Text
                         fontSize="sm"
                         color="gray.600"
@@ -150,29 +150,30 @@ function LatestDropsPage() {
                       </Text>
                     </Box>
                     {drop.isLocked && (
-                      <Flex
-                        align="center"
-                        justify="space-between"
-                        gap={4}
-                        flexWrap="wrap"
-                      >
-                        <Flex align="center" gap={2}>
-                          <Icon as={TimeIcon} boxSize={5} color="gray.600" />
-                          <Text fontSize="sm" color="gray.600">
+                      <>
+                        <Flex align="center" gap={3} mb={3}>
+                          <Icon as={TimeIcon} boxSize={6} color="gray.600" />
+                          <Text
+                            fontSize={{ base: 'md', md: 'lg' }}
+                            fontWeight="medium"
+                            color="gray.600"
+                          >
                             Shop Opens: {drop.unlockDate}
                           </Text>
                         </Flex>
                         <Button
-                          size="sm"
+                          size="md"
                           colorScheme="purple"
                           variant="outline"
                           borderColor="gray.600"
                           color="gray.600"
+                          width="full"
+                          fontSize={{ base: 'md', md: 'lg' }}
                           _hover={{ bg: 'purple.600', borderColor: 'purple.600', color: 'white' }}
                         >
                           Notify Me
                         </Button>
-                      </Flex>
+                      </>
                     )}
                   </Box>
                 </Box>
@@ -194,7 +195,7 @@ function LatestDropsPage() {
             </Heading>
             <Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={8}>
               {dropsData.past.map(drop => (
-                <Box key={drop.id} position="relative">
+                <Box key={drop.id}>
                   <Link
                     to={`/collection/${drop.id}`}
                     style={{ textDecoration: 'none' }}
