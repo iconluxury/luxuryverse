@@ -36,6 +36,7 @@ interface Product {
 interface Collection {
   id: string;
   title: string;
+  subtitle?: string; // Added subtitle as optional
   products: Product[];
 }
 
@@ -43,12 +44,6 @@ function Home() {
   const [collections, setCollections] = useState<Collection[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [countdown, setCountdown] = useState({
-    days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-  });
   const { open, address, isConnected, signMessageAsync } = useAppKit();
 
   const exclusiveRef = useRef(null);
@@ -274,26 +269,6 @@ function Home() {
     };
   }, []);
 
-  // Countdown logic
-  useEffect(() => {
-    const targetDate = new Date("2025-09-05T00:00:00Z").getTime();
-    const interval = setInterval(() => {
-      const now = new Date().getTime();
-      const distance = targetDate - now;
-      if (distance < 0) {
-        setCountdown({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-        clearInterval(interval);
-      } else {
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-        setCountdown({ days, hours, minutes, seconds });
-      }
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
   // Fetch collections
   useEffect(() => {
     setIsLoading(true);
@@ -415,13 +390,14 @@ function Home() {
           zIndex: 1,
         }}
       >
-        <Box maxW={{ base: "1200px", lg: "1600px" }} mx="auto" position="relative" zIndex={2} width="100%">
+        <Box position="relative" zIndex={2} width="100%">
           <VStack
             align={{ base: "center", lg: "center" }}
             spacing={{ base: 4, md: 6 }}
             maxW={{ base: "100%", lg: "800px" }}
             textAlign={{ base: "center", lg: "center" }}
             mx="auto"
+            px={{ base: 4, md: 8 }}
           >
             <Box position="relative" display="inline-block" whiteSpace="nowrap">
               <Heading
@@ -490,64 +466,66 @@ function Home() {
               fontSize={{ base: "md", md: "xl" }}
               py={{ base: 6, md: 8 }}
               px={{ base: 8, md: 12 }}
-              alignSelf={{ base: "center", lg: "center" }} // Center-align CTA button on lg
-              >
-                Get In Line
-              </Button>
-            </VStack>
+              alignSelf={{ base: "center", lg: "center" }}
+            >
+              Get In Line
+            </Button>
+          </VStack>
+          <Box
+            mt={{ base: 10, md: 12 }}
+            overflow="hidden"
+            width="100%"
+            maxW={{ base: "800px", lg: "1200px" }}
+            mx="auto"
+          >
             <Box
-  mt={{ base: 10, md: 12 }}
-  overflow="hidden"
-  width="100%"
-  maxW={{ base: "800px", lg: "1200px" }} // Reduced from 1200px/1600px
-  mx="auto"
->
-  <Box
-    ref={logosWrapperRef}
-    display="flex"
-    flexWrap="nowrap"
-    gap={{ base: 4, md: 8 }} // Increased from 3/6 to 4/8
-    w="max-content"
-    cursor="pointer"
-    tabIndex={0}
-    _hover={{ animationPlayState: "paused" }}
-    _focus={{ outline: "2px solid", outlineColor: "green.500" }}
-  >
-    {brandLogos.map((img, index) => (
-      <Image
-        key={`${img.alt}-${index}`}
-        className="brand-logo"
-        src={img.src}
-        alt={img.alt}
-        boxSize={{ base: "80px", md: "160px" }} // Increased from 60px/120px to 80px/160px
-        objectFit="contain"
-        fallbackSrc="https://via.placeholder.com/160" // Updated to match new size
-        onError={(e) => {
-          console.error(`Failed to load image: ${e.currentTarget.src}, alt: ${img.alt}`);
-          e.currentTarget.src = "/images/placeholder.jpg";
-        }}
-        filter="grayscale(100%)"
-        _hover={{ filter: "grayscale(0%)" }}
-        transition="filter 0.3s ease"
-      />
-    ))}
-  </Box>
-</Box>
+              ref={logosWrapperRef}
+              display="flex"
+              flexWrap="nowrap"
+              gap={{ base: 4, md: 8 }}
+              w="max-content"
+              cursor="pointer"
+              tabIndex={0}
+              _hover={{ animationPlayState: "paused" }}
+              _focus={{ outline: "2px solid", outlineColor: "green.500" }}
+            >
+              {brandLogos.map((img, index) => (
+                <Image
+                  key={`${img.alt}-${index}`}
+                  className="brand-logo"
+                  src={img.src}
+                  alt={img.alt}
+                  boxSize={{ base: "80px", md: "160px" }}
+                  objectFit="contain"
+                  fallbackSrc="https://via.placeholder.com/160"
+                  onError={(e) => {
+                    console.error(`Failed to load image: ${e.currentTarget.src}, alt: ${img.alt}`);
+                    e.currentTarget.src = "/images/placeholder.jpg";
+                  }}
+                  filter="grayscale(100%)"
+                  _hover={{ filter: "grayscale(0%)" }}
+                  transition="filter 0.3s ease"
+                />
+              ))}
+            </Box>
+          </Box>
         </Box>
       </Box>
 
       {/* Second Section (Three Cards) */}
-<Box
-  py={0} // Changed from { base: 2, md: 4 } to 0
-  px={{ base: 4, md: 8 }}
-  maxW={{ base: "1200px", lg: "1600px" }}
-  mx="auto"
->
+      <Box
+        py={0}
+        px={{ base: 4, md: 8 }}
+        width="100%"
+      >
         <Flex
           direction={{ base: "column", lg: "row" }}
           gap={8}
           justify="space-between"
           align="stretch"
+          maxW={{ base: "100%", lg: "100%" }}
+          mx="auto"
+          px={{ base: 4, md: 8 }}
         >
           <VStack
             bg="gray.900"
@@ -610,12 +588,11 @@ function Home() {
         </Flex>
       </Box>
 
-      {/* Recent Drops Section (Single Full-Width Card) */}
+      {/* Past Drops Section */}
       <Box
         py={{ base: 12, md: 16 }}
         px={{ base: 4, md: 8 }}
-        maxW={{ base: "1200px", lg: "1600px" }}
-        mx="auto"
+        width="100%"
       >
         <VStack
           bg="gray.900"
@@ -626,6 +603,9 @@ function Home() {
           spacing={8}
           transition="all 0.3s"
           _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
+          maxW={{ base: "100%", lg: "100%" }}
+          mx="auto"
+          px={{ base: 4, md: 8 }}
         >
           <Heading as="h2" size="2xl" color="gray.400">
             Past Drops
@@ -705,12 +685,11 @@ function Home() {
         </VStack>
       </Box>
 
-      {/* FAQs Section (Modified) */}
+      {/* FAQs Section */}
       <Box
         py={{ base: 12, md: 16 }}
         px={{ base: 4, md: 8 }}
-        maxW={{ base: "1200px", lg: "1600px" }}
-        mx="auto"
+        width="100%"
       >
         <VStack
           bg="gray.900"
@@ -721,6 +700,9 @@ function Home() {
           spacing={8}
           transition="all 0.3s"
           _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
+          maxW={{ base: "100%", lg: "100%" }}
+          mx="auto"
+          px={{ base: 4, md: 8 }}
         >
           <Heading as="h2" size="2xl" color="gray.400">
             Frequently Asked Questions
@@ -787,10 +769,14 @@ function Home() {
       <Box
         py={{ base: 12, md: 16 }}
         px={{ base: 4, md: 8 }}
-        maxW={{ base: "1200px", lg: "1600px" }}
-        mx="auto"
+        width="100%"
       >
-        <VStack spacing={8}>
+        <VStack
+          spacing={8}
+          maxW={{ base: "100%", lg: "100%" }}
+          mx="auto"
+          px={{ base: 4, md: 8 }}
+        >
           <Heading as="h2" size="2xl" color="gray.400">
             Read Documents
           </Heading>
@@ -821,10 +807,14 @@ function Home() {
       <Box
         py={{ base: 12, md: 16 }}
         px={{ base: 4, md: 8 }}
-        maxW={{ base: "1200px", lg: "1600px" }}
-        mx="auto"
+        width="100%"
       >
-        <VStack spacing={8}>
+        <VStack
+          spacing={8}
+          maxW={{ base: "100%", lg: "100%" }}
+          mx="auto"
+          px={{ base: 4, md: 8 }}
+        >
           <Heading as="h2" size="2xl" color="gray.400">
             Trust in Every Purchase
           </Heading>
