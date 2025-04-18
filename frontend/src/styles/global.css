@@ -228,11 +228,14 @@ input::placeholder, textarea::placeholder {
   position: relative;
   color: var(--color-primary);
   text-transform: uppercase;
-  animation: glitch 0.8s linear infinite;
 }
 
-.glitch::before,
-.glitch::after {
+.glitch-exclusive {
+  animation: glitch-exclusive 0.8s linear infinite;
+}
+
+.glitch-exclusive::before,
+.glitch-exclusive::after {
   content: attr(data-text);
   position: absolute;
   top: 0;
@@ -241,36 +244,82 @@ input::placeholder, textarea::placeholder {
   height: 100%;
 }
 
-.glitch::before {
+.glitch-exclusive::before {
   color: var(--color-accent);
-  animation: glitch-top 0.8s linear infinite;
+  animation: glitch-exclusive-top 0.8s linear infinite;
   clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
   transform: translate(4px, -4px);
 }
 
-.glitch::after {
+.glitch-exclusive::after {
   color: var(--color-accent-hover);
-  animation: glitch-bottom 1.2s linear infinite;
+  animation: glitch-exclusive-bottom 1.2s linear infinite;
   clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%);
   transform: translate(-4px, 4px);
 }
 
-@keyframes glitch {
+.glitch-brands {
+  animation: glitch-brands 0.9s linear infinite 0.3s;
+}
+
+.glitch-brands::before,
+.glitch-brands::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.glitch-brands::before {
+  color: var(--color-accent);
+  animation: glitch-brands-top 0.9s linear infinite 0.3s;
+  clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
+  transform: translate(5px, -5px);
+}
+
+.glitch-brands::after {
+  color: var(--color-accent-hover);
+  animation: glitch-brands-bottom 1.3s linear infinite 0.3s;
+  clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%);
+  transform: translate(-5px, 5px);
+}
+
+@keyframes glitch-exclusive {
   2%, 64% { transform: translate(4px, 0) skew(2deg); }
   4%, 60% { transform: translate(-4px, 0) skew(-2deg); }
   62% { transform: translate(0, 0) skew(8deg); }
 }
 
-@keyframes glitch-top {
+@keyframes glitch-exclusive-top {
   2%, 64% { transform: translate(6px, -6px); }
   4%, 60% { transform: translate(-6px, 6px); }
   62% { transform: translate(0, 0) skew(-12deg); }
 }
 
-@keyframes glitch-bottom {
+@keyframes glitch-exclusive-bottom {
   2%, 64% { transform: translate(-6px, 0); }
   4%, 60% { transform: translate(6px, 0); }
   62% { transform: translate(0, 0) skew(12deg); }
+}
+
+@keyframes glitch-brands {
+  2%, 64% { transform: translate(5px, 0) skew(3deg); }
+  4%, 60% { transform: translate(-5px, 0) skew(-3deg); }
+  62% { transform: translate(0, 0) skew(10deg); }
+}
+
+@keyframes glitch-brands-top {
+  2%, 64% { transform: translate(7px, -7px); }
+  4%, 60% { transform: translate(-7px, 7px); }
+  62% { transform: translate(0, 0) skew(-14deg); }
+}
+
+@keyframes glitch-brands-bottom {
+  2%, 64% { transform: translate(-7px, 0); }
+  4%, 60% { transform: translate(7px, 0); }
+  62% { transform: translate(0, 0) skew(14deg); }
 }
 
 /* Logo Styling */
