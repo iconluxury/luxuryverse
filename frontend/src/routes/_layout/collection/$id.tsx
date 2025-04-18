@@ -234,8 +234,8 @@ function CollectionDetails() {
   position="relative"
   w="full"
   style={{ aspectRatio: '3 / 4' }}
-  bg="#00FF00"
-  filter="brightness(0.65)" // Reduces brightness to 85% of original
+  bg="white"
+  filter="brightness(0.85)" // Reduces brightness to 85% of original
 >4
   <Image
     src={product.thumbnail}
@@ -254,7 +254,7 @@ function CollectionDetails() {
                           <Text fontWeight="bold" fontSize="md" color="white" noOfLines={1}>
                             {product.brand || 'Unknown'}
                           </Text>
-                          <Text fontSize="sm" color="gray.200" noOfLines={1}>
+                          <Text fontWeight="bold" fontSize="md" color="white">
                             {cleanedTitle}
                           </Text>
                           <Flex mt={2} justify="space-between" align="center">
