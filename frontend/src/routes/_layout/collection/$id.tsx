@@ -110,7 +110,7 @@ function CollectionDetails() {
   // Fetch collection data
   const fetchCollection = async () => {
     try {
-      const collectionUrl = `${API_BASE_URL}/api/v1/collection/${id}`;
+      const collectionUrl = `${API_BASE_URL}/api/v1/collections/${id}`;
       console.log('Fetching:', collectionUrl);
       const collectionData = await fetchWithRetry(collectionUrl);
       console.log('Fetch successful for', collectionUrl, ':', collectionData);
