@@ -234,13 +234,14 @@ function CollectionDetails() {
                         bg="transparent"
                         _hover={{ shadow: 'md', transform: 'translateY(-4px)', borderColor: 'gray.500' }}
                         transition="all 0.2s"
+                        height="100%" 
                       >
                        <Box
   position="relative"
   w="full"
   style={{ aspectRatio: '3 / 4' }}
   bg="white"
-  filter="brightness(0.85)" // Reduces brightness to 85% of original
+  filter="brightness(0.85)" //85% of original
 >4
   <Image
     src={product.thumbnail}
