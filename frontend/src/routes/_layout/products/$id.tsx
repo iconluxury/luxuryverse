@@ -381,21 +381,22 @@ function ProductDetails() {
               {/* Product Details Section */}
               <VStack align="start" spacing={4}>
                 <HStack spacing={2} alignItems="center">
-                  <Text fontSize="lg" color="gray.300" fontWeight="bold">
+                  <Text fontSize="lg" color="gray.300" fontWeight="bold" lineHeight="1.5">
                     {product.brand || 'Unknown Brand'}
                   </Text>
                   {product.discount && (
                     <>
-                      <Text fontSize="lg" color="gray.300">
+                      <Text fontSize="lg" color="gray.300" lineHeight="1.5">
                         |
                       </Text>
                       <Tag
                         colorScheme="green"
                         px={3}
-                        py={1}
+                        py={0.5}
                         borderRadius="full"
                         fontSize="lg"
-                        lineHeight="normal"
+                        lineHeight="1.5"
+                        minH="auto"
                       >
                         {product.discount}
                       </Tag>
