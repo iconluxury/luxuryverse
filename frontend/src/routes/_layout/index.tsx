@@ -99,7 +99,7 @@ function Home() {
       rotateY: 30,
       scale: 1.2,
       color: "#58fb6cd9",
-      fontSize: "5.5rem",
+      fontSize: { base: "3rem", md: "5.5rem" },
       lineHeight: "1",
       fontWeight: "bold",
       textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
@@ -333,7 +333,7 @@ function Home() {
         bgImage="url('/images/hero-bg.jpg')"
         bgSize="cover"
         bgPosition="center"
-        py={{ base: 20, md: 32 }}
+        py={{ base: 10, md: 16 }}
         px={{ base: 4, md: 8 }}
         position="relative"
         _before={{
@@ -347,13 +347,13 @@ function Home() {
           opacity: 0.7,
         }}
       >
-        <Flex maxW="1200px" mx="auto" direction={{ base: "column", lg: "row" }} align="center" gap={12} position="relative">
-          <VStack align="flex-start" spacing={12} flex="1">
+        <Flex maxW="1200px" mx="auto" direction={{ base: "column", lg: "row" }} align={{ base: "flex-start", lg: "center" }} gap={{ base: 6, md: 12 }} position="relative">
+          <VStack align="flex-start" spacing={{ base: 6, md: 12 }} flex="1" ml={{ base: 0, md: 0 }}>
             <Box position="relative" display="inline-block" whiteSpace="nowrap">
               <Heading
                 as="h2"
                 variant="glitch"
-                size="8xl"
+                size={{ base: "6xl", md: "9xl" }}
                 className="glitch glitch-exclusive"
                 data-text="EXCLUSIVE"
                 ref={exclusiveRef}
@@ -363,10 +363,10 @@ function Home() {
                 ref={exclusiveCursorRef}
                 className="terminal-cursor"
                 position="absolute"
-                top="10%"
+                top={{ base: "5%", md: "10%" }}
                 left="0"
                 color="#58fb6cd9"
-                fontSize="5.5rem"
+                fontSize={{ base: "3rem", md: "5.5rem" }}
                 lineHeight="1"
                 fontWeight="normal"
                 ml="0.05em"
@@ -378,7 +378,7 @@ function Home() {
               <Heading
                 as="h2"
                 variant="glitch"
-                size="8xl"
+                size={{ base: "6xl", md: "9xl" }}
                 className="glitch glitch-brands"
                 data-text="BRANDS"
                 ref={brandsRef}
@@ -388,10 +388,10 @@ function Home() {
                 ref={brandsCursorRef}
                 className="terminal-cursor"
                 position="absolute"
-                top="10%"
+                top={{ base: "5%", md: "10%" }}
                 left="0"
                 color="#58fb6cd9"
-                fontSize="5.5rem"
+                fontSize={{ base: "3rem", md: "5.5rem" }}
                 lineHeight="1"
                 fontWeight="normal"
                 ml="0.05em"
@@ -399,10 +399,10 @@ function Home() {
                 |
               </Box>
             </Box>
-            <Text fontFamily="'DM Sans', sans-serif" fontSize={{ base: "xl", md: "2xl" }} color="purple.500">
+            <Text fontFamily="'DM Sans', sans-serif" fontSize={{ base: "md", md: "2xl" }} color="purple.500">
               Exclusive Access
             </Text>
-            <Text fontSize={{ base: "lg", md: "xl" }} color="purple.500">
+            <Text fontSize={{ base: "sm", md: "xl" }} color="purple.500">
               Authenticated luxury goods, fully verified on the blockchain
             </Text>
             <Button
@@ -412,15 +412,15 @@ function Home() {
               color="black.900"
               _hover={{ bg: "purple.500" }}
               onClick={handleJoinWaitlist}
-              fontSize="xl"
-              py={8}
-              px={12}
+              fontSize={{ base: "md", md: "xl" }}
+              py={{ base: 6, md: 8 }}
+              px={{ base: 8, md: 12 }}
             >
               Join The Waitlist
             </Button>
           </VStack>
-          <Flex flex="1" justify="center" mt={{ base: 8, lg: 0 }}>
-            <Flex gap={8} flexWrap="wrap" justify="center">
+          <Flex flex="1" justify="center" mt={{ base: 6, lg: 0 }}>
+            <Flex gap={{ base: 4, md: 8 }} flexWrap="wrap" justify="center">
               {[
                 { src: "/images/balmain.jpg", alt: "Balmain Logo" },
                 { src: "/images/ferragamo.jpg", alt: "Ferragamo Logo" },
@@ -434,7 +434,7 @@ function Home() {
                   key={img.alt}
                   src={img.src}
                   alt={img.alt}
-                  boxSize={{ base: "80px", md: "100px" }}
+                  boxSize={{ base: "60px", md: "100px" }}
                   objectFit="contain"
                   fallbackSrc="/images/placeholder.jpg"
                   filter="grayscale(100%)"
