@@ -125,8 +125,11 @@ function LatestDropsPage() {
                 Upcoming Drops
               </Heading>
               <Text fontSize="lg" color="white">
-                2025-05-01, 10:00 AM until sold out.
-              </Text>
+  2025-05-01, 10:00 AM{" "}
+  <Text as="span" color="gray.400">
+    until sold out.
+  </Text>
+</Text>
               <ChakraLink
                 color="green.500"
                 fontSize="lg"
