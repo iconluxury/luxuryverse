@@ -1,8 +1,8 @@
-import { createContext, useState, ReactNode } from 'react';
+import { createContext, useState, ReactNode } from 'react'; // Ensure useState is imported
 
 // Define the shape of the context value
 interface AuthContextType {
-  user: { id: string; email: string } | null; // Example user type
+  user: { id: string; email: string } | null;
   isJoining: boolean;
   login: (userData: { id: string; email: string }) => void;
   logout: () => void;
@@ -35,7 +35,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const logout = () => {
     setUser(null);
     setIsJoining(false);
-    localStorage.removeItem('access_token'); // Clear token on logout
+    localStorage.removeItem('access_token');
   };
 
   const value: AuthContextType = {

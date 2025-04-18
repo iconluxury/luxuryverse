@@ -1,6 +1,6 @@
 import { Flex, Heading, Button } from '@chakra-ui/react';
 import { Link, useNavigate } from '@tanstack/react-router';
-import { useContext } from 'react';
+import { useContext } from 'react'; // Ensure useContext is imported
 import { AuthContext } from './AuthContext';
 
 export default function TopNav() {
@@ -12,17 +12,17 @@ export default function TopNav() {
       return {
         text: 'Profile',
         onClick: () => navigate({ to: '/profile' }),
-        bg: 'var(--color-primary)', // #c2a0e5d9 (light purple)
-        color: 'var(--color-background)', // #0A0A0A (black)
-        _hover: { bg: 'var(--color-primary-hover)' }, // #58fb6cd9 (green)
+        bg: 'var(--color-primary)',
+        color: 'var(--color-background)',
+        _hover: { bg: 'var(--color-primary-hover)' },
       };
     }
     return {
       text: isJoining ? 'Join' : 'Login',
       onClick: () => navigate({ to: '/join' }),
-      bg: 'var(--color-primary)', // #c2a0e5d9
-      color: 'var(--color-background)', // #0A0A0A
-      _hover: { bg: 'var(--color-primary-hover)' }, // #58fb6cd9
+      bg: 'var(--color-primary)',
+      color: 'var(--color-background)',
+      _hover: { bg: 'var(--color-primary-hover)' },
     };
   };
 
@@ -30,41 +30,38 @@ export default function TopNav() {
 
   return (
     <Flex
-      bg="rgba(10, 10, 10, 0.5)" // Semi-transparent black
+      bg="rgba(10, 10, 10, 0.5)"
       p={4}
       justify="center"
       width="100%"
       position="fixed"
       top={0}
       zIndex={10}
-      mt={{ base: '2rem', md: 0 }} // Push down on small screens
+      mt={{ base: '2rem', md: 0 }}
     >
       <Flex
-        maxW="80rem" // Match .container
+        maxW="80rem"
         width="100%"
-        px={{ base: '1rem', md: '1rem' }} // --spacing-md
+        px={{ base: '1rem', md: '1rem' }}
         justify={{ base: 'space-between', md: 'space-between' }}
         align="center"
         direction={{ base: 'row', md: 'row' }}
         gap={{ base: 2, md: 4 }}
       >
-        {/* Logo */}
         <Heading
           size="md"
-          color="var(--color-primary)" // #c2a0e5d9
+          color="var(--color-primary)"
           fontFamily="'Special Gothic Expanded One', sans-serif"
         >
           <Link to="/" className="luxuryverse-logo">
             LuxuryVerse
           </Link>
         </Heading>
-
-        {/* Navigation Links */}
         <Flex
           gap={4}
           alignItems="center"
           flexWrap="wrap"
-          justify="center" // Center links
+          justify="center"
         >
           {[
             { to: '/', label: 'Home' },
@@ -77,20 +74,18 @@ export default function TopNav() {
               key={to}
               to={to}
               style={{
-                color: 'var(--color-primary)', // #c2a0e5d9
+                color: 'var(--color-primary)',
                 textDecoration: 'none',
                 fontFamily: "'Special Gothic Expanded One', sans-serif",
               }}
               _hover={{
-                color: 'var(--color-primary-hover)', // #58fb6cd9
+                color: 'var(--color-primary-hover)',
               }}
             >
               {label}
             </Link>
           ))}
         </Flex>
-
-        {/* Button */}
         <Button
           onClick={onClick}
           bg={bg}
