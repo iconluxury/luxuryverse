@@ -403,7 +403,6 @@ function Home() {
         minH={{ base: "70vh", lg: "90vh" }}
         display="flex"
         justifyContent="center"
-        alignItems="flex-start"
         pt={{ base: 4, md: 6 }}
         _before={{
           content: '""',
