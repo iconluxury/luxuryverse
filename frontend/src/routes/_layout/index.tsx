@@ -610,71 +610,6 @@ function Home() {
         </Flex>
       </Box>
 
-      {/* Launch Section (Single Full-Width Card) */}
-      <Box py={{ base: 12, md: 16 }} bg="transparent" textAlign="center">
-        <VStack
-          bg="gray.900"
-          border="1px solid"
-          borderColor="gray.700"
-          borderRadius="md"
-          p={6}
-          maxW={{ base: "1200px", lg: "1600px" }}
-          mx="auto"
-          spacing={6}
-          transition="all 0.3s"
-          _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
-        >
-          <Heading as="h2" size="2xl" color="gray.400">
-            Launch Countdown
-          </Heading>
-          <Text fontSize="lg" color="gray.400">
-            First Drop: September 5th, 2025
-          </Text>
-          <Flex gap={8} justify="center" wrap="wrap">
-            {[
-              { value: countdown.days, label: "Days" },
-              { value: countdown.hours, label: "Hours" },
-              { value: countdown.minutes, label: "Minutes" },
-              { value: countdown.seconds, label: "Seconds" },
-            ].map(({ value, label }) => (
-              <VStack key={label}>
-                <Text fontSize="5xl" fontWeight="bold" color="gray.400">
-                  {value}
-                </Text>
-                <Text fontSize="lg" color="gray.400">
-                  {label}
-                </Text>
-              </VStack>
-            ))}
-          </Flex>
-        </VStack>
-      </Box>
-
-      {/* Roadmap Section (Single Full-Width Square Card) */}
-      <Box py={{ base: 12, md: 16 }} bg="transparent" textAlign="center">
-        <VStack
-          bg="gray.900"
-          border="1px solid"
-          borderColor="gray.700"
-          borderRadius="md"
-          p={6}
-          maxW={{ base: "1200px", lg: "1600px" }}
-          mx="auto"
-          spacing={6}
-          transition="all 0.3s"
-          _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
-          h={{ base: "auto", lg: "600px" }} // Square-ish on desktop
-        >
-          <Heading as="h2" size="2xl" color="gray.400">
-            Roadmap
-          </Heading>
-          <Text fontSize="lg" color="gray.400" maxW="700px">
-            Roadmap Coming Soon. Stay tuned for our detailed plans for LuxuryVerse, including new
-            features, partnerships, and expansion milestones.
-          </Text>
-        </VStack>
-      </Box>
-
       {/* Recent Drops Section (Single Full-Width Card) */}
       <Box
         py={{ base: 12, md: 16 }}
@@ -688,83 +623,91 @@ function Home() {
           borderColor="gray.700"
           borderRadius="md"
           p={8}
-          spacing={6}
+          spacing={8}
           transition="all 0.3s"
           _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
         >
           <Heading as="h2" size="2xl" color="gray.400">
-            Recent Drops
+            Past Drops
           </Heading>
           <Text maxW="700px" textAlign="center" fontSize="lg" color="gray.400">
-            Each week, LuxuryVerse releases a limited selection of luxury goods to our members.
+            Discover our previous exclusive luxury collections
           </Text>
           {error && <Text color="red.300" fontSize="lg">{error}</Text>}
-          {isLoading && <Text color="gray.400" fontSize="lg">Loading drops...</Text>}
+          {isLoading && <Text color="gray.400" fontSize="lg">Loading past drops...</Text>}
           {!isLoading && !Array.isArray(collections) && (
             <Text color="gray.400" fontSize="lg">No valid collections available</Text>
           )}
           {!isLoading && Array.isArray(collections) && collections.length === 0 && (
-            <Text color="gray.400" fontSize="lg">No drops available</Text>
+            <Text color="gray.400" fontSize="lg">No past drops available</Text>
           )}
           {!isLoading && Array.isArray(collections) && collections.length > 0 && (
-            <Grid
-              templateColumns={{ base: "1fr", md: "repeat(3, 1fr)" }}
-              gap={8}
-              w="100%"
-            >
-              {collections.flatMap((collection) =>
-                Array.isArray(collection.products) ? (
-                  collection.products.map((product) => (
-                    <VStack
-                      key={product.id}
-                      bg="gray.800"
-                      border="1px solid"
-                      borderColor="gray.700"
-                      borderRadius="md"
-                      p={6}
-                      align="start"
-                      transition="all 0.3s"
-                      _hover={{ borderColor: "green.500", shadow: "md" }}
-                    >
-                      <Image
-                        src={product.thumbnail}
-                        alt={`${product.title} Image`}
-                        borderRadius="md"
-                        objectFit="cover"
-                        h="200px"
-                        w="100%"
-                        fallbackSrc="/images/placeholder.jpg"
-                      />
-                      <Text fontSize="lg" fontWeight="bold" color="gray.400">
-                        {product.title}
-                      </Text>
-                      <Text fontSize="md" color="gray.400">{product.price}</Text>
-                      <Button
-                        size="md"
-                        variant="outline"
-                        borderColor="gray.400"
-                        color="gray.400"
-                        w="full"
-                        mt={4}
-                        _hover={{ bg: "green.500", color: "black.900" }}
-                      >
-                        View Details
-                      </Button>
-                    </VStack>
-                  ))
-                ) : (
-                  []
-                )
-              )}
-            </Grid>
+            <VStack w="100%" spacing={12}>
+              {collections.map((collection) => (
+                <VStack key={collection.id} w="100%" spacing={6}>
+                  <VStack align="start" w="100%">
+                    <Heading as="h3" size="lg" color="gray.400">
+                      {collection.title}
+                    </Heading>
+                    <Text fontSize="md" color="gray.500">
+                      {collection.subtitle || "Exclusive luxury collection"}
+                    </Text>
+                  </VStack>
+                  <Grid
+                    templateColumns={{ base: "1fr", md: "repeat(4, 1fr)" }}
+                    gap={6}
+                    w="100%"
+                  >
+                    {Array.isArray(collection.products) &&
+                      collection.products.slice(0, 4).map((product) => (
+                        <VStack
+                          key={product.id}
+                          bg="gray.800"
+                          border="1px solid"
+                          borderColor="gray.700"
+                          borderRadius="md"
+                          p={6}
+                          align="start"
+                          transition="all 0.3s"
+                          _hover={{ borderColor: "green.500", shadow: "md" }}
+                        >
+                          <Image
+                            src={product.thumbnail}
+                            alt={`${product.title} Image`}
+                            borderRadius="md"
+                            objectFit="cover"
+                            h="200px"
+                            w="100%"
+                            fallbackSrc="/images/placeholder.jpg"
+                          />
+                          <Text fontSize="lg" fontWeight="bold" color="gray.400">
+                            {product.title}
+                          </Text>
+                          <Text fontSize="md" color="gray.400">{product.price}</Text>
+                          <Button
+                            size="md"
+                            variant="outline"
+                            borderColor="gray.400"
+                            color="gray.400"
+                            w="full"
+                            mt={4}
+                            _hover={{ bg: "green.500", color: "black.900" }}
+                          >
+                            View Details
+                          </Button>
+                        </VStack>
+                      ))}
+                  </Grid>
+                </VStack>
+              ))}
+            </VStack>
           )}
         </VStack>
       </Box>
 
-      {/* FAQs Section (Single Full-Width Card) */}
+      {/* FAQs Section (Modified) */}
       <Box
         py={{ base: 12, md: 16 }}
-        bg="gray.800"
         px={{ base: 4, md: 8 }}
         maxW={{ base: "1200px", lg: "1600px" }}
         mx="auto"
