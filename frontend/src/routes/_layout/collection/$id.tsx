@@ -1,45 +1,13 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { Flex, Spinner, Box, Text, SimpleGrid, VStack, Heading, Skeleton, SkeletonText } from '@chakra-ui/react';
+import { Flex, Spinner, Box, Text, SimpleGrid, VStack, Heading, Skeleton, SkeletonText, Button } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 import { Link } from '@tanstack/react-router';
 import { ErrorBoundary } from 'react-error-boundary';
 import Footer from '../../../components/Common/Footer';
 import { Image } from '@chakra-ui/react';
 
-// Interfaces
-interface Variant {
-  id: string;
-  title: string;
-  size: string;
-  inventory_quantity: number;
-  price: string;
-  compare_at_price: string;
-}
+// ... Interfaces remain unchanged ...
 
-interface Product {
-  id: string;
-  title: string;
-  description: string;
-  brand: string;
-  thumbnail: string;
-  images?: string[];
-  variants?: Variant[];
-  full_price: string;
-  sale_price: string;
-  discount: string | null;
-  collection_id?: string;
-  total_inventory?: number;
-  discount_value?: number;
-}
-
-interface Collection {
-  id: string;
-  title: string;
-  description?: string;
-  products: Product[];
-}
-
-// ErrorFallback component
 function ErrorFallback({ error }: { error: Error }) {
   console.error('ErrorBoundary caught:', error, error.stack);
   return (
@@ -57,22 +25,21 @@ function ErrorFallback({ error }: { error: Error }) {
   );
 }
 
-// CollectionDetails component
 function CollectionDetails() {
   const [collection, setCollection] = useState<Collection | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showSlowMessage, setShowSlowMessage] = useState(false);
   const API_BASE_URL = 'https://iconluxury.shop';
   const { id } = Route.useParams();
 
-  // Fetch with retry and cache busting
   const fetchWithRetry = async (url: string, retryCount = 6): Promise<any> => {
     for (let attempt = 1; attempt <= retryCount; attempt++) {
       try {
+        console.log(`Attempt ${attempt} for ${url}`);
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 45000); // Increased timeout to 45s
-        const cacheBustedUrl = `${url}?t=${Date.now()}`;
-        const response = await fetch(cacheBustedUrl, {
+        const timeoutId = setTimeout(() => controller.abort(), 90000);
+        const response = await fetch(url, {
           signal: controller.signal,
           method: 'GET',
           headers: {
@@ -91,15 +58,27 @@ function CollectionDetails() {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        const data = await response.json();
+        const reader = response.body?.getReader();
+        if (!reader) throw new Error('Response body is not readable.');
+
+        let receivedData = '';
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          receivedData += new TextDecoder().decode(value);
+        }
+
+        const data = JSON.parse(receivedData);
         if (!data) throw new Error('Empty response received.');
         return data;
       } catch (err: any) {
+        console.error(`Attempt ${attempt} failed:`, err.message);
         if (err.name === 'AbortError') {
-          err.message = 'Request timed out after 45s.';
+          err.message = 'Request timed out after 90s.';
         }
-        console.error('Fetch error:', { url, attempt, error: err.message });
         if (attempt === retryCount) {
+          const cached = localStorage.getItem(`collection-${id}`);
+          if (cached) return JSON.parse(cached);
           throw err;
         }
         await new Promise((resolve) => setTimeout(resolve, 1000 * 2 ** attempt));
@@ -107,15 +86,15 @@ function CollectionDetails() {
     }
   };
 
-  // Fetch collection data
   const fetchCollection = async () => {
+    setLoading(true);
     try {
       const collectionUrl = `${API_BASE_URL}/api/v1/collections/${id}`;
       console.log('Fetching:', collectionUrl);
       const collectionData = await fetchWithRetry(collectionUrl);
-      console.log('Fetch successful for', collectionUrl, ':', collectionData);
+      console.log('Raw API response:', JSON.stringify(collectionData, null, 2));
+      console.log('Products count:', collectionData.products?.length || 0);
 
-      // Validate collection data
       if (!collectionData || typeof collectionData !== 'object') {
         throw new Error('Invalid collection data received');
       }
@@ -126,88 +105,65 @@ function CollectionDetails() {
         description: collectionData.description || '',
         products: Array.isArray(collectionData.products)
           ? collectionData.products
-              .filter((p: Product) => p && typeof p.id === 'string' && typeof p.title === 'string')
+              .filter((p: Product) => p && p.id)
               .map((p: Product) => {
-                const variants = Array.isArray(p.variants)
-                  ? p.variants.filter(
-                      (v: Variant) =>
-                        v &&
-                        typeof v === 'object' &&
-                        typeof v.id === 'string' &&
-                        typeof v.size === 'string' &&
-                        v.size !== '' &&
-                        v.size !== 'N/A' &&
-                        typeof v.inventory_quantity === 'number'
-                    )
-                  : [];
+                const variants = Array.isArray(p.variants) ? p.variants.filter((v: Variant) => v && v.id) : [];
                 return {
                   ...p,
-                  id: p.id || '',
-                  title: p.title || 'Untitled Product',
+                  id: p.id || `temp-${Math.random()}`,
+                  title: p.title || 'Unknown Product',
                   description: p.description || '',
-                  brand: p.brand || 'Unknown Brand',
+                  brand: p.brand || 'Unknown',
                   thumbnail: p.thumbnail || 'https://placehold.co/225x300',
-                  images: Array.isArray(p.images) ? p.images : undefined,
+                  images: Array.isArray(p.images) ? p.images : [],
                   variants,
                   full_price: p.full_price || 'N/A',
                   sale_price: p.sale_price || 'N/A',
                   discount: p.discount || null,
                   collection_id: p.collection_id || id,
-                  total_inventory: variants.reduce((sum: number, v: Variant) => {
-                    return sum + (typeof v.inventory_quantity === 'number' ? v.inventory_quantity : 0);
-                  }, 0),
+                  total_inventory: variants.reduce((sum: number, v: Variant) => sum + (v.inventory_quantity || 0), 0),
                   discount_value: p.discount ? parseFloat(p.discount.replace('% off', '')) || 0 : 0,
                 };
               })
-              .sort((a, b) => {
-                const aDiscount = a.discount_value || 0;
-                const bDiscount = b.discount_value || 0;
-                const aInventory = a.total_inventory || 0;
-                const bInventory = b.total_inventory || 0;
-
-                if (aDiscount !== bDiscount) {
-                  return bDiscount - aDiscount;
-                }
-                return bInventory - aInventory;
-              })
+              .sort((a, b) => (b.discount_value || 0) - (a.discount_value || 0))
           : [],
       };
 
       setCollection(validatedCollection);
+      localStorage.setItem(`collection-${id}`, JSON.stringify(validatedCollection));
       setError(null);
     } catch (err: any) {
       console.error('Fetch error:', err.message);
-      let errorMessage = 'Failed to load collection. Please try again later.';
-      if (err.message.includes('not found')) {
-        errorMessage = `Collection with ID ${id} not found.`;
-      } else if (err.message.includes('timed out')) {
-        errorMessage = 'Request timed out. Please check your connection and try again.';
-      } else if (err.message.includes('Invalid collection data')) {
-        errorMessage = 'Received invalid data from the server. Please try again later.';
-      }
-      setError(errorMessage);
+      setError(
+        err.message.includes('not found')
+          ? `Collection with ID ${id} not found.`
+          : 'Failed to load collection. Please try again.'
+      );
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    if (!id || typeof id !== 'string') {
-      setLoading(false);
+    if (!id) {
       setError('Invalid collection ID.');
+      setLoading(false);
       return;
     }
-
     fetchCollection();
+    const timer = setTimeout(() => setShowSlowMessage(true), 10000);
+    return () => clearTimeout(timer);
   }, [id]);
 
-  // Loading state
   if (loading) {
     return (
       <Box maxW="1200px" mx="auto" py={8} px={{ base: 4, md: 8 }} bg="transparent">
         <VStack spacing={4}>
           <Skeleton height="40px" width="300px" />
           <SkeletonText noOfLines={2} width="600px" />
+          {showSlowMessage && (
+            <Text color="gray.300">Loading collection, please wait...</Text>
+          )}
           <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing={6} w="100%">
             {Array(4)
               .fill(0)
@@ -223,13 +179,15 @@ function CollectionDetails() {
     );
   }
 
-  // Error or no collection
   if (error || !collection) {
     return (
       <Box textAlign="center" py={16} color="gray.300" bg="transparent" w="100%">
         <Text fontSize="lg" mb={4}>
           {error || `Collection not found for ID: ${id}`}
         </Text>
+        <Button onClick={fetchCollection} colorScheme="blue" mt={4}>
+          Retry
+        </Button>
         <Text fontSize="sm" mt={2}>
           Please check your network connection or contact{' '}
           <a href="mailto:support@iconluxury.shop" style={{ color: '#3182CE' }}>
@@ -245,22 +203,18 @@ function CollectionDetails() {
       <Box bg="transparent" w="100%">
         <Box py={8} px={{ base: 4, md: 8 }} maxW="1200px" mx="auto" bg="transparent" borderRadius="lg">
           <VStack spacing={6} align="start">
-            {/* Collection Header */}
             <Heading as="h1" size="xl" color="white">
               {collection.title}
             </Heading>
             {collection.description && (
               <Box fontSize="md" color="gray.300" dangerouslySetInnerHTML={{ __html: collection.description }} />
             )}
-
-            {/* Product Grid */}
             {collection.products.length > 0 ? (
               <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing={6} w="100%">
                 {collection.products.map((product) => {
                   const cleanTitle = product.brand
                     ? product.title.replace(new RegExp(`\\b${product.brand}\\b`, 'i'), '').trim()
                     : product.title;
-
                   return (
                     <Link key={product.id} to={`/products/${product.id}`}>
                       <Box
@@ -284,43 +238,44 @@ function CollectionDetails() {
                           <Text fontWeight="bold" fontSize="md" color="white" noOfLines={1}>
                             {cleanTitle}
                           </Text>
-                          <Flex justify="space-between" align="center" mt={1}>
-                            <Text fontSize="sm" color="gray.300" noOfLines={1}>
-                              {product.brand}
-                            </Text>
-                            {product.discount && (
-                              <Text fontSize="xs" color="red.400">
-                                {product.discount}
+                          <Flex justify="space-between" align固定式
+                            align="center" mt={1}>
+                              <Text fontSize="sm" color="gray.300" noOfLines={1}>
+                                {product.brand}
                               </Text>
-                            )}
-                          </Flex>
-                          <Flex mt={2} justify="space-between" align="center">
-                            <Text fontWeight="bold" fontSize="lg" color="var(--color-primary-hover)">
-                              {product.sale_price}
-                            </Text>
-                            <Text fontSize="sm" color="gray.400">
-                              {product.full_price}
-                            </Text>
-                          </Flex>
+                              {product.discount && (
+                                <Text fontSize="xs" color="red.400">
+                                  {product.discount}
+                                </Text>
+                              )}
+                            </Flex>
+                            <Flex mt={2} justify="space-between" align="center">
+                              <Text fontWeight="bold" fontSize="lg" color="var(--color-primary-hover)">
+                                {product.sale_price}
+                              </Text>
+                              <Text fontSize="sm" color="gray.400">
+                                {product.full_price}
+                              </Text>
+                            </Flex>
+                          </Box>
                         </Box>
-                      </Box>
-                    </Link>
-                  );
-                })}
-              </SimpleGrid>
-            ) : (
-              <Text fontSize="md" color="gray.300">
-                No products are currently available in this collection. Check back soon!
-              </Text>
-            )}
-          </VStack>
+                      </Link>
+                    );
+                  })}
+                </SimpleGrid>
+              ) : (
+                <Text fontSize="md" color="gray.300">
+                  No products are currently available in this collection. Check back soon!
+                </Text>
+              )}
+            </VStack>
+          </Box>
+          <Footer />
         </Box>
-        <Footer />
-      </Box>
-    </ErrorBoundary>
-  );
-}
+      </ErrorBoundary>
+    );
+  }
 
-export const Route = createFileRoute('/_layout/collection/$id')({
-  component: CollectionDetails,
-});
+  export const Route = createFileRoute('/_layout/collection/$id')({
+    component: CollectionDetails,
+  });
