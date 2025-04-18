@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { Link } from '@tanstack/react-router';
 import { ErrorBoundary } from 'react-error-boundary';
 import Footer from '../../../components/Common/Footer';
-import { Heading, Image, TimeIcon, ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
+import { Image, ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import DOMPurify from 'dompurify';
 
 // Interfaces
@@ -34,7 +34,6 @@ interface Product {
 // ErrorFallback component
 function ErrorFallback({ error }: { error: Error }) {
   console.error('ErrorBoundary caught (suppressed):', error, error.stack);
-  // Render minimal fallback UI without error message
   return <Box />;
 }
 
@@ -147,7 +146,7 @@ function ProductDetails() {
       setError(null);
     } catch (err: any) {
       console.error('Fetch error (suppressed):', err.message);
-      setError(null); // Suppress error
+      setError(null);
     } finally {
       setProductLoading(false);
     }
@@ -254,7 +253,7 @@ function ProductDetails() {
 
   if (productLoading) {
     return (
-      <Flex justify="center" align="center" minH="100vh">
+      <Flex justify="center" align="center" minH="100vh" bg="transparent">
         <Spinner size="xl" color="yellow.400" />
       </Flex>
     );
@@ -262,7 +261,7 @@ function ProductDetails() {
 
   if (!product) {
     return (
-      <Box textAlign="center" py={16} color="gray.700">
+      <Box textAlign="center" py={16} color="gray.700" bg="transparent" w="100%">
         <Text fontSize="lg" mb={4}>
           Product not found for ID: {id}
         </Text>
@@ -294,68 +293,91 @@ function ProductDetails() {
 
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
-      <Box>
-        <Box py={16} bg="white">
-          <Box maxW="800px" mx="auto" px={4}>
-            <Link to="/products" aria-label="Back to all products" style={{ color: '#3182CE', fontWeight: 'medium', textDecoration: 'none', margin: '8px', display: 'block' }}>
+      <Box bg="transparent" w="100%">
+        <Box py={8} px={{ base: 4, md: 8 }}>
+          <Box maxW="1200px" mx="auto" w="100%">
+            <Link
+              to="/products"
+              aria-label="Back to all products"
+              style={{ color: '#3182CE', fontWeight: 'medium', textDecoration: 'none', marginBottom: '16px', display: 'block' }}
+            >
               ← Back to all products
             </Link>
             {validatedImages ? (
-              <Box position="relative">
+              <Box position="relative" mb={8}>
                 <Image
-                  src={validatedImages[currentImage] || 'https://placehold.co/275x350'}
+                  src={validatedImages[currentImage] || 'https://placehold.co/300x400'}
                   alt={`${product.title || 'Product'} image ${currentImage + 1}`}
-                  w="full"
+                  w="100%"
+                  maxW="300px"
                   h="400px"
-                  objectFit="cover"
-                  borderRadius="md"
-                  mb={8}
-                  onError={(e) => (e.currentTarget.src = 'https://placehold.co/275x350')}
+                  objectFit="contain"
+                  mx="auto"
+                  onError={(e) => (e.currentTarget.src = 'https://placehold.co/300x400')}
                 />
+                {validatedImages.length > 1 && (
+                  <Flex justify="center" mt={4} wrap="wrap" gap={2}>
+                    {validatedImages.map((img, index) => (
+                      <Image
+                        key={index}
+                        src={img}
+                        alt={`Thumbnail ${index + 1}`}
+                        w="60px"
+                        h="80px"
+                        objectFit="contain"
+                        cursor="pointer"
+                        opacity={index === currentImage ? 1 : 0.6}
+                        onClick={() => setCurrentImage(index)}
+                        onError={(e) => (e.currentTarget.src = 'https://placehold.co/60x80')}
+                      />
+                    ))}
+                  </Flex>
+                )}
                 {validatedImages.length > 1 && (
                   <>
                     <IconButton
                       aria-label="Previous image"
-                      icon={<ChevronLeftIcon />}
+                      icon={<ChevronLeftIcon boxSize={6} />}
                       position="absolute"
-                      left="8px"
+                      left={{ base: '4px', md: '8px' }}
                       top="50%"
                       transform="translateY(-50%)"
+                      bg="blackAlpha.600"
+                      color="white"
+                      _hover={{ bg: 'blackAlpha.800' }}
                       onClick={() => setCurrentImage((prev) => (prev - 1 + validatedImages.length) % validatedImages.length)}
                     />
                     <IconButton
                       aria-label="Next image"
-                      icon={<ChevronRightIcon />}
+                      icon={<ChevronRightIcon boxSize={6} />}
                       position="absolute"
-                      right="8px"
+                      right={{ base: '4px', md: '8px' }}
                       top="50%"
                       transform="translateY(-50%)"
+                      bg="blackAlpha.600"
+                      color="white"
+                      _hover={{ bg: 'blackAlpha.800' }}
                       onClick={() => setCurrentImage((prev) => (prev + 1) % validatedImages.length)}
                     />
                   </>
                 )}
               </Box>
             ) : (
-              <Skeleton w="full" h="400px" borderRadius="md" mb={8} />
+              <Skeleton w="100%" maxW="300px" h="400px" mx="auto" mb={8} />
             )}
             <Flex align="center" mb={4}>
-              <Tag colorScheme="gray" mr={4} px={3} py={1} borderRadius="full">
+              <Tag colorScheme="gray" px={3} py={1} borderRadius="full">
                 Product
               </Tag>
-              <Text fontSize="sm" color="gray.500">{new Date().toLocaleDateString()}</Text>
-              <Flex align="center" ml={4}>
-                <TimeIcon mr={1} color="gray.500" boxSize={3} />
-                <Text fontSize="sm" color="gray.500">{validatedVariants?.length || 0} variants</Text>
-              </Flex>
               {product.discount && (
                 <Tag colorScheme="green" ml={4} px={3} py={1} borderRadius="full">
                   {product.discount}
                 </Tag>
               )}
             </Flex>
-            <Heading as="h1" size="2xl" mb={6} fontWeight="medium" lineHeight="1.3">
+            <Text as="h1" fontSize={{ base: '2xl', md: '3xl' }} mb={6} fontWeight="medium" lineHeight="1.3">
               {product.title || 'Untitled Product'}
-            </Heading>
+            </Text>
             <Text fontSize="xl" color="gray.700" mb={4}>
               {product.sale_price || 'N/A'}{' '}
               {product.full_price && <Text as="s" color="gray.500">{product.full_price}</Text>}
@@ -374,14 +396,15 @@ function ProductDetails() {
             )}
             {validatedVariants && validatedVariants.length > 0 && (
               <Box mt={8}>
-                <Heading as="h2" size="lg" mb={4}>
+                <Text as="h2" fontSize="xl" mb={4}>
                   Variants
-                </Heading>
+                </Text>
                 <HStack spacing={2} flexWrap="wrap" maxW="100%" gap={2}>
                   {validatedVariants.map((variant, index) => (
                     <Box
                       key={variant.id || `variant-${index}`}
-                      bg={variant.inventory_quantity > 0 ? 'gray.100' : 'red.100'}
+                      bg={variant.inventory_quantity > 0 ? 'gray.700' : 'red.900'}
+                      color="white"
                       px={3}
                       py={1}
                       borderRadius="full"
@@ -396,21 +419,21 @@ function ProductDetails() {
               </Box>
             )}
             <Box mt={8}>
-              <Heading as="h2" size="lg" mb={4}>
+              <Text as="h2" fontSize="xl" mb={4}>
                 Related Products
-              </Heading>
+              </Text>
               {topProductsLoading ? (
-                <HStack spacing={4} flexWrap="wrap">
+                <HStack spacing={4} flexWrap="wrap" justify="center">
                   {[...Array(5)].map((_, index) => (
-                    <Box key={index} p={4} borderWidth="1px" borderRadius="md" textAlign="center" maxW="200px">
-                      <Skeleton w="150px" h="150px" mx="auto" startColor="gray.100" endColor="gray.300" />
+                    <Box key={index} p={4} borderWidth="1px" borderRadius="md" textAlign="center" maxW="160px">
+                      <Skeleton w="120px" h="160px" mx="auto" startColor="gray.700" endColor="gray.600" />
                       <SkeletonText mt={2} noOfLines={2} spacing="2" />
                       <Skeleton mt={2} h="16px" w="100px" mx="auto" />
                     </Box>
                   ))}
                 </HStack>
               ) : topProducts.length > 0 ? (
-                <HStack spacing={4} flexWrap="wrap">
+                <HStack spacing={4} flexWrap="wrap" justify="center">
                   {topProducts.map((topProduct) => (
                     <Link key={topProduct.id} to={`/products/${topProduct.id}`}>
                       <Box
@@ -418,26 +441,27 @@ function ProductDetails() {
                         borderWidth="1px"
                         borderRadius="md"
                         textAlign="center"
-                        maxW="200px"
+                        maxW="160px"
+                        bg="gray.800"
                         _hover={{ transform: 'scale(1.05)', boxShadow: 'md' }}
                         transition="all 0.2s"
                       >
                         <Image
-                          src={topProduct.thumbnail || 'https://placehold.co/150x150'}
+                          src={topProduct.thumbnail || 'https://placehold.co/120x160'}
                           alt={topProduct.title || 'Product'}
-                          w="150px"
-                          h="150px"
-                          objectFit="cover"
+                          w="120px"
+                          h="160px"
+                          objectFit="contain"
                           mx="auto"
-                          onError={(e) => (e.currentTarget.src = 'https://placehold.co/150x150')}
+                          onError={(e) => (e.currentTarget.src = 'https://placehold.co/120x160')}
                         />
-                        <Text mt={2} fontSize="sm" fontWeight="medium" noOfLines={2}>
+                        <Text mt={2} fontSize="sm" fontWeight="medium" noOfLines={2} color="white">
                           {topProduct.title || 'Untitled Product'}
                         </Text>
-                        <Text color="gray.700" fontSize="sm">
+                        <Text color="gray.300" fontSize="sm">
                           {topProduct.sale_price || 'N/A'}
                           {topProduct.discount && (
-                            <Text as="span" color="green.500" ml={1}>
+                            <Text as="span" color="green.400" ml={1}>
                               ({topProduct.discount})
                             </Text>
                           )}
@@ -447,12 +471,12 @@ function ProductDetails() {
                   ))}
                 </HStack>
               ) : (
-                <Text fontSize="md" color="gray.500">
+                <Text fontSize="md" color="gray.400">
                   No related products available.
                 </Text>
               )}
             </Box>
-            <Divider mb={8} />
+            <Divider my={8} borderColor="gray.600" />
           </Box>
         </Box>
         <Footer />
