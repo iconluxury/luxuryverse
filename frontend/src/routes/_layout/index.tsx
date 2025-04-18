@@ -133,7 +133,10 @@ function Home() {
 
   return (
     <Box bg="black.900">
+      {/* Header with Logo */}
+     
 
+      {/* Hero Section: Exclusive Brands */}
       <Box
         bgImage="url('/images/hero-bg.jpg')"
         bgSize="cover"
@@ -309,8 +312,7 @@ function Home() {
           <Text color="cyan.500">First Drop: September 5th, 2025</Text>
           <Flex gap={8} justify="center" wrap="wrap">
             {[
-              { value: countdown.days,
-                label: "Days" },
+              { value: countdown.days, label: "Days" },
               { value: countdown.hours, label: "Hours" },
               { value: countdown.minutes, label: "Minutes" },
               { value: countdown.seconds, label: "Seconds" },
