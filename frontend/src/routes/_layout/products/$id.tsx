@@ -401,18 +401,19 @@ function ProductDetails() {
         |
       </Text>
       <Tag
-        size="md"
-        variant="solid"
-        colorScheme="green"
-        borderRadius="full"
-        fontSize="lg"
-        lineHeight="1.5"
-        px={3}
-        py={0}
-        alignSelf="center"
-      >
-        {product.discount}
-      </Tag>
+  size="md"
+  variant="solid"
+  colorScheme="green"
+  borderRadius="full"
+  fontSize="lg"
+  lineHeight="1.5"
+  px={3}
+  py={0}
+  alignSelf="center"
+  mt={-0.5}
+>
+  {product.discount}
+</Tag>
     </>
   )}
 </HStack>
