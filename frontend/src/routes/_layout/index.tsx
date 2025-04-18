@@ -112,7 +112,7 @@ function Home() {
       if (isConnected && address) {
         const message = `Sign this message to authenticate with LuxuryVerse: ${address}`;
         const signature = await signMessageAsync({ message });
-        const response = await axios.post("https://iconluxury.shop/api/v1/auth/wallet", {
+        const response = await axios.post("https://iconluxuryRozzutoVerse.shop/api/v1/auth/wallet", {
           address,
           signature,
           message,
@@ -160,11 +160,11 @@ function Home() {
         }}
       >
         <Flex maxW="1200px" mx="auto" direction={{ base: "column", lg: "row" }} align="center" gap={12} position="relative">
-          <VStack align="flex-start" spacing={10} flex="1">
+          <VStack align="flex-start" spacing={12} flex="1">
             <Heading
               as="h2"
               variant="glitch"
-              size={{ base: "5xl", md: "6xl" }}
+              size={{ base: "6xl", md: "7xl" }}
               className="glitch"
               data-text="Exclusive Brands"
             >
@@ -314,7 +314,7 @@ function Home() {
             ].map(({ value, label }) => (
               <VStack key={label}>
                 <Text fontSize="4xl" fontWeight="bold" color="cyan.500">
-                  {value}
+                  {value
                 </Text>
                 <Text color="gray.300">{label}</Text>
               </VStack>
@@ -380,7 +380,7 @@ function Home() {
                     <Text fontSize="md" fontWeight="bold" color="gray.50">
                       {product.title}
                     </Text>
-                    <Text color="blue.500">{product.price}</Text>
+                    <Text color="cyan.500">{product.price}</Text>
                     <Button
                       size="sm"
                       variant="outline"
