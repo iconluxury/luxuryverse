@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 import { ErrorBoundary } from 'react-error-boundary';
 import Footer from '../../../components/Common/Footer';
-
+import { useMemo } from 'react';
 // Interfaces (unchanged)
 interface Variant {
   id: string;
