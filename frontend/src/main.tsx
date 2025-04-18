@@ -1,4 +1,3 @@
-// src/main.tsx
 import { ChakraProvider } from '@chakra-ui/react';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
@@ -9,7 +8,7 @@ import { OpenAPI } from './client';
 import theme from './theme';
 import './styles/global.css';
 import { WagmiProvider } from 'wagmi';
-import { AuthProvider } from './components/Common/TopNav';
+import { AuthProvider } from './components/Common/AuthContext'; // Updated import
 import { wagmiConfig, queryClient } from './client/core/appkit';
 
 OpenAPI.BASE = 'https://iconluxury.shop';
