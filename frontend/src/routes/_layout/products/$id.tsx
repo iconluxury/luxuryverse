@@ -388,37 +388,26 @@ function ProductDetails() {
               )}
               {/* Product Details Section */}
               <VStack align="start" spacing={4}>
+              <Text fontSize="lg" fontWeight="bold" lineHeight="1.5" color="purple.500">
+    {product.brand || 'Unknown Brand'}
+  </Text>
               <Text as="h1" fontSize={{ base: '3xl', md: '4xl' }} fontWeight="medium" lineHeight="1.3" color="gray.50">
   {cleanTitle}
 </Text>
-                <HStack spacing={2} alignItems="center">
-  <Text fontSize="lg" fontWeight="bold" lineHeight="1.5" color="purple.500">
-    {product.brand || 'Unknown Brand'}
-  </Text>
-  {product.discount && (
-    <>
-      <Text fontSize="lg" lineHeight="1.5" color="purple.500">
-        |
-      </Text>
-      <Tag
-  size="md"
-  variant="solid"
-  colorScheme="green"
-  borderRadius="full"
-  fontSize="lg"
-  lineHeight="1.5"
-  px={3}
-  py={0}
-  alignSelf="center"
-  mt={-0.5}
->
-  {product.discount}
-</Tag>
-    </>
-  )}
-</HStack>
-
-
+{product.discount && (
+  <Tag
+    size="md"
+    variant="solid"
+    colorScheme="green"
+    borderRadius="full"
+    fontSize="lg"
+    lineHeight="1.5"
+    px={3}
+    py={0}
+  >
+    {product.discount}
+  </Tag>
+)}
 
                 {validatedVariants && validatedVariants.length > 0 && (
                   <HStack spacing={2} flexWrap="wrap" maxW="100%" gap={2}>
@@ -453,16 +442,19 @@ function ProductDetails() {
                     </Text>
                   )}
                 </HStack>
+                <Text as="h2" fontSize="xl" mb={2}>
+                  Product Description
+                </Text>
                 {product.description ? (
-                      <Text
-                        fontSize="lg"
-                        color="gray.400"
-                        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(product.description) }}
-                      />
-                    ) : (
-                      <Text fontSize="lg" color="gray.400">
-                        No description available
-                      </Text>
+                  <Text
+                    fontSize="lg"
+                    color="gray.400"
+                    dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(product.description) }}
+                  />
+                ) : (
+                  <Text fontSize="lg" color="gray.400">
+                    No description available
+                  </Text>
                     )}
                 {features.length > 0 && (
                   <Box>
