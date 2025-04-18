@@ -503,8 +503,6 @@ function Home() {
           mx="auto"
           spacing={6}
           width={'100%'}
-          transition="all 0.3s"
-          _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
         >
           <Heading as="h2" size="xl" color="purple.500">
             Launching September 2025
