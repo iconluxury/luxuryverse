@@ -57,10 +57,11 @@ export default function TopNav() {
           gap={{ base: 2, md: 4 }}
         >
           <Heading
-            size="md"
+            size={{ base: 'sm', md: 'sm' }} // Smaller size for logo
+            fontSize={{ base: '1rem', md: '1.25rem' }} // Fine-tuned font size
             color="var(--color-primary)"
             fontFamily="'Special Gothic Expanded One', sans-serif"
-            lineHeight="1"
+            lineHeight="1.2"
           >
             <Link to="/" className="luxuryverse-logo">
               LuxuryVerse
