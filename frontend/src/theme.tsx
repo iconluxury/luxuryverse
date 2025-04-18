@@ -11,66 +11,72 @@ const theme = extendTheme({
     heading: "'Special Gothic Expanded One', sans-serif",
     body: "'DM Sans', sans-serif",
     glitch: "'Rubik Glitch', system-ui",
-    nabla: "'Nabla', system-ui",
   },
   colors: {
     gray: {
-      50: "#F5F6F5", // Lightest gray for subtle highlights
+      50: "#F5F6F5",
       100: "#E0E2E0",
       200: "#C4C8C4",
       300: "#A8ADA8",
       400: "#8D938D",
       500: "#737A73",
       600: "#5C635C",
-      700: "#464E46", // Darker gray for text
-      800: "#2E3532", // Dark gray for backgrounds
-      900: "#1C2526", // Deep gray for contrast
+      700: "#464E46",
+      800: "#2E3532",
+      900: "#1C2526",
     },
     gold: {
       300: "#FFD966",
       400: "#E8B923",
-      500: "#D4A017", // Primary gold for luxury accents
+      500: "#D4A017",
       600: "#B8860B",
       700: "#9C6D08",
     },
     emerald: {
       300: "#66B266",
       400: "#4A914A",
-      500: "#2A6041", // Deep emerald for secondary accents
+      500: "#2A6041",
       600: "#1F4A33",
       700: "#173827",
     },
     purple: {
       300: "#B794F4",
       400: "#9F7AEA",
-      500: "#6B46C1", // Amethyst purple for buttons/links
+      500: "#6B46C1",
       600: "#553C9A",
       700: "#432B7A",
     },
+    cyan: {
+      300: "#4DD0E1",
+      400: "#26C6DA",
+      500: "#00BCD4",
+      600: "#00ACC1",
+      700: "#0097A7",
+    },
     black: {
-      900: "#0A0A0A", // Deep black for primary background
+      900: "#0A0A0A",
     },
     white: "#FFFFFF",
   },
   breakpoints: {
-    sm: "30em", // 480px
-    md: "48em", // 768px
-    lg: "62em", // 992px
-    xl: "80em", // 1280px
-    "2xl": "96em", // 1536px
+    sm: "30em",
+    md: "48em",
+    lg: "62em",
+    xl: "80em",
+    "2xl": "96em",
   },
   fontSizes: {
-    xs: "0.75rem", // 12px
-    sm: "0.875rem", // 14px
-    md: "1rem", // 16px
-    lg: "1.125rem", // 18px
-    xl: "1.25rem", // 20px
-    "2xl": "1.5rem", // 24px
-    "3xl": "1.875rem", // 30px
-    "4xl": "2.25rem", // 36px
-    "5xl": "3rem", // 48px
-    "6xl": "3.75rem", // 60px
-    "7xl": "4.5rem", // 72px
+    xs: "0.75rem",
+    sm: "0.875rem",
+    md: "1rem",
+    lg: "1.125rem",
+    xl: "1.25rem",
+    "2xl": "1.5rem",
+    "3xl": "1.875rem",
+    "4xl": "2.25rem",
+    "5xl": "3rem",
+    "6xl": "3.75rem",
+    "7xl": "4.5rem",
   },
   fontWeights: {
     light: 300,
@@ -108,7 +114,7 @@ const theme = extendTheme({
   radii: {
     none: "0",
     sm: "0.125rem",
-    md: "0.5rem", // 8px
+    md: "0.5rem",
     lg: "1rem",
     full: "9999px",
   },
@@ -122,7 +128,7 @@ const theme = extendTheme({
   components: {
     Heading: {
       baseStyle: {
-        fontFamily: "'Rubik Glitch', system-ui",
+        fontFamily: "'Special Gothic Expanded One', sans-serif",
         fontWeight: "normal",
         color: "gold.500",
         lineHeight: "short",
@@ -145,11 +151,10 @@ const theme = extendTheme({
           letterSpacing: "2px",
           textTransform: "uppercase",
         },
-        nabla: {
-          fontFamily: "'Nabla', system-ui",
+        glitch: {
+          fontFamily: "'Rubik Glitch', system-ui",
           fontWeight: "normal",
-          color: "emerald.500",
-          fontVariationSettings: '"EDPT" 100, "EHLT" 12',
+          color: "cyan.500",
         },
       },
     },
