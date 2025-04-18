@@ -43,7 +43,6 @@ export default function TopNav() {
         p={4}
         justify="center"
         width="100%"
-        top={0}
         zIndex={10}
         mt={{ base: '2rem', md: 0 }}
         backdropFilter="blur(5px)"
@@ -110,7 +109,7 @@ export default function TopNav() {
       {/* Mobile Drawer Menu */}
       <Drawer isOpen={isOpen} placement="right" onClose={closeMenu}>
         <DrawerOverlay />
-        <DrawerContent bg="rgba(10, 10, 10, 0.9)" color="white">
+        <DrawerContent bg="rgba(10, 10, 10, 0.9)" color="white" maxW={{ base: '75%', sm: '250px' }}>
           <DrawerCloseButton color="var(--color-primary)" />
           <DrawerHeader
             fontFamily="'Special Gothic Expanded One', sans-serif"
