@@ -74,8 +74,8 @@ function Home() {
     const brandsCursor = brandsCursorRef.current;
 
     // Split text into spans for typewriter effect
-    const exclusiveText = "eXCLUSIVE";
-    const brandsText = "bRANDS";
+    const exclusiveText = "EXCLUSIVE";
+    const brandsText = "BRANDS";
     exclusiveElement.innerHTML = exclusiveText
       .split("")
       .map((char) => `<span class="glitch-letter">${char}</span>`)
