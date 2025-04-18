@@ -56,7 +56,7 @@ function Home() {
   const exclusiveCursorRef = useRef(null);
   const brandsCursorRef = useRef(null);
 
-  // GSAP Animation for Typewriter, 3D Slanted Cursor, and Glitch
+  // GSAP Animation for Typewriter, 3D Slanted Cursor, and Flashy Glitch
   useEffect(() => {
     if (!exclusiveRef.current || !brandsRef.current || !exclusiveCursorRef.current || !brandsCursorRef.current) {
       console.error("Refs not found:", {
@@ -166,54 +166,86 @@ function Home() {
       },
     });
 
-    // Glitch animation for EXCLUSIVE
+    // Flashy Glitch animation for EXCLUSIVE
     const glitchExclusive = () => {
-      const colors = ["#58fb6cd9", "#c2a0e5d9", "#FFFFFF"];
-      const randomColor = colors[Math.floor(Math.random() * colors.length)];
-      gsap.to(exclusiveElement, {
-        color: randomColor,
-        x: gsap.utils.random(-5, 5),
-        y: gsap.utils.random(-5, 5),
-        skewX: gsap.utils.random(-5, 5),
-        duration: 0.2,
-        ease: "power1.inOut",
-        onComplete: () => {
-          gsap.to(exclusiveElement, {
-            color: "#58fb6cd9",
-            x: 0,
-            y: 0,
-            skewX: 0,
-            duration: 0.2,
-            ease: "power1.inOut",
-          });
-        },
-      });
-      gsap.delayedCall(gsap.utils.random(4, 6), glitchExclusive);
+      const colors = ["#58fb6cd9", "#ff00ff", "#00e5ff", "#ffea00", "#ff5555"];
+      gsap
+        .timeline()
+        .to(exclusiveElement, {
+          color: colors[Math.floor(Math.random() * colors.length)],
+          x: gsap.utils.random(-10, 10),
+          y: gsap.utils.random(-10, 10),
+          scale: gsap.utils.random(0.95, 1.05),
+          rotate: gsap.utils.random(-5, 5),
+          skewX: gsap.utils.random(-10, 10),
+          opacity: gsap.utils.random(0.3, 0.7),
+          duration: 0.1,
+          ease: "power1.inOut",
+        })
+        .to(exclusiveElement, {
+          color: colors[Math.floor(Math.random() * colors.length)],
+          x: gsap.utils.random(-15, 15),
+          y: gsap.utils.random(-15, 15),
+          scale: gsap.utils.random(0.9, 1.1),
+          rotate: gsap.utils.random(-7, 7),
+          skewX: gsap.utils.random(-15, 15),
+          opacity: gsap.utils.random(0.5, 0.9),
+          duration: 0.1,
+          ease: "power1.inOut",
+        })
+        .to(exclusiveElement, {
+          color: "#58fb6cd9",
+          x: 0,
+          y: 0,
+          scale: 1,
+          rotate: 0,
+          skewX: 0,
+          opacity: 1,
+          duration: 0.15,
+          ease: "power1.inOut",
+        });
+      gsap.delayedCall(gsap.utils.random(2, 4), glitchExclusive); // More frequent glitches
     };
 
-    // Glitch animation for BRANDS
+    // Flashy Glitch animation for BRANDS
     const glitchBrands = () => {
-      const colors = ["#58fb6cd9", "#fbac58d9", "#00e5ffd9"];
-      const randomColor = colors[Math.floor(Math.random() * colors.length)];
-      gsap.to(brandsElement, {
-        color: randomColor,
-        x: gsap.utils.random(-5, 5),
-        y: gsap.utils.random(-5, 5),
-        skewX: gsap.utils.random(-5, 5),
-        duration: 0.2,
-        ease: "power1.inOut",
-        onComplete: () => {
-          gsap.to(brandsElement, {
-            color: "#58fb6cd9",
-            x: 0,
-            y: 0,
-            skewX: 0,
-            duration: 0.2,
-            ease: "power1.inOut",
-          });
-        },
-      });
-      gsap.delayedCall(gsap.utils.random(4, 6), glitchBrands);
+      const colors = ["#58fb6cd9", "#ff00ff", "#00e5ff", "#ffea00", "#ff5555"];
+      gsap
+        .timeline()
+        .to(brandsElement, {
+          color: colors[Math.floor(Math.random() * colors.length)],
+          x: gsap.utils.random(-10, 10),
+          y: gsap.utils.random(-10, 10),
+          scale: gsap.utils.random(0.95, 1.05),
+          rotate: gsap.utils.random(-5, 5),
+          skewX: gsap.utils.random(-10, 10),
+          opacity: gsap.utils.random(0.3, 0.7),
+          duration: 0.1,
+          ease: "power1.inOut",
+        })
+        .to(brandsElement, {
+          color: colors[Math.floor(Math.random() * colors.length)],
+          x: gsap.utils.random(-15, 15),
+          y: gsap.utils.random(-15, 15),
+          scale: gsap.utils.random(0.9, 1.1),
+          rotate: gsap.utils.random(-7, 7),
+          skewX: gsap.utils.random(-15, 15),
+          opacity: gsap.utils.random(0.5, 0.9),
+          duration: 0.1,
+          ease: "power1.inOut",
+        })
+        .to(brandsElement, {
+          color: "#58fb6cd9",
+          x: 0,
+          y: 0,
+          scale: 1,
+          rotate: 0,
+          skewX: 0,
+          opacity: 1,
+          duration: 0.15,
+          ease: "power1.inOut",
+        });
+      gsap.delayedCall(gsap.utils.random(2, 4), glitchBrands); // More frequent glitches
     };
 
     // Start glitch animations after typewriter effect
@@ -309,7 +341,7 @@ function Home() {
         bgImage="url('/images/hero-bg.jpg')"
         bgSize="cover"
         bgPosition="center"
-        py={{ base: 10, md: 22 }}
+        py={{ base: 20, md: 32 }}
         px={{ base: '1rem', md: '1rem' }}
         position="relative"
         _before={{
