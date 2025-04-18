@@ -69,7 +69,6 @@ export default function TopNav() {
       p={4}
       justify="center"
       width="100%"
-      position="fixed"
       top={0}
       zIndex={10}
       mt={{ base: '2rem', md: 0 }} // Push down on small screens
