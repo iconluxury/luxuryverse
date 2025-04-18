@@ -57,7 +57,7 @@ function Home() {
   const brandsCursorRef = useRef(null);
   const logosWrapperRef = useRef(null);
 
-  // GSAP Animation for Headings (unchanged)
+  // GSAP Animation for Headings
   useEffect(() => {
     if (!exclusiveRef.current || !brandsRef.current || !exclusiveCursorRef.current || !brandsCursorRef.current) {
       console.error("Refs not found:", {
@@ -274,7 +274,7 @@ function Home() {
     };
   }, []);
 
-  // Countdown logic (unchanged)
+  // Countdown logic
   useEffect(() => {
     const targetDate = new Date("2025-09-05T00:00:00Z").getTime();
     const interval = setInterval(() => {
@@ -294,7 +294,7 @@ function Home() {
     return () => clearInterval(interval);
   }, []);
 
-  // Fetch collections (unchanged)
+  // Fetch collections
   useEffect(() => {
     setIsLoading(true);
     const url = "https://iconluxury.shop/api/v1/collections/";
@@ -331,7 +331,7 @@ function Home() {
       });
   }, []);
 
-  // Handle wallet authentication (unchanged)
+  // Handle wallet authentication
   const handleConnect = async () => {
     try {
       await open();
@@ -351,7 +351,7 @@ function Home() {
     }
   };
 
-  // Handle waitlist join (unchanged)
+  // Handle waitlist join
   const handleJoinWaitlist = () => {
     console.log("Joined the waitlist");
     // TODO: Implement waitlist logic
@@ -417,24 +417,13 @@ function Home() {
           zIndex: 1,
         }}
       >
-        <Flex
-          maxW={{ base: "1200px", lg: "1600px" }}
-          mx="auto"
-          direction={{ base: "column", lg: "row" }}
-          align={{ base: "center", lg: "flex-start" }}
-          gap={{ base: 6, md: 12 }}
-          position="relative"
-          zIndex={2}
-          justifyContent="space-between"
-          width="100%"
-          px={{ base: 4, md: 0 }}
-        >
+        <Box maxW={{ base: "1200px", lg: "1600px" }} mx="auto" position="relative" zIndex={2} width="100%">
           <VStack
-            align="flex-start"
+            align={{ base: "center", lg: "flex-start" }}
             spacing={{ base: 4, md: 6 }}
-            flex={{ base: "1", lg: "0 0 50%" }}
             maxW={{ base: "100%", lg: "800px" }}
             textAlign={{ base: "center", lg: "left" }}
+            mx="auto"
           >
             <Box position="relative" display="inline-block" whiteSpace="nowrap">
               <Heading
@@ -450,6 +439,33 @@ function Home() {
               <Box
                 as="span"
                 ref={exclusiveCursorRef}
+                className="terminal-cursor"
+                position="absolute"
+                top={{ base: "5%", md: "10%" }}
+                left="0"
+                color="#58fb6cd9"
+                fontSize={{ base: "1rem", md: "5.5rem" }}
+                lineHeight="1"
+                fontWeight="normal"
+                ml="0.05em"
+              >
+                |
+              </Box>
+            </Box>
+            <Box position="relative" display="inline-block" whiteSpace="nowrap">
+              <Heading
+                as="h2"
+                variant="glitch"
+                size={{ base: "3xl", md: "9xl" }}
+                className="glitch glitch-brands"
+                data-text="BRANDS"
+                ref={brandsRef}
+              >
+                BRANDS
+              </Heading>
+              <Box
+                as="span"
+                ref={brandsCursorRef}
                 className="terminal-cursor"
                 position="absolute"
                 top={{ base: "5%", md: "10%" }}
@@ -479,41 +495,13 @@ function Home() {
             >
               Join The Waitlist
             </Button>
-            <Box position="relative" display="inline-block" whiteSpace="nowrap" mt={4}>
-              <Heading
-                as="h2"
-                variant="glitch"
-                size={{ base: "3xl", md: "9xl" }}
-                className="glitch glitch-brands"
-                data-text="BRANDS"
-                ref={brandsRef}
-              >
-                BRANDS
-              </Heading>
-              <Box
-                as="span"
-                ref={brandsCursorRef}
-                className="terminal-cursor"
-                position="absolute"
-                top={{ base: "5%", md: "10%" }}
-                left="0"
-                color="#58fb6cd9"
-                fontSize={{ base: "1rem", md: "5.5rem" }}
-                lineHeight="1"
-                fontWeight="normal"
-                ml="0.05em"
-              >
-                |
-              </Box>
-            </Box>
           </VStack>
-          <Flex
-            flex={{ base: "1", lg: "0 0 50%" }}
-            justify="center"
-            align="center"
-            mt={{ base: 4, lg: 0 }}
-            maxW={{ base: "100%", lg: "800px" }}
+          <Box
+            mt={{ base: 6, md: 8 }}
             overflow="hidden"
+            width="100%"
+            maxW={{ base: "1200px", lg: "1600px" }}
+            mx="auto"
           >
             <Box
               ref={logosWrapperRef}
@@ -545,8 +533,8 @@ function Home() {
                 />
               ))}
             </Box>
-          </Flex>
-        </Flex>
+          </Box>
+        </Box>
       </Box>
 
       {/* Second Section (Three Cards) */}
@@ -623,75 +611,72 @@ function Home() {
         </Flex>
       </Box>
 
-      {/* Launch Section (Two Cards) */}
+      {/* Launch Section (Single Full-Width Card) */}
       <Box py={{ base: 12, md: 16 }} bg="transparent" textAlign="center">
-        <Flex
-          direction={{ base: "column", lg: "row" }}
-          gap={8}
-          justify="center"
-          align="stretch"
+        <VStack
+          bg="gray.900"
+          border="1px solid"
+          borderColor="gray.700"
+          borderRadius="md"
+          p={6}
           maxW={{ base: "1200px", lg: "1600px" }}
           mx="auto"
-          px={{ base: 4, md: 8 }}
+          spacing={6}
+          transition="all 0.3s"
+          _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
         >
-          <VStack
-            bg="gray.900"
-            border="1px solid"
-            borderColor="gray.700"
-            borderRadius="md"
-            p={6}
-            flex="1"
-            spacing={6}
-            transition="all 0.3s"
-            _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
-          >
-            <Heading as="h2" size="2xl" color="purple.500">
-              Launch Countdown
-            </Heading>
-            <Text fontSize="lg" color="purple.500">
-              First Drop: September 5th, 2025
-            </Text>
-            <Flex gap={8} justify="center" wrap="wrap">
-              {[
-                { value: countdown.days, label: "Days" },
-                { value: countdown.hours, label: "Hours" },
-                { value: countdown.minutes, label: "Minutes" },
-                { value: countdown.seconds, label: "Seconds" },
-              ].map(({ value, label }) => (
-                <VStack key={label}>
-                  <Text fontSize="5xl" fontWeight="bold" color="purple.500">
-                    {value}
-                  </Text>
-                  <Text fontSize="lg" color="purple.500">
-                    {label}
-                  </Text>
-                </VStack>
-              ))}
-            </Flex>
-          </VStack>
-          <VStack
-            bg="gray.900"
-            border="1px solid"
-            borderColor="gray.700"
-            borderRadius="md"
-            p={6}
-            flex="1"
-            spacing={6}
-            transition="all 0.3s"
-            _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
-          >
-            <Heading as="h2" size="2xl" color="purple.500">
-              Roadmap
-            </Heading>
-            <Text fontSize="lg" color="purple.500">
-              Roadmap Coming Soon. Stay tuned for our detailed plans for LuxuryVerse, including new
-              features, partnerships, and expansion milestones.
-            </Text>
-          </VStack>
-        </Flex>
+          <Heading as="h2" size="2xl" color="purple.500">
+            Launch Countdown
+          </Heading>
+          <Text fontSize="lg" color="purple.500">
+            First Drop: September 5th, 2025
+          </Text>
+          <Flex gap={8} justify="center" wrap="wrap">
+            {[
+              { value: countdown.days, label: "Days" },
+              { value: countdown.hours, label: "Hours" },
+              { value: countdown.minutes, label: "Minutes" },
+              { value: countdown.seconds, label: "Seconds" },
+            ].map(({ value, label }) => (
+              <VStack key={label}>
+                <Text fontSize="5xl" fontWeight="bold" color="purple.500">
+                  {value}
+                </Text>
+                <Text fontSize="lg" color="purple.500">
+                  {label}
+                </Text>
+              </VStack>
+            ))}
+          </Flex>
+        </VStack>
       </Box>
 
-      {/* Recent Drops Card */}
+      {/* Roadmap Section (Single Full-Width Square Card) */}
+      <Box py={{ base: 12, md: 16 }} bg="transparent" textAlign="center">
+        <VStack
+          bg="gray.900"
+          border="1px solid"
+          borderColor="gray.700"
+          borderRadius="md"
+          p={6}
+          maxW={{ base: "1200px", lg: "1600px" }}
+          mx="auto"
+          spacing={6}
+          transition="all 0.3s"
+          _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
+          h={{ base: "auto", lg: "600px" }} // Square-ish on desktop
+        >
+          <Heading as="h2" size="2xl" color="purple.500">
+            Roadmap
+          </Heading>
+          <Text fontSize="lg" color="purple.500" maxW="700px">
+            Roadmap Coming Soon. Stay tuned for our detailed plans for LuxuryVerse, including new
+            features, partnerships, and expansion milestones.
+          </Text>
+        </VStack>
+      </Box>
+
+      {/* Recent Drops Section (Single Full-Width Card) */}
       <Box
         py={{ base: 12, md: 16 }}
         px={{ base: 4, md: 8 }}
@@ -777,14 +762,24 @@ function Home() {
         </VStack>
       </Box>
 
-      {/* FAQs */}
+      {/* FAQs Section (Single Full-Width Card) */}
       <Box
         py={{ base: 12, md: 16 }}
         bg="gray.800"
         px={{ base: 4, md: 8 }}
         maxW={{ base: "1200px", lg: "1600px" }}
+        mx="auto"
       >
-        <VStack spacing={8}>
+        <VStack
+          bg="gray.900"
+          border="1px solid"
+          borderColor="gray.700"
+          borderRadius="md"
+          p={8}
+          spacing={8}
+          transition="all 0.3s"
+          _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
+        >
           <Heading as="h2" size="2xl" color="purple.500">
             Frequently Asked Questions
           </Heading>
