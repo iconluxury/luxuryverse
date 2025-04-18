@@ -41,8 +41,20 @@ interface Collection {
 
 // ErrorFallback component
 function ErrorFallback({ error }: { error: Error }) {
-  console.error('ErrorBoundary caught (suppressed):', error, error.stack);
-  return <Box />;
+  console.error('ErrorBoundary caught:', error, error.stack);
+  return (
+    <Box textAlign="center" py={16} color="gray.300" bg="transparent" w="100%">
+      <Text fontSize="lg" mb={4}>
+        An unexpected error occurred.
+      </Text>
+      <Text fontSize="sm" mt={2}>
+        Please try again or contact{' '}
+        <a href="mailto:support@iconluxury.shop" style={{ color: '#3182CE' }}>
+          support@iconluxury.shop
+        </a>.
+      </Text>
+    </Box>
+  );
 }
 
 // CollectionDetails component
@@ -54,12 +66,11 @@ function CollectionDetails() {
   const { id } = Route.useParams();
 
   // Fetch with retry and cache busting
-  const fetchWithRetry = async (url: string, retryCount = 6) => {
+  const fetchWithRetry = async (url: string, retryCount = 6): Promise<any> => {
     for (let attempt = 1; attempt <= retryCount; attempt++) {
       try {
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 30000);
-        // Add cache-busting query parameter
+        const timeoutId = setTimeout(() => controller.abort(), 45000); // Increased timeout to 45s
         const cacheBustedUrl = `${url}?t=${Date.now()}`;
         const response = await fetch(cacheBustedUrl, {
           signal: controller.signal,
@@ -67,21 +78,25 @@ function CollectionDetails() {
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
-            'Cache-Control': 'no-cache',
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            Pragma: 'no-cache',
+            Expires: '0',
           },
           credentials: 'omit',
         });
         clearTimeout(timeoutId);
 
         if (!response.ok) {
-          if (response.status === 404) throw new Error('Resource not found.');
+          if (response.status === 404) throw new Error('Collection not found.');
           throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        return await response.json();
+        const data = await response.json();
+        if (!data) throw new Error('Empty response received.');
+        return data;
       } catch (err: any) {
         if (err.name === 'AbortError') {
-          err.message = 'Request timed out after 30s.';
+          err.message = 'Request timed out after 45s.';
         }
         console.error('Fetch error:', { url, attempt, error: err.message });
         if (attempt === retryCount) {
@@ -100,7 +115,8 @@ function CollectionDetails() {
       const collectionData = await fetchWithRetry(collectionUrl);
       console.log('Fetch successful for', collectionUrl, ':', collectionData);
 
-      if (!collectionData || typeof collectionData !== 'object' || !Array.isArray(collectionData.products)) {
+      // Validate collection data
+      if (!collectionData || typeof collectionData !== 'object') {
         throw new Error('Invalid collection data received');
       }
 
@@ -108,66 +124,68 @@ function CollectionDetails() {
         id: collectionData.id || id,
         title: collectionData.title || 'Untitled Collection',
         description: collectionData.description || '',
-        products: collectionData.products
-          .filter(
-            (p: Product) =>
-              p &&
-              typeof p.id === 'string' &&
-              typeof p.title === 'string' &&
-              Array.isArray(p.variants) &&
-              p.variants.some((v: Variant) => v.inventory_quantity > 0)
-          )
-          .map((p: Product) => {
-            const variants = Array.isArray(p.variants)
-              ? p.variants.filter(
-                  (v: Variant) =>
-                    v &&
-                    typeof v === 'object' &&
-                    typeof v.id === 'string' &&
-                    typeof v.size === 'string' &&
-                    v.size !== '' &&
-                    v.size !== 'N/A' &&
-                    typeof v.inventory_quantity === 'number' &&
-                    v.inventory_quantity > 0
-                )
-              : [];
-            return {
-              ...p,
-              id: p.id || '',
-              title: p.title || 'Untitled Product',
-              description: p.description || '',
-              brand: p.brand || 'Unknown Brand',
-              thumbnail: p.thumbnail || 'https://placehold.co/225x300',
-              images: Array.isArray(p.images) ? p.images : undefined,
-              variants: variants,
-              full_price: p.full_price || '',
-              sale_price: p.sale_price || 'N/A',
-              discount: p.discount || null,
-              collection_id: p.collection_id || id,
-              total_inventory: variants.reduce((sum: number, v: Variant) => {
-                return sum + (typeof v.inventory_quantity === 'number' ? v.inventory_quantity : 0);
-              }, 0),
-              discount_value: p.discount ? parseFloat(p.discount.replace('% off', '')) || 0 : 0,
-            };
-          })
-          .sort((a, b) => {
-            const aDiscount = a.discount_value || 0;
-            const bDiscount = b.discount_value || 0;
-            const aInventory = a.total_inventory || 0;
-            const bInventory = b.total_inventory || 0;
+        products: Array.isArray(collectionData.products)
+          ? collectionData.products
+              .filter((p: Product) => p && typeof p.id === 'string' && typeof p.title === 'string')
+              .map((p: Product) => {
+                const variants = Array.isArray(p.variants)
+                  ? p.variants.filter(
+                      (v: Variant) =>
+                        v &&
+                        typeof v === 'object' &&
+                        typeof v.id === 'string' &&
+                        typeof v.size === 'string' &&
+                        v.size !== '' &&
+                        v.size !== 'N/A' &&
+                        typeof v.inventory_quantity === 'number'
+                    )
+                  : [];
+                return {
+                  ...p,
+                  id: p.id || '',
+                  title: p.title || 'Untitled Product',
+                  description: p.description || '',
+                  brand: p.brand || 'Unknown Brand',
+                  thumbnail: p.thumbnail || 'https://placehold.co/225x300',
+                  images: Array.isArray(p.images) ? p.images : undefined,
+                  variants,
+                  full_price: p.full_price || 'N/A',
+                  sale_price: p.sale_price || 'N/A',
+                  discount: p.discount || null,
+                  collection_id: p.collection_id || id,
+                  total_inventory: variants.reduce((sum: number, v: Variant) => {
+                    return sum + (typeof v.inventory_quantity === 'number' ? v.inventory_quantity : 0);
+                  }, 0),
+                  discount_value: p.discount ? parseFloat(p.discount.replace('% off', '')) || 0 : 0,
+                };
+              })
+              .sort((a, b) => {
+                const aDiscount = a.discount_value || 0;
+                const bDiscount = b.discount_value || 0;
+                const aInventory = a.total_inventory || 0;
+                const bInventory = b.total_inventory || 0;
 
-            if (aDiscount !== bDiscount) {
-              return bDiscount - aDiscount;
-            }
-            return bInventory - aInventory;
-          }),
+                if (aDiscount !== bDiscount) {
+                  return bDiscount - aDiscount;
+                }
+                return bInventory - aInventory;
+              })
+          : [],
       };
 
       setCollection(validatedCollection);
       setError(null);
     } catch (err: any) {
-      console.error('Fetch error (suppressed):', err.message);
-      setError('Failed to load collection. Please try again later.');
+      console.error('Fetch error:', err.message);
+      let errorMessage = 'Failed to load collection. Please try again later.';
+      if (err.message.includes('not found')) {
+        errorMessage = `Collection with ID ${id} not found.`;
+      } else if (err.message.includes('timed out')) {
+        errorMessage = 'Request timed out. Please check your connection and try again.';
+      } else if (err.message.includes('Invalid collection data')) {
+        errorMessage = 'Received invalid data from the server. Please try again later.';
+      }
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -239,7 +257,6 @@ function CollectionDetails() {
             {collection.products.length > 0 ? (
               <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing={6} w="100%">
                 {collection.products.map((product) => {
-                  // Clean title by removing brand if present
                   const cleanTitle = product.brand
                     ? product.title.replace(new RegExp(`\\b${product.brand}\\b`, 'i'), '').trim()
                     : product.title;
@@ -293,7 +310,7 @@ function CollectionDetails() {
               </SimpleGrid>
             ) : (
               <Text fontSize="md" color="gray.300">
-                No products found in this collection.
+                No products are currently available in this collection. Check back soon!
               </Text>
             )}
           </VStack>
