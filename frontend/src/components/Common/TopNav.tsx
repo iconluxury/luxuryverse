@@ -40,31 +40,39 @@ export default function TopNav() {
     <>
       <Flex
         bg="rgba(10, 10, 10, 0.5)"
-        p={4}
+        p={{ base: 2, md: 4 }}
         justify="center"
-        width="100%"
+        width="100vw" // Respect viewport width
         zIndex={10}
-        mt={{ base: '1rem', md: 0 }} // Reduced top margin on mobile
+        mt={{ base: '0.5rem', md: 0 }}
         backdropFilter="blur(5px)"
+        overflowX="hidden" // Prevent horizontal overflow
       >
         <Flex
-          maxW={{ base: '100%', md: '80rem' }} // Ensure full width on mobile
+          maxW={{ base: '100%', md: '80rem' }}
           width="100%"
-          px={{ base: '0.5rem', md: '1rem' }} // Tighter padding on mobile
+          px={{ base: '0.25rem', md: '1rem' }}
           justify={{ base: 'space-between', md: 'space-between' }}
           align="center"
           direction={{ base: 'row', md: 'row' }}
-          gap={{ base: 1, md: 2 }} // Reduced gap
+          gap={{ base: 0.5, md: 2 }}
         >
           <Heading
-            size="xs" // Smallest heading size
-            fontSize={{ base: '0.75rem', md: '0.875rem' }} // 12px mobile, 14px desktop
+            size="xs"
+            fontSize={{ base: '0.5rem', md: '0.875rem' }} // 8px mobile, 14px desktop
             color="var(--color-primary)"
             fontFamily="'Special Gothic Expanded One', sans-serif"
-            lineHeight="1.2"
+            lineHeight="1.1"
           >
             <Link to="/" className="luxuryverse-logo">
-              LuxuryVerse
+              <Flex
+                flexDir={{ base: 'column', md: 'row' }}
+                align={{ base: 'flex-start', md: 'center' }}
+                gap={{ base: 0, md: 0.5 }}
+              >
+                <span>Luxury</span>
+                <span>Verse</span>
+              </Flex>
             </Link>
           </Heading>
           {/* Desktop Menu */}
@@ -104,7 +112,8 @@ export default function TopNav() {
             bg="transparent"
             color="var(--color-primary)"
             _hover={{ color: 'var(--color-primary-hover)' }}
-            size="sm" // Smaller button size
+            size="xs"
+            ml="auto" // Pin to right edge
           />
         </Flex>
       </Flex>
