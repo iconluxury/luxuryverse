@@ -13,9 +13,9 @@ export const AuthContext = createContext({
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null); // e.g., { address, xUsername, xProfile }
-  const [isJoining, setJoining] = useState(false);
+  const [isJoining occupa, setJoining] = useState(false);
 
-  const login | async (userData) => {
+  const login = async (userData) => {
     setUser(userData);
     setJoining(false);
   };
@@ -71,15 +71,8 @@ export default function TopNav() {
       align="center"
       px={{ base: 4, md: 8 }}
     >
-      <Heading
-        size="md"
-        color="purple.300"
-        fontFamily="'YourCustomFont', sans-serif"
-      >
-        <Link
-          to="/"
-          style={{ fontFamily: "'YourCustomFont', sans-serif", color: 'inherit' }}
-        >
+      <Heading size="md" color="purple.300">
+        <Link to="/" className="luxuryverse-logo">
           LuxuryVerse
         </Link>
       </Heading>
@@ -89,7 +82,7 @@ export default function TopNav() {
           style={{
             color: 'white',
             textDecoration: 'none',
-            fontFamily: "'YourCustomFont', sans-serif",
+            fontFamily: 'DM Sans, sans-serif',
           }}
         >
           Home
@@ -99,7 +92,7 @@ export default function TopNav() {
           style={{
             color: 'white',
             textDecoration: 'none',
-            fontFamily: "'YourCustomFont', sans-serif",
+            fontFamily: 'DM Sans, sans-serif',
           }}
         >
           Roadmap
@@ -109,7 +102,7 @@ export default function TopNav() {
           style={{
             color: 'white',
             textDecoration: 'none',
-            fontFamily: "'YourCustomFont', sans-serif",
+            fontFamily: 'DM Sans, sans-serif',
           }}
         >
           Authenticity
@@ -119,7 +112,7 @@ export default function TopNav() {
           style={{
             color: 'white',
             textDecoration: 'none',
-            fontFamily: "'YourCustomFont', sans-serif",
+            fontFamily: 'DM Sans, sans-serif',
           }}
         >
           FAQ
@@ -129,7 +122,7 @@ export default function TopNav() {
           style={{
             color: 'white',
             textDecoration: 'none',
-            fontFamily: "'YourCustomFont', sans-serif",
+            fontFamily: 'DM Sans, sans-serif',
           }}
         >
           Contact
@@ -151,7 +144,7 @@ export default function TopNav() {
           py={2}
           fontWeight="medium"
           size="sm"
-          fontFamily="'YourCustomFont', sans-serif"
+          fontFamily="DM Sans, sans-serif"
         >
           {text}
         </Button>
