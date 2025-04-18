@@ -1,32 +1,26 @@
-import { Flex, Heading, Button } from '@chakra-ui/react';
+import { Flex, Heading } from '@chakra-ui/react';
 import { Link, useNavigate } from '@tanstack/react-router';
-import { useContext } from 'react'; // Ensure useContext is imported
+import { useContext } from 'react';
 import { AuthContext } from './AuthContext';
 
 export default function TopNav() {
   const { user, isJoining } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const getButtonProps = () => {
+  const getAuthLinkProps = () => {
     if (user) {
       return {
         text: 'Profile',
-        onClick: () => navigate({ to: '/profile' }),
-        bg: 'var(--color-primary)',
-        color: 'var(--color-background)',
-        _hover: { bg: 'var(--color-primary-hover)' },
+        to: '/profile',
       };
     }
     return {
       text: isJoining ? 'Join' : 'Login',
-      onClick: () => navigate({ to: '/join' }),
-      bg: 'var(--color-primary)',
-      color: 'var(--color-background)',
-      _hover: { bg: 'var(--color-primary-hover)' },
+      to: '/join',
     };
   };
 
-  const { text, onClick, bg, color, _hover } = getButtonProps();
+  const { text, to } = getAuthLinkProps();
 
   return (
     <Flex
@@ -51,6 +45,7 @@ export default function TopNav() {
           size="md"
           color="var(--color-primary)"
           fontFamily="'Special Gothic Expanded One', sans-serif"
+          lineHeight="1"
         >
           <Link to="/" className="luxuryverse-logo">
             LuxuryVerse
@@ -61,6 +56,7 @@ export default function TopNav() {
           alignItems="center"
           flexWrap="wrap"
           justify="center"
+          height="100%"
         >
           {[
             { to: '/', label: 'Home' },
@@ -68,37 +64,32 @@ export default function TopNav() {
             { to: '/authenticity', label: 'Authenticity' },
             { to: '/faq', label: 'FAQ' },
             { to: '/contact', label: 'Contact' },
+            { to, label: text }, // Add the auth link (Profile/Login/Join)
           ].map(({ to, label }) => (
             <Link
               key={to}
               to={to}
               style={{
-                color: 'var(--color-primary)',
+                color:
+                  label === text
+                    ? 'var(--color-primary-hover)' // Green for auth link
+                    : 'var(--color-primary)', // Purple for others
                 textDecoration: 'none',
                 fontFamily: "'Special Gothic Expanded One', sans-serif",
+                display: 'flex',
+                alignItems: 'center',
+                fontWeight:
+                  label === text ? 'var(--font-weight-bold)' : 'var(--font-weight-normal)', // Bolder for auth link
               }}
               _hover={{
-                color: 'var(--color-primary-hover)',
+                color: 'var(--color-primary-hover)', // Green on hover for all
               }}
+              onClick={() => navigate({ to })}
             >
               {label}
             </Link>
           ))}
         </Flex>
-        <Button
-          onClick={onClick}
-          bg={bg}
-          color={color}
-          _hover={_hover}
-          borderRadius="md"
-          px={4}
-          py={2}
-          fontWeight="medium"
-          size="sm"
-          fontFamily="'DM Sans', sans-serif"
-        >
-          {text}
-        </Button>
       </Flex>
     </Flex>
   );
