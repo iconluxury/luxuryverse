@@ -14,116 +14,123 @@ const Footer = () => {
       <Box maxW="80rem" mx="auto" px={{ base: 4, md: 8 }}>
         {/* Main Footer Content */}
         <Flex
-          direction={{ base: "column", md: "row" }}
-          justify="flex-start"
-          align="flex-start"
+          direction="column"
+          justify="center"
+          align="center"
           mb={6}
-          textAlign="left"
-          gap={{ base: 6, md: 4 }}
+          textAlign="center"
+          gap={4}
         >
-          {/* Left Section: Company Info and Links */}
-          <Flex
-            direction={{ base: "column", md: "row" }}
-            gap={{ base: 6, md: 12 }}
-            align="flex-start"
-            flex="2"
+          {/* Logo */}
+          <Heading
+            size="xs"
+            fontSize={{ base: '0.5rem', md: '0.75rem' }}
+            color="white"
+            fontFamily="'Special Gothic Expanded One', sans-serif"
+            lineHeight="1.1"
           >
-            {/* Company Information */}
-            <Box maxW={{ base: "100%", md: "400px" }}>
-              <Heading
-                as="h4"
-                size="xs"
-                fontSize={{ base: '0.5rem', md: '0.875rem' }}
+            <Link to="/" _hover={{ color: '#E0E0E0' }}>
+              <Flex align="center" gap={0.5}>
+                <span>Luxury</span>
+                <span>Verse</span>
+              </Flex>
+            </Link>
+          </Heading>
+          {/* Blurb */}
+          <Text color="gray.400" fontSize="sm" maxW="400px">
+            Defining luxury through innovation, authenticity, and global connectivity. Join us in shaping the future of exclusivity.
+          </Text>
+          {/* Navigation Links */}
+          <HStack
+            spacing={{ base: 2, md: 4 }}
+            flexWrap="wrap"
+            justify="center"
+          >
+            {[
+              { to: '/', label: 'Home' },
+              { to: '/roadmap', label: 'Roadmap' },
+              { to: '/authenticity', label: 'Authenticity' },
+              { to: '/faq', label: 'FAQ' },
+              { to: '/contact', label: 'Contact' },
+              { to: '/collections', label: 'Shop' },
+            ].map(({ to, label }) => (
+              <Link
+                key={to}
+                href={to}
                 color="white"
                 fontFamily="'Special Gothic Expanded One', sans-serif"
-                lineHeight="1.1"
-                mb={4}
+                fontWeight="normal"
+                textTransform="uppercase"
+                fontSize={{ base: '0.75rem', md: '0.875rem' }}
+                _hover={{ color: '#E0E0E0' }}
               >
-                <Link href="https://luxuryverse.com" _hover={{ color: "#E0E0E0" }}>
-                  <Flex flexDir="column" align="flex-start" gap={0}>
-                    <span>Luxury</span>
-                    <span>Verse</span>
-                  </Flex>
-                </Link>
-              </Heading>
-              <Text color="gray.400" fontSize="sm">
-                Defining luxury through innovation, authenticity, and global connectivity. Join us in shaping the future of exclusivity.
-              </Text>
-            </Box>
-
-            {/* Links (No Explore Title) */}
-            <Box>
-              <HStack spacing={4} justify="flex-start">
-                <Link
-                  href="/faq"
-                  color="white"
-                  fontFamily="'Special Gothic Expanded One', sans-serif"
-                  fontWeight="normal"
-                  textTransform="uppercase"
-                  _hover={{ color: "#E0E0E0" }}
-                >
-                  FAQ
-                </Link>
-              </HStack>
-            </Box>
-          </Flex>
+                {label}
+              </Link>
+            ))}
+          </HStack>
         </Flex>
 
         {/* Bottom Footer - Copyright and Legal Links */}
         <Flex
-          justify="flex-start"
+          justify="center"
           align="center"
           borderTop="1px solid"
           borderColor="gray.700"
           pt={4}
           flexWrap="wrap"
           gap={4}
-          textAlign="left"
         >
-          <Text color="gray.400" fontSize="sm">
-            © 2025{" "}
-            <Link href="https://luxuryverse.com" color="gray.200" _hover={{ color: "#E0E0E0" }}>
-              LuxuryVerse
-            </Link>
-            . All rights reserved.
-          </Text>
-          <HStack spacing={4} justify="flex-start">
-            <Link
-              href="/privacy-policy"
-              color="gray.400"
-              fontSize="sm"
-              fontFamily="'Special Gothic Expanded One', sans-serif"
-              _hover={{ color: "#E0E0E0" }}
-            >
-              Privacy Policy
-            </Link>
-            <Link
-              href="/terms-conditions"
-              color="gray.400"
-              fontSize="sm"
-              fontFamily="'Special Gothic Expanded One', sans-serif"
-              _hover={{ color: "#E0E0E0" }}
-            >
-              Terms and Conditions
-            </Link>
-            <Link
-              href="/cookies"
-              color="gray.400"
-              fontSize="sm"
-              fontFamily="'Special Gothic Expanded One', sans-serif"
-              _hover={{ color: "#E0E0E0" }}
-            >
-              Cookie Policy
-            </Link>
-            <Link
-              href="/opt-out"
-              color="gray.400"
-              fontSize="sm"
-              fontFamily="'Special Gothic Expanded One', sans-serif"
-              _hover={{ color: "#E0E0E0" }}
-            >
-              Opt Out
-            </Link>
+          <HStack
+            spacing={{ base: 2, md: 4 }}
+            flexWrap="wrap"
+            justify="center"
+            align="center"
+          >
+            <Text color="gray.400" fontSize="sm">
+              © 2025{" "}
+              <Link href="https://luxuryverse.com" color="gray.200" _hover={{ color: "#E0E0E0" }}>
+                LuxuryVerse
+              </Link>
+              . All rights reserved.
+            </Text>
+            <HStack spacing={{ base: 2, md: 4 }} justify="center" align="center">
+              <Link
+                href="/privacy-policy"
+                color="gray.400"
+                fontSize="sm"
+                fontFamily="'Special Gothic Expanded One', sans-serif"
+                _hover={{ color: "#E0E0E0" }}
+              >
+                Privacy Policy
+              </Link>
+              <Link
+                href="/terms-conditions"
+                color="gray.400"
+                fontSize="sm"
+                fontFamily="'Special Gothic Expanded One', sans-serif"
+                _hover={{ color: "#E0E0E0" }}
+              >
+                Terms and Conditions
+              </Link>
+              <Link
+                href="/cookies"
+                color="gray.400"
+                fontSize="sm"
+                fontFamily="'Special Gothic Expanded One', sans-serif"
+                _hover={{ color: "#E0E0E0" }}
+              >
+                Cookie Policy
+              </Link>
+              <Link
+                href="/opt-out"
+                color="gray.400"
+                fontSize="sm"
+                fontFamily="'Special Gothic Expanded One', sans-serif"
+                _hover={{ color: "#E0E0E0" }}
+              >
+                Opt Out
+              </Link>
+            </HStack>
           </HStack>
         </Flex>
       </Box>
