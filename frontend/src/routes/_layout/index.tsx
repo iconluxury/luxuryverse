@@ -14,7 +14,7 @@ import {
   AccordionIcon,
 } from "@chakra-ui/react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useRef,useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAppKit } from "@reown/appkit/react";
 import axios from "axios";
 import Footer from "@/components/Common/Footer";
@@ -56,7 +56,7 @@ function Home() {
   const exclusiveCursorRef = useRef(null);
   const brandsCursorRef = useRef(null);
 
-  // GSAP Animation for Typewriter, Cursor, and Glitch
+  // GSAP Animation for Typewriter, 3D Slanted Cursor, and Glitch
   useEffect(() => {
     if (!exclusiveRef.current || !brandsRef.current || !exclusiveCursorRef.current || !brandsCursorRef.current) {
       console.error("Refs not found:", {
@@ -91,26 +91,42 @@ function Home() {
     // Set initial color to green
     gsap.set([exclusiveElement, brandsElement], { color: "#58fb6cd9" });
 
-    // Cursor blinking animation
-    gsap.to([exclusiveCursor, brandsCursor], {
+    // 3D Slanted Cursor Style
+    gsap.set([exclusiveCursor, brandsCursor], {
+      transformPerspective: 400,
+      rotateY: 30,
+      scale: 1.2,
+      color: "#58fb6cd9",
+      fontSize: "5.5rem",
+      lineHeight: "1",
+      fontWeight: "bold",
+      textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+    });
+
+    // Cursor blinking animation during typing only
+    const cursorBlink = gsap.to([exclusiveCursor, brandsCursor], {
       opacity: 0,
       repeat: -1,
       yoyo: true,
       duration: 0.5,
       ease: "power1.inOut",
+      paused: true,
     });
 
-    // Typewriter animation with cursor
+    // Typewriter animation for eXCLUSIVE (one letter at a time)
     gsap.fromTo(
       exclusiveSpans,
-      { opacity: 0 },
+      { opacity: 0, y: 20, rotateX: -30 },
       {
         opacity: 1,
-        duration: 0.1,
-        stagger: 0.1,
-        ease: "power1.in",
+        y: 0,
+        rotateX: 0,
+        duration: 0.2,
+        stagger: 0.2,
+        ease: "power2.out",
         onStart: () => {
           gsap.set(exclusiveCursor, { opacity: 1 });
+          cursorBlink.play();
         },
         onUpdate: function () {
           const currentIndex = Math.floor(this.progress() * exclusiveSpans.length);
@@ -120,20 +136,26 @@ function Home() {
         },
         onComplete: () => {
           gsap.set(exclusiveCursor, { opacity: 0 });
+          cursorBlink.pause();
         },
       }
     );
+
+    // Typewriter animation for bRANDS (one letter at a time)
     gsap.fromTo(
       brandsSpans,
-      { opacity: 0 },
+      { opacity: 0, y: 20, rotateX: -30 },
       {
         opacity: 1,
-        duration: 0.1,
-        stagger: 0.1,
-        ease: "power1.in",
-        delay: exclusiveText.length * 0.1,
+        y: 0,
+        rotateX: 0,
+        duration: 0.2,
+        stagger: 0.2,
+        ease: "power2.out",
+        delay: exclusiveText.length * 0.2,
         onStart: () => {
           gsap.set(brandsCursor, { opacity: 1 });
+          cursorBlink.play();
         },
         onUpdate: function () {
           const currentIndex = Math.floor(this.progress() * brandsSpans.length);
@@ -143,6 +165,7 @@ function Home() {
         },
         onComplete: () => {
           gsap.set(brandsCursor, { opacity: 0 });
+          cursorBlink.pause();
         },
       }
     );
@@ -198,8 +221,8 @@ function Home() {
     };
 
     // Start glitch animations after typewriter effect
-    gsap.delayedCall(exclusiveText.length * 0.1 + 0.5, glitchExclusive);
-    gsap.delayedCall((exclusiveText.length + brandsText.length) * 0.1 + 0.5, glitchBrands);
+    gsap.delayedCall(exclusiveText.length * 0.2 + 0.5, glitchExclusive);
+    gsap.delayedCall((exclusiveText.length + brandsText.length) * 0.2 + 0.5, glitchBrands);
   }, []);
 
   // Countdown logic for September 5, 2025 launch
@@ -279,7 +302,7 @@ function Home() {
 
   // Handle waitlist join (placeholder functionality)
   const handleJoinWaitlist = () => {
-    console.log("Joined the waitlist");
+    consoleCITY="Joined the waitlist";
     // TODO: Implement waitlist logic (e.g., API call or form redirect)
   };
 
@@ -514,7 +537,7 @@ function Home() {
         <VStack
           bg="gray.900"
           border="1px solid"
-          borderColor="gray.700"
+          borderColor=" Touring.700"
           borderRadius="md"
           p={8}
           spacing={6}
