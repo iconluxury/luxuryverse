@@ -2,6 +2,7 @@ import React from 'react';
 import {
   Box,
   Flex,
+  Heading,
   Text,
   Link,
   HStack,
@@ -20,7 +21,7 @@ const Footer = () => {
           textAlign="center"
           gap={4}
         >
-          {/* Navigation Links (First Row) */}
+          {/* Navigation Links */}
           <HStack
             spacing={{ base: 2, md: 4 }}
             flexWrap="wrap"
@@ -50,91 +51,84 @@ const Footer = () => {
           </HStack>
         </Flex>
 
-        {/* Bottom Footer - Legal Links and Copyright */}
+        {/* Bottom Footer - Copyright and Legal Links */}
         <Flex
-          direction="column"
           justify="center"
-          align="center"
+          align="baseline"
           borderTop="1px solid"
           borderColor="gray.700"
           pt={4}
-          gap={4}
+          flexWrap="wrap"
+          gap={{ base: 2, md: 4 }}
         >
-          {/* Legal Links (Second Row) */}
           <HStack
             spacing={{ base: 2, md: 4 }}
             flexWrap="wrap"
             justify="center"
             align="baseline"
           >
-            <Link
-              href="/privacy-policy"
-              color="gray.200"
+            <Text
               fontSize="sm"
-              fontFamily="'Special Gothic Expanded One', sans-serif"
-              lineHeight="1.5"
-              _hover={{ color: 'white' }}
-            >
-              Privacy Policy
-            </Link>
-            <Link
-              href="/terms-conditions"
-              color="gray.200"
-              fontSize="sm"
-              fontFamily="'Special Gothic Expanded One', sans-serif"
-              lineHeight="1.5"
-              _hover={{ color: 'white' }}
-            >
-              Terms and Conditions
-            </Link>
-            <Link
-              href="/cookies"
-              color="gray.200"
-              fontSize="sm"
-              fontFamily="'Special Gothic Expanded One', sans-serif"
-              lineHeight="1.5"
-              _hover={{ color: 'white' }}
-            >
-              Cookie Policy
-            </Link>
-            <Link
-              href="/opt-out"
-              color="gray.200"
-              fontSize="sm"
-              fontFamily="'Special Gothic Expanded One', sans-serif"
-              lineHeight="1.5"
-              _hover={{ color: 'white' }}
-            >
-              Opt Out
-            </Link>
-          </HStack>
-
-          {/* Copyright Notice (Third Row) */}
-          <Text
-            fontSize="sm"
-            lineHeight="1.5"
-            fontFamily="'Special Gothic Expanded One', sans-serif"
-            display="flex"
-            alignItems="baseline"
-          >
-            <Box as="span" color="gray.500">
-              © 2025
-            </Box>
-            <Link
-              href="https://luxuryverse.com"
-              color="green.500"
-              fontSize="sm"
+              color="gray.500"
               lineHeight="1.5"
               fontFamily="'Special Gothic Expanded One', sans-serif"
-              _hover={{ color: 'white' }}
-              mx={1}
             >
-              LuxuryVerse
-            </Link>
-            <Box as="span" color="gray.500">
+              © 2025{' '}
+              <Link
+                href="https://luxuryverse.com"
+                color="green.500"
+                fontSize="sm"
+                lineHeight="1.5"
+                fontFamily="'Special Gothic Expanded One', sans-serif"
+                _hover={{ color: 'white' }}
+              >
+                LuxuryVerse
+              </Link>
               . All rights reserved.
-            </Box>
-          </Text>
+            </Text>
+            <HStack spacing={{ base: 2, md: 4 }} justify="center" align="baseline">
+              <Link
+                href="/privacy-policy"
+                color="gray.200"
+                fontSize="sm"
+                fontFamily="'Special Gothic Expanded One', sans-serif"
+                lineHeight="1.5"
+                _hover={{ color: 'white' }}
+              >
+                Privacy Policy
+              </Link>
+              <Link
+                href="/terms-conditions"
+                color="gray.200"
+                fontSize="sm"
+                fontFamily="'Special Gothic Expanded One', sans-serif"
+                lineHeight="1.5"
+                _hover={{ color: 'white' }}
+              >
+                Terms and Conditions
+              </Link>
+              <Link
+                href="/cookies"
+                color="gray.200"
+                fontSize="sm"
+                fontFamily="'Special Gothic Expanded One', sans-serif"
+                lineHeight="1.5"
+                _hover={{ color: 'white' }}
+              >
+                Cookie Policy
+              </Link>
+              <Link
+                href="/opt-out"
+                color="gray.200"
+                fontSize="sm"
+                fontFamily="'Special Gothic Expanded One', sans-serif"
+                lineHeight="1.5"
+                _hover={{ color: 'white' }}
+              >
+                Opt Out
+              </Link>
+            </HStack>
+          </HStack>
         </Flex>
       </Box>
     </Box>
