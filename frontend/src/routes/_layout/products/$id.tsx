@@ -154,25 +154,29 @@ function ProductDetails() {
 
   const fetchTopProducts = async () => {
     try {
-      const topProductsUrl = `${API_BASE_URL}/api/v1/collections/488238383399`;
+      // Use a more specific endpoint for related products if available
+      const topProductsUrl = product?.collection_id
+        ? `${API_BASE_URL}/api/v1/collections/${product.collection_id}`
+        : `${API_BASE_URL}/api/v1/collections/488238383399`; // Fallback to default collection
       console.log('Fetching:', topProductsUrl);
       const collectionData = await fetchWithRetry(topProductsUrl);
       console.log('Fetch successful for', topProductsUrl, ':', collectionData);
-
+  
       if (!collectionData || !Array.isArray(collectionData.products)) {
         console.warn('Invalid collection data:', collectionData);
         setTopProducts([]);
         return;
       }
-
+  
       const validatedTopProducts = collectionData.products
         .filter(
           (p: Product) =>
             p &&
             typeof p.id === 'string' &&
             typeof p.title === 'string' &&
-            p.id !== id &&
-            Array.isArray(p.variants)
+            p.id !== id && // Exclude the current product
+            Array.isArray(p.variants) &&
+            p.variants.some((v: Variant) => v.inventory_quantity > 0) // Ensure in-stock variants
         )
         .map((p: Product) => {
           const variants = Array.isArray(p.variants)
@@ -212,14 +216,14 @@ function ProductDetails() {
           const bDiscount = b.discount_value || 0;
           const aInventory = a.total_inventory || 0;
           const bInventory = b.total_inventory || 0;
-
+  
           if (aDiscount !== bDiscount) {
-            return bDiscount - aDiscount;
+            return bDiscount - aDiscount; // Prioritize higher discounts
           }
-          return bInventory - aInventory;
+          return bInventory - aInventory; // Then higher inventory
         })
-        .slice(0, 5);
-
+        .slice(0, 5); // Limit to 5 products
+  
       console.log('Top 5 products:', validatedTopProducts);
       setTopProducts(validatedTopProducts);
     } catch (topErr: any) {
@@ -229,7 +233,6 @@ function ProductDetails() {
       setTopProductsLoading(false);
     }
   };
-
   // Fetch product
   useEffect(() => {
     if (!id || typeof id !== 'string') {
