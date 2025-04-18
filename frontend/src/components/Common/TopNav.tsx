@@ -13,7 +13,7 @@ export const AuthContext = createContext({
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null); // e.g., { address, xUsername, xProfile }
-  const [isJoining occupa, setJoining] = useState(false);
+  const [isJoining, setJoining] = useState(false);
 
   const login = async (userData) => {
     setUser(userData);
@@ -82,7 +82,7 @@ export default function TopNav() {
           style={{
             color: 'white',
             textDecoration: 'none',
-            fontFamily: 'DM Sans, sans-serif',
+            fontFamily: "'DM Sans', sans-serif",
           }}
         >
           Home
@@ -92,7 +92,7 @@ export default function TopNav() {
           style={{
             color: 'white',
             textDecoration: 'none',
-            fontFamily: 'DM Sans, sans-serif',
+            fontFamily: "'DM Sans', sans-serif",
           }}
         >
           Roadmap
@@ -102,7 +102,7 @@ export default function TopNav() {
           style={{
             color: 'white',
             textDecoration: 'none',
-            fontFamily: 'DM Sans, sans-serif',
+            fontFamily: "'DM Sans', sans-serif",
           }}
         >
           Authenticity
@@ -112,7 +112,7 @@ export default function TopNav() {
           style={{
             color: 'white',
             textDecoration: 'none',
-            fontFamily: 'DM Sans, sans-serif',
+            fontFamily: "'DM Sans', sans-serif",
           }}
         >
           FAQ
@@ -122,7 +122,7 @@ export default function TopNav() {
           style={{
             color: 'white',
             textDecoration: 'none',
-            fontFamily: 'DM Sans, sans-serif',
+            fontFamily: "'DM Sans', sans-serif",
           }}
         >
           Contact
@@ -144,7 +144,7 @@ export default function TopNav() {
           py={2}
           fontWeight="medium"
           size="sm"
-          fontFamily="DM Sans, sans-serif"
+          fontFamily="'DM Sans', sans-serif"
         >
           {text}
         </Button>
