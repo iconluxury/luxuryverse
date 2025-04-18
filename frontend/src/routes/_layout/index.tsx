@@ -319,15 +319,15 @@ function Home() {
     // TODO: Implement waitlist logic
   };
 
-  // Logo data with local paths (assuming images are moved to public/assets/img/brand/)
+  // Logo data with local paths (assuming images are moved to public/assets/images/brand/)
   const brandLogos = [
-    { src: "/assets/img/brand/brand_img01.png", alt: "Balmain Logo" },
-    { src: "/assets/img/brand/brand_img02.png", alt: "Ferragamo Logo" },
-    { src: "/assets/img/brand/brand_img03.png", alt: "The Row Logo" },
-    { src: "/assets/img/brand/brand_img04.png", alt: "Gianvito Rossi Logo" },
-    { src: "/assets/img/brand/brand_img05.png", alt: "Roger Vivier Logo" },
-    { src: "/assets/img/brand/brand_img06.png", alt: "Etro Logo" },
-    { src: "/assets/img/brand/brand_img07.png", alt: "Moschino Logo" },
+    { src: "/assets/images/brand/brand_img01.png", alt: "Balmain Logo" },
+    { src: "/assets/images/brand/brand_img02.png", alt: "Ferragamo Logo" },
+    { src: "/assets/images/brand/brand_img03.png", alt: "The Row Logo" },
+    { src: "/assets/images/brand/brand_img04.png", alt: "Gianvito Rossi Logo" },
+    { src: "/assets/images/brand/brand_img05.png", alt: "Roger Vivier Logo" },
+    { src: "/assets/images/brand/brand_img06.png", alt: "Etro Logo" },
+    { src: "/assets/images/brand/brand_img07.png", alt: "Moschino Logo" },
   ];
 
   return (
