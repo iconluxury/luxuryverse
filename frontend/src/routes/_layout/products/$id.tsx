@@ -380,13 +380,25 @@ function ProductDetails() {
               )}
               {/* Product Details Section */}
               <VStack align="start" spacing={4}>
+                <Text as="h1" fontSize={{ base: '3xl', md: '4xl' }} fontWeight="medium" lineHeight="1.3">
+                  {product.title || 'Untitled Product'}
+                </Text>
                 <HStack spacing={2} alignItems="center">
-                  <Text fontSize="lg" color="gray.300" fontWeight="bold" lineHeight="1.5">
+                  <Text
+                    fontSize="lg"
+                    fontWeight="bold"
+                    lineHeight="1.5"
+                    style={{ color: 'var(--color-primary-hover)' }}
+                  >
                     {product.brand || 'Unknown Brand'}
                   </Text>
                   {product.discount && (
                     <>
-                      <Text fontSize="lg" color="gray.300" lineHeight="1.5">
+                      <Text
+                        fontSize="lg"
+                        lineHeight="1.5"
+                        style={{ color: 'var(--color-primary-hover)' }}
+                      >
                         |
                       </Text>
                       <Tag
@@ -395,15 +407,15 @@ function ProductDetails() {
                         fontSize="lg"
                         lineHeight="1.5"
                         minH="auto"
+                        py={0}
+                        px={3}
+                        style={{ color: 'var(--color-primary-hover)' }}
                       >
                         {product.discount}
                       </Tag>
                     </>
                   )}
                 </HStack>
-                <Text as="h1" fontSize={{ base: '3xl', md: '4xl' }} fontWeight="medium" lineHeight="1.3">
-                  {product.title || 'Untitled Product'}
-                </Text>
                 {validatedVariants && validatedVariants.length > 0 && (
                   <HStack spacing={2} flexWrap="wrap" maxW="100%" gap={2}>
                     {validatedVariants.map((variant, index) => (
