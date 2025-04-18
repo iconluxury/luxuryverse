@@ -310,7 +310,7 @@ function Home() {
         bgSize="cover"
         bgPosition="center"
         py={{ base: 10, md: 22 }}
-        px={{ base: 4, md: 8 }}
+        px={{ base: '1rem', md: '1rem' }}
         position="relative"
         _before={{
           content: '""',
