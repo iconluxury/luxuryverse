@@ -172,15 +172,6 @@ function LatestDropsPage() {
                       transition="all 0.3s"
                       _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
                     >
-                      <Box position="relative">
-                        <Image
-                          src={drop.image || 'https://placehold.co/400x400'}
-                          alt={drop.title || 'Drop Image'}
-                          style={{ aspectRatio: '4 / 3', objectFit: 'cover' }}
-                          w="full"
-                          loading="lazy"
-                        />
-                      </Box>
                       <Box mt={4}>
                         <Text
                           fontWeight="bold"
