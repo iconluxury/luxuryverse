@@ -117,7 +117,7 @@ function LatestDropsPage() {
   {/* Upcoming Drops Section */}
   {dropsData.upcoming.length > 0 && (
     <Box mb={16}>
-     <VStack spacing={4} textAlign="center">
+    <VStack spacing={8} textAlign="center">
         <Heading
           fontSize={{ base: "2xl", md: "3xl" }}
           color="white"
