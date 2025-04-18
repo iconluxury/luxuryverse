@@ -309,6 +309,8 @@ function Home() {
         bgImage="url('/images/hero-bg.jpg')"
         bgSize="cover"
         bgPosition="center"
+        py={{ base: 10, md: 22 }}
+        px={{ base: 4, md: 8 }}
         position="relative"
         _before={{
           content: '""',
