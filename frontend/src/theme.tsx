@@ -17,7 +17,7 @@ const theme = extendTheme({
       50: "#E6E6E6", // Off-white
       100: "#D4D4D4",
       200: "#B2B2B2",
-      300: "#58fb6cd9", // Green for body text
+      300: "#c2a0e5d9", // Light purple for body text
       400: "#7A8A94",
       500: "#5C6A74",
       600: "#465056",
@@ -25,24 +25,24 @@ const theme = extendTheme({
       800: "#2E3A3F",
       900: "#1A2526", // Dark blue-gray
     },
+    purple: {
+      300: "#d4b8f0d9",
+      400: "#cbb0e8d9",
+      500: "#c2a0e5d9", // Light purple
+      600: "#a082c4d9",
+      700: "#8569a3d9",
+      800: "#a058fbd9", // Split complement (purple)
+    },
     green: {
       300: "#7bff8cd9",
       400: "#6afe7dd9",
-      500: "#58fb6cd9", // Green
-      600: "#3cd950d9", // Darker green
+      500: "#58fb6cd9", // Green for hover
+      600: "#3cd950d9",
       700: "#2bb33cd9",
-    },
-    purple: {
-      500: "#a058fbd9", // Split complement (purple)
     },
     red: {
       500: "#fb58a0d9", // Split complement (red)
     },
-    blue: {
-      500: "#00B7EB", // Neon blue for glitch
-      600: "#009BC7",
-    },
-    white: "#FFFFFF",
     black: {
       900: "#0A0A0A", // Deep black
     },
@@ -120,7 +120,7 @@ const theme = extendTheme({
       baseStyle: {
         fontFamily: "'Special Gothic Expanded One', sans-serif",
         fontWeight: "normal",
-        color: "green.500",
+        color: "purple.500",
         lineHeight: "short",
       },
       sizes: {
@@ -141,21 +141,21 @@ const theme = extendTheme({
         logo: {
           fontFamily: "'Special Gothic Expanded One', sans-serif",
           fontWeight: "normal",
-          color: "green.500",
+          color: "purple.500",
           letterSpacing: "2px",
           textTransform: "uppercase",
         },
         glitch: {
           fontFamily: "'Rubik Glitch', system-ui",
           fontWeight: "normal",
-          color: "green.500",
+          color: "purple.500",
         },
       },
     },
     Text: {
       baseStyle: {
         fontFamily: "'DM Sans', sans-serif",
-        color: "green.500",
+        color: "purple.500",
         lineHeight: "base",
       },
     },
@@ -170,33 +170,33 @@ const theme = extendTheme({
       },
       variants: {
         solid: {
-          bg: "green.500",
+          bg: "purple.500",
           color: "black.900",
           _hover: {
-            bg: "green.600",
+            bg: "green.500",
             _disabled: {
-              bg: "green.500",
+              bg: "purple.500",
             },
           },
           _active: {
-            bg: "green.700",
+            bg: "purple.700",
           },
         },
         outline: {
           border: "2px solid",
-          borderColor: "green.500",
-          color: "green.500",
+          borderColor: "purple.500",
+          color: "purple.500",
           bg: "transparent",
           _hover: {
             bg: "green.500",
             color: "black.900",
           },
           _active: {
-            bg: "green.600",
+            bg: "purple.600",
           },
         },
         ghost: {
-          color: "green.500",
+          color: "purple.500",
           bg: "transparent",
           _hover: {
             bg: "gray.800",
@@ -245,11 +245,11 @@ const theme = extendTheme({
             border: "1px solid",
             borderColor: "gray.600",
             _hover: {
-              borderColor: "gray.500",
+              borderColor: "green.500",
             },
             _focus: {
-              borderColor: "green.500",
-              boxShadow: "0 0 0 1px #58fb6cd9",
+              borderColor: "purple.500",
+              boxShadow: "0 0 0 1px #c2a0e5d9",
             },
           },
         },
@@ -275,11 +275,11 @@ const theme = extendTheme({
             boxShadow: "lg",
           },
           title: {
-            color: "green.500",
+            color: "purple.500",
             fontFamily: "'Special Gothic Expanded One', sans-serif",
           },
           description: {
-            color: "green.500",
+            color: "purple.500",
             fontFamily: "'DM Sans', sans-serif",
           },
         },
@@ -288,9 +288,9 @@ const theme = extendTheme({
     Link: {
       baseStyle: {
         fontFamily: "'DM Sans', sans-serif",
-        color: "green.500",
+        color: "purple.500",
         _hover: {
-          color: "green.400",
+          color: "green.500",
           textDecoration: "underline",
         },
       },
@@ -300,7 +300,7 @@ const theme = extendTheme({
     global: {
       "html, body": {
         bg: "black.900",
-        color: "green.500",
+        color: "purple.500",
         fontFamily: "'DM Sans', sans-serif",
         lineHeight: "base",
         scrollBehavior: "smooth",
@@ -309,10 +309,10 @@ const theme = extendTheme({
         boxSizing: "border-box",
       },
       "a": {
-        color: "green.500",
+        color: "purple.500",
         textDecoration: "none",
         _hover: {
-          color: "green.400",
+          color: "green.500",
         },
       },
       "button": {

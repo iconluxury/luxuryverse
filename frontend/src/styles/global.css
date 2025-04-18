@@ -5,12 +5,10 @@
 :root {
   /* Colors */
   --color-background: #0A0A0A; /* Deep black */
-  --color-text: #58fb6cd9; /* Green */
-  --color-muted: #58fb6cd9; /* Green for body text */
-  --color-primary: #58fb6cd9; /* Green */
-  --color-primary-hover: #3cd950d9; /* Darker green */
-  --color-accent: #FFFFFF; /* White for glitch top */
-  --color-accent-blue: #00B7EB; /* Neon blue for glitch bottom */
+  --color-text: #c2a0e5d9; /* Light purple */
+  --color-muted: #c2a0e5d9; /* Light purple for body text */
+  --color-primary: #c2a0e5d9; /* Light purple */
+  --color-primary-hover: #58fb6cd9; /* Green */
   --color-secondary: #1A2526; /* Dark blue-gray */
   --color-border: #3A4A4F; /* Medium blue-gray */
 
@@ -96,7 +94,7 @@ h2 { font-size: var(--font-size-7xl); }
 h3 { font-size: var(--font-size-6xl); }
 h4 { font-size: var(--font-size-5xl); }
 h5 { font-size: var(--font-size-4xl); }
-h6 { font-size: var(--font-size-2xl); }
+h6 { font-size: var(--font-size-3xl); }
 
 p {
   font-size: var(--font-size-base);
@@ -152,7 +150,7 @@ ul, ol {
 
 ::-webkit-scrollbar-thumb {
   border-radius: 0.5rem;
-  background: linear-gradient(0deg, var(--color-primary) 0%, var(--color-accent) 100%);
+  background: linear-gradient(0deg, var(--color-primary) 0%, #FFFFFF 100%);
 }
 
 /* Selection */
@@ -284,11 +282,11 @@ input::placeholder, textarea::placeholder {
 
 /* Color cycling animation for glitch effect */
 @keyframes glitch-color {
-  0%, 20% { color: #58fb6cd9; } /* Green */
+  0%, 20% { color: #c2a0e5d9; } /* Light purple */
   21%, 25% { color: #a058fbd9; } /* Purple (split complement) */
-  26%, 45% { color: #58fb6cd9; } /* Green */
+  26%, 45% { color: #c2a0e5d9; } /* Light purple */
   46%, 50% { color: #fb58a0d9; } /* Red (split complement) */
-  51%, 100% { color: #58fb6cd9; } /* Green */
+  51%, 100% { color: #c2a0e5d9; } /* Light purple */
 }
 
 /* Random-like movement for Exclusive */
