@@ -415,6 +415,7 @@ function ProductDetails() {
       borderRadius="full"
       fontSize="lg"
       lineHeight="1.5"
+      textTransform="uppercase"
       px={3}
       py={0}
       mt={0}
