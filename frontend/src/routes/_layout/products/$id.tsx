@@ -232,6 +232,13 @@ function ProductDetails() {
       setTopProductsLoading(false);
     }
   };
+  const cleanTitle = useMemo(() => {
+    if (product?.title && product?.brand) {
+      const brandRegex = new RegExp(`\\b${product.brand}\\b`, 'i');
+      return product.title.replace(brandRegex, '').trim();
+    }
+    return product?.title || 'Untitled Product';
+  }, [product?.title, product?.brand]);
 
   useEffect(() => {
     if (!id || typeof id !== 'string') {
@@ -313,32 +320,33 @@ function ProductDetails() {
               {/* Image Section */}
               {validatedImages ? (
                 <Box position="relative" display="flex" flexDirection="column" alignItems="center">
-                  <Image
-                    src={validatedImages[currentImage] || 'https://placehold.co/400x500'}
-                    alt={`${product.title || 'Product'} image ${currentImage + 1}`}
-                    w="100%"
-                    maxW="400px"
-                    h="500px"
-                    objectFit="contain"
-                    mx="auto"
-                    onError={(e) => (e.currentTarget.src = 'https://placehold.co/400x500')}
-                  />
+                 <Image
+  src={validatedImages[currentImage] || 'https://placehold.co/450x550'}
+  alt={`${cleanTitle} image ${currentImage + 1}`}
+  w="100%"
+  maxW="450px"
+  h="550px"
+  objectFit="contain"
+  mx="auto"
+  onError={(e) => (e.currentTarget.src = 'https://placehold.co/450x550')}
+/>
+
                   {validatedImages.length > 1 && (
                     <HStack mt={4} justify="center" spacing={2}>
                       {validatedImages.map((img, index) => (
-                        <Image
-                          key={index}
-                          src={img}
-                          alt={`Thumbnail ${index + 1}`}
-                          w="80px"
-                          h="100px"
-                          objectFit="contain"
-                          cursor="pointer"
-                          borderRadius="md"
-                          border={index === currentImage ? '2px solid green.500' : '2px solid transparent'}
-                          onClick={() => setCurrentImage(index)}
-                          onError={(e) => (e.currentTarget.src = 'https://placehold.co/80x100')}
-                        />
+                      <Image
+                        key={index}
+                        src={img}
+                        alt={`Thumbnail ${index + 1}`}
+                        w="90px"
+                        h="110px"
+                        objectFit="contain"
+                        cursor="pointer"
+                        borderRadius="md"
+                        border={index === currentImage ? '2px solid green.500' : '2px solid transparent'}
+                        onClick={() => setCurrentImage(index)}
+                        onError={(e) => (e.currentTarget.src = 'https://placehold.co/90x110')}
+                      />
                       ))}
                     </HStack>
                   )}
@@ -380,42 +388,38 @@ function ProductDetails() {
               )}
               {/* Product Details Section */}
               <VStack align="start" spacing={4}>
-                <Text as="h1" fontSize={{ base: '3xl', md: '4xl' }} fontWeight="medium" lineHeight="1.3">
-                  {product.title || 'Untitled Product'}
-                </Text>
+              <Text as="h1" fontSize={{ base: '3xl', md: '4xl' }} fontWeight="medium" lineHeight="1.3">
+                {cleanTitle}
+              </Text>
+               
                 <HStack spacing={2} alignItems="center">
-                  <Text
-                    fontSize="lg"
-                    fontWeight="bold"
-                    lineHeight="1.5"
-                    color="purple.500"
-                  >
-                    {product.brand || 'Unknown Brand'}
-                  </Text>
-                  {product.discount && (
-                    <>
-                      <Text
-                        fontSize="lg"
-                        lineHeight="1.5"
-                        color="purple.500"
-                      >
-                        |
-                      </Text>
-                      <Tag
-                        size="md"
-                        variant="solid"
-                        colorScheme="green"
-                        borderRadius="full"
-                        fontSize="lg"
-                        lineHeight="1.5"
-                        px={3}
-                        py={0}
-                      >
-                        {product.discount}
-                      </Tag>
-                    </>
-                  )}
-                </HStack>
+  <Text fontSize="lg" fontWeight="bold" lineHeight="1.5" color="purple.500">
+    {product.brand || 'Unknown Brand'}
+  </Text>
+  {product.discount && (
+    <>
+      <Text fontSize="lg" lineHeight="1.5" color="purple.500">
+        |
+      </Text>
+      <Tag
+        size="md"
+        variant="solid"
+        colorScheme="green"
+        borderRadius="full"
+        fontSize="lg"
+        lineHeight="1.5"
+        px={3}
+        py={0}
+        alignSelf="center"
+      >
+        {product.discount}
+      </Tag>
+    </>
+  )}
+</HStack>
+
+
+
                 {validatedVariants && validatedVariants.length > 0 && (
                   <HStack spacing={2} flexWrap="wrap" maxW="100%" gap={2}>
                     {validatedVariants.map((variant, index) => (
@@ -476,6 +480,7 @@ function ProductDetails() {
                 )}
               </VStack>
             </SimpleGrid>
+            <Divider my={8} borderColor="gray.600" />
             <Box mt={8}>
               <Text as="h2" fontSize="xl" mb={4}>
                 Related Products
