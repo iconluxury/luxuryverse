@@ -43,10 +43,10 @@ function LatestDropsPage() {
       const futureDrop = {
         id: 'future-1',
         title: 'Upcoming Drop',
-        description: 'Get ready for our next exclusive drop!',
+        description: '2025-05-01, 10:00 AM until sold out.',
         image: 'https://placehold.co/400x400?text=Locked',
         isLocked: true,
-        unlockDate: '2025-05-01', // Fixed future date
+        unlockDate: '2025-05-01',
       };
 
       // Sort to put locked drop first
@@ -115,7 +115,7 @@ function LatestDropsPage() {
               >
                 <Box
                   role="link"
-                  borderWidth="1px"
+                  borderWidth={drop.isLocked ? 0 : '1px'}
                   borderColor="gray.700"
                   borderRadius="xl"
                   overflow="hidden"
