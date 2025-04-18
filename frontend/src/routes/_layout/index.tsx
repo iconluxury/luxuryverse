@@ -14,7 +14,7 @@ import {
   AccordionIcon,
 } from "@chakra-ui/react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef,useState } from "react";
 import { useAppKit } from "@reown/appkit/react";
 import axios from "axios";
 import Footer from "@/components/Common/Footer";
