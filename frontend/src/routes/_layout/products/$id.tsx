@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { Flex, Spinner, Box, Text, Tag, HStack, Divider, IconButton, Skeleton, SkeletonText } from '@chakra-ui/react';
+import { Flex, Spinner, Box, Text, Tag, HStack, Divider, IconButton, Skeleton, SkeletonText, SimpleGrid, VStack } from '@chakra-ui/react';
 import { useState, useEffect, useMemo } from 'react';
 import { Link } from '@tanstack/react-router';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -107,7 +107,7 @@ function ProductDetails() {
         id: productData.id || '',
         title: productData.title || 'Untitled Product',
         description: productData.description || '',
-        brand: productData.brand || '',
+        brand: productData.brand || 'Unknown Brand',
         thumbnail: productData.thumbnail || 'https://placehold.co/150x150',
         images: Array.isArray(productData.images) ? productData.images : undefined,
         variants: Array.isArray(productData.variants)
@@ -196,7 +196,7 @@ function ProductDetails() {
             id: p.id || '',
             title: p.title || 'Untitled Product',
             description: p.description || '',
-            brand: p.brand || '',
+            brand: p.brand || 'Unknown Brand',
             thumbnail: p.thumbnail || 'https://placehold.co/150x150',
             images: Array.isArray(p.images) ? p.images : undefined,
             variants: variants,
@@ -252,6 +252,18 @@ function ProductDetails() {
   const validatedImages = useMemo(() => (Array.isArray(product?.images) ? product.images : undefined), [product?.images]);
   const validatedVariants = useMemo(() => (Array.isArray(product?.variants) ? product.variants : undefined), [product?.variants]);
 
+  // Parse features from description or use placeholder
+  const features = useMemo(() => {
+    if (product?.description) {
+      const featureList = product.description
+        .split('\n')
+        .filter((line) => line.trim().startsWith('-') || line.trim().startsWith('*'))
+        .map((line) => line.trim().replace(/^[-*]\s*/, ''));
+      return featureList.length > 0 ? featureList : ['Premium materials', 'Designed for comfort', 'Exclusive styling'];
+    }
+    return ['Premium materials', 'Designed for comfort', 'Exclusive styling'];
+  }, [product?.description]);
+
   if (productLoading) {
     return (
       <Flex justify="center" align="center" minH="100vh" bg="transparent">
@@ -297,122 +309,145 @@ function ProductDetails() {
       <Box bg="transparent" w="100%">
         <Box py={8} px={{ base: 4, md: 8 }}>
           <Box maxW="1200px" mx="auto" w="100%">
-            {validatedImages ? (
-              <Box position="relative" mb={8}>
-                <Image
-                  src={validatedImages[currentImage] || 'https://placehold.co/300x400'}
-                  alt={`${product.title || 'Product'} image ${currentImage + 1}`}
-                  w="100%"
-                  maxW="300px"
-                  h="400px"
-                  objectFit="contain"
-                  mx="auto"
-                  onError={(e) => (e.currentTarget.src = 'https://placehold.co/300x400')}
-                />
-                {validatedImages.length > 1 && (
-                  <Flex justify="center" mt={4} wrap="wrap" gap={2}>
-                    {validatedImages.map((img, index) => (
-                      <Image
-                        key={index}
-                        src={img}
-                        alt={`Thumbnail ${index + 1}`}
-                        w="60px"
-                        h="80px"
-                        objectFit="contain"
-                        cursor="pointer"
-                        opacity={index === currentImage ? 1 : 0.6}
-                        onClick={() => setCurrentImage(index)}
-                        onError={(e) => (e.currentTarget.src = 'https://placehold.co/60x80')}
+            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={8}>
+              {/* Image Section */}
+              {validatedImages ? (
+                <Box position="relative">
+                  <Image
+                    src={validatedImages[currentImage] || 'https://placehold.co/400x500'}
+                    alt={`${product.title || 'Product'} image ${currentImage + 1}`}
+                    w="100%"
+                    maxW="400px"
+                    h="500px"
+                    objectFit="contain"
+                    mx="auto"
+                    onError={(e) => (e.currentTarget.src = 'https://placehold.co/400x500')}
+                  />
+                  {validatedImages.length > 1 && (
+                    <HStack mt={4} overflowX="auto" spacing={2} pb={2} css={{ '&::-webkit-scrollbar': { height: '8px' }, '&::-webkit-scrollbar-thumb': { background: '#4A5568', borderRadius: '4px' } }}>
+                      {validatedImages.map((img, index) => (
+                        <Image
+                          key={index}
+                          src={img}
+                          alt={`Thumbnail ${index + 1}`}
+                          w="80px"
+                          h="100px"
+                          objectFit="contain"
+                          cursor="pointer"
+                          borderRadius="md"
+                          border={index === currentImage ? '2px solid #ECC94B' : '2px solid transparent'}
+                          onClick={() => setCurrentImage(index)}
+                          onError={(e) => (e.currentTarget.src = 'https://placehold.co/80x100')}
+                        />
+                      ))}
+                    </HStack>
+                  )}
+                  {validatedImages.length > 1 && (
+                    <>
+                      <IconButton
+                        aria-label="Previous image"
+                        icon={<ChevronLeftIcon boxSize={6} />}
+                        position="absolute"
+                        left={{ base: '4px', md: '8px' }}
+                        top="50%"
+                        transform="translateY(-50%)"
+                        bg="blackAlpha.600"
+                        color="white"
+                        _hover={{ bg: 'blackAlpha.800' }}
+                        onClick={() => setCurrentImage((prev) => (prev - 1 + validatedImages.length) % validatedImages.length)}
                       />
-                    ))}
-                  </Flex>
-                )}
-                {validatedImages.length > 1 && (
-                  <>
-                    <IconButton
-                      aria-label="Previous image"
-                      icon={<ChevronLeftIcon boxSize={6} />}
-                      position="absolute"
-                      left={{ base: '4px', md: '8px' }}
-                      top="50%"
-                      transform="translateY(-50%)"
-                      bg="blackAlpha.600"
-                      color="white"
-                      _hover={{ bg: 'blackAlpha.800' }}
-                      onClick={() => setCurrentImage((prev) => (prev - 1 + validatedImages.length) % validatedImages.length)}
-                    />
-                    <IconButton
-                      aria-label="Next image"
-                      icon={<ChevronRightIcon boxSize={6} />}
-                      position="absolute"
-                      right={{ base: '4px', md: '8px' }}
-                      top="50%"
-                      transform="translateY(-50%)"
-                      bg="blackAlpha.600"
-                      color="white"
-                      _hover={{ bg: 'blackAlpha.800' }}
-                      onClick={() => setCurrentImage((prev) => (prev + 1) % validatedImages.length)}
-                    />
-                  </>
-                )}
-              </Box>
-            ) : (
-              <Skeleton w="100%" maxW="300px" h="400px" mx="auto" mb={8} />
-            )}
-            {product.discount && (
-              <Tag colorScheme="green" mb={4} px={3} py={1} borderRadius="full">
-                Exclusive Offer: {product.discount}
-              </Tag>
-            )}
-            <Text as="h1" fontSize={{ base: '2xl', md: '3xl' }} mb={6} fontWeight="medium" lineHeight="1.3">
-              {product.title || 'Untitled Product'}
-            </Text>
-            <Flex align="center" mb={4} direction={{ base: 'column', md: 'row' }} gap={4}>
-              <Text fontSize={{ base: '3xl', md: '4xl' }} fontWeight="bold" color="yellow.400">
-                {product.sale_price || 'N/A'}
-              </Text>
-              {product.full_price && (
-                <Text fontSize="lg" color="gray.500">
-                  Retail: {product.full_price}
-                </Text>
+                      <IconButton
+                        aria-label="Next image"
+                        icon={<ChevronRightIcon boxSize={6} />}
+                        position="absolute"
+                        right={{ base: '4px', md: '8px' }}
+                        top="50%"
+                        transform="translateY(-50%)"
+                        bg="blackAlpha.600"
+                        color="white"
+                        _hover={{ bg: 'blackAlpha.800' }}
+                        onClick={() => setCurrentImage((prev) => (prev + 1) % validatedImages.length)}
+                      />
+                    </>
+                  )}
+                </Box>
+              ) : (
+                <Skeleton w="100%" maxW="400px" h="500px" mx="auto" />
               )}
-            </Flex>
-            {product.description ? (
-              <Text
-                fontSize="lg"
-                color="gray.700"
-                mb={4}
-                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(product.description) }}
-              />
-            ) : (
-              <Text fontSize="lg" color="gray.700" mb={4}>
-                No description available
-              </Text>
-            )}
-            {validatedVariants && validatedVariants.length > 0 && (
-              <Box mt={8}>
-                <Text as="h2" fontSize="xl" mb={4}>
-                  Variants
+              {/* Product Details Section */}
+              <VStack align="start" spacing={4}>
+                <Text as="h1" fontSize={{ base: '2xl', md: '3xl' }} fontWeight="medium" lineHeight="1.3">
+                  {product.title || 'Untitled Product'}
                 </Text>
-                <HStack spacing={2} flexWrap="wrap" maxW="100%" gap={2}>
-                  {validatedVariants.map((variant, index) => (
-                    <Box
-                      key={variant.id || `variant-${index}`}
-                      bg={variant.inventory_quantity > 0 ? 'gray.700' : 'red.900'}
-                      color="white"
-                      px={3}
-                      py={1}
-                      borderRadius="full"
-                      mb={2}
-                      fontSize="md"
-                    >
-                      Size {variant.size} - {variant.price}{' '}
-                      {variant.inventory_quantity > 0 ? `(${variant.inventory_quantity} in stock)` : '(Out of stock)'}
-                    </Box>
-                  ))}
-                </HStack>
-              </Box>
-            )}
+                <Text fontSize="lg" color="gray.300" fontWeight="bold">
+                  {product.brand || 'Unknown Brand'}
+                </Text>
+                {product.discount && (
+                  <Tag colorScheme="green" px={3} py={1} borderRadius="full">
+                    {product.discount}
+                  </Tag>
+                )}
+                <VStack align="start" spacing={2}>
+                  {product.full_price && (
+                    <Text fontSize={{ base: '2xl', md: '3xl' }} color="gray.500">
+                      MSRP: {product.full_price}
+                    </Text>
+                  )}
+                  <Text fontSize={{ base: '4xl', md: '5xl' }} fontWeight="bold" color="yellow.400">
+                    {product.sale_price || 'N/A'}
+                  </Text>
+                </VStack>
+                {product.description ? (
+                  <Text
+                    fontSize="lg"
+                    color="gray.700"
+                    dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(product.description) }}
+                  />
+                ) : (
+                  <Text fontSize="lg" color="gray.700">
+                    No description available
+                  </Text>
+                )}
+                {features.length > 0 && (
+                  <Box>
+                    <Text as="h2" fontSize="xl" mb={2}>
+                      Features
+                    </Text>
+                    <VStack align="start" spacing={1}>
+                      {features.map((feature, index) => (
+                        <Text key={index} fontSize="md" color="gray.300">
+                          • {feature}
+                        </Text>
+                      ))}
+                    </VStack>
+                  </Box>
+                )}
+                {validatedVariants && validatedVariants.length > 0 && (
+                  <Box>
+                    <Text as="h2" fontSize="xl" mb={4}>
+                      Variants
+                    </Text>
+                    <HStack spacing={2} flexWrap="wrap" maxW="100%" gap={2}>
+                      {validatedVariants.map((variant, index) => (
+                        <Box
+                          key={variant.id || `variant-${index}`}
+                          bg={variant.inventory_quantity > 0 ? 'gray.700' : 'red.900'}
+                          color="white"
+                          px={3}
+                          py={1}
+                          borderRadius="full"
+                          mb={2}
+                          fontSize="md"
+                        >
+                          Size {variant.size} - {variant.price}{' '}
+                          {variant.inventory_quantity > 0 ? `(${variant.inventory_quantity} in stock)` : '(Out of stock)'}
+                        </Box>
+                      ))}
+                    </HStack>
+                  </Box>
+                )}
+              </VStack>
+            </SimpleGrid>
             <Box mt={8}>
               <Text as="h2" fontSize="xl" mb={4}>
                 Related Products
