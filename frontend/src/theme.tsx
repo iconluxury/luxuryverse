@@ -60,6 +60,7 @@ const theme = extendTheme({
     "5xl": "3rem",
     "6xl": "3.75rem",
     "7xl": "4.5rem",
+    "8xl": "5.5rem", // Added for hero text
   },
   fontWeights: {
     light: 300,
@@ -117,14 +118,18 @@ const theme = extendTheme({
         lineHeight: "short",
       },
       sizes: {
-        "4xl": { fontSize: "6xl" },
-        "3xl": { fontSize: "5xl" },
-        "2xl": { fontSize: "4xl" },
-        xl: { fontSize: "3xl" },
-        lg: { fontSize: "2xl" },
-        md: { fontSize: "xl" },
-        sm: { fontSize: "lg" },
-        xs: { fontSize: "md" },
+        "8xl": { fontSize: "8xl" },
+        "7xl": { fontSize: "7xl" },
+        "6xl": { fontSize: "6xl" },
+        "5xl": { fontSize: "5xl" },
+        "4xl": { fontSize: "4xl" },
+        "3xl": { fontSize: "3xl" },
+        "2xl": { fontSize: "2xl" },
+        xl: { fontSize: "xl" },
+        lg: { fontSize: "lg" },
+        md: { fontSize: "md" },
+        sm: { fontSize: "sm" },
+        xs: { fontSize: "xs" },
       },
       variants: {
         logo: {
