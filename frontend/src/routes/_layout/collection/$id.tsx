@@ -1,12 +1,12 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { Flex, Spinner, Box, Text, SimpleGrid, VStack, Heading, Skeleton, SkeletonText } from '@chakra-ui/react';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from '@tanstack/react-router';
 import { ErrorBoundary } from 'react-error-boundary';
 import Footer from '../../../components/Common/Footer';
 import { Image } from '@chakra-ui/react';
 
-// Interfaces (reused from your code, extended for collection)
+// Interfaces
 interface Variant {
   id: string;
   title: string;
@@ -39,14 +39,14 @@ interface Collection {
   products: Product[];
 }
 
-// ErrorFallback component (reused)
+// ErrorFallback component
 function ErrorFallback({ error }: { error: Error }) {
   console.error('ErrorBoundary caught (suppressed):', error, error.stack);
   return <Box />;
 }
 
 // Define the route
-export const Route = createFileRoute('/_layout/collection/$id')({
+export const Route = createFileRoute('/_layout/collections/$id')({
   component: CollectionDetails,
 });
 
@@ -58,7 +58,7 @@ function CollectionDetails() {
   const API_BASE_URL = 'https://iconluxury.shop';
   const { id } = Route.useParams();
 
-  // Fetch with retry (reused from your code)
+  // Fetch with retry
   const fetchWithRetry = async (url: string, retryCount = 6) => {
     for (let attempt = 1; attempt <= retryCount; attempt++) {
       try {
@@ -139,7 +139,7 @@ function CollectionDetails() {
               title: p.title || 'Untitled Product',
               description: p.description || '',
               brand: p.brand || 'Unknown Brand',
-              thumbnail: p.thumbnail || 'https://placehold.co/150x150',
+              thumbnail: p.thumbnail || 'https://placehold.co/150x200',
               images: Array.isArray(p.images) ? p.images : undefined,
               variants: variants,
               full_price: p.full_price || '',
@@ -188,17 +188,17 @@ function CollectionDetails() {
   // Loading state
   if (loading) {
     return (
-      <Box maxW="1200px" mx="auto" py={8} px={{ base: 4, md: 8 }}>
+      <Box maxW="1200px" mx="auto" py={8} px={{ base: 4, md: 8 }} bg="gray.800">
         <VStack spacing={4}>
-          <Skeleton height="40px" width="300px" />
-          <SkeletonText noOfLines={2} width="600px" />
+          <Skeleton height="40px" width="300px" bg="gray.700" />
+          <SkeletonText noOfLines={2} width="600px" bg="gray.700" />
           <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing={6} w="100%">
             {Array(4)
               .fill(0)
               .map((_, index) => (
                 <Box key={index}>
-                  <Skeleton height="200px" />
-                  <SkeletonText mt={4} noOfLines={3} />
+                  <Skeleton height="200px" bg="gray.700" />
+                  <SkeletonText mt={4} noOfLines={3} bg="gray.700" />
                 </Box>
               ))}
           </SimpleGrid>
@@ -210,7 +210,7 @@ function CollectionDetails() {
   // Error or no collection
   if (error || !collection) {
     return (
-      <Box textAlign="center" py={16} color="gray.700" bg="transparent" w="100%">
+      <Box textAlign="center" py={16} color="gray.300" bg="transparent" w="100%">
         <Text fontSize="lg" mb={4}>
           {error || `Collection not found for ID: ${id}`}
         </Text>
@@ -227,14 +227,14 @@ function CollectionDetails() {
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
       <Box bg="transparent" w="100%">
-        <Box py={8} px={{ base: 4, md: 8 }} maxW="1200px" mx="auto">
+        <Box py={8} px={{ base: 4, md: 8 }} maxW="1200px" mx="auto" bg="gray.800" borderRadius="lg">
           <VStack spacing={6} align="start">
             {/* Collection Header */}
-            <Heading as="h1" size="xl" color="gray.800">
+            <Heading as="h1" size="xl" color="white">
               {collection.title}
             </Heading>
             {collection.description && (
-              <Text fontSize="md" color="gray.600">
+              <Text fontSize="md" color="gray.300">
                 {collection.description}
               </Text>
             )}
@@ -246,10 +246,11 @@ function CollectionDetails() {
                   <Link key={product.id} to={`/products/${product.id}`}>
                     <Box
                       borderWidth="1px"
+                      borderColor="gray.600"
                       borderRadius="lg"
                       overflow="hidden"
-                      bg="white"
-                      _hover={{ shadow: 'md', transform: 'translateY(-4px)' }}
+                      bg="gray.700"
+                      _hover={{ shadow: 'md', transform: 'translateY(-4px)', borderColor: 'gray.500' }}
                       transition="all 0.2s"
                     >
                       <Image
@@ -258,25 +259,26 @@ function CollectionDetails() {
                         w="100%"
                         h="200px"
                         objectFit="cover"
-                        onError={(e) => (e.currentTarget.src = 'https://placehold.co/150x150')}
+                        aspectRatio="3/4"
+                        onError={(e) => (e.currentTarget.src = 'https://placehold.co/150x200')}
                       />
                       <Box p={4}>
-                        <Text fontWeight="bold" fontSize="md" noOfLines={1}>
+                        <Text fontWeight="bold" fontSize="md" color="white" noOfLines={1}>
                           {product.title}
                         </Text>
-                        <Text fontSize="sm" color="gray.600" noOfLines={2}>
+                        <Text fontSize="sm" color="gray.300" noOfLines={1} mt={1}>
                           {product.brand}
                         </Text>
                         <Flex mt={2} justify="space-between" align="center">
-                          <Text fontSize="sm" color="gray.500" as={product.discount ? 's' : 'span'}>
+                          <Text fontSize="sm" color="gray.400" as={product.discount ? 's' : 'span'}>
                             {product.full_price}
                           </Text>
-                          <Text fontWeight="bold" color="var(--color-primary-hover)">
+                          <Text fontWeight="bold" fontSize="md" color="var(--color-primary-hover)">
                             {product.sale_price}
                           </Text>
                         </Flex>
                         {product.discount && (
-                          <Text fontSize="xs" color="red.500" mt={1}>
+                          <Text fontSize="xs" color="red.400" mt={1}>
                             {product.discount}
                           </Text>
                         )}
@@ -286,7 +288,7 @@ function CollectionDetails() {
                 ))}
               </SimpleGrid>
             ) : (
-              <Text fontSize="md" color="gray.600">
+              <Text fontSize="md" color="gray.300">
                 No products found in this collection.
               </Text>
             )}
