@@ -400,7 +400,6 @@ function Home() {
         px={{ base: 4, md: 8 }}
         position="relative"
         width="100%"
-        minH={{ base: "70vh", lg: "90vh" }}
         display="flex"
         justifyContent="center"
         pt={{ base: 4, md: 6 }}
