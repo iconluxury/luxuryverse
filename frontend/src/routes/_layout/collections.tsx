@@ -126,6 +126,9 @@ function LatestDropsPage() {
         </Heading>
         <Text fontSize="lg" color="white" mt={12}>
           2025-05-01, 10:00 AM
+          <Text as="span" color="gray.400">
+          - until sold out.
+          </Text>
           <br />
           <ChakraLink
             as="span"
@@ -138,6 +141,8 @@ function LatestDropsPage() {
           >
         NOTIFY
           </ChakraLink>
+
+   
         </Text>
       </VStack>
     </Box>
