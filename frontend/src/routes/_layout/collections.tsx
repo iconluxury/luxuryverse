@@ -140,7 +140,7 @@ function LatestDropsPage() {
             _hover={{ color: "green.400" }}
             onClick={() => console.log("Notify clicked - no action implemented")}
           >
-            notify
+        NOTIFY
           </ChakraLink>
         </Text>
       </VStack>
