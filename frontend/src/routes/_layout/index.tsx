@@ -179,9 +179,9 @@ function Home() {
             <Button
               size="lg"
               variant="solid"
-              bg="gold.500"
+              bg="cyan.500"
               color="black.900"
-              _hover={{ bg: "gold.600" }}
+              _hover={{ bg: "cyan.600" }}
               onClick={handleJoinWaitlist}
               fontSize="xl"
               py={8}
@@ -235,9 +235,9 @@ function Home() {
             flex="1"
             align="start"
             transition="all 0.3s"
-            _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "gold.500" }}
+            _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "cyan.500" }}
           >
-            <Heading as="h3" size="lg" mb={4} color="gold.500">
+            <Heading as="h3" size="lg" mb={4} color="cyan.500">
               Luxury Brands
             </Heading>
             <Text color="gray.300">
@@ -254,9 +254,9 @@ function Home() {
             flex="1"
             align="start"
             transition="all 0.3s"
-            _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "gold.500" }}
+            _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "cyan.500" }}
           >
-            <Heading as="h3" size="lg" mb={4} color="gold.500">
+            <Heading as="h3" size="lg" mb={4} color="cyan.500">
               Exclusive Drops
             </Heading>
             <Text color="gray.300">
@@ -274,9 +274,9 @@ function Home() {
             flex="1"
             align="start"
             transition="all 0.3s"
-            _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "gold.500" }}
+            _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "cyan.500" }}
           >
-            <Heading as="h3" size="lg" mb={4} color="gold.500">
+            <Heading as="h3" size="lg" mb={4} color="cyan.500">
               Authentic Goods
             </Heading>
             <Text color="gray.300">
@@ -299,9 +299,9 @@ function Home() {
           mx="auto"
           spacing={6}
           transition="all 0.3s"
-          _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "gold.500" }}
+          _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "cyan.500" }}
         >
-          <Heading as="h2" size="xl" color="gold.500">
+          <Heading as="h2" size="xl" color="cyan.500">
             Launching September 2025
           </Heading>
           <Text color="gray.300">First Drop: September 5th, 2025</Text>
@@ -313,7 +313,7 @@ function Home() {
               { value: countdown.seconds, label: "Seconds" },
             ].map(({ value, label }) => (
               <VStack key={label}>
-                <Text fontSize="4xl" fontWeight="bold" color="gold.500">
+                <Text fontSize="4xl" fontWeight="bold" color="cyan.500">
                   {value}
                 </Text>
                 <Text color="gray.300">{label}</Text>
@@ -333,9 +333,9 @@ function Home() {
           p={8}
           spacing={6}
           transition="all 0.3s"
-          _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "gold.500" }}
+          _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "cyan.500" }}
         >
-          <Heading as="h2" size="xl" color="gold.500">
+          <Heading as="h2" size="xl" color="cyan.500">
             Recent Drops
           </Heading>
           <Text maxW="600px" textAlign="center" color="gray.300">
@@ -366,7 +366,7 @@ function Home() {
                     p={4}
                     align="start"
                     transition="all 0.3s"
-                    _hover={{ borderColor: "gold.500", shadow: "md" }}
+                    _hover={{ borderColor: "cyan.500", shadow: "md" }}
                   >
                     <Image
                       src={product.thumbnail}
@@ -380,15 +380,15 @@ function Home() {
                     <Text fontSize="md" fontWeight="bold" color="gray.50">
                       {product.title}
                     </Text>
-                    <Text color="purple.500">{product.price}</Text>
+                    <Text color="blue.500">{product.price}</Text>
                     <Button
                       size="sm"
                       variant="outline"
-                      borderColor="gold.500"
-                      color="gold.500"
+                      borderColor="cyan.500"
+                      color="cyan.500"
                       w="full"
                       mt={2}
-                      _hover={{ bg: "gold.500", color: "black.900" }}
+                      _hover={{ bg: "cyan.500", color: "black.900" }}
                     >
                       View Details
                     </Button>
@@ -403,7 +403,7 @@ function Home() {
       {/* FAQs */}
       <Box py={16} bg="gray.800" px={{ base: 4, md: 8 }}>
         <VStack maxW="1200px" mx="auto" spacing={8}>
-          <Heading as="h2" size="xl" color="gold.500">
+          <Heading as="h2" size="xl" color="cyan.500">
             Frequently Asked Questions
           </Heading>
           <Accordion allowToggle w="100%">
@@ -442,7 +442,7 @@ function Home() {
                   <Box flex="1" textAlign="left" color="gray.50">
                     {question}
                   </Box>
-                  <AccordionIcon color="gold.500" />
+                  <AccordionIcon color="cyan.500" />
                 </AccordionButton>
                 <AccordionPanel color="gray.300">
                   {answer}
@@ -454,9 +454,9 @@ function Home() {
             as={Link}
             to="/faq"
             variant="outline"
-            borderColor="gold.500"
-            color="gold.500"
-            _hover={{ bg: "gold.500", color: "black.900" }}
+            borderColor="cyan.500"
+            color="cyan.500"
+            _hover={{ bg: "cyan.500", color: "black.900" }}
           >
             See All FAQ
           </Button>
@@ -466,7 +466,7 @@ function Home() {
       {/* Documents */}
       <Box py={16} px={{ base: 4, md: 8 }} maxW="1200px" mx="auto">
         <VStack spacing={8}>
-          <Heading as="h2" size="xl" color="gold.500">
+          <Heading as="h2" size="xl" color="cyan.500">
             Read Documents
           </Heading>
           <Flex gap={8} wrap="wrap" justify="center">
@@ -480,9 +480,9 @@ function Home() {
                 as="a"
                 href={href}
                 variant="outline"
-                borderColor="gold.500"
-                color="gold.500"
-                _hover={{ bg: "gold.500", color: "black.900" }}
+                borderColor="cyan.500"
+                color="cyan.500"
+                _hover={{ bg: "cyan.500", color: "black.900" }}
               >
                 {label}
               </Button>
@@ -494,7 +494,7 @@ function Home() {
       {/* Authentication Council */}
       <Box py={16} px={{ base: 4, md: 8 }} maxW="1200px" mx="auto">
         <VStack spacing={8}>
-          <Heading as="h2" size="xl" color="gold.500">
+          <Heading as="h2" size="xl" color="cyan.500">
             Trust in Every Purchase
           </Heading>
           <Text textAlign="center" maxW="600px" color="gray.300">
