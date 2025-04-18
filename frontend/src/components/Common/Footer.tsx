@@ -93,7 +93,7 @@ const Footer = () => {
               fontFamily="'Special Gothic Expanded One', sans-serif"
             >
               © 2025{' '}
-              <Link href="https://luxuryverse.com" color="gray.200" _hover={{ color: 'gray.200' }}>
+              <Link href="https://luxuryverse.com" color="gray.400" _hover={{ color: 'gray.200' }}>
                 LuxuryVerse
               </Link>
               . All rights reserved.
@@ -101,41 +101,41 @@ const Footer = () => {
             <HStack spacing={{ base: 2, md: 4 }} justify="center" align="baseline">
               <Link
                 href="/privacy-policy"
-                color="gray.400"
+                color="gray.200"
                 fontSize="sm"
                 fontFamily="'Special Gothic Expanded One', sans-serif"
                 lineHeight="1.5"
-                _hover={{ color: 'gray.200' }}
+                _hover={{ color: 'white' }}
               >
                 Privacy Policy
               </Link>
               <Link
                 href="/terms-conditions"
-                color="gray.400"
+                color="gray.200"
                 fontSize="sm"
                 fontFamily="'Special Gothic Expanded One', sans-serif"
                 lineHeight="1.5"
-                _hover={{ color: 'gray.200' }}
+                _hover={{ color: 'white' }}
               >
                 Terms and Conditions
               </Link>
               <Link
                 href="/cookies"
-                color="gray.400"
+                color="gray.200"
                 fontSize="sm"
                 fontFamily="'Special Gothic Expanded One', sans-serif"
                 lineHeight="1.5"
-                _hover={{ color: 'gray.200' }}
+                _hover={{ color: 'white' }}
               >
                 Cookie Policy
               </Link>
               <Link
                 href="/opt-out"
-                color="gray.400"
+                color="gray.200"
                 fontSize="sm"
                 fontFamily="'Special Gothic Expanded One', sans-serif"
                 lineHeight="1.5"
-                _hover={{ color: 'gray.200' }}
+                _hover={{ color: 'white' }}
               >
                 Opt Out
               </Link>
@@ -146,4 +146,5 @@ const Footer = () => {
     </Box>
   );
 };
+
 export default Footer;
