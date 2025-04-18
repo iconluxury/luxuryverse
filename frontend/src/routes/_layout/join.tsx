@@ -20,7 +20,7 @@ import Footer from '../../components/Common/Footer';
 import theme from '../../theme';
 import { useState, useContext, useEffect, useCallback } from 'react';
 import { useAccount } from 'wagmi';
-import { AuthContext } from '../../components/Common/TopNav';
+import { AuthProvider } from '../../components/Common/TopNav';
 import { OpenAPI } from '../../client';
 
 interface XProfile {
