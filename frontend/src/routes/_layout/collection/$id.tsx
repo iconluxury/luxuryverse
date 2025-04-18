@@ -45,11 +45,6 @@ function ErrorFallback({ error }: { error: Error }) {
   return <Box />;
 }
 
-// Define the route
-export const Route = createFileRoute('/_layout/collections/$id')({
-  component: CollectionDetails,
-});
-
 // CollectionDetails component
 function CollectionDetails() {
   const [collection, setCollection] = useState<Collection | null>(null);
@@ -58,18 +53,21 @@ function CollectionDetails() {
   const API_BASE_URL = 'https://iconluxury.shop';
   const { id } = Route.useParams();
 
-  // Fetch with retry
+  // Fetch with retry and cache busting
   const fetchWithRetry = async (url: string, retryCount = 6) => {
     for (let attempt = 1; attempt <= retryCount; attempt++) {
       try {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 30000);
-        const response = await fetch(url, {
+        // Add cache-busting query parameter
+        const cacheBustedUrl = `${url}?t=${Date.now()}`;
+        const response = await fetch(cacheBustedUrl, {
           signal: controller.signal,
           method: 'GET',
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
+            'Cache-Control': 'no-cache',
           },
           credentials: 'omit',
         });
@@ -97,7 +95,7 @@ function CollectionDetails() {
   // Fetch collection data
   const fetchCollection = async () => {
     try {
-      const collectionUrl = `${API_BASE_URL}/api/v1/collections/${id}`;
+      const collectionUrl = `${API_BASE_URL}/api/v1/collection/${id}`;
       console.log('Fetching:', collectionUrl);
       const collectionData = await fetchWithRetry(collectionUrl);
       console.log('Fetch successful for', collectionUrl, ':', collectionData);
@@ -139,7 +137,7 @@ function CollectionDetails() {
               title: p.title || 'Untitled Product',
               description: p.description || '',
               brand: p.brand || 'Unknown Brand',
-              thumbnail: p.thumbnail || 'https://placehold.co/150x200',
+              thumbnail: p.thumbnail || 'https://placehold.co/225x300',
               images: Array.isArray(p.images) ? p.images : undefined,
               variants: variants,
               full_price: p.full_price || '',
@@ -188,17 +186,17 @@ function CollectionDetails() {
   // Loading state
   if (loading) {
     return (
-      <Box maxW="1200px" mx="auto" py={8} px={{ base: 4, md: 8 }} bg="gray.800">
+      <Box maxW="1200px" mx="auto" py={8} px={{ base: 4, md: 8 }} bg="transparent">
         <VStack spacing={4}>
-          <Skeleton height="40px" width="300px" bg="gray.700" />
-          <SkeletonText noOfLines={2} width="600px" bg="gray.700" />
+          <Skeleton height="40px" width="300px" />
+          <SkeletonText noOfLines={2} width="600px" />
           <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing={6} w="100%">
             {Array(4)
               .fill(0)
               .map((_, index) => (
                 <Box key={index}>
-                  <Skeleton height="200px" bg="gray.700" />
-                  <SkeletonText mt={4} noOfLines={3} bg="gray.700" />
+                  <Skeleton height="300px" />
+                  <SkeletonText mt={4} noOfLines={3} />
                 </Box>
               ))}
           </SimpleGrid>
@@ -227,65 +225,71 @@ function CollectionDetails() {
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
       <Box bg="transparent" w="100%">
-        <Box py={8} px={{ base: 4, md: 8 }} maxW="1200px" mx="auto" bg="gray.800" borderRadius="lg">
+        <Box py={8} px={{ base: 4, md: 8 }} maxW="1200px" mx="auto" bg="transparent" borderRadius="lg">
           <VStack spacing={6} align="start">
             {/* Collection Header */}
             <Heading as="h1" size="xl" color="white">
               {collection.title}
             </Heading>
             {collection.description && (
-              <Text fontSize="md" color="gray.300">
-                {collection.description}
-              </Text>
+              <Box fontSize="md" color="gray.300" dangerouslySetInnerHTML={{ __html: collection.description }} />
             )}
 
             {/* Product Grid */}
             {collection.products.length > 0 ? (
               <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing={6} w="100%">
-                {collection.products.map((product) => (
-                  <Link key={product.id} to={`/products/${product.id}`}>
-                    <Box
-                      borderWidth="1px"
-                      borderColor="gray.600"
-                      borderRadius="lg"
-                      overflow="hidden"
-                      bg="gray.700"
-                      _hover={{ shadow: 'md', transform: 'translateY(-4px)', borderColor: 'gray.500' }}
-                      transition="all 0.2s"
-                    >
-                      <Image
-                        src={product.thumbnail}
-                        alt={product.title}
-                        w="100%"
-                        h="200px"
-                        objectFit="cover"
-                        aspectRatio="3/4"
-                        onError={(e) => (e.currentTarget.src = 'https://placehold.co/150x200')}
-                      />
-                      <Box p={4}>
-                        <Text fontWeight="bold" fontSize="md" color="white" noOfLines={1}>
-                          {product.title}
-                        </Text>
-                        <Text fontSize="sm" color="gray.300" noOfLines={1} mt={1}>
-                          {product.brand}
-                        </Text>
-                        <Flex mt={2} justify="space-between" align="center">
-                          <Text fontSize="sm" color="gray.400" as={product.discount ? 's' : 'span'}>
-                            {product.full_price}
+                {collection.products.map((product) => {
+                  // Clean title by removing brand if present
+                  const cleanTitle = product.brand
+                    ? product.title.replace(new RegExp(`\\b${product.brand}\\b`, 'i'), '').trim()
+                    : product.title;
+
+                  return (
+                    <Link key={product.id} to={`/products/${product.id}`}>
+                      <Box
+                        borderWidth="1px"
+                        borderColor="gray.600"
+                        borderRadius="lg"
+                        overflow="hidden"
+                        bg="transparent"
+                        _hover={{ shadow: 'md', transform: 'translateY(-4px)', borderColor: 'gray.500' }}
+                        transition="all 0.2s"
+                      >
+                        <Image
+                          src={product.thumbnail}
+                          alt={product.title}
+                          w="100%"
+                          h="300px"
+                          objectFit="cover"
+                          onError={(e) => (e.currentTarget.src = 'https://placehold.co/225x300')}
+                        />
+                        <Box p={4}>
+                          <Text fontWeight="bold" fontSize="md" color="white" noOfLines={1}>
+                            {cleanTitle}
                           </Text>
-                          <Text fontWeight="bold" fontSize="md" color="var(--color-primary-hover)">
-                            {product.sale_price}
-                          </Text>
-                        </Flex>
-                        {product.discount && (
-                          <Text fontSize="xs" color="red.400" mt={1}>
-                            {product.discount}
-                          </Text>
-                        )}
+                          <Flex justify="space-between" align="center" mt={1}>
+                            <Text fontSize="sm" color="gray.300" noOfLines={1}>
+                              {product.brand}
+                            </Text>
+                            {product.discount && (
+                              <Text fontSize="xs" color="red.400">
+                                {product.discount}
+                              </Text>
+                            )}
+                          </Flex>
+                          <Flex mt={2} justify="space-between" align="center">
+                            <Text fontWeight="bold" fontSize="lg" color="var(--color-primary-hover)">
+                              {product.sale_price}
+                            </Text>
+                            <Text fontSize="sm" color="gray.400">
+                              {product.full_price}
+                            </Text>
+                          </Flex>
+                        </Box>
                       </Box>
-                    </Box>
-                  </Link>
-                ))}
+                    </Link>
+                  );
+                })}
               </SimpleGrid>
             ) : (
               <Text fontSize="md" color="gray.300">
@@ -299,3 +303,7 @@ function CollectionDetails() {
     </ErrorBoundary>
   );
 }
+
+export const Route = createFileRoute('/_layout/collection/$id')({
+  component: CollectionDetails,
+});
