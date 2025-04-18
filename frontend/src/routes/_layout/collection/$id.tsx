@@ -5,6 +5,7 @@ import { Link } from '@tanstack/react-router';
 import { ErrorBoundary } from 'react-error-boundary';
 import Footer from '../../../components/Common/Footer';
 import cleanTitle from '../../../utils/cleanTitle';
+
 // Interfaces (unchanged)
 interface Variant {
   id: string;
@@ -74,7 +75,7 @@ function CollectionDetails() {
           Expires: '0',
         },
         credentials: 'omit',
-        cache: 'force-cache', // Leverage browser cache
+        cache: 'force-cache',
       });
 
       if (!response.ok) {
@@ -82,7 +83,6 @@ function CollectionDetails() {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      // Stream response for large or chunked data
       const reader = response.body?.getReader();
       if (!reader) throw new Error('Response body is not readable.');
 
@@ -101,7 +101,6 @@ function CollectionDetails() {
         throw new Error('Invalid collection data received');
       }
 
-      // Validate and transform data
       const validatedCollection: Collection = {
         id: collectionData.id || id,
         title: collectionData.title || 'Untitled Collection',
@@ -132,14 +131,13 @@ function CollectionDetails() {
           : [],
       };
 
-      // Store in localStorage as fallback
       localStorage.setItem(`collection-${id}`, JSON.stringify(validatedCollection));
       return validatedCollection;
     },
-    staleTime: 1000 * 60 * 5, // 5 minutes
-    cacheTime: 1000 * 60 * 30, // 30 minutes
-    retry: 3, // Retry 3 times on failure
-    retryDelay: (attempt) => 1000 * 2 ** attempt, // Exponential backoff
+    staleTime: 1000 * 60 * 5,
+    cacheTime: 1000 * 60 * 30,
+    retry: 3,
+    retryDelay: (attempt) => 1000 * 2 ** attempt,
   });
 
   if (isLoading) {
@@ -187,9 +185,7 @@ function CollectionDetails() {
       <Box bg="transparent" w="100%">
         <Box py={8} px={{ base: 4, md: 8 }} maxW="1200px" mx="auto" bg="transparent" borderRadius="lg">
           <VStack spacing={6} align="start">
-            <Heading as="h1" size="xl" color="#00FF00"
-                       textTransform="uppercase"
-            >
+            <Heading as="h1" size="xl" color="#00FF00" textTransform="uppercase">
               {collection.title}
             </Heading>
             {collection.description && (
@@ -197,10 +193,15 @@ function CollectionDetails() {
             )}
             {collection.products.length > 0 ? (
               <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing={6} w="100%">
-               {collection.products.map((product) => {
-                const cleanedTitle = cleanTitle(product)();
+                {collection.products.map((product) => {
+                  const cleanedTitle = cleanTitle(product)();
+
                   return (
-                    <Link key={product.id} to={`/products/${product.id}`}>
+                    <Link
+                      key={product.id}
+                      to={`/products/${product.id}`}
+                      aria-label={`View details for ${cleanedTitle} by ${product.brand || 'Unknown'}`}
+                    >
                       <Box
                         borderWidth="1px"
                         borderColor="gray.600"
@@ -213,15 +214,15 @@ function CollectionDetails() {
                         <Box
                           position="relative"
                           w="full"
-                          style={{ aspectRatio: '3 / 4' }} // Fixed container aspect ratio
-                          bg="white" // Background for letterboxing
+                          style={{ aspectRatio: '3 / 4' }}
+                          bg="white"
                         >
                           <Image
                             src={product.thumbnail}
-                            alt={product.title}
+                            alt={`${cleanedTitle} by ${product.brand || 'Unknown'}`}
                             w="full"
                             h="full"
-                            objectFit="contain" // Show full image
+                            objectFit="contain"
                             position="absolute"
                             top="0"
                             left="0"
@@ -231,13 +232,13 @@ function CollectionDetails() {
                         </Box>
                         <Box p={4}>
                           <Text fontWeight="bold" fontSize="md" color="white" noOfLines={1}>
-                            {product.brand}
+                            {product.brand || 'Unknown'}
                           </Text>
                           <Text fontSize="sm" color="gray.200" noOfLines={1}>
                             {cleanedTitle}
                           </Text>
                           <Flex mt={2} justify="space-between" align="center">
-                            <Text fontWeight="bold" fontSize="2xl" color="var(--color-primary-hover)">
+                            <Text fontWeight="bold" fontSize="xl" color="var(--color-primary-hover)">
                               {product.sale_price}
                             </Text>
                             <Text fontSize="lg" color="gray.400">
