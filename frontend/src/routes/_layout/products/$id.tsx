@@ -380,7 +380,7 @@ function ProductDetails() {
               )}
               {/* Product Details Section */}
               <VStack align="start" spacing={4}>
-                <HStack spacing={2} align="center">
+                <HStack spacing={2} alignItems="center">
                   <Text fontSize="lg" color="gray.300" fontWeight="bold">
                     {product.brand || 'Unknown Brand'}
                   </Text>
@@ -389,7 +389,14 @@ function ProductDetails() {
                       <Text fontSize="lg" color="gray.300">
                         |
                       </Text>
-                      <Tag colorScheme="green" px={3} py={1} borderRadius="full">
+                      <Tag
+                        colorScheme="green"
+                        px={3}
+                        py={1}
+                        borderRadius="full"
+                        fontSize="lg"
+                        lineHeight="normal"
+                      >
                         {product.discount}
                       </Tag>
                     </>
@@ -450,30 +457,6 @@ function ProductDetails() {
                         </Text>
                       ))}
                     </VStack>
-                  </Box>
-                )}
-                {validatedVariants && validatedVariants.length > 0 && (
-                  <Box>
-                    <Text as="h2" fontSize="xl" mb={4}>
-                      Sizes
-                    </Text>
-                    <HStack spacing={2} flexWrap="wrap" maxW="100%" gap={2}>
-                      {validatedVariants.map((variant, index) => (
-                        <Box
-                          key={variant.id || `variant-${index}`}
-                          bg={variant.inventory_quantity > 0 ? 'gray.700' : 'red.900'}
-                          color="white"
-                          px={3}
-                          py={1}
-                          borderRadius="full"
-                          mb={2}
-                          fontSize="md"
-                        >
-                          Size {variant.size} - {variant.price}{' '}
-                          {variant.inventory_quantity > 0 ? `(${variant.inventory_quantity} in stock)` : '(Out of stock)'}
-                        </Box>
-                      ))}
-                    </HStack>
                   </Box>
                 )}
               </VStack>
