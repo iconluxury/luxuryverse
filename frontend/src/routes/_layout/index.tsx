@@ -599,7 +599,9 @@ function Home() {
           mx="auto"
           px={{ base: 4, md: 8 }}
         >
-          <Heading as="h2" size="2xl" color="gray.400">
+          <Heading as="h2" size="2xl" color="gray.400" 
+                    textTransform="uppercase"
+          >
             Trust in Every Purchase
           </Heading>
           <Text
