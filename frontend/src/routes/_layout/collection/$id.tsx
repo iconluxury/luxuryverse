@@ -1,10 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { Box, Text, Image, SimpleGrid, VStack, Heading, Skeleton, SkeletonText, Button, Flex } from '@chakra-ui/react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMemo } from '@tanstack/react-query'; // Add useMemo import
 import { Link } from '@tanstack/react-router';
 import { ErrorBoundary } from 'react-error-boundary';
 import Footer from '../../../components/Common/Footer';
-import cleanTitle from '../../../utils/cleanTitle';
 
 // Interfaces (unchanged)
 interface Variant {
@@ -140,6 +139,25 @@ function CollectionDetails() {
     retryDelay: (attempt) => 1000 * 2 ** attempt,
   });
 
+  // Compute cleaned titles with useMemo
+  const cleanedTitles = useMemo(() => {
+    if (!collection?.products) return [];
+    return collection.products.map((product) => {
+      if (!product?.title) return 'Untitled Product';
+      if (!product?.brand) return product.title.trim();
+
+      // Escape special regex characters in brand
+      const escapeRegExp = (string: string) => string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const brandRegex = new RegExp(`\\b${escapeRegExp(product.brand)}\\b`, 'i');
+      const menRegex = /\b(men'?s|men)\b/i;
+      return product.title
+        .replace(brandRegex, '')
+        .replace(menRegex, '')
+        .trim()
+        .replace(/\s+/g, ' ');
+    });
+  }, [collection?.products]);
+
   if (isLoading) {
     return (
       <Box maxW="1200px" mx="auto" py={8} px={{ base: 4, md: 8 }} bg="transparent">
@@ -193,8 +211,8 @@ function CollectionDetails() {
             )}
             {collection.products.length > 0 ? (
               <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing={6} w="100%">
-                {collection.products.map((product) => {
-                  const cleanedTitle = cleanTitle(product)();
+                {collection.products.map((product, index) => {
+                  const cleanedTitle = cleanedTitles[index] || 'Untitled Product'; // Fallback if index is out of sync
 
                   return (
                     <Link
