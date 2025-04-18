@@ -258,7 +258,7 @@ function CollectionDetails() {
                             {cleanedTitle}
                           </Text>
                           <Flex mt={2} justify="space-between" align="center">
-                            <Text fontWeight="bold" fontSize="xl" color="var(--color-primary-hover)">
+                            <Text fontWeight="bold" fontSize="2xl" color="var(--color-primary-hover)">
                               {product.sale_price}
                             </Text>
                             <Text fontSize="lg" color="gray.400">
