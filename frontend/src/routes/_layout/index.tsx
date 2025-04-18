@@ -550,7 +550,7 @@ function Home() {
           align="stretch"
         >
           <VStack
-            bg="gray.900"c
+            bg="gray.900"
             border="1px solid"
             borderColor="gray.700"
             borderRadius="md"
