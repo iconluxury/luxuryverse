@@ -43,7 +43,7 @@ function LatestDropsPage() {
         id: 'future-1',
         title: 'Next Exclusive Drop',
         description:
-          'Our next premium collection is almost here! Shop opens for shopping 2025-05-01 10:00 AM until items sold.',
+          'Next premium drop! <strong>Shop opens: 2025-05-01, 10:00 AM</strong> until sold out.',
         isLocked: true,
       };
 
@@ -59,7 +59,7 @@ function LatestDropsPage() {
   useEffect(() => {
     const allDrops = [...dropsData.upcoming, ...dropsData.past];
     if (allDrops.length > 0) {
-      const descriptions = allDrops.map(col => col.description || '');
+      const descriptions = allDrops.map(col => col.description?.replace(/<\/?strong>/g, '') || '');
       const maxHeight = Math.max(...descriptions.map(desc => desc.length)) * 1.5;
       setMaxDescriptionHeight(maxHeight);
     }
@@ -67,7 +67,7 @@ function LatestDropsPage() {
 
   if (isLoading) {
     return (
-      <Box p={4} bg="gray.900" color="white" minH="100vh" display="flex" justifyContent="center" alignItems="center">
+      <Box p={4} color="white" minH="100vh" display="flex" justifyContent="center" alignItems="center">
         <Box maxW="1400px" w="full">
           <Skeleton height="20px" width="200px" mb={6} />
           <Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={8}>
@@ -86,7 +86,7 @@ function LatestDropsPage() {
 
   if (!dropsData.upcoming.length && !dropsData.past.length) {
     return (
-      <Box p={4} bg="gray.900" color="white" minH="100vh" display="flex" justifyContent="center" alignItems="center">
+      <Box p={4} color="white" minH="100vh" display="flex" justifyContent="center" alignItems="center">
         <Text>No drops available.</Text>
       </Box>
     );
@@ -94,7 +94,6 @@ function LatestDropsPage() {
 
   return (
     <Box
-      bg="gray.900"
       color="white"
       minH="100vh"
       display="flex"
@@ -121,8 +120,8 @@ function LatestDropsPage() {
                     borderColor="gray.700"
                     borderRadius="xl"
                     overflow="hidden"
-                    bg="white"
-                    color="gray.900"
+                    bg="gray.800"
+                    color="white"
                     opacity={drop.isLocked ? 0.7 : 1}
                     transition="all 0.3s ease"
                     boxShadow="0 4px 15px rgba(0, 0, 0, 0.2)"
@@ -139,14 +138,13 @@ function LatestDropsPage() {
                     <Box height={`${maxDescriptionHeight}px`} overflow="hidden">
                       <Text
                         fontSize="sm"
-                        color="gray.600"
+                        color="gray.300"
                         noOfLines={2}
                         lineHeight="1.5"
-                      >
-                        {drop.description
-                          ? drop.description.replace(/<\/?p>/g, '')
-                          : 'No description available.'}
-                      </Text>
+                        dangerouslySetInnerHTML={{
+                          __html: drop.description || 'No description available.',
+                        }}
+                      />
                     </Box>
                   </Box>
                 </Box>
@@ -179,8 +177,8 @@ function LatestDropsPage() {
                       borderColor="gray.700"
                       borderRadius="xl"
                       overflow="hidden"
-                      bg="white"
-                      color="gray.900"
+                      bg="gray.800"
+                      color="white"
                       _hover={{ boxShadow: 'lg', transform: 'scale(1.03)' }}
                       transition="all 0.3s ease"
                       boxShadow="0 4px 15px rgba(0, 0, 0, 0.2)"
@@ -197,7 +195,7 @@ function LatestDropsPage() {
                       <Box height={`${maxDescriptionHeight}px`} overflow="hidden">
                         <Text
                           fontSize="sm"
-                          color="gray.600"
+                          color="gray.300"
                           noOfLines={2}
                           lineHeight="1.5"
                         >
