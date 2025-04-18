@@ -133,8 +133,6 @@ function Home() {
 
   return (
     <Box bg="black.900">
-      {/* Header with Logo */}
-     
 
       {/* Hero Section: Exclusive Brands */}
       <Box
@@ -160,7 +158,7 @@ function Home() {
             <Heading
               as="h2"
               variant="glitch"
-              size={{ base: "6xl", md: "7xl" }}
+              size="8xl"
               className="glitch glitch-exclusive"
               data-text="Exclusive"
             >
@@ -169,7 +167,7 @@ function Home() {
             <Heading
               as="h2"
               variant="glitch"
-              size={{ base: "6xl", md: "7xl" }}
+              size="8xl"
               className="glitch glitch-brands"
               data-text="Brands"
             >
