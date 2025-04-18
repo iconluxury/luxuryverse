@@ -334,8 +334,11 @@ function Home() {
   py={{ base: 6, md: 16 }}
   px={{ base: 2, md: 8 }}
   position="relative"
-  overflowX="hidden"
-  width="100vw"
+  width="100%" // Changed from 100vw to 100% to respect parent container
+  minH="100vh" // Ensure full viewport height for hero section
+  display="flex" // Ensure the Box itself is a flex container to center content
+  justifyContent="center" // Center content horizontally
+  alignItems="center" // Center content vertically
   _before={{
     content: '""',
     position: "absolute",
@@ -345,23 +348,27 @@ function Home() {
     bottom: 0,
     bg: "black.900",
     opacity: 0.7,
+    zIndex: 1, // Ensure overlay is behind content
   }}
 >
   <Flex
-    maxW={{ base: "100%", md: "1200px" }}
+    maxW="1200px" // Consistent max-width to center content
     mx="auto"
     direction={{ base: "column", lg: "row" }}
-    align={{ base: "flex-start", lg: "center" }}
+    align={{ base: "center", lg: "center" }} // Center align on all breakpoints
     gap={{ base: 4, md: 12 }}
     position="relative"
-    justify={{ base: "center", lg: "flex-start" }} // Align content to the left on wide screens
+    zIndex={2} // Ensure content is above overlay
+    justifyContent="space-between" // Distribute space evenly between left and right sections
+    width="100%" // Ensure Flex takes full width of parent
+    px={{ base: 4, md: 0 }} // Remove horizontal padding on desktop to align with maxW
   >
     <VStack
       align="flex-start"
       spacing={{ base: 4, md: 12 }}
-      flex={{ base: "none", lg: "0 0 50%" }} // Fixed width on wide screens to prevent stretching
-      maxW={{ base: "100%", lg: "600px" }} // Limit width to keep content tight
-      ml={{ base: 0, lg: 0 }} // Ensure no unintended left margin
+      flex={{ base: "1", lg: "0 0 50%" }} // Allow VStack to take 50% width on desktop
+      maxW={{ base: "100%", lg: "600px" }} // Limit width for text content
+      textAlign={{ base: "center", lg: "left" }} // Center text on mobile, left-align on desktop
     >
       <Box position="relative" display="inline-block" whiteSpace="nowrap">
         <Heading
@@ -433,34 +440,39 @@ function Home() {
       >
         Join The Waitlist
       </Button>
-          </VStack>
-          <Flex flex="1" justify="center" mt={{ base: 6, lg: 0 }}>
-            <Flex gap={{ base: 2, md: 8 }} flexWrap="wrap" justify="center">
-              {[
-                { src: "https://github.com/iconluxurygroup/legacy-test-luxuryverse/raw/dev/frontend/public/assets/img/brand/brand_img01.png", alt: "Balmain Logo" },
-                { src: "https://github.com/iconluxurygroup/legacy-test-luxuryverse/raw/dev/frontend/public/assets/img/brand/brand_img02.png", alt: "Ferragamo Logo" },
-                { src: "https://github.com/iconluxurygroup/legacy-test-luxuryverse/raw/dev/frontend/public/assets/img/brand/brand_img03.png", alt: "The Row Logo" },
-                { src: "https://github.com/iconluxurygroup/legacy-test-luxuryverse/raw/dev/frontend/public/assets/img/brand/brand_img04.png", alt: "Gianvito Rossi Logo" },
-                { src: "https://github.com/iconluxurygroup/legacy-test-luxuryverse/raw/dev/frontend/public/assets/img/brand/brand_img05.png", alt: "Roger Vivier Logo" },
-                { src: "https://github.com/iconluxurygroup/legacy-test-luxuryverse/raw/dev/frontend/public/assets/img/brand/brand_img06.png", alt: "Etro Logo" },
-                { src: "https://github.com/iconluxurygroup/legacy-test-luxuryverse/raw/dev/frontend/public/assets/img/brand/brand_img07.png", alt: "Moschino Logo" },
-              ].map((img) => (
-                <Image
-                  key={img.alt}
-                  src={img.src}
-                  alt={img.alt}
-                  boxSize={{ base: "40px", md: "100px" }} // Smaller on mobile
-                  objectFit="contain"
-                  fallbackSrc="/images/placeholder.jpg"
-                  filter="grayscale(100%)"
-                  _hover={{ filter: "grayscale(0%)" }}
-                  transition="filter 0.3s ease"
-                />
-              ))}
-            </Flex>
-          </Flex>
-        </Flex>
-
+    </VStack>
+    <Flex
+      flex={{ base: "1", lg: "0 0 50%" }} // Ensure brand logos take 50% width on desktop
+      justify="center"
+      align="center"
+      mt={{ base: 6, lg: 0 }}
+      maxW={{ base: "100%", lg: "600px" }} // Limit width to balance with text section
+    >
+      <Flex gap={{ base: 2, md: 8 }} flexWrap="wrap" justify="center">
+        {[
+          { src: "https://github.com/iconluxurygroup/legacy-test-luxuryverse/raw/dev/frontend/public/assets/img/brand/brand_img01.png", alt: "Balmain Logo" },
+          { src: "https://github.com/iconluxurygroup/legacy-test-luxuryverse/raw/dev/frontend/public/assets/img/brand/brand_img02.png", alt: "Ferragamo Logo" },
+          { src: "https://github.com/iconluxurygroup/legacy-test-luxuryverse/raw/dev/frontend/public/assets/img/brand/brand_img03.png", alt: "The Row Logo" },
+          { src: "https://github.com/iconluxurygroup/legacy-test-luxuryverse/raw/dev/frontend/public/assets/img/brand/brand_img04.png", alt: "Gianvito Rossi Logo" },
+          { src: "https://github.com/iconluxurygroup/legacy-test-luxuryverse/raw/dev/frontend/public/assets/img/brand/brand_img05.png", alt: "Roger Vivier Logo" },
+          { src: "https://github.com/iconluxurygroup/legacy-test-luxuryverse/raw/dev/frontend/public/assets/img/brand/brand_img06.png", alt: "Etro Logo" },
+          { src: "https://github.com/iconluxurygroup/legacy-test-luxuryverse/raw/dev/frontend/public/assets/img/brand/brand_img07.png", alt: "Moschino Logo" },
+        ].map((img) => (
+          <Image
+            key={img.alt}
+            src={img.src}
+            alt={img.alt}
+            boxSize={{ base: "40px", md: "80px" }} // Reduced size to prevent overflow
+            objectFit="contain"
+            fallbackSrc="/images/placeholder.jpg"
+            filter="grayscale(100%)"
+            _hover={{ filter: "grayscale(0%)" }}
+            transition="filter 0.3s ease"
+          />
+        ))}
+      </Flex>
+    </Flex>
+  </Flex>
       {/* Cards Section: Luxury Brands, Exclusive Drops, Authentic Goods */}
       <Box py={16} px={{ base: 4, md: 8 }} maxW="1200px" mx="auto">
         <Flex
