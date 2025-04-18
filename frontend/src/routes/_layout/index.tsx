@@ -427,7 +427,7 @@ function Home() {
               <Heading
                 as="h2"
                 variant="glitch"
-                size={{ base: "3xl", md: "9xl" }}
+                size={{ base: "5xl", md: "9xl" }}
                 className="glitch glitch-exclusive"
                 data-text="EXCLUSIVE"
                 ref={exclusiveRef}
@@ -454,7 +454,7 @@ function Home() {
               <Heading
                 as="h2"
                 variant="glitch"
-                size={{ base: "3xl", md: "9xl" }}
+                size={{ base: "5xl", md: "9xl" }}
                 className="glitch glitch-brands"
                 data-text="BRANDS"
                 ref={brandsRef}
