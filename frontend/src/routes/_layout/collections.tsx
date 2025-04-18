@@ -186,6 +186,7 @@ function LatestDropsPage() {
                       color="gray.400"
                       textTransform="uppercase"
                       noOfLines={1}
+                      _hover={{color: "white" }}
                     >
                       {drop.title || 'Untitled Drop'}
                     </Heading>
