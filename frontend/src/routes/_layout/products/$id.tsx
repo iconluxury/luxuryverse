@@ -388,26 +388,41 @@ function ProductDetails() {
               )}
               {/* Product Details Section */}
               <VStack align="start" spacing={4}>
-              <Text fontSize="lg" fontWeight="bold" lineHeight="1.5" color="purple.500">
+              <VStack align="start" spacing={1}>
+  <Text
+    fontSize="lg"
+    fontWeight="bold"
+    lineHeight="1.5"
+    color="purple.500"
+    textTransform="uppercase"
+  >
     {product.brand || 'Unknown Brand'}
   </Text>
-              <Text as="h1" fontSize={{ base: '3xl', md: '4xl' }} fontWeight="medium" lineHeight="1.3" color="gray.50">
-  {cleanTitle}
-</Text>
-{product.discount && (
-  <Tag
-    size="md"
-    variant="solid"
-    colorScheme="green"
-    borderRadius="full"
-    fontSize="lg"
-    lineHeight="1.5"
-    px={3}
-    py={0}
+  <Text
+    as="h1"
+    fontSize={{ base: '3xl', md: '4xl' }}
+    fontWeight="medium"
+    lineHeight="1.3"
+    color="gray.50"
   >
-    {product.discount}
-  </Tag>
-)}
+    {cleanTitle}
+  </Text>
+  {product.discount && (
+    <Tag
+      size="md"
+      variant="solid"
+      colorScheme="green"
+      borderRadius="full"
+      fontSize="lg"
+      lineHeight="1.5"
+      px={3}
+      py={0}
+      mt={0}
+    >
+      {product.discount}
+    </Tag>
+  )}
+</VStack>
 
                 {validatedVariants && validatedVariants.length > 0 && (
                   <HStack spacing={2} flexWrap="wrap" maxW="100%" gap={2}>
