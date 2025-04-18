@@ -41,9 +41,7 @@ function LatestDropsPage() {
       // Add a placeholder for the upcoming locked drop
       const upcomingDrop = {
         id: 'future-1',
-        title: 'Next Exclusive Drop',
-        description:
-          'Next premium drop! <strong>Shop opens: 2025-05-01, 10:00 AM</strong> until sold out.',
+        description: 'Shop opens: <strong>2025-05-01, 10:00 AM</strong> until sold out.',
         isLocked: true,
       };
 
@@ -116,21 +114,12 @@ function LatestDropsPage() {
               {dropsData.upcoming.map(drop => (
                 <Box key={drop.id} width={{ base: '100%', md: '33.33%' }} maxW="400px" textAlign="center">
                   <Text
-                    fontWeight="bold"
-                    fontSize={{ base: '2xl', md: '2xl' }}
-                    mb={4}
-                    color="white"
-                    noOfLines={1}
-                  >
-                    {drop.title || 'Untitled Drop'}
-                  </Text>
-                  <Text
                     fontSize={{ base: 'lg', md: 'lg' }}
                     color="gray.400"
                     mb={4}
                     lineHeight="1.5"
                     dangerouslySetInnerHTML={{
-                      __html: drop.description || 'No description available.',
+                      __html: drop.description || 'No information available.',
                     }}
                   />
                   <Link
