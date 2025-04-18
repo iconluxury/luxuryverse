@@ -417,7 +417,7 @@ function Home() {
       >
         <Box maxW={{ base: "1200px", lg: "1600px" }} mx="auto" position="relative" zIndex={2} width="100%">
           <VStack
-            align={{ base: "center", lg: "flex-start" }}
+            align={{ base: "center", lg: "center" }}
             spacing={{ base: 4, md: 6 }}
             maxW={{ base: "100%", lg: "800px" }}
             textAlign={{ base: "center", lg: "center" }}
@@ -490,10 +490,11 @@ function Home() {
               fontSize={{ base: "md", md: "xl" }}
               py={{ base: 6, md: 8 }}
               px={{ base: 8, md: 12 }}
-            >
-              Join The Waitlist
-            </Button>
-          </VStack>
+              alignSelf={{ base: "center", lg: "center" }} // Center-align CTA button on lg
+              >
+                Get In Line
+              </Button>
+            </VStack>
           <Box
   mt={{ base: 10, md: 12 }} // Reduced from 6/8 to 2/4
   overflow="hidden"
