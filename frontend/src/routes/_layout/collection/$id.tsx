@@ -56,6 +56,18 @@ function ErrorFallback({ error }: { error: Error }) {
   );
 }
 
+function SuspenseErrorFallback({ error }: { error: Error }) {
+  console.error('Suspense Error:', error);
+  return (
+    <Box textAlign="center" py={16} color="gray.300">
+      <Text fontSize="lg" mb={4}>
+        Something went wrong while loading!
+      </Text>
+      <Text fontSize="sm">{error.message}</Text>
+    </Box>
+  );
+}
+
 function CollectionDetails() {
   const API_BASE_URL = 'https://iconluxury.shop';
   const { id } = Route.useParams();
@@ -197,7 +209,6 @@ function CollectionDetails() {
                 {collection.products.map((product) => {
                   const cleanTitle = useMemo(() => {
                     if (product?.title && product?.brand) {
-                      // Escape special characters in brand name for regex
                       const escapedBrand = product.brand.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
                       const brandRegex = new RegExp(`\\b${escapedBrand}\\b`, 'i');
                       const menRegex = /\b(men'?s|men)\b/i;
@@ -278,27 +289,29 @@ function CollectionDetails() {
 
 export const Route = createFileRoute('/_layout/collection/$id')({
   component: () => (
-    <Suspense
-      fallback={
-        <Box maxW="1200px" mx="auto" py={8} px={{ base: 4, md: 8 }} bg="transparent">
-          <VStack spacing={4}>
-            <Skeleton height="40px" width="300px" />
-            <SkeletonText noOfLines={2} width="600px" />
-            <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing={6} w="100%">
-              {Array(4)
-                .fill(0)
-                .map((_, index) => (
-                  <Box key={index}>
-                    <Skeleton height="300px" />
-                    <SkeletonText mt={4} noOfLines={3} />
-                  </Box>
-                ))}
-            </SimpleGrid>
-          </VStack>
-        </Box>
-      }
-    >
-      <CollectionDetails />
-    </Suspense>
+    <ErrorBoundary FallbackComponent={SuspenseErrorFallback}>
+      <Suspense
+        fallback={
+          <Box maxW="1200px" mx="auto" py={8} px={{ base: 4, md: 8 }} bg="transparent">
+            <VStack spacing={4}>
+              <Skeleton height="40px" width="300px" />
+              <SkeletonText noOfLines={2} width="600px" />
+              <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing={6} w="100%">
+                {Array(4)
+                  .fill(0)
+                  .map((_, index) => (
+                    <Box key={index}>
+                      <Skeleton height="300px" />
+                      <SkeletonText mt={4} noOfLines={3} />
+                    </Box>
+                  ))}
+              </SimpleGrid>
+            </VStack>
+          </Box>
+        }
+      >
+        <CollectionDetails />
+      </Suspense>
+    </ErrorBoundary>
   ),
 });
