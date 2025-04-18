@@ -51,7 +51,7 @@ const Footer = () => {
           </HStack>
         </Flex>
 
-        {/* Bottom Footer - Copyright and Legal Links */}
+        {/* Bottom Footer - Legal Links and Copyright */}
         <Flex
           justify="center"
           align="baseline"
@@ -67,12 +67,56 @@ const Footer = () => {
             justify="center"
             align="baseline"
           >
+            <Link
+              href="/privacy-policy"
+              color="gray.400"
+              fontSize="sm"
+              fontFamily="'Special Gothic Expanded One', sans-serif"
+              lineHeight="1.5"
+              textTransform="uppercase"
+              _hover={{ color: 'white' }}
+            >
+              Privacy Policy
+            </Link>
+            <Link
+              href="/terms-conditions"
+              color="gray.400"
+              fontSize="sm"
+              fontFamily="'Special Gothic Expanded One', sans-serif"
+              lineHeight="1.5"
+              textTransform="uppercase"
+              _hover={{ color: 'white' }}
+            >
+              Terms and Conditions
+            </Link>
+            <Link
+              href="/cookies"
+              color="gray.400"
+              fontSize="sm"
+              fontFamily="'Special Gothic Expanded One', sans-serif"
+              lineHeight="1.5"
+              textTransform="uppercase"
+              _hover={{ color: 'white' }}
+            >
+              Cookie Policy
+            </Link>
+            <Link
+              href="/opt-out"
+              color="gray.400"
+              fontSize="sm"
+              fontFamily="'Special Gothic Expanded One', sans-serif"
+              lineHeight="1.5"
+              textTransform="uppercase"
+              _hover={{ color: 'white' }}
+            >
+              Opt Out
+            </Link>
             <Text
               fontSize="sm"
               color="gray.500"
               lineHeight="1.5"
               fontFamily="'Special Gothic Expanded One', sans-serif"
-              textTransform="uppercase" // Added for uppercase
+              textTransform="uppercase"
             >
               © 2025{' '}
               <Link
@@ -81,59 +125,13 @@ const Footer = () => {
                 fontSize="sm"
                 lineHeight="1.5"
                 fontFamily="'Special Gothic Expanded One', sans-serif"
-                textTransform="uppercase" // Added for uppercase
+                textTransform="uppercase"
                 _hover={{ color: 'white' }}
               >
-              LuxuryVerse
+                LuxuryVerse
               </Link>
               {' '}All rights reserved.
             </Text>
-            <HStack spacing={{ base: 2, md: 4 }} justify="center" align="baseline">
-              <Link
-                href="/privacy-policy"
-                color="gray.400"
-                fontSize="sm"
-                fontFamily="'Special Gothic Expanded One', sans-serif"
-                lineHeight="1.5"
-                textTransform="uppercase" // Added for uppercase
-                _hover={{ color: 'white' }}
-              >
-                Privacy Policy
-              </Link>
-              <Link
-                href="/terms-conditions"
-                color="gray.400"
-                fontSize="sm"
-                fontFamily="'Special Gothic Expanded One', sans-serif"
-                lineHeight="1.5"
-                textTransform="uppercase" // Added for uppercase
-                _hover={{ color: 'white' }}
-              >
-                Terms and Conditions
-              </Link>
-              <Link
-                href="/cookies"
-                color="gray.400"
-                fontSize="sm"
-                fontFamily="'Special Gothic Expanded One', sans-serif"
-                lineHeight="1.5"
-                textTransform="uppercase" // Added for uppercase
-                _hover={{ color: 'white' }}
-              >
-                Cookie Policy
-              </Link>
-              <Link
-                href="/opt-out"
-                color="gray.400"
-                fontSize="sm"
-                fontFamily="'Special Gothic Expanded One', sans-serif"
-                lineHeight="1.5"
-                textTransform="uppercase" // Added for uppercase
-                _hover={{ color: 'white' }}
-              >
-                Opt Out
-              </Link>
-            </HStack>
           </HStack>
         </Flex>
       </Box>
