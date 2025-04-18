@@ -113,41 +113,33 @@ function LatestDropsPage() {
             <Flex justify="center" gap={8} flexWrap="wrap">
               {dropsData.upcoming.map(drop => (
                 <Box key={drop.id} width={{ base: '100%', md: '33.33%' }} maxW="400px" textAlign="center">
-                  <Link
-                    to={`/collection/${drop.id}`}
-                    style={{ textDecoration: 'none' }}
-                    _hover={{ textDecoration: 'none' }}
+                  <Box
+                    border="1px solid"
+                    borderColor="gray.700"
+                    borderRadius="md"
+                    p={6}
+                    transition="all 0.3s"
+                    _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
                   >
-                    <Box
-                      border="1px solid"
-                      borderColor="gray.700"
-                      borderRadius="md"
-                      bg="gray.800"
-                      p={6}
-                      transition="all 0.3s"
-                      _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
+                    <Text
+                      fontSize={{ base: 'lg', md: 'lg' }}
+                      color="gray.400"
+                      mb={4}
+                      lineHeight="1.5"
+                      dangerouslySetInnerHTML={{
+                        __html: drop.description || 'No information available.',
+                      }}
+                    />
+                    <Link
+                      color="green.500"
+                      fontSize={{ base: 'lg', md: 'lg' }}
+                      fontWeight="bold"
+                      textDecoration="underline"
+                      _hover={{ color: 'green.400' }}
                     >
-                      <Text
-                        fontSize={{ base: 'lg', md: 'lg' }}
-                        color="gray.400"
-                        mb={4}
-                        lineHeight="1.5"
-                        dangerouslySetInnerHTML={{
-                          __html: drop.description || 'No information available.',
-                        }}
-                      />
-                      <Link
-                        color="green.500"
-                        fontSize={{ base: 'lg', md: 'lg' }}
-                        fontWeight="bold"
-                        textDecoration="underline"
-                        _hover={{ color: 'green.400' }}
-                        onClick={e => e.stopPropagation()} // Prevent card click when clicking Notify Me
-                      >
-                        Notify Me
-                      </Link>
-                    </Box>
-                  </Link>
+                      Notify Me
+                    </Link>
+                  </Box>
                 </Box>
               ))}
             </Flex>
