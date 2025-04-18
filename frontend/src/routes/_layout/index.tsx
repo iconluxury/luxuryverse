@@ -88,8 +88,10 @@ function Home() {
     const exclusiveSpans = exclusiveElement.querySelectorAll(".glitch-letter");
     const brandsSpans = brandsElement.querySelectorAll(".glitch-letter");
 
-    // Set initial color to green
+    // Set initial color to green and hide all letters
     gsap.set([exclusiveElement, brandsElement], { color: "#58fb6cd9" });
+    gsap.set(exclusiveSpans, { opacity: 0 });
+    gsap.set(brandsSpans, { opacity: 0 });
 
     // 3D Slanted Cursor Style
     gsap.set([exclusiveCursor, brandsCursor], {
@@ -101,6 +103,7 @@ function Home() {
       lineHeight: "1",
       fontWeight: "bold",
       textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+      x: 0,
     });
 
     // Cursor blinking animation during typing only
@@ -113,64 +116,56 @@ function Home() {
       paused: true,
     });
 
-    // Typewriter animation for eXCLUSIVE (one letter at a time)
-    gsap.fromTo(
-      exclusiveSpans,
-      { opacity: 0, y: 20, rotateX: -30 },
-      {
-        opacity: 1,
-        y: 0,
-        rotateX: 0,
-        duration: 0.2,
-        stagger: 0.2,
-        ease: "power2.out",
-        onStart: () => {
-          gsap.set(exclusiveCursor, { opacity: 1 });
-          cursorBlink.play();
-        },
-        onUpdate: function () {
-          const currentIndex = Math.floor(this.progress() * exclusiveSpans.length);
-          gsap.set(exclusiveCursor, {
-            x: currentIndex * (exclusiveElement.offsetWidth / exclusiveText.length),
-          });
-        },
-        onComplete: () => {
-          gsap.set(exclusiveCursor, { opacity: 0 });
-          cursorBlink.pause();
-        },
-      }
-    );
+    // Typewriter animation for EXCLUSIVE (cumulative letter reveal)
+    gsap.to(exclusiveSpans, {
+      opacity: 1,
+      y: 0,
+      rotateX: 0,
+      duration: 0.2,
+      stagger: 0.2,
+      ease: "power2.out",
+      onStart: () => {
+        gsap.set(exclusiveCursor, { opacity: 1 });
+        cursorBlink.play();
+      },
+      onUpdate: function () {
+        const currentIndex = Math.floor(this.progress() * exclusiveSpans.length);
+        gsap.set(exclusiveCursor, {
+          x: currentIndex * (exclusiveElement.offsetWidth / exclusiveText.length) + 5, // Small offset to be closer
+        });
+      },
+      onComplete: () => {
+        gsap.set(exclusiveCursor, { opacity: 0 });
+        cursorBlink.pause();
+      },
+    });
 
-    // Typewriter animation for bRANDS (one letter at a time)
-    gsap.fromTo(
-      brandsSpans,
-      { opacity: 0, y: 20, rotateX: -30 },
-      {
-        opacity: 1,
-        y: 0,
-        rotateX: 0,
-        duration: 0.2,
-        stagger: 0.2,
-        ease: "power2.out",
-        delay: exclusiveText.length * 0.2,
-        onStart: () => {
-          gsap.set(brandsCursor, { opacity: 1 });
-          cursorBlink.play();
-        },
-        onUpdate: function () {
-          const currentIndex = Math.floor(this.progress() * brandsSpans.length);
-          gsap.set(brandsCursor, {
-            x: currentIndex * (brandsElement.offsetWidth / brandsText.length),
-          });
-        },
-        onComplete: () => {
-          gsap.set(brandsCursor, { opacity: 0 });
-          cursorBlink.pause();
-        },
-      }
-    );
+    // Typewriter animation for BRANDS (cumulative letter reveal)
+    gsap.to(brandsSpans, {
+      opacity: 1,
+      y: 0,
+      rotateX: 0,
+      duration: 0.2,
+      stagger: 0.2,
+      ease: "power2.out",
+      delay: exclusiveText.length * 0.2,
+      onStart: () => {
+        gsap.set(brandsCursor, { opacity: 1 });
+        cursorBlink.play();
+      },
+      onUpdate: function () {
+        const currentIndex = Math.floor(this.progress() * brandsSpans.length);
+        gsap.set(brandsCursor, {
+          x: currentIndex * (brandsElement.offsetWidth / brandsText.length) + 5, // Small offset to be closer
+        });
+      },
+      onComplete: () => {
+        gsap.set(brandsCursor, { opacity: 0 });
+        cursorBlink.pause();
+      },
+    });
 
-    // Glitch animation for eXCLUSIVE
+    // Glitch animation for EXCLUSIVE
     const glitchExclusive = () => {
       const colors = ["#58fb6cd9", "#c2a0e5d9", "#FFFFFF"];
       const randomColor = colors[Math.floor(Math.random() * colors.length)];
@@ -195,7 +190,7 @@ function Home() {
       gsap.delayedCall(gsap.utils.random(4, 6), glitchExclusive);
     };
 
-    // Glitch animation for bRANDS
+    // Glitch animation for BRANDS
     const glitchBrands = () => {
       const colors = ["#58fb6cd9", "#fbac58d9", "#00e5ffd9"];
       const randomColor = colors[Math.floor(Math.random() * colors.length)];
@@ -302,7 +297,7 @@ function Home() {
 
   // Handle waitlist join (placeholder functionality)
   const handleJoinWaitlist = () => {
-    consoleCITY="Joined the waitlist";
+    console.log("Joined the waitlist");
     // TODO: Implement waitlist logic (e.g., API call or form redirect)
   };
 
@@ -335,7 +330,7 @@ function Home() {
                 variant="glitch"
                 size="8xl"
                 className="glitch glitch-exclusive"
-                data-text="eXCLUSIVE"
+                data-text="EXCLUSIVE"
                 ref={exclusiveRef}
               />
               <Box
@@ -344,12 +339,12 @@ function Home() {
                 className="terminal-cursor"
                 position="absolute"
                 top="10%"
-                left="100%"
+                left="0"
                 color="#58fb6cd9"
                 fontSize="5.5rem"
                 lineHeight="1"
                 fontWeight="normal"
-                ml="0.1em"
+                ml="0.05em"
               >
                 |
               </Box>
@@ -360,7 +355,7 @@ function Home() {
                 variant="glitch"
                 size="8xl"
                 className="glitch glitch-brands"
-                data-text="bRANDS"
+                data-text="BRANDS"
                 ref={brandsRef}
               />
               <Box
@@ -369,12 +364,12 @@ function Home() {
                 className="terminal-cursor"
                 position="absolute"
                 top="10%"
-                left="100%"
+                left="0"
                 color="#58fb6cd9"
                 fontSize="5.5rem"
                 lineHeight="1"
                 fontWeight="normal"
-                ml="0.1em"
+                ml="0.05em"
               >
                 |
               </Box>
@@ -507,6 +502,7 @@ function Home() {
           maxW="600px"
           mx="auto"
           spacing={6}
+          width={'100%'}
           transition="all 0.3s"
           _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
         >
@@ -537,7 +533,7 @@ function Home() {
         <VStack
           bg="gray.900"
           border="1px solid"
-          borderColor=" Touring.700"
+          borderColor="gray.700"
           borderRadius="md"
           p={8}
           spacing={6}
