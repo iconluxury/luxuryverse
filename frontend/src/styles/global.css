@@ -10,8 +10,7 @@
   --color-primary: #00E5FF; /* Light cyan */
   --color-primary-hover: #00B8CC; /* Darker cyan */
   --color-accent: #FFFFFF; /* White for glitch top */
-  --color-accent-hover: #E6E6E6; /* Light gray for glitch bottom (Exclusive) */
-  --color-accent-blue: #00B7EB; /* Neon blue for glitch bottom (Brands) */
+  --color-accent-blue: #00B7EB; /* Neon blue for glitch bottom */
   --color-secondary: #1A2526; /* Dark blue-gray */
   --color-border: #3A4A4F; /* Medium blue-gray */
 
@@ -253,7 +252,7 @@ input::placeholder, textarea::placeholder {
 }
 
 .glitch-exclusive::after {
-  color: var(--color-accent-hover); /* Light gray */
+  color: var(--color-accent-blue); /* Neon blue */
   animation: glitch-exclusive-bottom 1.2s linear infinite;
   clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%);
   transform: translate(-4px, 4px);
@@ -288,39 +287,51 @@ input::placeholder, textarea::placeholder {
 }
 
 @keyframes glitch-exclusive {
-  2%, 64% { transform: translate(4px, 0) skew(2deg); }
-  4%, 60% { transform: translate(-4px, 0) skew(-2deg); }
-  62% { transform: translate(0, 0) skew(8deg); }
+  0%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(4px, 0) skew(2deg); }
+  40% { transform: translate(-4px, 0) skew(-2deg); }
+  60% { transform: translate(2px, 0) skew(4deg); }
+  80% { transform: translate(-2px, 0) skew(-4deg); }
 }
 
 @keyframes glitch-exclusive-top {
-  2%, 64% { transform: translate(6px, -6px); }
-  4%, 60% { transform: translate(-6px, 6px); }
-  62% { transform: translate(0, 0) skew(-12deg); }
+  0%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(6px, -6px); }
+  40% { transform: translate(-6px, 6px); }
+  60% { transform: translate(3px, -3px); }
+  80% { transform: translate(-3px, 3px); }
 }
 
 @keyframes glitch-exclusive-bottom {
-  2%, 64% { transform: translate(-6px, 0); }
-  4%, 60% { transform: translate(6px, 0); }
-  62% { transform: translate(0, 0) skew(12deg); }
+  0%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(-6px, 0); }
+  40% { transform: translate(6px, 0); }
+  60% { transform: translate(-3px, 0); }
+  80% { transform: translate(3px, 0); }
 }
 
 @keyframes glitch-brands {
-  2%, 64% { transform: translate(5px, 0) skew(3deg); }
-  4%, 60% { transform: translate(-5px, 0) skew(-3deg); }
-  62% { transform: translate(0, 0) skew(10deg); }
+  0%, 100% { transform: translate(0, 0); }
+  15% { transform: translate(5px, 0) skew(3deg); }
+  30% { transform: translate(-5px, 0) skew(-3deg); }
+  45% { transform: translate(3px, 0) skew(5deg); }
+  60% { transform: translate(-3px, 0) skew(-5deg); }
 }
 
 @keyframes glitch-brands-top {
-  2%, 64% { transform: translate(7px, -7px); }
-  4%, 60% { transform: translate(-7px, 7px); }
-  62% { transform: translate(0, 0) skew(-14deg); }
+  0%, 100% { transform: translate(0, 0); }
+  15% { transform: translate(7px, -7px); }
+  30% { transform: translate(-7px, 7px); }
+  45% { transform: translate(4px, -4px); }
+  60% { transform: translate(-4px, 4px); }
 }
 
 @keyframes glitch-brands-bottom {
-  2%, 64% { transform: translate(-7px, 0); }
-  4%, 60% { transform: translate(7px, 0); }
-  62% { transform: translate(0, 0) skew(14deg); }
+  0%, 100% { transform: translate(0, 0); }
+  15% { transform: translate(-7px, 0); }
+  30% { transform: translate(7px, 0); }
+  45% { transform: translate(-4px, 0); }
+  60% { transform: translate(4px, 0); }
 }
 
 /* Logo Styling */
@@ -347,7 +358,7 @@ input::placeholder, textarea::placeholder {
 .py-md { padding-top: var(--spacing-md); padding-bottom: var(--spacing-md); }
 
 /* Responsive typography */
-@media (max-width: 48em) { /* md breakpoint: 768px */
+@media (max-width: 48em) {
   h1 { font-size: var(--font-size-6xl); }
   h2 { font-size: var(--font-size-5xl); }
   h3 { font-size: var(--font-size-4xl); }
@@ -358,7 +369,7 @@ input::placeholder, textarea::placeholder {
   p { font-size: var(--font-size-sm); }
 }
 
-@media (max-width: 30em) { /* sm breakpoint: 480px */
+@media (max-width: 30em) {
   h1 { font-size: var(--font-size-5xl); }
   h2 { font-size: var(--font-size-4xl); }
   h3 { font-size: var(--font-size-3xl); }
