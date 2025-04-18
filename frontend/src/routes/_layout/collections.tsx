@@ -1,4 +1,4 @@
-import { Box, Text, Grid, Heading, Skeleton } from '@chakra-ui/react';
+import { Box, Text, Grid, Heading, Skeleton, Flex } from '@chakra-ui/react';
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
 import { useState, useEffect } from 'react';
@@ -68,15 +68,15 @@ function LatestDropsPage() {
   if (isLoading) {
     return (
       <Box p={4} color="white" minH="100vh" display="flex" justifyContent="center" alignItems="center">
-        <Box maxW="1400px" w="full">
+        <Box maxW={{ base: "1200px", lg: "1600px" }} w="full" px={{ base: 4, md: 8 }} py={0}>
           <Skeleton height="20px" width="200px" mb={6} />
-          <Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={8}>
-            <Skeleton height="200px" borderRadius="lg" />
-          </Grid>
+          <Flex justify="center" gap={8}>
+            <Skeleton height="200px" width={{ base: "100%", md: "33.33%" }} borderRadius="md" />
+          </Flex>
           <Skeleton height="20px" width="200px" mt={12} mb={6} />
           <Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={8}>
             {selectedDrops.map((_, index) => (
-              <Skeleton key={index} height="200px" borderRadius="lg" />
+              <Skeleton key={index} height="200px" borderRadius="md" />
             ))}
           </Grid>
         </Box>
@@ -100,7 +100,7 @@ function LatestDropsPage() {
       flexDirection="column"
       alignItems="center"
     >
-      <Box maxW="1400px" w="full" px={6} pt={8}>
+      <Box maxW={{ base: "1200px", lg: "1600px" }} w="full" px={{ base: 4, md: 8 }} py={0}>
         {/* Upcoming Drops Section */}
         {dropsData.upcoming.length > 0 && (
           <Box mb={16}>
@@ -112,33 +112,31 @@ function LatestDropsPage() {
             >
               Upcoming Drops
             </Heading>
-            <Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={8}>
+            <Flex justify="center" gap={8} flexWrap="wrap">
               {dropsData.upcoming.map(drop => (
-                <Box key={drop.id}>
+                <Box key={drop.id} width={{ base: '100%', md: '33.33%' }} maxW="400px">
                   <Box
-                    borderWidth="1px"
+                    border="1px solid"
                     borderColor="gray.700"
-                    borderRadius="xl"
+                    borderRadius="md"
                     overflow="hidden"
-                    bg="gray.800"
-                    color="white"
-                    opacity={drop.isLocked ? 0.7 : 1}
-                    transition="all 0.3s ease"
-                    boxShadow="0 4px 15px rgba(0, 0, 0, 0.2)"
+                    bg="gray.900"
+                    color="gray.400"
+                    opacity={0.6}
                     p={6}
                   >
                     <Text
                       fontWeight="bold"
-                      fontSize={{ base: 'lg', md: 'xl' }}
-                      mb={3}
+                      fontSize={{ base: '2xl', md: '2xl' }}
+                      mb={4}
                       noOfLines={1}
                     >
                       {drop.title || 'Untitled Drop'}
                     </Text>
                     <Box height={`${maxDescriptionHeight}px`} overflow="hidden">
                       <Text
-                        fontSize="sm"
-                        color="gray.300"
+                        fontSize={{ base: 'lg', md: 'lg' }}
+                        color="gray.400"
                         noOfLines={2}
                         lineHeight="1.5"
                         dangerouslySetInnerHTML={{
@@ -149,7 +147,7 @@ function LatestDropsPage() {
                   </Box>
                 </Box>
               ))}
-            </Grid>
+            </Flex>
           </Box>
         )}
 
@@ -173,29 +171,28 @@ function LatestDropsPage() {
                   >
                     <Box
                       role="link"
-                      borderWidth="1px"
+                      border="1px solid"
                       borderColor="gray.700"
-                      borderRadius="xl"
+                      borderRadius="md"
                       overflow="hidden"
                       bg="gray.800"
-                      color="white"
-                      _hover={{ boxShadow: 'lg', transform: 'scale(1.03)' }}
-                      transition="all 0.3s ease"
-                      boxShadow="0 4px 15px rgba(0, 0, 0, 0.2)"
+                      color="gray.400"
                       p={6}
+                      transition="all 0.3s"
+                      _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
                     >
                       <Text
                         fontWeight="bold"
-                        fontSize={{ base: 'lg', md: 'xl' }}
-                        mb={3}
+                        fontSize={{ base: '2xl', md: '2xl' }}
+                        mb={4}
                         noOfLines={1}
                       >
                         {drop.title || 'Untitled Drop'}
                       </Text>
                       <Box height={`${maxDescriptionHeight}px`} overflow="hidden">
                         <Text
-                          fontSize="sm"
-                          color="gray.300"
+                          fontSize={{ base: 'lg', md: 'lg' }}
+                          color="gray.400"
                           noOfLines={2}
                           lineHeight="1.5"
                         >

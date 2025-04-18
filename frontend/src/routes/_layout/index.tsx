@@ -609,51 +609,46 @@ function Home() {
           </VStack>
         </Flex>
       </Box>
-{/* Launch Section (Single Full-Width Card) */}
-<Box
-  py={{ base: 12, md: 16 }}
-  bg="transparent"
-  textAlign="center"
-  maxW={{ base: "1200px", lg: "1600px" }} // Match three-card section
-  mx="auto"
-  px={0} // Remove horizontal padding to align with card edges
->
-  <VStack
-    bg="gray.900"
-    border="1px solid"
-    borderColor="gray.700"
-    borderRadius="md"
-    p={6}
-    w="100%" // Ensure full width within maxW
-    spacing={6}
-    transition="all 0.3s"
-    _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
-  >
-    <Heading as="h2" size="2xl" color="gray.400">
-      Launch Countdown
-    </Heading>
-    <Text fontSize="lg" color="gray.400">
-      First Drop: September 5th, 2025
-    </Text>
-    <Flex gap={8} justify="center" wrap="wrap">
-      {[
-        { value: countdown.days, label: "Days" },
-        { value: countdown.hours, label: "Hours" },
-        { value: countdown.minutes, label: "Minutes" },
-        { value: countdown.seconds, label: "Seconds" },
-      ].map(({ value, label }) => (
-        <VStack key={label}>
-          <Text fontSize="5xl" fontWeight="bold" color="gray.400">
-            {value}
-          </Text>
+
+      {/* Launch Section (Single Full-Width Card) */}
+      <Box py={{ base: 12, md: 16 }} bg="transparent" textAlign="center">
+        <VStack
+          bg="gray.900"
+          border="1px solid"
+          borderColor="gray.700"
+          borderRadius="md"
+          p={6}
+          maxW={{ base: "1200px", lg: "1600px" }}
+          mx="auto"
+          spacing={6}
+          transition="all 0.3s"
+          _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
+        >
+          <Heading as="h2" size="2xl" color="gray.400">
+            Launch Countdown
+          </Heading>
           <Text fontSize="lg" color="gray.400">
-            {label}
+            First Drop: September 5th, 2025
           </Text>
+          <Flex gap={8} justify="center" wrap="wrap">
+            {[
+              { value: countdown.days, label: "Days" },
+              { value: countdown.hours, label: "Hours" },
+              { value: countdown.minutes, label: "Minutes" },
+              { value: countdown.seconds, label: "Seconds" },
+            ].map(({ value, label }) => (
+              <VStack key={label}>
+                <Text fontSize="5xl" fontWeight="bold" color="gray.400">
+                  {value}
+                </Text>
+                <Text fontSize="lg" color="gray.400">
+                  {label}
+                </Text>
+              </VStack>
+            ))}
+          </Flex>
         </VStack>
-      ))}
-    </Flex>
-  </VStack>
-</Box>
+      </Box>
 
       {/* Roadmap Section (Single Full-Width Square Card) */}
       <Box py={{ base: 12, md: 16 }} bg="transparent" textAlign="center">
