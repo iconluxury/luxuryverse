@@ -72,6 +72,7 @@ const Footer = () => {
               color="gray.500"
               lineHeight="1.5"
               fontFamily="'Special Gothic Expanded One', sans-serif"
+              textTransform="uppercase" // Added for uppercase
             >
               © 2025{' '}
               <Link
@@ -80,6 +81,7 @@ const Footer = () => {
                 fontSize="sm"
                 lineHeight="1.5"
                 fontFamily="'Special Gothic Expanded One', sans-serif"
+                textTransform="uppercase" // Added for uppercase
                 _hover={{ color: 'white' }}
               >
                 LuxuryVerse
@@ -93,6 +95,7 @@ const Footer = () => {
                 fontSize="sm"
                 fontFamily="'Special Gothic Expanded One', sans-serif"
                 lineHeight="1.5"
+                textTransform="uppercase" // Added for uppercase
                 _hover={{ color: 'white' }}
               >
                 Privacy Policy
@@ -103,6 +106,7 @@ const Footer = () => {
                 fontSize="sm"
                 fontFamily="'Special Gothic Expanded One', sans-serif"
                 lineHeight="1.5"
+                textTransform="uppercase" // Added for uppercase
                 _hover={{ color: 'white' }}
               >
                 Terms and Conditions
@@ -113,6 +117,7 @@ const Footer = () => {
                 fontSize="sm"
                 fontFamily="'Special Gothic Expanded One', sans-serif"
                 lineHeight="1.5"
+                textTransform="uppercase" // Added for uppercase
                 _hover={{ color: 'white' }}
               >
                 Cookie Policy
@@ -123,6 +128,7 @@ const Footer = () => {
                 fontSize="sm"
                 fontFamily="'Special Gothic Expanded One', sans-serif"
                 lineHeight="1.5"
+                textTransform="uppercase" // Added for uppercase
                 _hover={{ color: 'white' }}
               >
                 Opt Out
