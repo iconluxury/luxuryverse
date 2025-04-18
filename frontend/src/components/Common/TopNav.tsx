@@ -42,11 +42,11 @@ export default function TopNav() {
         bg="rgba(10, 10, 10, 0.5)"
         p={{ base: 2, md: 4 }}
         justify="center"
-        width="100vw" // Respect viewport width
+        width="100vw"
         zIndex={10}
         mt={{ base: '0.5rem', md: 0 }}
         backdropFilter="blur(5px)"
-        overflowX="hidden" // Prevent horizontal overflow
+        overflowX="hidden"
       >
         <Flex
           maxW={{ base: '100%', md: '80rem' }}
@@ -59,8 +59,8 @@ export default function TopNav() {
         >
           <Heading
             size="xs"
-            fontSize={{ base: '0.5rem', md: '0.875rem' }} // 8px mobile, 14px desktop
-            color="var(--color-primary)"
+            fontSize={{ base: '0.5rem', md: '0.875rem' }}
+            color="white" // Logo color set to white
             fontFamily="'Special Gothic Expanded One', sans-serif"
             lineHeight="1.1"
           >
@@ -88,14 +88,14 @@ export default function TopNav() {
                 key={to}
                 to={to}
                 style={{
-                  color: label === text ? 'var(--color-primary-hover)' : 'var(--color-primary)',
+                  color: label === text ? '#00FF00' : 'white', // Green for Login/Join/Profile, white for others
                   textDecoration: 'none',
                   fontFamily: "'Special Gothic Expanded One', sans-serif",
                   fontWeight: 'var(--font-weight-normal)',
                   textTransform: 'uppercase',
                 }}
                 _hover={{
-                  color: 'var(--color-primary-hover)',
+                  color: label === text ? '#33FF33' : '#E0E0E0', // Lighter green for auth hover, light gray for others
                 }}
                 onClick={() => navigate({ to })}
               >
@@ -110,10 +110,10 @@ export default function TopNav() {
             onClick={toggleMenu}
             aria-label="Toggle Menu"
             bg="transparent"
-            color="var(--color-primary)"
-            _hover={{ color: 'var(--color-primary-hover)' }}
+            color="white" // Hamburger icon set to white
+            _hover={{ color: '#E0E0E0' }} // Light gray hover
             size="xs"
-            ml="auto" // Pin to right edge
+            ml="auto"
           />
         </Flex>
       </Flex>
@@ -121,10 +121,10 @@ export default function TopNav() {
       <Drawer isOpen={isOpen} placement="right" onClose={closeMenu}>
         <DrawerOverlay />
         <DrawerContent bg="rgba(10, 10, 10, 0.9)" color="white" maxW={{ base: '75%', sm: '250px' }}>
-          <DrawerCloseButton color="var(--color-primary)" />
+          <DrawerCloseButton color="white" /> {/* Close button set to white */}
           <DrawerHeader
             fontFamily="'Special Gothic Expanded One', sans-serif"
-            color="var(--color-primary)"
+            color="white" // Drawer header set to white
           >
             Menu
           </DrawerHeader>
@@ -135,7 +135,7 @@ export default function TopNav() {
                   key={to}
                   to={to}
                   style={{
-                    color: label === text ? 'var(--color-primary-hover)' : 'var(--color-primary)',
+                    color: label === text ? '#00FF00' : 'white', // Green for Login/Join/Profile, white for others
                     textDecoration: 'none',
                     fontFamily: "'Special Gothic Expanded One', sans-serif",
                     fontWeight: 'var(--font-weight-normal)',
@@ -143,7 +143,7 @@ export default function TopNav() {
                     padding: '0.5rem',
                   }}
                   _hover={{
-                    color: 'var(--color-primary-hover)',
+                    color: label === text ? '#33FF33' : '#E0E0E0', // Lighter green for auth hover, light gray for others
                   }}
                   onClick={() => {
                     navigate({ to });
