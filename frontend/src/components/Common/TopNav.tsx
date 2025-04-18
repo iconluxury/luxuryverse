@@ -160,11 +160,7 @@ export default function TopNav() {
         {/* Button */}
         <Button
           onClick={onClick}
-          bg={bg}
           color={color}
-          _hover={{
-            bg: '#00B8CC', // --color-primary-hover
-          }}
           borderRadius="md"
           px={4}
           py={2}
