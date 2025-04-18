@@ -43,7 +43,7 @@ const Footer = () => {
                 fontWeight="normal"
                 textTransform="uppercase"
                 fontSize={{ base: '0.75rem', md: '0.875rem' }}
-                _hover={{ color: 'gray.200' }}
+                _hover={{ color: 'gray.300' }}
               >
                 {label}
               </Link>
@@ -89,7 +89,7 @@ const Footer = () => {
             <HStack spacing={{ base: 2, md: 4 }} justify="center" align="baseline">
               <Link
                 href="/privacy-policy"
-                color="gray.200"
+                color="gray.300"
                 fontSize="sm"
                 fontFamily="'Special Gothic Expanded One', sans-serif"
                 lineHeight="1.5"
@@ -99,7 +99,7 @@ const Footer = () => {
               </Link>
               <Link
                 href="/terms-conditions"
-                color="gray.200"
+                color="gray.300"
                 fontSize="sm"
                 fontFamily="'Special Gothic Expanded One', sans-serif"
                 lineHeight="1.5"
@@ -109,7 +109,7 @@ const Footer = () => {
               </Link>
               <Link
                 href="/cookies"
-                color="gray.200"
+                color="gray.300"
                 fontSize="sm"
                 fontFamily="'Special Gothic Expanded One', sans-serif"
                 lineHeight="1.5"
@@ -119,7 +119,7 @@ const Footer = () => {
               </Link>
               <Link
                 href="/opt-out"
-                color="gray.200"
+                color="gray.300"
                 fontSize="sm"
                 fontFamily="'Special Gothic Expanded One', sans-serif"
                 lineHeight="1.5"
