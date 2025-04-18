@@ -21,25 +21,6 @@ const Footer = () => {
           textAlign="center"
           gap={4}
         >
-          {/* Logo */}
-          <Heading
-            size="xs"
-            fontSize={{ base: '0.5rem', md: '0.75rem' }}
-            color="white"
-            fontFamily="'Special Gothic Expanded One', sans-serif"
-            lineHeight="1.2"
-          >
-            <Link href="https://luxuryverse.com">
-              <Flex align="center" gap={0.5}>
-                <span>Luxury</span>
-                <span>Verse</span>
-              </Flex>
-            </Link>
-          </Heading>
-          {/* Blurb */}
-          <Text color="gray.400" fontSize="sm" maxW="400px">
-            Defining luxury through innovation, authenticity, and global connectivity. Join us in shaping the future of exclusivity.
-          </Text>
           {/* Navigation Links */}
           <HStack
             spacing={{ base: 2, md: 4 }}
@@ -93,7 +74,14 @@ const Footer = () => {
               fontFamily="'Special Gothic Expanded One', sans-serif"
             >
               © 2025{' '}
-              <Link href="https://luxuryverse.com" color="gray.400" _hover={{ color: 'gray.200' }}>
+              <Link
+                href="https://luxuryverse.com"
+                color="green.500"
+                fontSize="sm"
+                lineHeight="1.5"
+                fontFamily="'Special Gothic Expanded One', sans-serif"
+                _hover={{ color: 'green.400' }}
+              >
                 LuxuryVerse
               </Link>
               . All rights reserved.
