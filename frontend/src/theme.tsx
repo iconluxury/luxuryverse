@@ -60,7 +60,7 @@ const theme = extendTheme({
     "5xl": "3rem",
     "6xl": "3.75rem",
     "7xl": "4.5rem",
-    "8xl": "5.5rem", // Added for hero text
+    "8xl": "5.5rem", // For hero text
   },
   fontWeights: {
     light: 300,
