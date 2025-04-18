@@ -32,17 +32,11 @@ const theme = extendTheme({
       600: "#00B8CC",
       700: "#0088A3",
     },
-    blue: {
-      300: "#4DD0FF",
-      400: "#26C6FF",
-      500: "#00B7EB", // Neon blue
-      600: "#009BC7",
-      700: "#007A9E",
-    },
+    white: "#FFFFFF",
+    lightGray: "#E6E6E6",
     black: {
       900: "#0A0A0A", // Deep black
     },
-    white: "#FFFFFF",
   },
   breakpoints: {
     sm: "30em",
@@ -280,9 +274,9 @@ const theme = extendTheme({
     Link: {
       baseStyle: {
         fontFamily: "'DM Sans', sans-serif",
-        color: "blue.500",
+        color: "cyan.500",
         _hover: {
-          color: "blue.400",
+          color: "cyan.400",
           textDecoration: "underline",
         },
       },
@@ -301,10 +295,10 @@ const theme = extendTheme({
         boxSizing: "border-box",
       },
       "a": {
-        color: "blue.500",
+        color: "cyan.500",
         textDecoration: "none",
         _hover: {
-          color: "blue.400",
+          color: "cyan.400",
         },
       },
       "button": {
