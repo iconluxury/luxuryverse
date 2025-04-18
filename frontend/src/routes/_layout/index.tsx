@@ -88,8 +88,8 @@ function Home() {
     const exclusiveSpans = exclusiveElement.querySelectorAll(".glitch-letter");
     const brandsSpans = brandsElement.querySelectorAll(".glitch-letter");
 
-    // Set initial color to green and hide all letters
-    gsap.set([exclusiveElement, brandsElement], { color: "#58fb6cd9" });
+    // Set initial state: hide entire heading and letters
+    gsap.set([exclusiveElement, brandsElement], { opacity: 0, color: "#58fb6cd9" });
     gsap.set(exclusiveSpans, { opacity: 0 });
     gsap.set(brandsSpans, { opacity: 0 });
 
@@ -106,62 +106,63 @@ function Home() {
       x: 0,
     });
 
-    // Cursor blinking animation during typing only
-    const cursorBlink = gsap.to([exclusiveCursor, brandsCursor], {
+    // Cursor blinking animation (always blinking)
+    gsap.to([exclusiveCursor, brandsCursor], {
       opacity: 0,
       repeat: -1,
       yoyo: true,
       duration: 0.5,
       ease: "power1.inOut",
-      paused: true,
     });
 
     // Typewriter animation for EXCLUSIVE (cumulative letter reveal)
-    gsap.to(exclusiveSpans, {
+    gsap.to(exclusiveElement, {
       opacity: 1,
-      y: 0,
-      rotateX: 0,
-      duration: 0.2,
-      stagger: 0.2,
-      ease: "power2.out",
-      onStart: () => {
-        gsap.set(exclusiveCursor, { opacity: 1 });
-        cursorBlink.play();
-      },
-      onUpdate: function () {
-        const currentIndex = Math.floor(this.progress() * exclusiveSpans.length);
-        gsap.set(exclusiveCursor, {
-          x: currentIndex * (exclusiveElement.offsetWidth / exclusiveText.length) + 5, // Small offset to be closer
-        });
-      },
+      duration: 0.1,
       onComplete: () => {
-        gsap.set(exclusiveCursor, { opacity: 0 });
-        cursorBlink.pause();
+        gsap.to(exclusiveSpans, {
+          opacity: 1,
+          y: 0,
+          rotateX: 0,
+          duration: 0.2,
+          stagger: 0.2,
+          ease: "power2.out",
+          onStart: () => {
+            gsap.set(exclusiveCursor, { opacity: 1 });
+          },
+          onUpdate: function () {
+            const currentIndex = Math.floor(this.progress() * exclusiveSpans.length);
+            gsap.set(exclusiveCursor, {
+              x: currentIndex * (exclusiveElement.offsetWidth / exclusiveText.length) + 5,
+            });
+          },
+        });
       },
     });
 
     // Typewriter animation for BRANDS (cumulative letter reveal)
-    gsap.to(brandsSpans, {
+    gsap.to(brandsElement, {
       opacity: 1,
-      y: 0,
-      rotateX: 0,
-      duration: 0.2,
-      stagger: 0.2,
-      ease: "power2.out",
+      duration: 0.1,
       delay: exclusiveText.length * 0.2,
-      onStart: () => {
-        gsap.set(brandsCursor, { opacity: 1 });
-        cursorBlink.play();
-      },
-      onUpdate: function () {
-        const currentIndex = Math.floor(this.progress() * brandsSpans.length);
-        gsap.set(brandsCursor, {
-          x: currentIndex * (brandsElement.offsetWidth / brandsText.length) + 5, // Small offset to be closer
-        });
-      },
       onComplete: () => {
-        gsap.set(brandsCursor, { opacity: 0 });
-        cursorBlink.pause();
+        gsap.to(brandsSpans, {
+          opacity: 1,
+          y: 0,
+          rotateX: 0,
+          duration: 0.2,
+          stagger: 0.2,
+          ease: "power2.out",
+          onStart: () => {
+            gsap.set(brandsCursor, { opacity: 1 });
+          },
+          onUpdate: function () {
+            const currentIndex = Math.floor(this.progress() * brandsSpans.length);
+            gsap.set(brandsCursor, {
+              x: currentIndex * (brandsElement.offsetWidth / brandsText.length) + 5,
+            });
+          },
+        });
       },
     });
 
@@ -217,7 +218,7 @@ function Home() {
 
     // Start glitch animations after typewriter effect
     gsap.delayedCall(exclusiveText.length * 0.2 + 0.5, glitchExclusive);
-    gsap.delayedCall((exclusiveText.length + brandsText.length) * 0.2 + 0.5, glitchBrands);
+    gsap.delayedCall((exclusiveText.length + brandsText.length) * 0.っていう2 + 0.5, glitchBrands);
   }, []);
 
   // Countdown logic for September 5, 2025 launch
@@ -323,7 +324,8 @@ function Home() {
       >
         <Flex maxW="1200px" mx="auto" direction={{ base: "column", lg: "row" }} align="center" gap={12} position="relative">
           <VStack align="flex-start" spacing={12} flex="1">
-          <Heading
+            <Box position="relative" display="inline-block" white neurospace="nowrap">
+              <Heading
                 as="h2"
                 variant="glitch"
                 size="8xl"
@@ -331,8 +333,6 @@ function Home() {
                 data-text="EXCLUSIVE"
                 ref={exclusiveRef}
               />
-            <Box position="relative" display="inline-block">
-
               <Box
                 as="span"
                 ref={exclusiveCursorRef}
@@ -349,7 +349,7 @@ function Home() {
                 |
               </Box>
             </Box>
-            <Box position="relative" display="inline-block">
+            <Box position="relative" display="inline-block" whiteSpace="nowrap">
               <Heading
                 as="h2"
                 variant="glitch"
@@ -385,7 +385,7 @@ function Home() {
               variant="solid"
               bg="green.500"
               color="black.900"
-              _hover={{ bg: "green.600" }}
+              _hover={{ bg: "purple.500" }}
               onClick={handleJoinWaitlist}
               fontSize="xl"
               py={8}
@@ -502,7 +502,8 @@ function Home() {
           maxW="600px"
           mx="auto"
           spacing={6}
-          width={'100%'}
+          transition="all 0.3s"
+          _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
         >
           <Heading as="h2" size="xl" color="purple.500">
             Launching September 2025
