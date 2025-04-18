@@ -495,43 +495,44 @@ function Home() {
                 Get In Line
               </Button>
             </VStack>
-          <Box
-  mt={{ base: 10, md: 12 }} // Reduced from 6/8 to 2/4
+            <Box
+  mt={{ base: 10, md: 12 }}
   overflow="hidden"
   width="100%"
-  maxW={{ base: "1200px", lg: "1600px" }}
-  mx="auto">
-            <Box
-              ref={logosWrapperRef}
-              display="flex"
-              flexWrap="nowrap"
-              gap={{ base: 3, md: 6 }}
-              w="max-content"
-              cursor="pointer"
-              tabIndex={0}
-              _hover={{ animationPlayState: "paused" }}
-              _focus={{ outline: "2px solid", outlineColor: "green.500" }}
-            >
-              {brandLogos.map((img, index) => (
-                <Image
-                key={`${img.alt}-${index}`}
-                className="brand-logo"
-                src={img.src}
-                alt={img.alt}
-                boxSize={{ base: "60px", md: "120px" }} // Increased from 40px/90px to 60px/120px
-                objectFit="contain"
-                fallbackSrc="https://via.placeholder.com/120" // Updated to match new size
-                onError={(e) => {
-                  console.error(`Failed to load image: ${e.currentTarget.src}, alt: ${img.alt}`);
-                  e.currentTarget.src = "/images/placeholder.jpg";
-                }}
-                filter="grayscale(100%)"
-                _hover={{ filter: "grayscale(0%)" }}
-                transition="filter 0.3s ease"
-              />
-              ))}
-            </Box>
-          </Box>
+  maxW={{ base: "800px", lg: "1200px" }} // Reduced from 1200px/1600px
+  mx="auto"
+>
+  <Box
+    ref={logosWrapperRef}
+    display="flex"
+    flexWrap="nowrap"
+    gap={{ base: 4, md: 8 }} // Increased from 3/6 to 4/8
+    w="max-content"
+    cursor="pointer"
+    tabIndex={0}
+    _hover={{ animationPlayState: "paused" }}
+    _focus={{ outline: "2px solid", outlineColor: "green.500" }}
+  >
+    {brandLogos.map((img, index) => (
+      <Image
+        key={`${img.alt}-${index}`}
+        className="brand-logo"
+        src={img.src}
+        alt={img.alt}
+        boxSize={{ base: "80px", md: "160px" }} // Increased from 60px/120px to 80px/160px
+        objectFit="contain"
+        fallbackSrc="https://via.placeholder.com/160" // Updated to match new size
+        onError={(e) => {
+          console.error(`Failed to load image: ${e.currentTarget.src}, alt: ${img.alt}`);
+          e.currentTarget.src = "/images/placeholder.jpg";
+        }}
+        filter="grayscale(100%)"
+        _hover={{ filter: "grayscale(0%)" }}
+        transition="filter 0.3s ease"
+      />
+    ))}
+  </Box>
+</Box>
         </Box>
       </Box>
 
