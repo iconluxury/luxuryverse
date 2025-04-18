@@ -31,7 +31,7 @@ const Footer = () => {
             {/* Company Information */}
             <Box maxW={{ base: "100%", md: "400px" }}>
               <Heading as="h4" size="md" mb={4}>
-                <Link href="https://luxuryverse.com" _hover={{ textDecoration: "none", color: "purple.600" }}>
+                <Link href="https://luxuryverse.com" _hover={{ textDecoration: "none", color: "gray.500" }}>
                   LuxuryVerse
                 </Link>
               </Heading>
@@ -46,16 +46,16 @@ const Footer = () => {
                 Explore
               </Heading>
               <HStack wrap="wrap" spacing={4} justify={{ base: "center", md: "flex-start" }}>
-                <Link href="/roadmap" color="gray.300" _hover={{ color: "purple.600" }}>
+                <Link href="/roadmap" color="gray.300" _hover={{ color: "gray.500" }}>
                   Roadmap
                 </Link>
-                <Link href="/authenticity" color="gray.300" _hover={{ color: "purple.600" }}>
+                <Link href="/authenticity" color="gray.300" _hover={{ color: "gray.500" }}>
                   Authenticity
                 </Link>
-                <Link href="/faq" color="gray.300" _hover={{ color: "purple.600" }}>
+                <Link href="/faq" color="gray.300" _hover={{ color: "gray.500" }}>
                   FAQ
                 </Link>
-                <Link href="/contact" color="gray.300" _hover={{ color: "purple.600" }}>
+                <Link href="/contact" color="gray.300" _hover={{ color: "gray.500" }}>
                   Contact
                 </Link>
               </HStack>
@@ -67,10 +67,10 @@ const Footer = () => {
                 Shop
               </Heading>
               <HStack wrap="wrap" spacing={4} justify={{ base: "center", md: "flex-start" }}>
-                <Link href="/join" color="gray.300" _hover={{ color: "purple.600" }}>
+                <Link href="/join" color="gray.300" _hover={{ color: "gray.500" }}>
                   Join
                   </Link>
-                <Link href="/collections" color="gray.300" _hover={{ color: "purple.600" }}>
+                <Link href="/collections" color="gray.300" _hover={{ color: "gray.500" }}>
                   Collections
                 </Link>
               </HStack>
@@ -88,7 +88,7 @@ const Footer = () => {
             </Heading>
             <Text color="gray.300" mb={2}>
               <strong>Email:</strong>{" "}
-              <Link href="mailto:info@luxuryverse.com" _hover={{ color: "purple.600" }}>
+              <Link href="mailto:info@luxuryverse.com" _hover={{ color: "gray.500" }}>
                 info@luxuryverse.com
               </Link>
             </Text>
@@ -111,7 +111,7 @@ const Footer = () => {
         >
           <Text color="gray.400" fontSize="sm">
             © 2025{" "}
-            <Link href="https://luxuryverse.com" color="gray.200" _hover={{ color: "purple.600" }}>
+            <Link href="https://luxuryverse.com" color="gray.200" _hover={{ color: "gray.500" }}>
               LuxuryVerse
             </Link>
             . All rights reserved.
@@ -121,16 +121,16 @@ const Footer = () => {
             flexWrap="wrap"
             justify={{ base: "center", md: "flex-end" }}
           >
-            <Link href="/privacy-policy" color="gray.400" fontSize="sm" _hover={{ color: "purple.600" }}>
+            <Link href="/privacy-policy" color="gray.400" fontSize="sm" _hover={{ color: "gray.500" }}>
               Privacy Policy
             </Link>
-            <Link href="/terms-conditions" color="gray.400" fontSize="sm" _hover={{ color: "purple.600" }}>
+            <Link href="/terms-conditions" color="gray.400" fontSize="sm" _hover={{ color: "gray.500" }}>
               Terms and Conditions
             </Link>
-            <Link href="/cookies" color="gray.400" fontSize="sm" _hover={{ color: "purple.600" }}>
+            <Link href="/cookies" color="gray.400" fontSize="sm" _hover={{ color: "gray.500" }}>
               Cookie Policy
             </Link>
-            <Link href="/opt-out" color="gray.400" fontSize="sm" _hover={{ color: "purple.600" }}>
+            <Link href="/opt-out" color="gray.400" fontSize="sm" _hover={{ color: "gray.500" }}>
               Opt Out
             </Link>
           </HStack>

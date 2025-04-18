@@ -67,7 +67,7 @@ function Layout() {
             zIndex: 9999,
           }}
           buttonStyle={{
-            background: theme.colors.purple[500] || "#EF4444",
+            background: theme.colors.green[500] || "#EF4444",
             color: theme.colors.white || "#FFFFFF",
             padding: "4px 8px",
             fontWeight: "medium",
@@ -120,14 +120,14 @@ function Layout() {
          We use cookies to provide necessary site functionality and improve your experience. Read about{" "}
           <Link
             to="/cookies"
-            style={{ color: theme.colors.purple[500] || "#EF4444", textDecoration: "underline" }}
+            style={{ color: theme.colors.green[500] || "#EF4444", textDecoration: "underline" }}
           >
             Cookies
           </Link>{" "}
           and {" "}
           <Link
             to="/privacy-policy"
-            style={{ color: theme.colors.purple[500] || "#EF4444", textDecoration: "underline" }}
+            style={{ color: theme.colors.green[500] || "#EF4444", textDecoration: "underline" }}
           >
             Privacy 
           </Link>
