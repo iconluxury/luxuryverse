@@ -133,13 +133,6 @@ function Home() {
 
   return (
     <Box bg="black.900">
-      {/* Header with Logo */}
-      <Box as="header" py={6} px={{ base: 4, md: 8 }} textAlign="center">
-        <Heading as="h1" variant="logo" className="luxuryverse-logo" size="2xl">
-          LUXURYVERSE
-        </Heading>
-      </Box>
-
       {/* Hero Section: Exclusive Brands */}
       <Box
         bgImage="url('/images/hero-bg.jpg')"
