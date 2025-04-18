@@ -111,7 +111,7 @@ const Footer = () => {
             
               <Link
                 href="https://luxuryverse.com"
-                color="green.400"
+                color="#00FF00"
                 fontSize="sm"
                 lineHeight="1.5"
                 fontFamily="'Special Gothic Expanded One', sans-serif"
