@@ -73,7 +73,7 @@ function Home() {
     const exclusiveCursor = exclusiveCursorRef.current;
     const brandsCursor = brandsCursorRef.current;
 
-    // Split text into spans for typewriter effect
+    // Split text into spans for typewriter and glitch effects
     const exclusiveText = "EXCLUSIVE";
     const brandsText = "BRANDS";
     exclusiveElement.innerHTML = exclusiveText
@@ -166,86 +166,78 @@ function Home() {
       },
     });
 
-    // Flashy Glitch animation for EXCLUSIVE
+    // Flashy Glitch animation for EXCLUSIVE (individual letters)
     const glitchExclusive = () => {
       const colors = ["#58fb6cd9", "#ff00ff", "#00e5ff", "#ffea00", "#ff5555"];
-      gsap
-        .timeline()
-        .to(exclusiveElement, {
-          color: colors[Math.floor(Math.random() * colors.length)],
-          x: gsap.utils.random(-10, 10),
-          y: gsap.utils.random(-10, 10),
-          scale: gsap.utils.random(0.95, 1.05),
-          rotate: gsap.utils.random(-5, 5),
-          skewX: gsap.utils.random(-10, 10),
-          opacity: gsap.utils.random(0.3, 0.7),
-          duration: 0.1,
-          ease: "power1.inOut",
-        })
-        .to(exclusiveElement, {
-          color: colors[Math.floor(Math.random() * colors.length)],
-          x: gsap.utils.random(-15, 15),
-          y: gsap.utils.random(-15, 15),
-          scale: gsap.utils.random(0.9, 1.1),
-          rotate: gsap.utils.random(-7, 7),
-          skewX: gsap.utils.random(-15, 15),
-          opacity: gsap.utils.random(0.5, 0.9),
-          duration: 0.1,
-          ease: "power1.inOut",
-        })
-        .to(exclusiveElement, {
-          color: "#58fb6cd9",
-          x: 0,
-          y: 0,
-          scale: 1,
-          rotate: 0,
-          skewX: 0,
-          opacity: 1,
-          duration: 0.15,
-          ease: "power1.inOut",
-        });
-      gsap.delayedCall(gsap.utils.random(2, 4), glitchExclusive); // More frequent glitches
+      exclusiveSpans.forEach((span) => {
+        gsap
+          .timeline()
+          .to(span, {
+            color: colors[Math.floor(Math.random() * colors.length)],
+            x: gsap.utils.random(-20, 20),
+            y: gsap.utils.random(-20, 20),
+            scale: gsap.utils.random(0.9, 1.1),
+            rotate: gsap.utils.random(-10, 10),
+            duration: 0.08,
+            ease: "none",
+          })
+          .to(span, {
+            color: colors[Math.floor(Math.random() * colors.length)],
+            x: gsap.utils.random(-15, 15),
+            y: gsap.utils.random(-15, 15),
+            scale: gsap.utils.random(0.95, 1.05),
+            rotate: gsap.utils.random(-5, 5),
+            duration: 0.08,
+            ease: "none",
+          })
+          .to(span, {
+            color: "#58fb6cd9",
+            x: 0,
+            y: 0,
+            scale: 1,
+            rotate: 0,
+            duration: 0.1,
+            ease: "power1.out",
+          });
+      });
+      gsap.delayedCall(gsap.utils.random(1.5, 3), glitchExclusive); // Frequent glitches
     };
 
-    // Flashy Glitch animation for BRANDS
+    // Flashy Glitch animation for BRANDS (individual letters)
     const glitchBrands = () => {
       const colors = ["#58fb6cd9", "#ff00ff", "#00e5ff", "#ffea00", "#ff5555"];
-      gsap
-        .timeline()
-        .to(brandsElement, {
-          color: colors[Math.floor(Math.random() * colors.length)],
-          x: gsap.utils.random(-10, 10),
-          y: gsap.utils.random(-10, 10),
-          scale: gsap.utils.random(0.95, 1.05),
-          rotate: gsap.utils.random(-5, 5),
-          skewX: gsap.utils.random(-10, 10),
-          opacity: gsap.utils.random(0.3, 0.7),
-          duration: 0.1,
-          ease: "power1.inOut",
-        })
-        .to(brandsElement, {
-          color: colors[Math.floor(Math.random() * colors.length)],
-          x: gsap.utils.random(-15, 15),
-          y: gsap.utils.random(-15, 15),
-          scale: gsap.utils.random(0.9, 1.1),
-          rotate: gsap.utils.random(-7, 7),
-          skewX: gsap.utils.random(-15, 15),
-          opacity: gsap.utils.random(0.5, 0.9),
-          duration: 0.1,
-          ease: "power1.inOut",
-        })
-        .to(brandsElement, {
-          color: "#58fb6cd9",
-          x: 0,
-          y: 0,
-          scale: 1,
-          rotate: 0,
-          skewX: 0,
-          opacity: 1,
-          duration: 0.15,
-          ease: "power1.inOut",
-        });
-      gsap.delayedCall(gsap.utils.random(2, 4), glitchBrands); // More frequent glitches
+      brandsSpans.forEach((span) => {
+        gsap
+          .timeline()
+          .to(span, {
+            color: colors[Math.floor(Math.random() * colors.length)],
+            x: gsap.utils.random(-20, 20),
+            y: gsap.utils.random(-20, 20),
+            scale: gsap.utils.random(0.9, 1.1),
+            rotate: gsap.utils.random(-10, 10),
+            duration: 0.08,
+            ease: "none",
+          })
+          .to(span, {
+            color: colors[Math.floor(Math.random() * colors.length)],
+            x: gsap.utils.random(-15, 15),
+            y: gsap.utils.random(-15, 15),
+            scale: gsap.utils.random(0.95, 1.05),
+            rotate: gsap.utils.random(-5, 5),
+            duration: 0.08,
+            ease: "none",
+          })
+          .to(span, {
+            color: "#58fb6cd9",
+            x: 0,
+            y: 0,
+            scale: 1,
+            rotate: 0,
+            duration: 0.1,
+            ease: "power1.out",
+          });
+      });
+      gsap.delayedCall(gsap.utils.random(1.5, 3), glitchBrands); // Frequent glitches
     };
 
     // Start glitch animations after typewriter effect
@@ -342,7 +334,7 @@ function Home() {
         bgSize="cover"
         bgPosition="center"
         py={{ base: 20, md: 32 }}
-        px={{ base: '1rem', md: '1rem' }}
+        px={{ base: 4, md: 8 }}
         position="relative"
         _before={{
           content: '""',
@@ -361,7 +353,7 @@ function Home() {
               <Heading
                 as="h2"
                 variant="glitch"
-                size="9xl"
+                size="8xl"
                 className="glitch glitch-exclusive"
                 data-text="EXCLUSIVE"
                 ref={exclusiveRef}
@@ -386,7 +378,7 @@ function Home() {
               <Heading
                 as="h2"
                 variant="glitch"
-                size="9xl"
+                size="8xl"
                 className="glitch glitch-brands"
                 data-text="BRANDS"
                 ref={brandsRef}
