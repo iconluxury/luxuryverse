@@ -128,7 +128,7 @@ const Footer = () => {
               justify="flex-end"
               align="baseline"
             >
-              <Link
+            <Link
                 href="/terms-conditions"
                 color="gray.400"
                 fontSize="sm"
