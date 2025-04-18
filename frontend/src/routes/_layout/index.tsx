@@ -764,45 +764,6 @@ function Home() {
           </Button>
         </VStack>
       </Box>
-
-      {/* Documents */}
-      <Box
-        py={{ base: 12, md: 16 }}
-        px={{ base: 4, md: 8 }}
-        width="100%"
-      >
-        <VStack
-          spacing={8}
-          maxW={{ base: "100%", lg: "100%" }}
-          mx="auto"
-          px={{ base: 4, md: 8 }}
-        >
-          <Heading as="h2" size="2xl" color="gray.400">
-            Read Documents
-          </Heading>
-          <Flex gap={8} wrap="wrap" justify="center">
-            {[
-              { href: "/docs/whitepaper.pdf", label: "Whitepaper" },
-              { href: "/docs/presentation.pdf", label: "Presentation" },
-              { href: "/docs/lightpaper.pdf", label: "Lightpaper" },
-            ].map(({ href, label }) => (
-              <Button
-                key={label}
-                as="a"
-                href={href}
-                variant="outline"
-                borderColor="gray.400"
-                color="gray.400"
-                size="lg"
-                _hover={{ bg: "green.500", color: "black.900" }}
-              >
-                {label}
-              </Button>
-            ))}
-          </Flex>
-        </VStack>
-      </Box>
-
       {/* Authentication Council */}
       <Box
         py={{ base: 12, md: 16 }}
