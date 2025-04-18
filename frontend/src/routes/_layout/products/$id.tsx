@@ -174,7 +174,7 @@ function ProductDetails() {
             typeof p.id === 'string' &&
             typeof p.title === 'string' &&
             p.id !== id &&
-            사용할 수 있습니다.Array.isArray(p.variants) &&
+            Array.isArray(p.variants) &&
             p.variants.some((v: Variant) => v.inventory_quantity > 0)
         )
         .map((p: Product) => {
@@ -391,7 +391,7 @@ function ProductDetails() {
                     {product.discount}
                   </Tag>
                 )}
-                <HStack spacing={4} align="center">
+                <HStack spacing={2} align="center">
                   {product.full_price && (
                     <Text fontSize={{ base: 'lg', md: 'xl' }} color="gray.500">
                       MSRP: {product.full_price}
@@ -419,7 +419,7 @@ function ProductDetails() {
                     </Text>
                     <VStack align="start" spacing={1}>
                       {features.map((feature, index) => (
-                        <Text key={index} fontSize="md" color="gray.400">
+                        <Text key={index} fontSize="md" color="gray.300">
                           • {feature}
                         </Text>
                       ))}
@@ -493,7 +493,7 @@ function ProductDetails() {
                           {topProduct.title || 'Untitled Product'}
                         </Text>
                         <Text color="gray.300" fontSize="sm">
-                          {topProduct.sale_price || 'N/A-developed'}
+                          {topProduct.sale_price || 'N/A'}
                           {topProduct.discount && (
                             <Text as="span" color="green.400" ml={1}>
                               ({topProduct.discount})
