@@ -587,7 +587,31 @@ function Home() {
           </VStack>
         </Flex>
       </Box>
-
+      {/* Authentication Council */}
+      <Box
+        py={{ base: 12, md: 16 }}
+        px={{ base: 4, md: 8 }}
+        width="100%"
+      >
+        <VStack
+          spacing={8}
+          maxW={{ base: "100%", lg: "100%" }}
+          mx="auto"
+          px={{ base: 4, md: 8 }}
+        >
+          <Heading as="h2" size="2xl" color="gray.400">
+            Trust in Every Purchase
+          </Heading>
+          <Text
+            textAlign="center"
+            maxW={{ base: "700px", lg: "900px" }}
+            fontSize="lg"
+            color="gray.400"
+          >
+            LuxuryVerse partners with former members of Interpol, the FBI, and other agencies to guarantee authentic merchandise. All goods are transported, stored, and shipped from secure facilities.
+          </Text>
+        </VStack>
+      </Box>
       {/* FAQs Section */}
       <Box
         py={{ base: 12, md: 16 }}
@@ -667,31 +691,7 @@ function Home() {
           </Button>
         </VStack>
       </Box>
-      {/* Authentication Council */}
-      <Box
-        py={{ base: 12, md: 16 }}
-        px={{ base: 4, md: 8 }}
-        width="100%"
-      >
-        <VStack
-          spacing={8}
-          maxW={{ base: "100%", lg: "100%" }}
-          mx="auto"
-          px={{ base: 4, md: 8 }}
-        >
-          <Heading as="h2" size="2xl" color="gray.400">
-            Trust in Every Purchase
-          </Heading>
-          <Text
-            textAlign="center"
-            maxW={{ base: "700px", lg: "900px" }}
-            fontSize="lg"
-            color="gray.400"
-          >
-            LuxuryVerse partners with former members of Interpol, the FBI, and other agencies to guarantee authentic merchandise. All goods are transported, stored, and shipped from secure facilities.
-          </Text>
-        </VStack>
-      </Box>
+
 
       {/* Footer */}
       <Footer />

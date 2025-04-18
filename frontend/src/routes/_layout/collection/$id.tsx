@@ -76,50 +76,42 @@ function CollectionDetails() {
     queryKey: ['collection', id],
     queryFn: async () => {
       const url = `${API_BASE_URL}/api/v1/collections/${id}`;
-      console.log('Fetching:', url);
+      console.log('Fetching collection:', url);
       const response = await fetch(url, {
         method: 'GET',
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-          Pragma: 'no-cache',
-          Expires: '0',
         },
         credentials: 'omit',
-        cache: 'force-cache',
       });
-
+  
       if (!response.ok) {
+        console.error(`Fetch failed with status: ${response.status}`);
         if (response.status === 404) throw new Error('Collection not found.');
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-
-      const reader = response.body?.getReader();
-      if (!reader) throw new Error('Response body is not readable.');
-
-      let receivedData = '';
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        receivedData += new TextDecoder().decode(value);
-      }
-
-      const collectionData = JSON.parse(receivedData);
+  
+      const collectionData = await response.json();
       console.log('Raw API response:', JSON.stringify(collectionData, null, 2));
-      console.log('Products count:', collectionData.products?.length || 0);
-
+      console.log('Products in response:', collectionData.products ? collectionData.products.length : 'No products field');
+  
       if (!collectionData || typeof collectionData !== 'object') {
+        console.error('Invalid collection data:', collectionData);
         throw new Error('Invalid collection data received');
       }
-
+  
       const validatedCollection: Collection = {
         id: collectionData.id || id,
         title: collectionData.title || 'Untitled Collection',
         description: collectionData.description || '',
         products: Array.isArray(collectionData.products)
           ? collectionData.products
-              .filter((p: Product) => p && p.id)
+              .filter((p: Product) => {
+                const isValid = p && (p.id || p.title || p.brand); // Less strict: allow products with title or brand
+                console.log(`Product filter: Valid=${isValid}, Product=${JSON.stringify(p)}`);
+                return isValid;
+              })
               .map((p: Product) => {
                 const variants = Array.isArray(p.variants) ? p.variants.filter((v: Variant) => v && v.id) : [];
                 return {
@@ -142,8 +134,8 @@ function CollectionDetails() {
               .sort((a, b) => (b.discount_value || 0) - (a.discount_value || 0))
           : [],
       };
-
-      localStorage.setItem(`collection-${id}`, JSON.stringify(validatedCollection));
+  
+      console.log('Validated collection products count:', validatedCollection.products.length);
       return validatedCollection;
     },
     suspense: false,
