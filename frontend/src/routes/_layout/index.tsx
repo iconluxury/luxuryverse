@@ -159,9 +159,18 @@ function Home() {
               variant="glitch"
               size={{ base: "6xl", md: "7xl" }}
               className="glitch"
-              data-text="Exclusive Brands"
+              data-text="Exclusive"
             >
-              Exclusive Brands
+              Exclusive
+            </Heading>
+            <Heading
+              as="h2"
+              variant="glitch"
+              size={{ base: "6xl", md: "7xl" }}
+              className="glitch"
+              data-text="Brands"
+            >
+              Brands
             </Heading>
             <Text fontFamily="'DM Sans', sans-serif" fontSize={{ base: "xl", md: "2xl" }} color="gray.300">
               Exclusive Access
