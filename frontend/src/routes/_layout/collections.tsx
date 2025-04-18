@@ -117,7 +117,7 @@ function LatestDropsPage() {
   {/* Upcoming Drops Section */}
   {dropsData.upcoming.length > 0 && (
     <Box mb={16}>
-      <VStack spacing={4} textAlign="center">
+     <VStack spacing={4} textAlign="center">
         <Heading
           fontSize={{ base: "2xl", md: "3xl" }}
           color="white"
@@ -127,20 +127,22 @@ function LatestDropsPage() {
         <Text fontSize="lg" color="white">
           2025-05-01, 10:00 AM
           <br />
-          <Text as="span" color="gray.400" lineHeight="1.2">
+          <Text as="span" color="gray.400">
             until sold out.
           </Text>
+          <br />
+          <ChakraLink
+            as="span"
+            color="green.500"
+            fontSize="lg"
+            fontWeight="bold"
+            textDecoration="underline"
+            _hover={{ color: "green.400" }}
+            onClick={() => console.log("Notify clicked - no action implemented")}
+          >
+            Notify
+          </ChakraLink>
         </Text>
-        <ChakraLink
-          color="green.500"
-          fontSize="lg"
-          fontWeight="bold"
-          textDecoration="underline"
-          _hover={{ color: "green.400" }}
-          onClick={() => console.log("Notify clicked - no action implemented")}
-        >
-          notify
-        </ChakraLink>
       </VStack>
     </Box>
   )}
