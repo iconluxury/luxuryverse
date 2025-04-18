@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import { TimeIcon } from '@chakra-ui/icons';
 import Footer from "@/components/Common/Footer";
 
-export const Route = createFileRoute('/_layout/latest-drops')({
+export const Route = createFileRoute('/_layout/collections')({
   component: LatestDropsPage,
 });
 
@@ -105,16 +105,6 @@ function LatestDropsPage() {
       alignItems="center"
     >
       <Box maxW="1400px" w="full" px={6} pt={8}>
-        <Heading
-          fontSize={{ base: '3xl', md: '4xl' }}
-          mb={12}
-          textAlign="center"
-          bgGradient="linear(to-r, purple.400, pink.400)"
-          bgClip="text"
-        >
-          Latest Drops
-        </Heading>
-
         {/* Upcoming Drops Section */}
         {dropsData.upcoming?.length > 0 && (
           <Box mb={16}>

@@ -122,12 +122,6 @@ export default function TopNav() {
         <DrawerOverlay />
         <DrawerContent bg="rgba(10, 10, 10, 0.9)" color="white" maxW={{ base: '75%', sm: '250px' }}>
           <DrawerCloseButton color="white" /> {/* Close button set to white */}
-          <DrawerHeader
-            fontFamily="'Special Gothic Expanded One', sans-serif"
-            color="white" // Drawer header set to white
-          >
-            Menu
-          </DrawerHeader>
           <DrawerBody>
             <VStack spacing={4} align="stretch">
               {navItems.map(({ to, label }) => (
