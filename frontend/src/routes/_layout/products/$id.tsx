@@ -388,10 +388,9 @@ function ProductDetails() {
               )}
               {/* Product Details Section */}
               <VStack align="start" spacing={4}>
-              <Text as="h1" fontSize={{ base: '3xl', md: '4xl' }} fontWeight="medium" lineHeight="1.3">
-                {cleanTitle}
-              </Text>
-               
+              <Text as="h1" fontSize={{ base: '3xl', md: '4xl' }} fontWeight="medium" lineHeight="1.3" color="gray.50">
+  {cleanTitle}
+</Text>
                 <HStack spacing={2} alignItems="center">
   <Text fontSize="lg" fontWeight="bold" lineHeight="1.5" color="purple.500">
     {product.brand || 'Unknown Brand'}
@@ -454,16 +453,16 @@ function ProductDetails() {
                   )}
                 </HStack>
                 {product.description ? (
-                  <Text
-                    fontSize="lg"
-                    color="gray.500"
-                    dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(product.description) }}
-                  />
-                ) : (
-                  <Text fontSize="lg" color="gray.500">
-                    No description available
-                  </Text>
-                )}
+                      <Text
+                        fontSize="lg"
+                        color="gray.400"
+                        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(product.description) }}
+                      />
+                    ) : (
+                      <Text fontSize="lg" color="gray.400">
+                        No description available
+                      </Text>
+                    )}
                 {features.length > 0 && (
                   <Box>
                     <Text as="h2" fontSize="xl" mb={2}>
