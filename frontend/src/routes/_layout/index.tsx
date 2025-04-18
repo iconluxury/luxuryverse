@@ -327,7 +327,7 @@ function Home() {
               <Heading
                 as="h2"
                 variant="glitch"
-                size="8xl"
+                size="9xl"
                 className="glitch glitch-exclusive"
                 data-text="EXCLUSIVE"
                 ref={exclusiveRef}
@@ -352,7 +352,7 @@ function Home() {
               <Heading
                 as="h2"
                 variant="glitch"
-                size="8xl"
+                size="9xl"
                 className="glitch glitch-brands"
                 data-text="BRANDS"
                 ref={brandsRef}
