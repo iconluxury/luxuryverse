@@ -113,36 +113,37 @@ function LatestDropsPage() {
       flexDirection="column"
       alignItems="center"
     >
-      <Box maxW={{ base: "1200px", lg: "1600px" }} w="full" px={{ base: 4, md: 8 }} py={0}>
-        {/* Upcoming Drops Section */}
-        {dropsData.upcoming.length > 0 && (
-          <Box mb={16}>
-            <VStack spacing={8} textAlign="center">
-              <Heading
-                fontSize={{ base: '2xl', md: '3xl' }}
-                color="white"
-              >
-                Upcoming Drops
-                </Heading>
-<Text fontSize="lg" color="white">
-  2025-05-01, 10:00 AM<br />
-  <Text as="span" color="gray.400" lineHeight="1.2">
-    until sold out.
-  </Text>
-</Text>
-              <ChakraLink
-                color="green.500"
-                fontSize="lg"
-                fontWeight="bold"
-                textDecoration="underline"
-                _hover={{ color: "green.400" }}
-                onClick={() => console.log("Notify clicked - no action implemented")}
-              >
-                Notify
-              </ChakraLink>
-            </VStack>
-          </Box>
-        )}
+      <Box maxW={{ base: "1200px", lg: "1600px" }} w="full" px={{ base: 4, md: 8 }} py={0} pt={{ base: 8, md: 12 }}>
+  {/* Upcoming Drops Section */}
+  {dropsData.upcoming.length > 0 && (
+    <Box mb={16}>
+      <VStack spacing={4} textAlign="center">
+        <Heading
+          fontSize={{ base: "2xl", md: "3xl" }}
+          color="white"
+        >
+          Upcoming Drops
+        </Heading>
+        <Text fontSize="lg" color="white">
+          2025-05-01, 10:00 AM
+          <br />
+          <Text as="span" color="gray.400" lineHeight="1.2">
+            until sold out.
+          </Text>
+        </Text>
+        <ChakraLink
+          color="green.500"
+          fontSize="lg"
+          fontWeight="bold"
+          textDecoration="underline"
+          _hover={{ color: "green.400" }}
+          onClick={() => console.log("Notify clicked - no action implemented")}
+        >
+          Notify
+        </ChakraLink>
+      </VStack>
+    </Box>
+  )}
 
         {/* Past Drops Section */}
         {dropsData.past.length > 0 && (
