@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 import { ErrorBoundary } from 'react-error-boundary';
 import Footer from '../../../components/Common/Footer';
-
+import cleanTitle from '../../../utils/cleanTitle';
 // Interfaces (unchanged)
 interface Variant {
   id: string;
@@ -197,24 +197,8 @@ function CollectionDetails() {
             )}
             {collection.products.length > 0 ? (
               <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing={6} w="100%">
-                {collection.products.map((product) => {
-                  const cleanTitle = product.brand
-                    ? product.title.replace(new RegExp(`\\b${product.brand}\\b`, 'i'), '').trim()
-                    : product.title;
-
-                    f (product?.title && product?.brand) {
-                      // Create regex for brand
-                      const brandRegex = new RegExp(`\\b${product.brand}\\b`, 'i');
-                      // Create regex for men/mens/men's variations
-                      const menRegex = /\b(men'?s|men)\b/i;
-                      // Remove brand and men-related words, then trim
-                      return product.title
-                        .replace(brandRegex, '')
-                        .replace(menRegex, '')
-                        .trim()
-                        .replace(/\s+/g, ' '); // Normalize multiple spaces
-                    }
-                    return product?.title || 'Untitled Product';
+               {collection.products.map((product) => {
+                const cleanedTitle = cleanTitle(product)();
                   return (
                     <Link key={product.id} to={`/products/${product.id}`}>
                       <Box
@@ -250,10 +234,10 @@ function CollectionDetails() {
                             {product.brand}
                           </Text>
                           <Text fontSize="sm" color="gray.200" noOfLines={1}>
-                            {cleanTitle}
+                            {cleanedTitle}
                           </Text>
                           <Flex mt={2} justify="space-between" align="center">
-                            <Text fontWeight="bold" fontSize="xl" color="var(--color-primary-hover)">
+                            <Text fontWeight="bold" fontSize="2xl" color="var(--color-primary-hover)">
                               {product.sale_price}
                             </Text>
                             <Text fontSize="lg" color="gray.400">
