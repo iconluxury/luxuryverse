@@ -327,107 +327,112 @@ function Home() {
   };
 
   return (
-    <Box bg="black.900">
-      {/* Hero Section: Exclusive Brands */}
-      <Box
-        bgImage="url('/images/hero-bg.jpg')"
-        bgSize="cover"
-        bgPosition="center"
-        py={{ base: 6, md: 16 }}
-        px={{ base: 2, md: 8 }}
-        position="relative"
-        overflowX="hidden"
-        width="100vw"
-        _before={{
-          content: '""',
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          bg: "black.900",
-          opacity: 0.7,
-        }}
-      >
-        <Flex
-          maxW={{ base: "100%", md: "1200px" }}
-          mx="auto"
-          direction={{ base: "column", lg: "row" }}
-          align={{ base: "flex-start", lg: "center" }}
-          gap={{ base: 4, md: 12 }}
-          position="relative"
+<Box
+  bgImage="url('/images/hero-bg.jpg')"
+  bgSize="cover"
+  bgPosition="center"
+  py={{ base: 6, md: 16 }}
+  px={{ base: 2, md: 8 }}
+  position="relative"
+  overflowX="hidden"
+  width="100vw"
+  _before={{
+    content: '""',
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    bg: "black.900",
+    opacity: 0.7,
+  }}
+>
+  <Flex
+    maxW={{ base: "100%", md: "1200px" }}
+    mx="auto"
+    direction={{ base: "column", lg: "row" }}
+    align={{ base: "flex-start", lg: "center" }}
+    gap={{ base: 4, md: 12 }}
+    position="relative"
+    justify={{ base: "center", lg: "flex-start" }} // Align content to the left on wide screens
+  >
+    <VStack
+      align="flex-start"
+      spacing={{ base: 4, md: 12 }}
+      flex={{ base: "none", lg: "0 0 50%" }} // Fixed width on wide screens to prevent stretching
+      maxW={{ base: "100%", lg: "600px" }} // Limit width to keep content tight
+      ml={{ base: 0, lg: 0 }} // Ensure no unintended left margin
+    >
+      <Box position="relative" display="inline-block" whiteSpace="nowrap">
+        <Heading
+          as="h2"
+          variant="glitch"
+          size={{ base: "3xl", md: "9xl" }}
+          className="glitch glitch-exclusive"
+          data-text="EXCLUSIVE"
+          ref={exclusiveRef}
         >
-          <VStack align="flex-start" spacing={{ base: 4, md: 12 }} flex="1" ml={{ base: 0, md: 0 }}>
-            <Box position="relative" display="inline-block" whiteSpace="nowrap">
-              <Heading
-                as="h2"
-                variant="glitch"
-                size={{ base: "3xl", md: "9xl" }} // Smaller on mobile
-                className="glitch glitch-exclusive"
-                data-text="EXCLUSIVE"
-                ref={exclusiveRef}
-              >
-                EXCLUSIVE
-              </Heading>
-              <Box
-                as="span"
-                ref={exclusiveCursorRef}
-                className="terminal-cursor"
-                position="absolute"
-                top={{ base: "5%", md: "10%" }}
-                left="0"
-                color="#58fb6cd9"
-                fontSize={{ base: "1rem", md: "5.5rem" }} // Smaller cursor on mobile
-                lineHeight="1"
-                fontWeight="normal"
-                ml="0.05em"
-              >
-                |
-              </Box>
-            </Box>
-            <Box position="relative" display="inline-block" whiteSpace="nowrap">
-              <Heading
-                as="h2"
-                variant="glitch"
-                size={{ base: "3xl", md: "9xl" }}
-                className="glitch glitch-brands"
-                data-text="BRANDS"
-                ref={brandsRef}
-              >
-                BRANDS
-              </Heading>
-              <Box
-                as="span"
-                ref={brandsCursorRef}
-                className="terminal-cursor"
-                position="absolute"
-                top={{ base: "5%", md: "10%" }}
-                left="0"
-                color="#58fb6cd9"
-                fontSize={{ base: "1rem", md: "5.5rem" }}
-                lineHeight="1"
-                fontWeight="normal"
-                ml="0.05em"
-              >
-                |
-              </Box>
-            </Box>
-            <Text fontSize={{ base: "sm", md: "xl" }} color="purple.500">
-              Exclusive Access to authenticated luxury goods, verified on the blockchain
-            </Text>
-            <Button
-              size="lg"
-              variant="solid"
-              bg="green.500"
-              color="black.900"
-              _hover={{ bg: "green.600" }}
-              onClick={handleJoinWaitlist}
-              fontSize={{ base: "md", md: "xl" }}
-              py={{ base: 6, md: 8 }}
-              px={{ base: 8, md: 12 }}
-            >
-              Join The Waitlist
-            </Button>
+          EXCLUSIVE
+        </Heading>
+        <Box
+          as="span"
+          ref={exclusiveCursorRef}
+          className="terminal-cursor"
+          position="absolute"
+          top={{ base: "5%", md: "10%" }}
+          left="0"
+          color="#58fb6cd9"
+          fontSize={{ base: "1rem", md: "5.5rem" }}
+          lineHeight="1"
+          fontWeight="normal"
+          ml="0.05em"
+        >
+          |
+        </Box>
+      </Box>
+      <Box position="relative" display="inline-block" whiteSpace="nowrap">
+        <Heading
+          as="h2"
+          variant="glitch"
+          size={{ base: "3xl", md: "9xl" }}
+          className="glitch glitch-brands"
+          data-text="BRANDS"
+          ref={brandsRef}
+        >
+          BRANDS
+        </Heading>
+        <Box
+          as="span"
+          ref={brandsCursorRef}
+          className="terminal-cursor"
+          position="absolute"
+          top={{ base: "5%", md: "10%" }}
+          left="0"
+          color="#58fb6cd9"
+          fontSize={{ base: "1rem", md: "5.5rem" }}
+          lineHeight="1"
+          fontWeight="normal"
+          ml="0.05em"
+        >
+          |
+        </Box>
+      </Box>
+      <Text fontSize={{ base: "sm", md: "xl" }} color="purple.500">
+        Exclusive Access to authenticated luxury goods, verified on the blockchain
+      </Text>
+      <Button
+        size="lg"
+        variant="solid"
+        bg="green.500"
+        color="black.900"
+        _hover={{ bg: "green.600" }}
+        onClick={handleJoinWaitlist}
+        fontSize={{ base: "md", md: "xl" }}
+        py={{ base: 6, md: 8 }}
+        px={{ base: 8, md: 12 }}
+      >
+        Join The Waitlist
+      </Button>
           </VStack>
           <Flex flex="1" justify="center" mt={{ base: 6, lg: 0 }}>
             <Flex gap={{ base: 2, md: 8 }} flexWrap="wrap" justify="center">
