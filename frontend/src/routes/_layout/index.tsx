@@ -136,7 +136,7 @@ function Home() {
 
       {/* Hero Section: Exclusive Brands */}
       <Box
-        bgImage="url('https://images.unsplash.com/photo-1496167117681-944f702be1f4')"
+        bgImage="url('/images/hero-bg.jpg')"
         bgSize="cover"
         bgPosition="center"
         py={{ base: 20, md: 32 }}
