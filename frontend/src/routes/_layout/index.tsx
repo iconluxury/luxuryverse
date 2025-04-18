@@ -478,7 +478,7 @@ function Home() {
                 |
               </Box>
             </Box>
-            <Text fontSize={{ base: "md", md: "2xl" }} color="gray.400">
+            <Text fontSize={{ base: "md", md: "2xl" }} color="white">
               Exclusive Access to authenticated luxury goods, verified on the blockchain
             </Text>
             <Button
