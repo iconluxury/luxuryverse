@@ -134,8 +134,8 @@ function Home() {
   return (
     <Box bg="black.900">
       {/* Header with Logo */}
-      <Box as="header" py={4} px={{ base: 4, md: 8 }} textAlign="center">
-        <Heading as="h1" variant="logo" className="luxuryverse-logo">
+      <Box as="header" py={6} px={{ base: 4, md: 8 }} textAlign="center">
+        <Heading as="h1" variant="logo" className="luxuryverse-logo" size="2xl">
           LUXURYVERSE
         </Heading>
       </Box>
@@ -145,7 +145,7 @@ function Home() {
         bgImage="url('/images/hero-bg.jpg')"
         bgSize="cover"
         bgPosition="center"
-        py={{ base: 16, md: 24 }}
+        py={{ base: 20, md: 32 }}
         px={{ base: 4, md: 8 }}
         position="relative"
         _before={{
@@ -156,61 +156,66 @@ function Home() {
           right: 0,
           bottom: 0,
           bg: "black.900",
-          opacity: 0.5,
+          opacity: 0.7,
         }}
       >
-        <VStack spacing={6} maxW="800px" align="flex-start" position="relative">
-          <Heading
-            as="h2"
-            size={{ base: "3xl", md: "4xl" }}
-            className="glitch"
-            data-text="Exclusive Brands"
-          >
-            Exclusive Brands
-          </Heading>
-          <Heading as="h3" variant="nabla" size={{ base: "xl", md: "2xl" }} className="nabla-text">
-            Exclusive Access
-          </Heading>
-          <Text fontSize={{ base: "lg", md: "xl" }} color="gray.300">
-            Authenticated luxury goods, fully verified on the blockchain
-          </Text>
-          <Button
-            size="lg"
-            variant="solid"
-            bg="gold.500"
-            color="black.900"
-            _hover={{ bg: "gold.600" }}
-            onClick={handleJoinWaitlist}
-            fontSize="xl"
-            py={8}
-            px={12}
-          >
-            Join The Waitlist
-          </Button>
-          <Flex gap={8} flexWrap="nowrap" overflowX="auto" mt={12} pb={2}>
-            {[
-              { src: "/images/balmain.jpg", alt: "Balmain Logo" },
-              { src: "/images/ferragamo.jpg", alt: "Ferragamo Logo" },
-              { src: "/images/the-row.jpg", alt: "The Row Logo" },
-              { src: "/images/roger-vivier.jpg", alt: "Roger Vivier Logo" },
-              { src: "/images/gianvito-rossi.jpg", alt: "Gianvito Rossi Logo" },
-              { src: "/images/etro.jpg", alt: "Etro Logo" },
-              { src: "/images/moschino.jpg", alt: "Moschino Logo" },
-            ].map((img) => (
-              <Image
-                key={img.alt}
-                src={img.src}
-                alt={img.alt}
-                boxSize="100px"
-                objectFit="contain"
-                fallbackSrc="/images/placeholder.jpg"
-                filter="grayscale(100%)"
-                _hover={{ filter: "grayscale(0%)" }}
-                transition="filter 0.3s ease"
-              />
-            ))}
+        <Flex maxW="1200px" mx="auto" direction={{ base: "column", lg: "row" }} align="center" gap={12} position="relative">
+          <VStack align="flex-start" spacing={10} flex="1">
+            <Heading
+              as="h2"
+              variant="glitch"
+              size={{ base: "5xl", md: "6xl" }}
+              className="glitch"
+              data-text="Exclusive Brands"
+            >
+              Exclusive Brands
+            </Heading>
+            <Text fontFamily="'DM Sans', sans-serif" fontSize={{ base: "xl", md: "2xl" }} color="gray.300">
+              Exclusive Access
+            </Text>
+            <Text fontSize={{ base: "lg", md: "xl" }} color="gray.300">
+              Authenticated luxury goods, fully verified on the blockchain
+            </Text>
+            <Button
+              size="lg"
+              variant="solid"
+              bg="gold.500"
+              color="black.900"
+              _hover={{ bg: "gold.600" }}
+              onClick={handleJoinWaitlist}
+              fontSize="xl"
+              py={8}
+              px={12}
+            >
+              Join The Waitlist
+            </Button>
+          </VStack>
+          <Flex flex="1" justify="center" mt={{ base: 8, lg: 0 }}>
+            <Flex gap={8} flexWrap="wrap" justify="center">
+              {[
+                { src: "/images/balmain.jpg", alt: "Balmain Logo" },
+                { src: "/images/ferragamo.jpg", alt: "Ferragamo Logo" },
+                { src: "/images/the-row.jpg", alt: "The Row Logo" },
+                { src: "/images/roger-vivier.jpg", alt: "Roger Vivier Logo" },
+                { src: "/images/gianvito-rossi.jpg", alt: "Gianvito Rossi Logo" },
+                { src: "/images/etro.jpg", alt: "Etro Logo" },
+                { src: "/images/moschino.jpg", alt: "Moschino Logo" },
+              ].map((img) => (
+                <Image
+                  key={img.alt}
+                  src={img.src}
+                  alt={img.alt}
+                  boxSize={{ base: "80px", md: "100px" }}
+                  objectFit="contain"
+                  fallbackSrc="/images/placeholder.jpg"
+                  filter="grayscale(100%)"
+                  _hover={{ filter: "grayscale(0%)" }}
+                  transition="filter 0.3s ease"
+                />
+              ))}
+            </Flex>
           </Flex>
-        </VStack>
+        </Flex>
       </Box>
 
       {/* Cards Section: Luxury Brands, Exclusive Drops, Authentic Goods */}
@@ -221,7 +226,6 @@ function Home() {
           justify="space-between"
           align="stretch"
         >
-          {/* Luxury Brands Card */}
           <VStack
             bg="gray.900"
             border="1px solid"
@@ -241,8 +245,6 @@ function Home() {
               industry relationships over decades, ensuring that we have the best styles at the prices.
             </Text>
           </VStack>
-
-          {/* Exclusive Drops Card */}
           <VStack
             bg="gray.900"
             border="1px solid"
@@ -263,8 +265,6 @@ function Home() {
               basis exclusive to our members.
             </Text>
           </VStack>
-
-          {/* Authentic Goods Card */}
           <VStack
             bg="gray.900"
             border="1px solid"
@@ -301,12 +301,7 @@ function Home() {
           transition="all 0.3s"
           _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "gold.500" }}
         >
-          <Heading
-            as="h2"
-            size="xl"
-            className="glitch"
-            data-text="Launching September 2025"
-          >
+          <Heading as="h2" size="xl" color="gold.500">
             Launching September 2025
           </Heading>
           <Text color="gray.300">First Drop: September 5th, 2025</Text>
@@ -340,12 +335,7 @@ function Home() {
           transition="all 0.3s"
           _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "gold.500" }}
         >
-          <Heading
-            as="h2"
-            size="xl"
-            className="glitch"
-            data-text="Recent Drops"
-          >
+          <Heading as="h2" size="xl" color="gold.500">
             Recent Drops
           </Heading>
           <Text maxW="600px" textAlign="center" color="gray.300">
@@ -413,12 +403,7 @@ function Home() {
       {/* FAQs */}
       <Box py={16} bg="gray.800" px={{ base: 4, md: 8 }}>
         <VStack maxW="1200px" mx="auto" spacing={8}>
-          <Heading
-            as="h2"
-            size="xl"
-            className="glitch"
-            data-text="Frequently Asked Questions"
-          >
+          <Heading as="h2" size="xl" color="gold.500">
             Frequently Asked Questions
           </Heading>
           <Accordion allowToggle w="100%">
@@ -481,12 +466,7 @@ function Home() {
       {/* Documents */}
       <Box py={16} px={{ base: 4, md: 8 }} maxW="1200px" mx="auto">
         <VStack spacing={8}>
-          <Heading
-            as="h2"
-            size="xl"
-            className="glitch"
-            data-text="Read Documents"
-          >
+          <Heading as="h2" size="xl" color="gold.500">
             Read Documents
           </Heading>
           <Flex gap={8} wrap="wrap" justify="center">
@@ -514,12 +494,7 @@ function Home() {
       {/* Authentication Council */}
       <Box py={16} px={{ base: 4, md: 8 }} maxW="1200px" mx="auto">
         <VStack spacing={8}>
-          <Heading
-            as="h2"
-            size="xl"
-            className="glitch"
-            data-text="Trust in Every Purchase"
-          >
+          <Heading as="h2" size="xl" color="gold.500">
             Trust in Every Purchase
           </Heading>
           <Text textAlign="center" maxW="600px" color="gray.300">
