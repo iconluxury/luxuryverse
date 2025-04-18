@@ -267,7 +267,7 @@ function ProductDetails() {
   if (productLoading) {
     return (
       <Flex justify="center" align="center" minH="100vh" bg="transparent">
-        <Spinner size="xl" color="yellow.400" />
+        <Spinner size="xl" color="var(--color-primary-hover)" />
       </Flex>
     );
   }
@@ -335,7 +335,7 @@ function ProductDetails() {
                           objectFit="contain"
                           cursor="pointer"
                           borderRadius="md"
-                          border={index === currentImage ? '2px solid #ECC94B' : '2px solid transparent'}
+                          border={index === currentImage ? '2px solid var(--color-primary-hover)' : '2px solid transparent'}
                           onClick={() => setCurrentImage(index)}
                           onError={(e) => (e.currentTarget.src = 'https://placehold.co/80x100')}
                         />
@@ -391,8 +391,6 @@ function ProductDetails() {
                       </Text>
                       <Tag
                         colorScheme="green"
-                        px={3}
-                        py={0.5}
                         borderRadius="full"
                         fontSize="lg"
                         lineHeight="1.5"
@@ -403,7 +401,7 @@ function ProductDetails() {
                     </>
                   )}
                 </HStack>
-                <Text as="h1" fontSize={{ base: '2xl', md: '3xl' }} fontWeight="medium" lineHeight="1.3">
+                <Text as="h1" fontSize={{ base: '3xl', md: '4xl' }} fontWeight="medium" lineHeight="1.3">
                   {product.title || 'Untitled Product'}
                 </Text>
                 {validatedVariants && validatedVariants.length > 0 && (
@@ -426,7 +424,11 @@ function ProductDetails() {
                   </HStack>
                 )}
                 <HStack spacing={2} align="center">
-                  <Text fontSize={{ base: '3xl', md: '4xl' }} fontWeight="bold" color="--color-primary-hover">
+                  <Text
+                    fontSize={{ base: '3xl', md: '4xl' }}
+                    fontWeight="bold"
+                    style={{ color: 'var(--color-primary-hover)' }}
+                  >
                     {product.sale_price || 'N/A'}
                   </Text>
                   {product.full_price && (
