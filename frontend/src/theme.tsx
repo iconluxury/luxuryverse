@@ -17,7 +17,7 @@ const theme = extendTheme({
       50: "#E6E6E6", // Off-white
       100: "#D4D4D4",
       200: "#B2B2B2",
-      300: "#00E5FF", // Light cyan for body text
+      300: "#c2a0e5d9", // Light purple for body text
       400: "#7A8A94",
       500: "#5C6A74",
       600: "#465056",
@@ -25,12 +25,12 @@ const theme = extendTheme({
       800: "#2E3A3F",
       900: "#1A2526", // Dark blue-gray
     },
-    cyan: {
-      300: "#4DF2FF",
-      400: "#26E9FF",
-      500: "#00E5FF", // Light cyan
-      600: "#00B8CC",
-      700: "#0088A3",
+    purple: {
+      300: "#d4b8f0d9",
+      400: "#cbb0e8d9",
+      500: "#c2a0e5d9", // Light purple
+      600: "#a082c4d9",
+      700: "#8569a3d9",
     },
     blue: {
       500: "#00B7EB", // Neon blue for glitch
@@ -114,7 +114,7 @@ const theme = extendTheme({
       baseStyle: {
         fontFamily: "'Special Gothic Expanded One', sans-serif",
         fontWeight: "normal",
-        color: "cyan.500",
+        color: "purple.500",
         lineHeight: "short",
       },
       sizes: {
@@ -135,21 +135,21 @@ const theme = extendTheme({
         logo: {
           fontFamily: "'Special Gothic Expanded One', sans-serif",
           fontWeight: "normal",
-          color: "cyan.500",
+          color: "purple.500",
           letterSpacing: "2px",
           textTransform: "uppercase",
         },
         glitch: {
           fontFamily: "'Rubik Glitch', system-ui",
           fontWeight: "normal",
-          color: "cyan.500",
+          color: "purple.500",
         },
       },
     },
     Text: {
       baseStyle: {
         fontFamily: "'DM Sans', sans-serif",
-        color: "cyan.500",
+        color: "purple.500",
         lineHeight: "base",
       },
     },
@@ -164,33 +164,33 @@ const theme = extendTheme({
       },
       variants: {
         solid: {
-          bg: "cyan.500",
+          bg: "purple.500",
           color: "black.900",
           _hover: {
-            bg: "cyan.600",
+            bg: "purple.600",
             _disabled: {
-              bg: "cyan.500",
+              bg: "purple.500",
             },
           },
           _active: {
-            bg: "cyan.700",
+            bg: "purple.700",
           },
         },
         outline: {
           border: "2px solid",
-          borderColor: "cyan.500",
-          color: "cyan.500",
+          borderColor: "purple.500",
+          color: "purple.500",
           bg: "transparent",
           _hover: {
-            bg: "cyan.500",
+            bg: "purple.500",
             color: "black.900",
           },
           _active: {
-            bg: "cyan.600",
+            bg: "purple.600",
           },
         },
         ghost: {
-          color: "cyan.500",
+          color: "purple.500",
           bg: "transparent",
           _hover: {
             bg: "gray.800",
@@ -242,8 +242,8 @@ const theme = extendTheme({
               borderColor: "gray.500",
             },
             _focus: {
-              borderColor: "cyan.500",
-              boxShadow: "0 0 0 1px #00E5FF",
+              borderColor: "purple.500",
+              boxShadow: "0 0 0 1px #c2a0e5d9",
             },
           },
         },
@@ -269,11 +269,11 @@ const theme = extendTheme({
             boxShadow: "lg",
           },
           title: {
-            color: "cyan.500",
+            color: "purple.500",
             fontFamily: "'Special Gothic Expanded One', sans-serif",
           },
           description: {
-            color: "cyan.500",
+            color: "purple.500",
             fontFamily: "'DM Sans', sans-serif",
           },
         },
@@ -282,9 +282,9 @@ const theme = extendTheme({
     Link: {
       baseStyle: {
         fontFamily: "'DM Sans', sans-serif",
-        color: "cyan.500",
+        color: "purple.500",
         _hover: {
-          color: "cyan.400",
+          color: "purple.400",
           textDecoration: "underline",
         },
       },
@@ -294,7 +294,7 @@ const theme = extendTheme({
     global: {
       "html, body": {
         bg: "black.900",
-        color: "cyan.500",
+        color: "purple.500",
         fontFamily: "'DM Sans', sans-serif",
         lineHeight: "base",
         scrollBehavior: "smooth",
@@ -303,10 +303,10 @@ const theme = extendTheme({
         boxSizing: "border-box",
       },
       "a": {
-        color: "cyan.500",
+        color: "purple.500",
         textDecoration: "none",
         _hover: {
-          color: "cyan.400",
+          color: "purple.400",
         },
       },
       "button": {
