@@ -69,9 +69,7 @@ export default function TopNav() {
       p={4}
       justify="center"
       width="100%"
-      top={0}
-      zIndex={10}
-      mt={{ base: '2rem', md: 0 }} // Push down on small screens
+      mt={{ base: '2rem', md: '4rem' }} // Account for header
     >
       <Flex
         maxW="80rem" // Match .container
@@ -87,6 +85,7 @@ export default function TopNav() {
           size="md"
           color="#00E5FF" // --color-primary
           alignSelf={{ base: 'flex-start', md: 'center' }} // Left on small, center on large
+          lineHeight="1.2" // Match CSS --line-height-heading
         >
           <Link to="/" className="luxuryverse-logo">
             LuxuryVerse
@@ -103,50 +102,65 @@ export default function TopNav() {
           <Link
             to="/"
             style={{
-              color: '#aeb8bb', // --color-border (muted)
+              color: '#3A4A4F', // --color-border (muted)
               textDecoration: 'none',
               fontFamily: "'Special Gothic Expanded One', sans-serif",
+              fontSize: 'var(--font-size-base)', // 1rem for readability
+              lineHeight: '1.2', // Align with logo
             }}
+            _hover={{ color: '#00E5FF' }} // --color-primary
           >
             Home
           </Link>
           <Link
             to="/roadmap"
             style={{
-              color: '#aeb8bb', // --color-border
+              color: '#3A4A4F', // --color-border
               textDecoration: 'none',
               fontFamily: "'Special Gothic Expanded One', sans-serif",
+              fontSize: 'var(--font-size-base)',
+              lineHeight: '1.2',
             }}
+            _hover={{ color: '#00E5FF' }}
           >
             Roadmap
           </Link>
           <Link
             to="/authenticity"
             style={{
-              color: '#aeb8bb', // --color-border
+              color: '#3A4A4F', // --color-border
               textDecoration: 'none',
               fontFamily: "'Special Gothic Expanded One', sans-serif",
+              fontSize: 'var(--font-size-base)',
+              lineHeight: '1.2',
             }}
+            _hover={{ color: '#00E5FF' }}
           >
             Authenticity
           </Link>
           <Link
             to="/faq"
             style={{
-              color: '#aeb8bb', // --color-border
+              color: '#3A4A4F', // --color-border
               textDecoration: 'none',
               fontFamily: "'Special Gothic Expanded One', sans-serif",
+              fontSize: 'var(--font-size-base)',
+              lineHeight: '1.2',
             }}
+            _hover={{ color: '#00E5FF' }}
           >
             FAQ
           </Link>
           <Link
             to="/contact"
             style={{
-              color: '#aeb8bb', // --color-border
+              color: '#3A4A4F', // --color-border
               textDecoration: 'none',
               fontFamily: "'Special Gothic Expanded One', sans-serif",
+              fontSize: 'var(--font-size-base)',
+              lineHeight: '1.2',
             }}
+            _hover={{ color: '#00E5FF' }}
           >
             Contact
           </Link>
@@ -155,13 +169,18 @@ export default function TopNav() {
         {/* Button */}
         <Button
           onClick={onClick}
+          bg={bg}
           color={color}
+          _hover={{
+            bg: '#00B8CC', // --color-primary-hover
+          }}
           borderRadius="md"
           px={4}
           py={2}
           fontWeight="medium"
           size="sm"
           fontFamily="'Special Gothic Expanded One', sans-serif"
+          lineHeight="1.2" // Align with logo
         >
           {text}
         </Button>

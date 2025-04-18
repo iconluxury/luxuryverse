@@ -16,7 +16,7 @@
   --font-family-body: 'DM Sans', sans-serif;
   --font-family-heading: 'Special Gothic Expanded One', sans-serif;
   --font-family-logo: 'Special Gothic Expanded One', sans-serif;
-  --font-family-hero: 'Special Gothic Expanded One', sans-serif;
+  --font-family-glitch: 'Special Gothic Expanded One', sans-serif;
   --font-size-base: 1rem; /* 16px */
   --font-size-sm: 0.875rem; /* 14px */
   --font-size-lg: 1.125rem; /* 18px */
@@ -225,19 +225,19 @@ input::placeholder, textarea::placeholder {
 /* Glitch Effect for Hero Heading */
 .glitch {
   position: relative;
-  font-family: var(--font-family-hero);
-  text-transform: none; /* Preserve mixed case */
+  font-family: var(--font-family-glitch);
+  text-transform: none; /* Preserve eXCLUSIVE and bRANDS casing */
 }
 
-/* Letter styling for typing effect */
-.glitch-letter {
+.glitch span {
   display: inline-block;
-  opacity: 0; /* Start hidden for typing effect */
+  opacity: 0; /* Initially hidden for typewriter effect */
 }
 
-/* Pseudo-elements for glitch effect */
-.glitch::before,
-.glitch::after {
+.glitch-exclusive::before,
+.glitch-exclusive::after,
+.glitch-brands::before,
+.glitch-brands::after {
   content: attr(data-text);
   position: absolute;
   top: 0;
@@ -247,11 +247,19 @@ input::placeholder, textarea::placeholder {
   color: inherit; /* Matches base text color */
 }
 
-.glitch::before {
+.glitch-exclusive::before {
   clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
 }
 
-.glitch::after {
+.glitch-exclusive::after {
+  clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%);
+}
+
+.glitch-brands::before {
+  clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
+}
+
+.glitch-brands::after {
   clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%);
 }
 

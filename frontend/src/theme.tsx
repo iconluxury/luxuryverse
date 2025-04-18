@@ -10,7 +10,7 @@ const theme = extendTheme({
   fonts: {
     heading: "'Special Gothic Expanded One', sans-serif",
     body: "'DM Sans', sans-serif",
-    hero: "'Special Gothic Expanded One', sans-serif",
+    glitch: "'Special Gothic Expanded One', sans-serif",
   },
   colors: {
     gray: {
@@ -148,7 +148,7 @@ const theme = extendTheme({
           letterSpacing: "2px",
           textTransform: "uppercase",
         },
-        hero: {
+        glitch: {
           fontFamily: "'Special Gothic Expanded One', sans-serif",
           fontWeight: "normal",
           color: "purple.500",
