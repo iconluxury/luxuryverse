@@ -9,8 +9,8 @@
   --color-muted: #00E5FF; /* Light cyan for body text */
   --color-primary: #00E5FF; /* Light cyan */
   --color-primary-hover: #00B8CC; /* Darker cyan */
-  --color-accent: #FFFFFF; /* White for glitch top */
-  --color-accent-blue: #00B7EB; /* Neon blue for glitch bottom */
+  --color-accent: #00E5FF; /* White for glitch top */
+  --color-accent-blue: #00E5FF; /* Neon blue for glitch bottom */
   --color-secondary: #1A2526; /* Dark blue-gray */
   --color-border: #3A4A4F; /* Medium blue-gray */
 
