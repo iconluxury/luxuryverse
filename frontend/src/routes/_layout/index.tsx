@@ -430,21 +430,21 @@ function Home() {
             </Button>
           </VStack>
           <Flex flex="1" justify="center" mt={{ base: 6, lg: 0 }}>
-            <Flex gap={{ base: 4, md: 8 }} flexWrap="wrap" justify="center">
+            <Flex gap={{ base: 2, md: 8 }} flexWrap="wrap" justify="center">
               {[
-                { src: "/images/balmain.jpg", alt: "Balmain Logo" },
-                { src: "/images/ferragamo.jpg", alt: "Ferragamo Logo" },
-                { src: "/images/the-row.jpg", alt: "The Row Logo" },
-                { src: "/images/roger-vivier.jpg", alt: "Roger Vivier Logo" },
-                { src: "/images/gianvito-rossi.jpg", alt: "Gianvito Rossi Logo" },
-                { src: "/images/etro.jpg", alt: "Etro Logo" },
-                { src: "/images/moschino.jpg", alt: "Moschino Logo" },
+                { src: "https://github.com/iconluxurygroup/legacy-test-luxuryverse/raw/dev/frontend/public/assets/img/brand/brand_img01.png", alt: "Balmain Logo" },
+                { src: "https://github.com/iconluxurygroup/legacy-test-luxuryverse/raw/dev/frontend/public/assets/img/brand/brand_img02.png", alt: "Ferragamo Logo" },
+                { src: "https://github.com/iconluxurygroup/legacy-test-luxuryverse/raw/dev/frontend/public/assets/img/brand/brand_img03.png", alt: "The Row Logo" },
+                { src: "https://github.com/iconluxurygroup/legacy-test-luxuryverse/raw/dev/frontend/public/assets/img/brand/brand_img04.png", alt: "Gianvito Rossi Logo" },
+                { src: "https://github.com/iconluxurygroup/legacy-test-luxuryverse/raw/dev/frontend/public/assets/img/brand/brand_img05.png", alt: "Roger Vivier Logo" },
+                { src: "https://github.com/iconluxurygroup/legacy-test-luxuryverse/raw/dev/frontend/public/assets/img/brand/brand_img06.png", alt: "Etro Logo" },
+                { src: "https://github.com/iconluxurygroup/legacy-test-luxuryverse/raw/dev/frontend/public/assets/img/brand/brand_img07.png", alt: "Moschino Logo" },
               ].map((img) => (
                 <Image
                   key={img.alt}
                   src={img.src}
                   alt={img.alt}
-                  boxSize={{ base: "60px", md: "100px" }}
+                  boxSize={{ base: "40px", md: "100px" }} // Smaller on mobile
                   objectFit="contain"
                   fallbackSrc="/images/placeholder.jpg"
                   filter="grayscale(100%)"
