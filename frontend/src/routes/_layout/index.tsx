@@ -523,7 +523,7 @@ function Home() {
           border="1px solid"
           borderColor="gray.700"
           borderRadius="md"
-          p={8}
+          p={4}
           maxW="600px"
           mx="auto"
           spacing={6}
