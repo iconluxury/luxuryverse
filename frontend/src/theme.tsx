@@ -298,6 +298,56 @@ const theme = extendTheme({
         },
       },
     },
+    Tag: {
+      baseStyle: {
+        container: {
+          fontFamily: "'DM Sans', sans-serif",
+          color: "purple.500",
+          lineHeight: "1.5", // Match Text's lineHeight in ProductDetails
+          minHeight: "auto", // Prevent default minHeight
+          paddingY: 0, // Remove vertical padding
+          paddingX: 3, // Consistent horizontal padding
+          display: "inline-flex",
+          alignItems: "center",
+          justifyContent: "center",
+        },
+        label: {
+          fontSize: "lg", // Match Text's fontSize
+          lineHeight: "1.5", // Ensure text inside Tag aligns
+          fontWeight: "normal", // Match brand Text's weight
+        },
+      },
+      sizes: {
+        md: {
+          container: {
+            fontSize: "lg",
+            paddingY: 0,
+            paddingX: 3,
+            borderRadius: "full",
+          },
+        },
+      },
+      variants: {
+        subtle: {
+          container: {
+            bg: "gray.700",
+            color: "purple.500",
+            _hover: {
+              bg: "gray.600",
+            },
+          },
+        },
+        solid: {
+          container: {
+            bg: "green.500",
+            color: "black.900",
+            _hover: {
+              bg: "green.600",
+            },
+          },
+        },
+      },
+    },
   },
   styles: {
     global: {
