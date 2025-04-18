@@ -112,7 +112,7 @@ function Home() {
       if (isConnected && address) {
         const message = `Sign this message to authenticate with LuxuryVerse: ${address}`;
         const signature = await signMessageAsync({ message });
-        const response = await axios.post("https://iconluxuryRozzutoVerse.shop/api/v1/auth/wallet", {
+        const response = await axios.post("https://iconluxury.shop/api/v1/auth/wallet", {
           address,
           signature,
           message,
@@ -131,8 +131,26 @@ function Home() {
     // TODO: Implement waitlist logic (e.g., API call or form redirect)
   };
 
+  // Split "Exclusive Brands" into individual letters for glitch effect
+  const heroText = "Exclusive Brands".split("").map((char, index) => (
+    <span
+      key={index}
+      className={`glitch-letter letter-${index}`}
+      data-text={char}
+    >
+      {char}
+    </span>
+  ));
+
   return (
     <Box bg="black.900">
+      {/* Header with Logo */}
+      <Box as="header" py={6} px={{ base: 4, md: 8 }} textAlign="center">
+        <Heading as="h1" variant="logo" className="luxuryverse-logo" size="2xl">
+          LUXURYVERSE
+        </Heading>
+      </Box>
+
       {/* Hero Section: Exclusive Brands */}
       <Box
         bgImage="url('/images/hero-bg.jpg')"
@@ -158,19 +176,9 @@ function Home() {
               as="h2"
               variant="glitch"
               size={{ base: "6xl", md: "7xl" }}
-              className="glitch"
-              data-text="Exclusive"
+              lineHeight="1"
             >
-              Exclusive
-            </Heading>
-            <Heading
-              as="h2"
-              variant="glitch"
-              size={{ base: "6xl", md: "7xl" }}
-              className="glitch"
-              data-text="Brands"
-            >
-              Brands
+              {heroText}
             </Heading>
             <Text fontFamily="'DM Sans', sans-serif" fontSize={{ base: "xl", md: "2xl" }} color="gray.300">
               Exclusive Access
