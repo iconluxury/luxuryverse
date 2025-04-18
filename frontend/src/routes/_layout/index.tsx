@@ -323,7 +323,7 @@ function Home() {
       >
         <Flex maxW="1200px" mx="auto" direction={{ base: "column", lg: "row" }} align="center" gap={12} position="relative">
           <VStack align="flex-start" spacing={12} flex="1">
-            <Box position="relative" display="inline-block" white neurospace="nowrap">
+            <Box position="relative" display="inline-block" whiteSpace="nowrap">
               <Heading
                 as="h2"
                 variant="glitch"
