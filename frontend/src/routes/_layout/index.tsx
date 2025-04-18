@@ -582,7 +582,7 @@ function Home() {
             <Heading as="h3" size="xl" mb={4} color="gray.400"
                          textTransform="uppercase"
             >
-              Authentic Goods
+              Verified Goods
             </Heading>
             <Text fontSize="lg" color="gray.400">
               LuxuryVerse goods are 100% authentic and guaranteed on the blockchain. Our goods and
