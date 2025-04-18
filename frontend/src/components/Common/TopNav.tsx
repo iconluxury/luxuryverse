@@ -41,23 +41,23 @@ export default function TopNav() {
       return {
         text: 'Profile',
         onClick: () => navigate({ to: '/profile' }),
-        bg: '#D4A017', // --color-primary
-        color: '#F5F6F5', // --color-text (white)
+        bg: '#00E5FF', // --color-primary
+        color: '#0A0A0A', // --color-background
       };
     }
     if (isJoining) {
       return {
         text: 'Join',
         onClick: () => navigate({ to: '/join' }),
-        bg: '#D4A017', // --color-primary
-        color: '#F5F6F5', // --color-text
+        bg: '#00E5FF', // --color-primary
+        color: '#0A0A0A', // --color-background
       };
     }
     return {
       text: 'Login',
       onClick: () => navigate({ to: '/join' }),
-      bg: '#D4A017', // --color-primary
-      color: '#F5F6F5', // --color-text
+      bg: '#00E5FF', // --color-primary
+      color: '#0A0A0A', // --color-background
     };
   };
 
@@ -67,84 +67,104 @@ export default function TopNav() {
     <Flex
       bg="rgba(10, 10, 10, 0.5)" // Black with 50% transparency
       p={4}
-      align="center"
-      px={{ base: 4, md: 8 }}
-      position="relative"
+      justify="center"
+      width="100%"
+      position="fixed"
+      top={0}
+      zIndex={10}
+      mt={{ base: '2rem', md: 0 }} // Push down on small screens
     >
-      {/* Left spacer for centering */}
-      <Flex flex={1} />
-      
-      {/* Centered Logo */}
-      <Heading
-        size="md"
-        color="purple.300"
-        position="absolute"
-        left="50%"
-        transform="translateX(-50%)"
+      <Flex
+        maxW="80rem" // Match .container
+        width="100%"
+        px={{ base: '1rem', md: '1rem' }} // --spacing-md
+        justify={{ base: 'flex-start', md: 'space-between' }} // Left on small, spread on large
+        align="center"
+        direction={{ base: 'column', md: 'row' }} // Stack on small screens
+        gap={{ base: 2, md: 4 }} // Spacing between items
       >
-        <Link to="/" className="luxuryverse-logo">
-          LuxuryVerse
-        </Link>
-      </Heading>
-      
-      {/* Right Navigation Links */}
-      <Flex flex={1} justify="flex-end" gap={4} alignItems="center">
-        <Link
-          to="/"
-          style={{
-            color: '#F5F6F5', // --color-text
-            textDecoration: 'none',
-            fontFamily: "'Special Gothic Expanded One', sans-serif",
-          }}
+        {/* Logo */}
+        <Heading
+          size="md"
+          color="#00E5FF" // --color-primary
+          alignSelf={{ base: 'flex-start', md: 'center' }} // Left on small, center on large
         >
-          Home
-        </Link>
-        <Link
-          to="/roadmap"
-          style={{
-            color: '#F5F6F5',
-            textDecoration: 'none',
-            fontFamily: "'Special Gothic Expanded One', sans-serif",
-          }}
+          <Link to="/" className="luxuryverse-logo">
+            LuxuryVerse
+          </Link>
+        </Heading>
+
+        {/* Navigation Links */}
+        <Flex
+          gap={4}
+          alignItems="center"
+          flexWrap="wrap"
+          justify={{ base: 'flex-start', md: 'center' }} // Left on small, center on large
         >
-          Roadmap
-        </Link>
-        <Link
-          to="/authenticity"
-          style={{
-            color: '#F5F6F5',
-            textDecoration: 'none',
-            fontFamily: "'Special Gothic Expanded One', sans-serif",
-          }}
-        >
-          Authenticity
-        </Link>
-        <Link
-          to="/faq"
-          style={{
-            color: '#F5F6F5',
-            textDecoration: 'none',
-            fontFamily: "'Special Gothic Expanded One', sans-serif",
-          }}
-        >
-          FAQ
-        </Link>
-        <Link
-          to="/contact"
-          style={{
-            color: '#F5F6F5',
-            textDecoration: 'none',
-            fontFamily: "'Special Gothic Expanded One', sans-serif",
-          }}
-        >
-          Contact
-        </Link>
+          <Link
+            to="/"
+            style={{
+              color: '#3A4A4F', // --color-border (muted)
+              textDecoration: 'none',
+              fontFamily: "'Special Gothic Expanded One', sans-serif",
+            }}
+            _hover={{ color: '#00E5FF' }} // --color-primary
+          >
+            Home
+          </Link>
+          <Link
+            to="/roadmap"
+            style={{
+              color: '#3A4A4F', // --color-border
+              textDecoration: 'none',
+              fontFamily: "'Special Gothic Expanded One', sans-serif",
+            }}
+            _hover={{ color: '#00E5FF' }}
+          >
+            Roadmap
+          </Link>
+          <Link
+            to="/authenticity"
+            style={{
+              color: '#3A4A4F', // --color-border
+              textDecoration: 'none',
+              fontFamily: "'Special Gothic Expanded One', sans-serif",
+            }}
+            _hover={{ color: '#00E5FF' }}
+          >
+            Authenticity
+          </Link>
+          <Link
+            to="/faq"
+            style={{
+              color: '#3A4A4F', // --color-border
+              textDecoration: 'none',
+              fontFamily: "'Special Gothic Expanded One', sans-serif",
+            }}
+            _hover={{ color: '#00E5FF' }}
+          >
+            FAQ
+          </Link>
+          <Link
+            to="/contact"
+            style={{
+              color: '#3A4A4F', // --color-border
+              textDecoration: 'none',
+              fontFamily: "'Special Gothic Expanded One', sans-serif",
+            }}
+            _hover={{ color: '#00E5FF' }}
+          >
+            Contact
+          </Link>
+        </Flex>
+
+        {/* Button */}
         <Button
           onClick={onClick}
           bg={bg}
           color={color}
           _hover={{
-            bg: '#B8860B', // --color-primary-hover
+            bg: '#00B8CC', // --color-primary-hover
           }}
           borderRadius="md"
           px={4}
