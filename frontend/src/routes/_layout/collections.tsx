@@ -159,50 +159,46 @@ function LatestDropsPage() {
               Past
             </Heading>
             <Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={8}>
-              {dropsData.past.map(drop => (
-                <Box key={drop.id}>
-                  <Link
-                    to={`/collection/${drop.id}`}
-                    style={{ textDecoration: 'none' }}
+            {dropsData.past.map(drop => (
+              <Box key={drop.id}>
+                <Link
+                  to={`/collection/${drop.id}`}
+                  style={{ textDecoration: 'none' }}
+                >
+                  <VStack
+                    bg="gray.900"
+                    border="1px solid"
+                    borderColor="gray.700"
+                    borderRadius="md"
+                    p={6}
+                    align="start"
+                    transition="all 0.3s"
+                    _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
                   >
-                    <Box
-                      role="link"
-                      bg="gray.900"
-                      border="1px solid"
-                      borderColor="gray.700"
-                      borderRadius="md"
-                      p={6}
-                      transition="all 0.3s"
-                      _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
+                    <Heading
+                      as="h3"
+                      size="xl"
+                      mb={4}
+                      color="gray.400"
+                      textTransform="uppercase"
+                      noOfLines={1}
                     >
-                      <Box mt={4}>
-                        <Text
-                          fontWeight="bold"
-                          fontSize={{ base: 'lg', md: 'xl' }}
-                          mb={3}
-                          color="gray.400"
-                          noOfLines={1}
-                        >
-                          {drop.title || 'Untitled Drop'}
-                        </Text>
-                        <Box height={`${maxDescriptionHeight}px`} overflow="hidden">
-                          <Text
-                            fontSize="sm"
-                            color="gray.400"
-                            noOfLines={2}
-                            lineHeight="1.5"
-                          >
-                            {drop.description
-                              ? drop.description.replace(/<\/?p>/g, '')
-                              : 'No description available.'}
-                          </Text>
-                        </Box>
-                      </Box>
-                    </Box>
-                  </Link>
-                </Box>
-              ))}
-            </Grid>
+                      {drop.title || 'Untitled Drop'}
+                    </Heading>
+                    <Text
+                      fontSize="lg"
+                      color="gray.400"
+                      lineHeight="1.5"
+                    >
+                      {drop.description
+                        ? drop.description.replace(/<\/?p>/g, '')
+                        : 'No description available.'}
+                    </Text>
+                  </VStack>
+                </Link>
+              </Box>
+            ))}
+          </Grid>
           </Box>
         )}
       </Box>
