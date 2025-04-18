@@ -309,7 +309,7 @@ function Home() {
           <Text color="cyan.500">First Drop: September 5th, 2025</Text>
           <Flex gap={8} justify="center" wrap="wrap">
             {[
-              { value: countdown.days,бот
+              { value: countdown.days,
                 label: "Days" },
               { value: countdown.hours, label: "Hours" },
               { value: countdown.minutes, label: "Minutes" },
