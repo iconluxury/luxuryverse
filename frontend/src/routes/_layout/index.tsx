@@ -461,7 +461,7 @@ function Home() {
               variant="solid"
               bg="green.600"
               color="white"
-              _hover={{ bg: "green.800" }}
+              _hover={{ bg: "green.700" }}
               onClick={handleJoinWaitlist}
               fontSize={{ base: "md", md: "xl" }}
               py={{ base: 6, md: 8 }}
