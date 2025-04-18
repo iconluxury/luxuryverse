@@ -1,4 +1,3 @@
-// theme.js
 import { extendTheme, ThemeConfig } from "@chakra-ui/react";
 
 const config: ThemeConfig = {
@@ -9,37 +8,49 @@ const config: ThemeConfig = {
 const theme = extendTheme({
   config,
   fonts: {
-    heading: "'Plus Jakarta Sans', sans-serif",
-    body: "'Outfit', sans-serif",
+    heading: "'Special Gothic Expanded One', sans-serif",
+    body: "'DM Sans', sans-serif",
+    glitch: "'Rubik Glitch', system-ui",
+    nabla: "'Nabla', system-ui",
   },
   colors: {
     gray: {
-      50: "#F7FAFC",
-      100: "#EDF2F7",
-      200: "#E2E8F0",
-      300: "#CBD5E0",
-      400: "#A0AEC0",
-      500: "#718096",
-      600: "#4A5568",
-      700: "#2D3748",
-      800: "#1A202C",
-      900: "#171923",
+      50: "#F5F6F5", // Lightest gray for subtle highlights
+      100: "#E0E2E0",
+      200: "#C4C8C4",
+      300: "#A8ADA8",
+      400: "#8D938D",
+      500: "#737A73",
+      600: "#5C635C",
+      700: "#464E46", // Darker gray for text
+      800: "#2E3532", // Dark gray for backgrounds
+      900: "#1C2526", // Deep gray for contrast
+    },
+    gold: {
+      300: "#FFD966",
+      400: "#E8B923",
+      500: "#D4A017", // Primary gold for luxury accents
+      600: "#B8860B",
+      700: "#9C6D08",
+    },
+    emerald: {
+      300: "#66B266",
+      400: "#4A914A",
+      500: "#2A6041", // Deep emerald for secondary accents
+      600: "#1F4A33",
+      700: "#173827",
     },
     purple: {
       300: "#B794F4",
       400: "#9F7AEA",
-      500: "#805AD5",
-      600: "#6B46C1",
-      700: "#553C9A",
+      500: "#6B46C1", // Amethyst purple for buttons/links
+      600: "#553C9A",
+      700: "#432B7A",
     },
-    pink: {
-      300: "#FBB6CE",
-      400: "#F687B3",
-      500: "#ED64A6",
-      600: "#D53F8C",
+    black: {
+      900: "#0A0A0A", // Deep black for primary background
     },
     white: "#FFFFFF",
-    black: "#000000",
   },
   breakpoints: {
     sm: "30em", // 480px
@@ -91,7 +102,7 @@ const theme = extendTheme({
     12: "3rem",
     16: "4rem",
     20: "5rem",
-    24: "6rem",
+    24: "6rem,
     32: "8rem",
   },
   radii: {
@@ -102,18 +113,18 @@ const theme = extendTheme({
     full: "9999px",
   },
   shadows: {
-    sm: "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
-    base: "0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)",
-    md: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
-    lg: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
-    xl: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+    sm: "0 1px 2px 0 rgba(0, 0, 0, 0.2)",
+    base: "0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.2)",
+    md: "0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2)",
+    lg: "0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2)",
+    xl: "0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2)",
   },
   components: {
     Heading: {
       baseStyle: {
-        fontFamily: "'Plus Jakarta Sans', sans-serif",
-        fontWeight: "extrabold",
-        color: "white",
+        fontFamily: "'Rubik Glitch', system-ui",
+        fontWeight: "normal",
+        color: "gold.500",
         lineHeight: "short",
       },
       sizes: {
@@ -126,17 +137,32 @@ const theme = extendTheme({
         sm: { fontSize: "lg" },
         xs: { fontSize: "md" },
       },
+      variants: {
+        logo: {
+          fontFamily: "'Special Gothic Expanded One', sans-serif",
+          fontWeight: "normal",
+          color: "gold.500",
+          letterSpacing: "2px",
+          textTransform: "uppercase",
+        },
+        nabla: {
+          fontFamily: "'Nabla', system-ui",
+          fontWeight: "normal",
+          color: "emerald.500",
+          fontVariationSettings: '"EDPT" 100, "EHLT" 12',
+        },
+      },
     },
     Text: {
       baseStyle: {
-        fontFamily: "'Outfit', sans-serif",
+        fontFamily: "'DM Sans', sans-serif",
         color: "gray.300",
         lineHeight: "base",
       },
     },
     Button: {
       baseStyle: {
-        fontFamily: "'Outfit', sans-serif",
+        fontFamily: "'DM Sans', sans-serif",
         fontWeight: "bold",
         borderRadius: "md",
         paddingX: 6,
@@ -145,33 +171,33 @@ const theme = extendTheme({
       },
       variants: {
         solid: {
-          bg: "purple.500",
-          color: "white",
+          bg: "gold.500",
+          color: "black.900",
           _hover: {
-            bg: "purple.600",
+            bg: "gold.600",
             _disabled: {
-              bg: "purple.500",
+              bg: "gold.500",
             },
           },
           _active: {
-            bg: "purple.700",
+            bg: "gold.700",
           },
         },
         outline: {
           border: "2px solid",
-          borderColor: "purple.500",
-          color: "purple.500",
+          borderColor: "gold.500",
+          color: "gold.500",
           bg: "transparent",
           _hover: {
-            bg: "purple.500",
-            color: "white",
+            bg: "gold.500",
+            color: "black.900",
           },
           _active: {
-            bg: "purple.600",
+            bg: "gold.600",
           },
         },
         ghost: {
-          color: "purple.500",
+          color: "gold.500",
           bg: "transparent",
           _hover: {
             bg: "gray.800",
@@ -205,9 +231,9 @@ const theme = extendTheme({
     Input: {
       baseStyle: {
         field: {
-          fontFamily: "'Outfit', sans-serif",
+          fontFamily: "'DM Sans', sans-serif",
           color: "white",
-          bg: "gray.800",
+          bg: "gray.900",
           borderRadius: "md",
           _placeholder: {
             color: "gray.400",
@@ -223,8 +249,8 @@ const theme = extendTheme({
               borderColor: "gray.500",
             },
             _focus: {
-              borderColor: "purple.500",
-              boxShadow: "0 0 0 1px #805AD5",
+              borderColor: "gold.500",
+              boxShadow: "0 0 0 1px #D4A017",
             },
           },
         },
@@ -232,9 +258,9 @@ const theme = extendTheme({
     },
     Textarea: {
       baseStyle: {
-        fontFamily: "'Outfit', sans-serif",
+        fontFamily: "'DM Sans', sans-serif",
         color: "white",
-        bg: "gray.800",
+        bg: "gray.900",
         borderRadius: "md",
         _placeholder: {
           color: "gray.400",
@@ -250,22 +276,22 @@ const theme = extendTheme({
             boxShadow: "lg",
           },
           title: {
-            color: "white",
-            fontFamily: "'Plus Jakarta Sans', sans-serif",
+            color: "gold.500",
+            fontFamily: "'Special Gothic Expanded One', sans-serif",
           },
           description: {
             color: "gray.300",
-            fontFamily: "'Outfit', sans-serif",
+            fontFamily: "'DM Sans', sans-serif",
           },
         },
       },
     },
     Link: {
       baseStyle: {
-        fontFamily: "'Outfit', sans-serif",
-        color: "purple.400",
+        fontFamily: "'DM Sans', sans-serif",
+        color: "purple.500",
         _hover: {
-          color: "purple.300",
+          color: "purple.400",
           textDecoration: "underline",
         },
       },
@@ -274,9 +300,9 @@ const theme = extendTheme({
   styles: {
     global: {
       "html, body": {
-        bg: "gray.900",
+        bg: "black.900",
         color: "white",
-        fontFamily: "'Outfit', sans-serif",
+        fontFamily: "'DM Sans', sans-serif",
         lineHeight: "base",
         scrollBehavior: "smooth",
       },
@@ -284,10 +310,10 @@ const theme = extendTheme({
         boxSizing: "border-box",
       },
       "a": {
-        color: "purple.400",
+        color: "purple.500",
         textDecoration: "none",
         _hover: {
-          color: "purple.300",
+          color: "purple.400",
         },
       },
       "button": {
