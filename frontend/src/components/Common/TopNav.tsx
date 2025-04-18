@@ -1,4 +1,4 @@
-import { Flex, Heading, IconButton, Drawer, DrawerBody, DrawerHeader, DrawerOverlay, DrawerContent, DrawerCloseButton, VStack } from '@chakra-ui/react';
+import { Flex, Heading, IconButton, Drawer, DrawerBody, DrawerOverlay, DrawerContent, DrawerCloseButton, VStack, Box } from '@chakra-ui/react';
 import { HamburgerIcon } from '@chakra-ui/icons';
 import { Link, useNavigate } from '@tanstack/react-router';
 import { useContext, useState } from 'react';
@@ -60,7 +60,7 @@ export default function TopNav() {
           <Heading
             size="xs"
             fontSize={{ base: '0.5rem', md: '0.875rem' }}
-            color="white" // Logo color set to white
+            color="white"
             fontFamily="'Special Gothic Expanded One', sans-serif"
             lineHeight="1.1"
           >
@@ -84,23 +84,27 @@ export default function TopNav() {
             align="center"
           >
             {navItems.map(({ to, label }) => (
-              <Link
+              <Box
                 key={to}
-                to={to}
-                style={{
-                  color: label === text ? '#00FF00' : 'white', // Green for Login/Join/Profile, white for others
-                  textDecoration: 'none',
-                  fontFamily: "'Special Gothic Expanded One', sans-serif",
-                  fontWeight: 'var(--font-weight-normal)',
-                  textTransform: 'uppercase',
-                }}
-                _hover={{
-                  color: label === text ? '#33FF33' : '#E0E0E0', // Lighter green for auth hover, light gray for others
-                }}
-                onClick={() => navigate({ to })}
+                as="span"
+                display="inline-block"
+                _hover={{ color: 'gray.400' }}
+                fontSize={{ base: '0.75rem', md: '0.875rem' }} // Match Footer nav links
               >
-                {label}
-              </Link>
+                <Link
+                  to={to}
+                  style={{
+                    color: label === text ? '#00FF00' : 'white', // Green for Login/Join/Profile, white for others
+                    textDecoration: 'none',
+                    fontFamily: "'Special Gothic Expanded One', sans-serif",
+                    fontWeight: 'var(--font-weight-normal)',
+                    textTransform: 'uppercase',
+                  }}
+                  onClick={() => navigate({ to })}
+                >
+                  {label}
+                </Link>
+             </Box>
             ))}
           </Flex>
           {/* Mobile Menu Button */}
@@ -110,8 +114,8 @@ export default function TopNav() {
             onClick={toggleMenu}
             aria-label="Toggle Menu"
             bg="transparent"
-            color="white" // Hamburger icon set to white
-            _hover={{ color: '#E0E0E0' }} // Light gray hover
+            color="white"
+            _hover={{ color: '#E0E0E0' }}
             size="xs"
             ml="auto"
           />
@@ -121,31 +125,38 @@ export default function TopNav() {
       <Drawer isOpen={isOpen} placement="right" onClose={closeMenu}>
         <DrawerOverlay />
         <DrawerContent bg="rgba(10, 10, 10, 0.9)" color="white" maxW={{ base: '75%', sm: '250px' }}>
-          <DrawerCloseButton color="white" /> {/* Close button set to white */}
+          <DrawerCloseButton color="white" />
           <DrawerBody>
             <VStack spacing={4} align="stretch">
               {navItems.map(({ to, label }) => (
-                <Link
+                <Box
                   key={to}
-                  to={to}
-                  style={{
-                    color: label === text ? '#00FF00' : 'white', // Green for Login/Join/Profile, white for others
-                    textDecoration: 'none',
-                    fontFamily: "'Special Gothic Expanded One', sans-serif",
-                    fontWeight: 'var(--font-weight-normal)',
-                    textTransform: 'uppercase',
-                    padding: '0.5rem',
-                  }}
+                  as="span"
+                  display="block"
                   _hover={{
                     color: label === text ? '#33FF33' : '#E0E0E0', // Lighter green for auth hover, light gray for others
                   }}
-                  onClick={() => {
-                    navigate({ to });
-                    closeMenu();
-                  }}
+                  fontSize={{ base: '0.75rem', md: '0.875rem' }} // Match Footer nav links
                 >
-                  {label}
-                </Link>
+                  <Link
+                    to={to}
+                    style={{
+                      color: label === text ? '#00FF00' : 'white', // Green for Login/Join/Profile, white for others
+                      textDecoration: 'none',
+                      fontFamily: "'Special Gothic Expanded One', sans-serif",
+                      fontWeight: 'var(--font-weight-normal)',
+                      textTransform: 'uppercase',
+                      padding: '0.5rem',
+                      display: 'block', // Ensure full-width click area
+                    }}
+                    onClick={() => {
+                      navigate({ to });
+                      closeMenu();
+                    }}
+                  >
+                    {label}
+                  </Link>
+                </Box>
               ))}
             </VStack>
           </DrawerBody>
