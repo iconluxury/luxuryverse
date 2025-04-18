@@ -1,7 +1,8 @@
-import { Box, Text, Grid, Heading, Skeleton, Flex, Link } from '@chakra-ui/react';
-import { createFileRoute } from '@tanstack/react-router';
+import { Box, Text, Image, Grid, Heading, Skeleton, Flex, Icon } from '@chakra-ui/react';
+import { createFileRoute, Link } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
 import { useState, useEffect } from 'react';
+import { LockIcon } from '@chakra-ui/icons';
 import Footer from "@/components/Common/Footer";
 
 export const Route = createFileRoute('/_layout/collections')({
@@ -12,7 +13,7 @@ function LatestDropsPage() {
   const selectedDrops = ['461931184423', '471622844711', '488238383399'];
   const [maxDescriptionHeight, setMaxDescriptionHeight] = useState(0);
 
-  const { data: dropsData = { upcoming: [], past: [] }, isLoading } = useQuery({
+  const { data: dropsData = [], isLoading } = useQuery({
     queryKey: ['drops', selectedDrops],
     queryFn: async () => {
       const dropPromises = selectedDrops.map(id =>
@@ -24,7 +25,7 @@ function LatestDropsPage() {
         })
       );
       const results = await Promise.allSettled(dropPromises);
-      const pastDrops = results
+      const drops = results
         .filter(result => result.status === 'fulfilled')
         .map(result => ({
           ...result.value,
@@ -38,43 +39,39 @@ function LatestDropsPage() {
         console.error('Some drops failed to fetch:', errors);
       }
 
-      // Add a placeholder for the upcoming locked drop
-      const upcomingDrop = {
+      // Add a placeholder for a future locked drop with a specific unlock date
+      const futureDrop = {
         id: 'future-1',
-        description: 'Shop opens: <strong>2025-05-01, 10:00 AM</strong> until sold out.',
+        title: 'Upcoming Drop',
+        description: 'Get ready for our next exclusive drop!',
+        image: 'https://placehold.co/400x400?text=Locked',
         isLocked: true,
+        unlockDate: '2025-05-01', // Fixed future date
       };
 
-      return {
-        upcoming: [upcomingDrop],
-        past: pastDrops,
-      };
+      // Sort to put locked drop first
+      return [futureDrop, ...drops];
     },
     staleTime: 1000 * 60 * 5,
     cacheTime: 1000 * 60 * 30,
   });
 
   useEffect(() => {
-    const allDrops = [...dropsData.upcoming, ...dropsData.past];
-    if (allDrops.length > 0) {
-      const descriptions = allDrops.map(col => col.description?.replace(/<\/?strong>/g, '') || '');
+    if (dropsData.length > 0) {
+      const descriptions = dropsData.map(col => col.description || '');
       const maxHeight = Math.max(...descriptions.map(desc => desc.length)) * 1.5;
       setMaxDescriptionHeight(maxHeight);
     }
-  }, [dropsData.upcoming, dropsData.past]);
+  }, [dropsData]);
 
   if (isLoading) {
     return (
-      <Box p={4} color="white" minH="100vh" display="flex" justifyContent="center" alignItems="center">
-        <Box maxW={{ base: "1200px", lg: "1600px" }} w="full" px={{ base: 4, md: 8 }} py={0}>
-          <Skeleton height="20px" width="200px" mb={6} />
-          <Flex justify="center" gap={8}>
-            <Skeleton height="200px" width={{ base: "100%", md: "33.33%" }} borderRadius="md" />
-          </Flex>
-          <Skeleton height="20px" width="200px" mt={12} mb={6} />
+      <Box p={4} bg="gray.900" color="white" minH="100vh" display="flex" justifyContent="center" alignItems="center">
+        <Box maxW="1400px" w="full">
+          <Skeleton height="30px" width="250px" mb={10} />
           <Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={8}>
             {selectedDrops.map((_, index) => (
-              <Skeleton key={index} height="200px" borderRadius="md" />
+              <Skeleton key={index} height="400px" borderRadius="lg" />
             ))}
           </Grid>
         </Box>
@@ -82,9 +79,9 @@ function LatestDropsPage() {
     );
   }
 
-  if (!dropsData.upcoming.length && !dropsData.past.length) {
+  if (dropsData.length === 0) {
     return (
-      <Box p={4} color="white" minH="100vh" display="flex" justifyContent="center" alignItems="center">
+      <Box p={4} bg="gray.900" color="white" minH="100vh" display="flex" justifyContent="center" alignItems="center">
         <Text>No drops available.</Text>
       </Box>
     );
@@ -92,117 +89,99 @@ function LatestDropsPage() {
 
   return (
     <Box
+      bg="gray.900"
       color="white"
       minH="100vh"
       display="flex"
       flexDirection="column"
       alignItems="center"
     >
-      <Box maxW={{ base: "1200px", lg: "1600px" }} w="full" px={{ base: 4, md: 8 }} py={0}>
-        {/* Upcoming Drops Section */}
-        {dropsData.upcoming.length > 0 && (
-          <Box mb={16}>
-            <Heading
-              fontSize={{ base: '2xl', md: '3xl' }}
-              mb={8}
-              textAlign="center"
-              color="white"
-            >
-              Upcoming Drops
-            </Heading>
-            <Flex justify="center" gap={8} flexWrap="wrap">
-              {dropsData.upcoming.map(drop => (
-                <Box key={drop.id} width={{ base: '100%', md: '33.33%' }} maxW="400px" textAlign="center">
-                  <Box
-                    border="1px solid"
-                    borderColor="gray.700"
-                    borderRadius="md"
-                    p={6}
-                    transition="all 0.3s"
-                    _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
-                  >
-                    <Text
-                      fontSize={{ base: 'lg', md: 'lg' }}
-                      color="gray.400"
-                      mb={4}
-                      lineHeight="1.5"
-                      dangerouslySetInnerHTML={{
-                        __html: drop.description || 'No information available.',
-                      }}
+      <Box maxW="1400px" w="full" px={6} pt={8}>
+        <Heading
+          fontSize={{ base: '3xl', md: '4xl' }}
+          mb={12}
+          textAlign="center"
+          bgGradient="linear(to-r, purple.400, pink.400)"
+          bgClip="text"
+        >
+          Latest Drops
+        </Heading>
+        <Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={8}>
+          {dropsData.map(drop => (
+            <Box key={drop.id} position="relative">
+              <Link
+                to={drop.isLocked ? undefined : `/collection/${drop.id}`}
+                style={{ textDecoration: 'none', pointerEvents: drop.isLocked ? 'none' : 'auto' }}
+              >
+                <Box
+                  role="link"
+                  borderWidth="1px"
+                  borderColor="gray.700"
+                  borderRadius="xl"
+                  overflow="hidden"
+                  bg="white"
+                  color="gray.900"
+                  opacity={drop.isLocked ? 0.7 : 1}
+                  _hover={!drop.isLocked ? { boxShadow: 'lg', transform: 'scale(1.03)' } : {}}
+                  transition="all 0.3s ease"
+                  boxShadow="0 4px 15px rgba(0, 0, 0, 0.2)"
+                >
+                  <Box position="relative">
+                    <Image
+                      src={drop.image || 'https://placehold.co/400x400'}
+                      alt={drop.title || 'Drop Image'}
+                      style={{ aspectRatio: '4 / 3', objectFit: 'cover' }}
+                      w="full"
+                      loading="lazy"
+                      filter={drop.isLocked ? 'grayscale(50%)' : 'none'}
                     />
-                    <Link
-                      color="green.500"
-                      fontSize={{ base: 'lg', md: 'lg' }}
+                    {drop.isLocked && (
+                      <Flex
+                        position="absolute"
+                        top={0}
+                        left={0}
+                        right={0}
+                        bottom={0}
+                        bg="blackAlpha.600"
+                        align="center"
+                        justify="center"
+                        flexDirection="column"
+                        gap={2}
+                      >
+                        <Icon as={LockIcon} boxSize={10} color="white" />
+                        <Text color="white" fontWeight="bold" fontSize="sm">
+                          Unlocks: {drop.unlockDate}
+                        </Text>
+                      </Flex>
+                    )}
+                  </Box>
+                  <Box p={6}>
+                    <Text
                       fontWeight="bold"
-                      textDecoration="underline"
-                      _hover={{ color: 'green.400' }}
+                      fontSize={{ base: 'lg', md: 'xl' }}
+                      mb={3}
+                      noOfLines={1}
                     >
-                      Notify Me
-                    </Link>
+                      {drop.title || 'Untitled Drop'}
+                    </Text>
+                    <Box height={`${maxDescriptionHeight}px`} overflow="hidden">
+                      <Text
+                        fontSize="sm"
+                        color="gray.600"
+                        noOfLines={2}
+                        lineHeight="1.5"
+                      >
+                        {drop.description
+                          ? drop.description.replace(/<\/?p>/g, '')
+                          : 'No description available.'}
+                      </Text>
+                    </Box>
                   </Box>
                 </Box>
-              ))}
-            </Flex>
-          </Box>
-        )}
-
-        {/* Past Drops Section */}
-        {dropsData.past.length > 0 && (
-          <Box>
-            <Heading
-              fontSize={{ base: '2xl', md: '3xl' }}
-              mb={8}
-              textAlign="center"
-              color="white"
-            >
-              Past Drops
-            </Heading>
-            <Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={8}>
-              {dropsData.past.map(drop => (
-                <Box key={drop.id}>
-                  <Link
-                    to={`/collection/${drop.id}`}
-                    style={{ textDecoration: 'none' }}
-                  >
-                    <Box
-                      role="link"
-                      border="1px solid"
-                      borderColor="gray.700"
-                      borderRadius="md"
-                      overflow="hidden"
-                      bg="gray.800"
-                      color="gray.400"
-                      p={6}
-                      transition="all 0.3s"
-                      _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
-                    >
-                      <Text
-                        fontWeight="bold"
-                        fontSize={{ base: '2xl', md: '2xl' }}
-                        mb={4}
-                        noOfLines={1}
-                      >
-                        {drop.title || 'Untitled Drop'}
-                      </Text>
-                      <Box height={`${maxDescriptionHeight}px`} overflow="hidden">
-                        <Text
-                          fontSize={{ base: 'lg', md: 'lg' }}
-                          color="gray.400"
-                          noOfLines={2}
-                          lineHeight="1.5"
-                        >
-                          {drop.description
-                            ? drop.description.replace(/<\/?p>/g, '')
-                            : 'No description available.'}
-                        </Text>
-                      </Box>
-                    </Box>
-                  </Link>
-                </Box>
-              ))}
-            </Grid>
-          </Box>
-        )}
+              </Link>
+            </Box>
+          ))}
+        </Grid>
       </Box>
       <Box w="full" mt={16}>
         <Footer />
