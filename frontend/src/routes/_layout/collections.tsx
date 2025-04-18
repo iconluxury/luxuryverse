@@ -125,18 +125,20 @@ function LatestDropsPage() {
           Upcoming
         </Heading>
         <Text fontSize="xl" color="white" mt={12}>
-        2025-05-01
-        <br />
-        10:00 AM -
-          <Text as="span" color="gray.200">
-            {' '}until sold out.
-          </Text>
-          <br />
-          <ChakraLink
-            as="span"
-            color="green.500"
-            fontSize="xl"
-            fontWeight="bold"
+  2025-05-01
+  <br />
+  <Text as="span" fontSize="lg">
+    10:00 AM -
+  </Text>
+  <Text as="span" fontSize="lg" color="gray.200">
+    {' '}until sold out.
+  </Text>
+  <br />
+  <ChakraLink
+    as="span"
+    color="green.500"
+    fontSize="xl"
+    fontWeight="bold"
             textDecoration="underline"
             _hover={{ color: "green.400" }}
             onClick={() => console.log("Notify clicked - no action implemented")}
