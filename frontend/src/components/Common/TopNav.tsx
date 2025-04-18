@@ -103,55 +103,50 @@ export default function TopNav() {
           <Link
             to="/"
             style={{
-              color: '#3A4A4F', // --color-border (muted)
+              color: '#aeb8bb', // --color-border (muted)
               textDecoration: 'none',
               fontFamily: "'Special Gothic Expanded One', sans-serif",
             }}
-            _hover={{ color: '#00E5FF' }} // --color-primary
           >
             Home
           </Link>
           <Link
             to="/roadmap"
             style={{
-              color: '#3A4A4F', // --color-border
+              color: '#aeb8bb', // --color-border
               textDecoration: 'none',
               fontFamily: "'Special Gothic Expanded One', sans-serif",
             }}
-            _hover={{ color: '#00E5FF' }}
           >
             Roadmap
           </Link>
           <Link
             to="/authenticity"
             style={{
-              color: '#3A4A4F', // --color-border
+              color: '#aeb8bb', // --color-border
               textDecoration: 'none',
               fontFamily: "'Special Gothic Expanded One', sans-serif",
             }}
-            _hover={{ color: '#00E5FF' }}
           >
             Authenticity
           </Link>
           <Link
             to="/faq"
             style={{
-              color: '#3A4A4F', // --color-border
+              color: '#aeb8bb', // --color-border
               textDecoration: 'none',
               fontFamily: "'Special Gothic Expanded One', sans-serif",
             }}
-            _hover={{ color: '#00E5FF' }}
           >
             FAQ
           </Link>
           <Link
             to="/contact"
             style={{
-              color: '#3A4A4F', // --color-border
+              color: '#aeb8bb', // --color-border
               textDecoration: 'none',
               fontFamily: "'Special Gothic Expanded One', sans-serif",
             }}
-            _hover={{ color: '#00E5FF' }}
           >
             Contact
           </Link>
