@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { Box, Text, Image, SimpleGrid, VStack, Heading, Skeleton, SkeletonText, Button } from '@chakra-ui/react';
+import { Box, Text, Image, SimpleGrid, VStack, Heading, Skeleton, SkeletonText, Button,Flex } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 import { ErrorBoundary } from 'react-error-boundary';
