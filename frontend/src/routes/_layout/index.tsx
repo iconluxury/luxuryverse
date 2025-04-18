@@ -99,14 +99,14 @@ function Home() {
       rotateY: 30,
       scale: 1.2,
       color: "#58fb6cd9",
-      fontSize: { base: "1rem", md: "5.5rem" }, // Smaller cursor on mobile
+      fontSize: { base: "1rem", md: "5.5rem" },
       lineHeight: "1",
       fontWeight: "bold",
       textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
       x: 0,
     });
 
-    // Cursor blinking animation (always blinking)
+    // Cursor blinking animation
     gsap.to([exclusiveCursor, brandsCursor], {
       opacity: 0,
       repeat: -1,
@@ -115,7 +115,7 @@ function Home() {
       ease: "power1.inOut",
     });
 
-    // Typewriter animation for EXCLUSIVE (cumulative letter reveal)
+    // Typewriter animation for EXCLUSIVE
     gsap.to(exclusiveElement, {
       opacity: 1,
       duration: 0.1,
@@ -140,7 +140,7 @@ function Home() {
       },
     });
 
-    // Typewriter animation for BRANDS (cumulative letter reveal)
+    // Typewriter animation for BRANDS
     gsap.to(brandsElement, {
       opacity: 1,
       duration: 0.1,
@@ -166,7 +166,7 @@ function Home() {
       },
     });
 
-    // Flashy Glitch animation for EXCLUSIVE (individual letters)
+    // Flashy Glitch animation for EXCLUSIVE
     const glitchExclusive = () => {
       const colors = ["#58fb6cd9", "#ff00ff", "#00e5ff", "#ffea00", "#ff5555"];
       exclusiveSpans.forEach((span) => {
@@ -203,7 +203,7 @@ function Home() {
       gsap.delayedCall(gsap.utils.random(1.5, 3), glitchExclusive);
     };
 
-    // Flashy Glitch animation for BRANDS (individual letters)
+    // Flashy Glitch animation for BRANDS
     const glitchBrands = () => {
       const colors = ["#58fb6cd9", "#ff00ff", "#00e5ff", "#ffea00", "#ff5555"];
       brandsSpans.forEach((span) => {
@@ -268,15 +268,15 @@ function Home() {
   // Fetch collections from the API
   useEffect(() => {
     setIsLoading(true);
-    const url = 'https://iconluxury.shop/api/v1/collections/';
-    console.log('Fetching collections from:', url);
+    const url = "https://iconluxury.shop/api/v1/collections/";
+    console.log("Fetching collections from:", url);
     axios
       .get(url, {
-        headers: { 'Accept': 'application/json' },
+        headers: { Accept: "application/json" },
         timeout: 10000,
       })
       .then((res) => {
-        console.log('API Response:', res.data);
+        console.log("API Response:", res.data);
         const data = Array.isArray(res.data)
           ? res.data
           : Array.isArray(res.data?.collections)
@@ -286,15 +286,17 @@ function Home() {
         setIsLoading(false);
       })
       .catch((err) => {
-        console.error('Fetch error:', {
+        console.error("Fetch error:", {
           message: err.message,
           code: err.code,
-          response: err.response ? {
-            status: err.response.status,
-            data: err.response.data,
-          } : null,
+          response: err.response
+            ? {
+                status: err.response.status,
+                data: err.response.data,
+              }
+            : null,
         });
-        setError('Unable to load collections. Please try again later.');
+        setError("Unable to load collections. Please try again later.");
         setCollections([]);
         setIsLoading(false);
       });
@@ -320,164 +322,175 @@ function Home() {
     }
   };
 
-  // Handle waitlist join (placeholder functionality)
+  // Handle waitlist join
   const handleJoinWaitlist = () => {
     console.log("Joined the waitlist");
-    // TODO: Implement waitlist logic (e.g., API call or form redirect)
+    // TODO: Implement waitlist logic
   };
 
   return (
-<Box
-  bgImage="url('/images/hero-bg.jpg')"
-  bgSize="cover"
-  bgPosition="center"
-  py={{ base: 6, md: 16 }}
-  px={{ base: 2, md: 8 }}
-  position="relative"
-  width="100%" // Changed from 100vw to 100% to respect parent container
-  minH="100vh" // Ensure full viewport height for hero section
-  display="flex" // Ensure the Box itself is a flex container to center content
-  justifyContent="center" // Center content horizontally
-  alignItems="center" // Center content vertically
-  _before={{
-    content: '""',
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    bg: "black.900",
-    opacity: 0.7,
-    zIndex: 1, // Ensure overlay is behind content
-  }}
->
-  <Flex
-    maxW="1200px" // Consistent max-width to center content
-    mx="auto"
-    direction={{ base: "column", lg: "row" }}
-    align={{ base: "center", lg: "center" }} // Center align on all breakpoints
-    gap={{ base: 4, md: 12 }}
-    position="relative"
-    zIndex={2} // Ensure content is above overlay
-    justifyContent="space-between" // Distribute space evenly between left and right sections
-    width="100%" // Ensure Flex takes full width of parent
-    px={{ base: 4, md: 0 }} // Remove horizontal padding on desktop to align with maxW
-  >
-    <VStack
-      align="flex-start"
-      spacing={{ base: 4, md: 12 }}
-      flex={{ base: "1", lg: "0 0 50%" }} // Allow VStack to take 50% width on desktop
-      maxW={{ base: "100%", lg: "600px" }} // Limit width for text content
-      textAlign={{ base: "center", lg: "left" }} // Center text on mobile, left-align on desktop
+    <Box
+      width="100%"
+      minH="100vh" // Ensure the entire page takes at least full viewport height
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      bg="black.900" // Consistent background for non-hero sections
     >
-      <Box position="relative" display="inline-block" whiteSpace="nowrap">
-        <Heading
-          as="h2"
-          variant="glitch"
-          size={{ base: "3xl", md: "9xl" }}
-          className="glitch glitch-exclusive"
-          data-text="EXCLUSIVE"
-          ref={exclusiveRef}
-        >
-          EXCLUSIVE
-        </Heading>
-        <Box
-          as="span"
-          ref={exclusiveCursorRef}
-          className="terminal-cursor"
-          position="absolute"
-          top={{ base: "5%", md: "10%" }}
-          left="0"
-          color="#58fb6cd9"
-          fontSize={{ base: "1rem", md: "5.5rem" }}
-          lineHeight="1"
-          fontWeight="normal"
-          ml="0.05em"
-        >
-          |
-        </Box>
-      </Box>
-      <Box position="relative" display="inline-block" whiteSpace="nowrap">
-        <Heading
-          as="h2"
-          variant="glitch"
-          size={{ base: "3xl", md: "9xl" }}
-          className="glitch glitch-brands"
-          data-text="BRANDS"
-          ref={brandsRef}
-        >
-          BRANDS
-        </Heading>
-        <Box
-          as="span"
-          ref={brandsCursorRef}
-          className="terminal-cursor"
-          position="absolute"
-          top={{ base: "5%", md: "10%" }}
-          left="0"
-          color="#58fb6cd9"
-          fontSize={{ base: "1rem", md: "5.5rem" }}
-          lineHeight="1"
-          fontWeight="normal"
-          ml="0.05em"
-        >
-          |
-        </Box>
-      </Box>
-      <Text fontSize={{ base: "sm", md: "xl" }} color="purple.500">
-        Exclusive Access to authenticated luxury goods, verified on the blockchain
-      </Text>
-      <Button
-        size="lg"
-        variant="solid"
-        bg="green.500"
-        color="black.900"
-        _hover={{ bg: "green.600" }}
-        onClick={handleJoinWaitlist}
-        fontSize={{ base: "md", md: "xl" }}
-        py={{ base: 6, md: 8 }}
-        px={{ base: 8, md: 12 }}
+      {/* Hero Section */}
+      <Box
+        bgImage="url('/images/hero-bg.jpg')"
+        bgSize="cover"
+        bgPosition="center"
+        py={{ base: 8, md: 20 }} // Increased padding for more vertical space
+        px={{ base: 4, md: 8 }}
+        position="relative"
+        width="100%"
+        minH={{ base: "100vh", lg: "120vh" }} // Slightly taller on desktop for fuller appearance
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        _before={{
+          content: '""',
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          bg: "black.900",
+          opacity: 0.7,
+          zIndex: 1,
+        }}
       >
-        Join The Waitlist
-      </Button>
-    </VStack>
-    <Flex
-      flex={{ base: "1", lg: "0 0 50%" }} // Ensure brand logos take 50% width on desktop
-      justify="center"
-      align="center"
-      mt={{ base: 6, lg: 0 }}
-      maxW={{ base: "100%", lg: "600px" }} // Limit width to balance with text section
-    >
-      <Flex gap={{ base: 2, md: 8 }} flexWrap="wrap" justify="center">
-        {[
-          { src: "https://github.com/iconluxurygroup/legacy-test-luxuryverse/raw/dev/frontend/public/assets/img/brand/brand_img01.png", alt: "Balmain Logo" },
-          { src: "https://github.com/iconluxurygroup/legacy-test-luxuryverse/raw/dev/frontend/public/assets/img/brand/brand_img02.png", alt: "Ferragamo Logo" },
-          { src: "https://github.com/iconluxurygroup/legacy-test-luxuryverse/raw/dev/frontend/public/assets/img/brand/brand_img03.png", alt: "The Row Logo" },
-          { src: "https://github.com/iconluxurygroup/legacy-test-luxuryverse/raw/dev/frontend/public/assets/img/brand/brand_img04.png", alt: "Gianvito Rossi Logo" },
-          { src: "https://github.com/iconluxurygroup/legacy-test-luxuryverse/raw/dev/frontend/public/assets/img/brand/brand_img05.png", alt: "Roger Vivier Logo" },
-          { src: "https://github.com/iconluxurygroup/legacy-test-luxuryverse/raw/dev/frontend/public/assets/img/brand/brand_img06.png", alt: "Etro Logo" },
-          { src: "https://github.com/iconluxurygroup/legacy-test-luxuryverse/raw/dev/frontend/public/assets/img/brand/brand_img07.png", alt: "Moschino Logo" },
-        ].map((img) => (
-          <Image
-            key={img.alt}
-            src={img.src}
-            alt={img.alt}
-            boxSize={{ base: "40px", md: "80px" }} // Reduced size to prevent overflow
-            objectFit="contain"
-            fallbackSrc="/images/placeholder.jpg"
-            filter="grayscale(100%)"
-            _hover={{ filter: "grayscale(0%)" }}
-            transition="filter 0.3s ease"
-          />
-        ))}
-      </Flex>
-    </Flex>
-  </Flex>
+        <Flex
+          maxW="1400px" // Increased max-width for wider desktop layout
+          mx="auto"
+          direction={{ base: "column", lg: "row" }}
+          align={{ base: "center", lg: "center" }}
+          gap={{ base: 6, md: 16 }} // Increased gap for better spacing
+          position="relative"
+          zIndex={2}
+          justifyContent="space-between"
+          width="100%"
+          px={{ base: 4, md: 0 }}
+        >
+          <VStack
+            align="flex-start"
+            spacing={{ base: 6, md: 14 }} // Increased spacing for better proportion
+            flex={{ base: "1", lg: "0 0 50%" }}
+            maxW={{ base: "100%", lg: "700px" }} // Slightly wider for balance
+            textAlign={{ base: "center", lg: "left" }}
+          >
+            <Box position="relative" display="inline-block" whiteSpace="nowrap">
+              <Heading
+                as="h2"
+                variant="glitch"
+                size={{ base: "3xl", md: "9xl" }}
+                className="glitch glitch-exclusive"
+                data-text="EXCLUSIVE"
+                ref={exclusiveRef}
+              >
+                EXCLUSIVE
+              </Heading>
+              <Box
+                as="span"
+                ref={exclusiveCursorRef}
+                className="terminal-cursor"
+                position="absolute"
+                top={{ base: "5%", md: "10%" }}
+                left="0"
+                color="#58fb6cd9"
+                fontSize={{ base: "1rem", md: "5.5rem" }}
+                lineHeight="1"
+                fontWeight="normal"
+                ml="0.05em"
+              >
+                |
+              </Box>
+            </Box>
+            <Box position="relative" display="inline-block" whiteSpace="nowrap">
+              <Heading
+                as="h2"
+                variant="glitch"
+                size={{ base: "3xl", md: "9xl" }}
+                className="glitch glitch-brands"
+                data-text="BRANDS"
+                ref={brandsRef}
+              >
+                BRANDS
+              </Heading>
+              <Box
+                as="span"
+                ref={brandsCursorRef}
+                className="terminal-cursor"
+                position="absolute"
+                top={{ base: "5%", md: "10%" }}
+                left="0"
+                color="#58fb6cd9"
+                fontSize={{ base: "1rem", md: "5.5rem" }}
+                lineHeight="1"
+                fontWeight="normal"
+                ml="0.05em"
+              >
+                |
+              </Box>
+            </Box>
+            <Text fontSize={{ base: "md", md: "2xl" }} color="purple.500"> {/* Increased font size */}
+              Exclusive Access to authenticated luxury goods, verified on the blockchain
+            </Text>
+            <Button
+              size="lg"
+              variant="solid"
+              bg="green.500"
+              color="black.900"
+              _hover={{ bg: "green.600" }}
+              onClick={handleJoinWaitlist}
+              fontSize={{ base: "md", md: "xl" }}
+              py={{ base: 6, md: 10 }} // Larger button for prominence
+              px={{ base: 8, md: 14 }}
+            >
+              Join The Waitlist
+            </Button>
+          </VStack>
+          <Flex
+            flex={{ base: "1", lg: "0 0 50%" }}
+            justify="center"
+            align="center"
+            mt={{ base: 8, lg: 0 }}
+            maxW={{ base: "100%", lg: "700px" }} // Match left section width
+          >
+            <Flex gap={{ base: 4, md: 10 }} flexWrap="wrap" justify="center"> {/* Increased gap */}
+              {[
+                { src: "https://github.com/iconluxurygroup/legacy-test-luxuryverse/raw/dev/frontend/public/assets/img/brand/brand_img01.png", alt: "Balmain Logo" },
+                { src: "https://github.com/iconluxurygroup/legacy-test-luxuryverse/raw/dev/frontend/public/assets/img/brand/brand_img02.png", alt: "Ferragamo Logo" },
+                { src: "https://github.com/iconluxurygroup/legacy-test-luxuryverse/raw/dev/frontend/public/assets/img/brand/brand_img03.png", alt: "The Row Logo" },
+                { src: "https://github.com/iconluxurygroup/legacy-test-luxuryverse/raw/dev/frontend/public/assets/img/brand/brand_img04.png", alt: "Gianvito Rossi Logo" },
+                { src: "https://github.com/iconluxurygroup/legacy-test-luxuryverse/raw/dev/frontend/public/assets/img/brand/brand_img05.png", alt: "Roger Vivier Logo" },
+                { src: "https://github.com/iconluxurygroup/legacy-test-luxuryverse/raw/dev/frontend/public/assets/img/brand/brand_img06.png", alt: "Etro Logo" },
+                { src: "https://github.com/iconluxurygroup/legacy-test-luxuryverse/raw/dev/frontend/public/assets/img/brand/brand_img07.png", alt: "Moschino Logo" },
+              ].map((img) => (
+                <Image
+                  key={img.alt}
+                  src={img.src}
+                  alt={img.alt}
+                  boxSize={{ base: "50px", md: "100px" }} // Increased size for visibility
+                  objectFit="contain"
+                  fallbackSrc="/images/placeholder.jpg"
+                  filter="grayscale(100%)"
+                  _hover={{ filter: "grayscale(0%)" }}
+                  transition="filter 0.3s ease"
+                />
+              ))}
+            </Flex>
+          </Flex>
+        </Flex>
+      </Box>
+
       {/* Cards Section: Luxury Brands, Exclusive Drops, Authentic Goods */}
-      <Box py={16} px={{ base: 4, md: 8 }} maxW="1200px" mx="auto">
+      <Box py={{ base: 16, md: 24 }} px={{ base: 4, md: 8 }} maxW="1400px" mx="auto"> {/* Increased padding and max-width */}
         <Flex
           direction={{ base: "column", lg: "row" }}
-          gap={8}
+          gap={10} // Increased gap for better spacing
           justify="space-between"
           align="stretch"
         >
@@ -486,16 +499,16 @@ function Home() {
             border="1px solid"
             borderColor="gray.700"
             borderRadius="md"
-            p={6}
+            p={8} // Increased padding
             flex="1"
             align="start"
             transition="all 0.3s"
             _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
           >
-            <Heading as="h3" size="lg" mb={4} color="purple.500">
+            <Heading as="h3" size="xl" mb={4} color="purple.500"> {/* Larger heading */}
               Luxury Brands
             </Heading>
-            <Text color="purple.500">
+            <Text fontSize="lg" color="purple.500"> {/* Larger text */}
               LuxuryVerse has direct access to the world's top luxury brands. We have built our
               industry relationships over decades, ensuring that we have the best styles at the prices.
             </Text>
@@ -505,16 +518,16 @@ function Home() {
             border="1px solid"
             borderColor="gray.700"
             borderRadius="md"
-            p={6}
+            p={8}
             flex="1"
             align="start"
             transition="all 0.3s"
             _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
           >
-            <Heading as="h3" size="lg" mb={4} color="purple.500">
+            <Heading as="h3" size="xl" mb={4} color="purple.500">
               Exclusive Drops
             </Heading>
-            <Text color="purple.500">
+            <Text fontSize="lg" color="purple.500">
               Each week, LuxuryVerse releases a limited selection of luxury goods to our members. We
               announce these drops one day in advance on X, releasing goods on a first come first serve
               basis exclusive to our members.
@@ -525,16 +538,16 @@ function Home() {
             border="1px solid"
             borderColor="gray.700"
             borderRadius="md"
-            p={6}
+            p={8}
             flex="1"
             align="start"
             transition="all 0.3s"
             _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
           >
-            <Heading as="h3" size="lg" mb={4} color="purple.500">
+            <Heading as="h3" size="xl" mb={4} color="purple.500">
               Authentic Goods
             </Heading>
-            <Text color="purple.500">
+            <Text fontSize="lg" color="purple.500">
               LuxuryVerse goods are 100% authentic and guaranteed on the blockchain. Our goods and
               services are also supported by the Authentication Council.
             </Text>
@@ -543,24 +556,26 @@ function Home() {
       </Box>
 
       {/* Launch Card */}
-      <Box py={16} bg="gray.800" textAlign="center">
+      <Box py={{ base: 16, md: 24 }} bg="gray.800" textAlign="center">
         <VStack
           bg="gray.900"
           border="1px solid"
           borderColor="gray.700"
           borderRadius="md"
-          p={4}
-          maxW="600px"
+          p={6} // Increased padding
+          maxW="700px" // Slightly wider
           mx="auto"
-          spacing={6}
+          spacing={8} // Increased spacing
           transition="all 0.3s"
           _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
         >
-          <Heading as="h2" size="xl" color="purple.500">
+          <Heading as="h2" size="2xl" color="purple.500"> {/* Larger heading */}
             Launching September 2025
           </Heading>
-          <Text color="purple.500">First Drop: September 5th, 2025</Text>
-          <Flex gap={8} justify="center" wrap="wrap">
+          <Text fontSize="lg" color="purple.500"> {/* Larger text */}
+            First Drop: September 5th, 2025
+          </Text>
+          <Flex gap={10} justify="center" wrap="wrap"> {/* Increased gap */}
             {[
               { value: countdown.days, label: "Days" },
               { value: countdown.hours, label: "Hours" },
@@ -568,10 +583,12 @@ function Home() {
               { value: countdown.seconds, label: "Seconds" },
             ].map(({ value, label }) => (
               <VStack key={label}>
-                <Text fontSize="4xl" fontWeight="bold" color="purple.500">
+                <Text fontSize="5xl" fontWeight="bold" color="purple.500"> {/* Larger font */}
                   {value}
                 </Text>
-                <Text color="purple.500">{label}</Text>
+                <Text fontSize="lg" color="purple.500"> {/* Larger text */}
+                  {label}
+                </Text>
               </VStack>
             ))}
           </Flex>
@@ -579,35 +596,35 @@ function Home() {
       </Box>
 
       {/* Recent Drops Card */}
-      <Box py={16} px={{ base: 4, md: 8 }} maxW="1200px" mx="auto">
+      <Box py={{ base: 16, md: 24 }} px={{ base: 4, md: 8 }} maxW="1400px" mx="auto">
         <VStack
           bg="gray.900"
           border="1px solid"
           borderColor="gray.700"
           borderRadius="md"
-          p={8}
-          spacing={6}
+          p={10} // Increased padding
+          spacing={8} // Increased spacing
           transition="all 0.3s"
           _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
         >
-          <Heading as="h2" size="xl" color="purple.500">
+          <Heading as="h2" size="2xl" color="purple.500"> {/* Larger heading */}
             Recent Drops
           </Heading>
-          <Text maxW="600px" textAlign="center" color="purple.500">
+          <Text maxW="700px" textAlign="center" fontSize="lg" color="purple.500"> {/* Larger text */}
             Each week, LuxuryVerse releases a limited selection of luxury goods to our members.
           </Text>
-          {error && <Text color="red.300">{error}</Text>}
-          {isLoading && <Text color="purple.500">Loading drops...</Text>}
+          {error && <Text color="red.300" fontSize="lg">{error}</Text>}
+          {isLoading && <Text color="purple.500" fontSize="lg">Loading drops...</Text>}
           {!isLoading && !Array.isArray(collections) && (
-            <Text color="purple.500">No valid collections available</Text>
+            <Text color="purple.500" fontSize="lg">No valid collections available</Text>
           )}
           {!isLoading && Array.isArray(collections) && collections.length === 0 && (
-            <Text color="purple.500">No drops available</Text>
+            <Text color="purple.500" fontSize="lg">No drops available</Text>
           )}
           {!isLoading && Array.isArray(collections) && collections.length > 0 && (
             <Grid
               templateColumns={{ base: "1fr", md: "repeat(3, 1fr)" }}
-              gap={8}
+              gap={10} // Increased gap
               w="100%"
             >
               {collections.flatMap((collection) =>
@@ -619,7 +636,7 @@ function Home() {
                       border="1px solid"
                       borderColor="gray.700"
                       borderRadius="md"
-                      p={4}
+                      p={6} // Increased padding
                       align="start"
                       transition="all 0.3s"
                       _hover={{ borderColor: "green.500", shadow: "md" }}
@@ -629,21 +646,21 @@ function Home() {
                         alt={`${product.title} Image`}
                         borderRadius="md"
                         objectFit="cover"
-                        h="150px"
+                        h="200px" // Increased height for visibility
                         w="100%"
                         fallbackSrc="/images/placeholder.jpg"
                       />
-                      <Text fontSize="md" fontWeight="bold" color="purple.500">
+                      <Text fontSize="lg" fontWeight="bold" color="purple.500"> {/* Larger text */}
                         {product.title}
                       </Text>
-                      <Text color="purple.500">{product.price}</Text>
+                      <Text fontSize="md" color="purple.500">{product.price}</Text>
                       <Button
-                        size="sm"
+                        size="md" // Larger button
                         variant="outline"
                         borderColor="purple.500"
                         color="purple.500"
                         w="full"
-                        mt={2}
+                        mt={4} // Increased margin
                         _hover={{ bg: "green.500", color: "black.900" }}
                       >
                         View Details
@@ -660,9 +677,9 @@ function Home() {
       </Box>
 
       {/* FAQs */}
-      <Box py={16} bg="gray.800" px={{ base: 4, md: 8 }}>
-        <VStack maxW="1200px" mx="auto" spacing={8}>
-          <Heading as="h2" size="xl" color="purple.500">
+      <Box py={{ base: 16, md: 24 }} bg="gray.800" px={{ base: 4, md: 8 }}>
+        <VStack maxW="1400px" mx="auto" spacing={10}> {/* Increased spacing and max-width */}
+          <Heading as="h2" size="2xl" color="purple.500"> {/* Larger heading */}
             Frequently Asked Questions
           </Heading>
           <Accordion allowToggle w="100%">
@@ -698,12 +715,12 @@ function Home() {
             ].map(({ question, answer }) => (
               <AccordionItem key={question}>
                 <AccordionButton>
-                  <Box flex="1" textAlign="left" color="purple.500">
+                  <Box flex="1" textAlign="left" color="purple.500" fontSize="lg"> {/* Larger text */}
                     {question}
                   </Box>
                   <AccordionIcon color="purple.500" />
                 </AccordionButton>
-                <AccordionPanel color="purple.500">
+                <AccordionPanel color="purple.500" fontSize="lg"> {/* Larger text */}
                   {answer}
                 </AccordionPanel>
               </AccordionItem>
@@ -715,6 +732,7 @@ function Home() {
             variant="outline"
             borderColor="purple.500"
             color="purple.500"
+            size="lg" // Larger button
             _hover={{ bg: "green.500", color: "black.900" }}
           >
             See All FAQ
@@ -723,12 +741,12 @@ function Home() {
       </Box>
 
       {/* Documents */}
-      <Box py={16} px={{ base: 4, md: 8 }} maxW="1200px" mx="auto">
-        <VStack spacing={8}>
-          <Heading as="h2" size="xl" color="purple.500">
+      <Box py={{ base: 16, md: 24 }} px={{ base: 4, md: 8 }} maxW="1400px" mx="auto">
+        <VStack spacing={10}> {/* Increased spacing */}
+          <Heading as="h2" size="2xl" color="purple.500"> {/* Larger heading */}
             Read Documents
           </Heading>
-          <Flex gap={8} wrap="wrap" justify="center">
+          <Flex gap={10} wrap="wrap" justify="center"> {/* Increased gap */}
             {[
               { href: "/docs/whitepaper.pdf", label: "Whitepaper" },
               { href: "/docs/presentation.pdf", label: "Presentation" },
@@ -741,6 +759,7 @@ function Home() {
                 variant="outline"
                 borderColor="purple.500"
                 color="purple.500"
+                size="lg" // Larger button
                 _hover={{ bg: "green.500", color: "black.900" }}
               >
                 {label}
@@ -751,12 +770,12 @@ function Home() {
       </Box>
 
       {/* Authentication Council */}
-      <Box py={16} px={{ base: 4, md: 8 }} maxW="1200px" mx="auto">
-        <VStack spacing={8}>
-          <Heading as="h2" size="xl" color="purple.500">
+      <Box py={{ base: 16, md: 24 }} px={{ base: 4, md: 8 }} maxW="1400px" mx="auto">
+        <VStack spacing={10}> {/* Increased spacing */}
+          <Heading as="h2" size="2xl" color="purple.500"> {/* Larger heading */}
             Trust in Every Purchase
           </Heading>
-          <Text textAlign="center" maxW="600px" color="purple.500">
+          <Text textAlign="center" maxW="700px" fontSize="lg" color="purple.500"> {/* Larger text */}
             LuxuryVerse partners with former members of Interpol, the FBI, and other agencies to guarantee authentic merchandise. All goods are transported, stored, and shipped from secure facilities.
           </Text>
         </VStack>
