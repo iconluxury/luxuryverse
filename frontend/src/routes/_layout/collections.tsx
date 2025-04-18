@@ -177,7 +177,7 @@ function LatestDropsPage() {
                     p={6}
                     align="start"
                     transition="all 0.3s"
-                    _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
+                    _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" , color: "white" }}
                   >
                     <Heading
                       as="h3"
@@ -186,7 +186,7 @@ function LatestDropsPage() {
                       color="gray.400"
                       textTransform="uppercase"
                       noOfLines={1}
-                      _hover={{color: "white" }}
+   
                     >
                       {drop.title || 'Untitled Drop'}
                     </Heading>
