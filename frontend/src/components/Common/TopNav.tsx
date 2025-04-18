@@ -20,9 +20,9 @@ export default function TopNav() {
       };
     }
     return {
-      text: isJoining ? 'Join' : 'Login',
+      text: isJoining ? 'Join' : 'Shop',
       to: '/join',
-    };
+    }
   };
 
   const { text, to } = getAuthLinkProps();
