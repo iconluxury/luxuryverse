@@ -154,7 +154,7 @@ export default function TopNav() {
                       closeMenu();
                     }}
                   >
-                    {label}
+                  {label}
                   </Link>
                 </Box>
               ))}
