@@ -1,4 +1,4 @@
-import { Box, Text, Image, Grid, Heading, Skeleton, Flex, Icon, Button } from '@chakra-ui/react';
+import { Box, Text, Grid, Heading, Skeleton, Flex, Icon, Button } from '@chakra-ui/react';
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
 import { useState, useEffect } from 'react';
@@ -44,7 +44,6 @@ function LatestDropsPage() {
         id: 'future-1',
         title: 'Next Exclusive Drop',
         description: 'Our next premium collection is almost here!',
-        image: 'https://placehold.co/400x400?text=Upcoming',
         isLocked: true,
         unlockDate: '2025-05-01', // Fixed future date
       };
@@ -71,15 +70,14 @@ function LatestDropsPage() {
     return (
       <Box p={4} bg="gray.900" color="white" minH="100vh" display="flex" justifyContent="center" alignItems="center">
         <Box maxW="1400px" w="full">
-          <Skeleton height="30px" width="250px" mb={10} />
           <Skeleton height="20px" width="200px" mb={6} />
           <Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={8}>
-            <Skeleton height="400px" borderRadius="lg" />
+            <Skeleton height="200px" borderRadius="lg" />
           </Grid>
           <Skeleton height="20px" width="200px" mt={12} mb={6} />
           <Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={8}>
             {selectedDrops.map((_, index) => (
-              <Skeleton key={index} height="400px" borderRadius="lg" />
+              <Skeleton key={index} height="200px" borderRadius="lg" />
             ))}
           </Grid>
         </Box>
@@ -111,7 +109,7 @@ function LatestDropsPage() {
             <Heading
               fontSize={{ base: '2xl', md: '3xl' }}
               mb={8}
-              textAlign="center"
+柏              textAlign="center"
               color="white"
             >
               Upcoming Drops
@@ -129,45 +127,31 @@ function LatestDropsPage() {
                     opacity={0.7}
                     transition="all 0.3s ease"
                     boxShadow="0 4px 15px rgba(0, 0, 0, 0.2)"
+                    p={6}
                   >
-                    <Box position="relative">
-                      <Image
-                        src={drop.image || 'https://placehold.co/400x400'}
-                        alt={drop.title || 'Drop Image'}
-                        style={{ aspectRatio: '4 / 3', objectFit: 'cover' }}
-                        w="full"
-                        loading="lazy"
-                        filter="grayscale(50%)"
-                      />
-                      <Flex
-                        position="absolute"
-                        top={0}
-                        left={0}
-                        right={0}
-                        bottom={0}
-                        bg="blackAlpha.600"
-                        align="center"
-                        justify="center"
-                        flexDirection="column"
-                        gap={4}
+                    <Flex
+                      align="center"
+                      justify="center"
+                      flexDirection="column"
+                      gap={4}
+                      minH="150px"
+                    >
+                      <Icon as={TimeIcon} boxSize={8} color="gray.600" />
+                      <Text fontWeight="bold" fontSize="sm" color="gray.600">
+                        Unlocks: {drop.unlockDate}
+                      </Text>
+                      <Button
+                        size="sm"
+                        colorScheme="purple"
+                        variant="outline"
+                        borderColor="gray.600"
+                        color="gray.600"
+                        _hover={{ bg: 'purple.600', borderColor: 'purple.600', color: 'white' }}
                       >
-                        <Icon as={TimeIcon} boxSize={10} color="white" />
-                        <Text color="white" fontWeight="bold" fontSize="sm">
-                          Unlocks: {drop.unlockDate}
-                        </Text>
-                        <Button
-                          size="sm"
-                          colorScheme="purple"
-                          variant="outline"
-                          borderColor="white"
-                          color="white"
-                          _hover={{ bg: 'purple.600', borderColor: 'purple.600' }}
-                        >
-                          Notify Me
-                        </Button>
-                      </Flex>
-                    </Box>
-                    <Box p={6}>
+                        Notify Me
+                      </Button>
+                    </Flex>
+                    <Box mt={4}>
                       <Text
                         fontWeight="bold"
                         fontSize={{ base: 'lg', md: 'xl' }}
@@ -201,7 +185,7 @@ function LatestDropsPage() {
           <Box>
             <Heading
               fontSize={{ base: '2xl', md: '3xl' }}
-              mb Cousins={8}
+              mb={8}
               textAlign="center"
               color="white"
             >
@@ -225,35 +209,27 @@ function LatestDropsPage() {
                       _hover={{ boxShadow: 'lg', transform: 'scale(1.03)' }}
                       transition="all 0.3s ease"
                       boxShadow="0 4px 15px rgba(0, 0, 0, 0.2)"
+                      p={6}
                     >
-                      <Image
-                        src={drop.image || 'https://placehold.co/400x400'}
-                        alt={drop.title || 'Drop Image'}
-                        style={{ aspectRatio: '4 / 3', objectFit: 'cover' }}
-                        w="full"
-                        loading="lazy"
-                      />
-                      <Box p={6}>
+                      <Text
+                        fontWeight="bold"
+                        fontSize={{ base: 'lg', md: 'xl' }}
+                        mb={3}
+                        noOfLines={1}
+                      >
+                        {drop.title || 'Untitled Drop'}
+                      </Text>
+                      <Box height={`${maxDescriptionHeight}px`} overflow="hidden">
                         <Text
-                          fontWeight="bold"
-                          fontSize={{ base: 'lg', md: 'xl' }}
-                          mb={3}
-                          noOfLines={1}
+                          fontSize="sm"
+                          color="gray.600"
+                          noOfLines={2}
+                          lineHeight="1.5"
                         >
-                          {drop.title || 'Untitled Drop'}
+                          {drop.description
+                            ? drop.description.replace(/<\/?p>/g, '')
+                            : 'No description available.'}
                         </Text>
-                        <Box height={`${maxDescriptionHeight}px`} overflow="hidden">
-                          <Text
-                            fontSize="sm"
-                            color="gray.600"
-                            noOfLines={2}
-                            lineHeight="1.5"
-                          >
-                            {drop.description
-                              ? drop.description.replace(/<\/?p>/g, '')
-                              : 'No description available.'}
-                          </Text>
-                        </Box>
                       </Box>
                     </Box>
                   </Link>
