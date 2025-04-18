@@ -108,7 +108,7 @@ const Footer = () => {
               textTransform="uppercase"
               textAlign="center"
             >
-              © 2025{' '}
+            
               <Link
                 href="https://luxuryverse.com"
                 color="green.500"
@@ -120,6 +120,7 @@ const Footer = () => {
               >
                 LuxuryVerse
               </Link>
+              {' '}© 2025
             </Text>
 
             {/* Right Side - Terms and Opt Out */}
