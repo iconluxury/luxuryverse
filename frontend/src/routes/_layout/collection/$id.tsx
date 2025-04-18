@@ -266,8 +266,8 @@ function CollectionDetails() {
                             <Text fontWeight="bold" fontSize="2xl" color="var(--color-primary-hover)">
                               {product.sale_price}
                             </Text>
-                            <Text fontSize="lg" color="gray.400">
-                              MSRP: {product.full_price}
+                            <Text fontSize="md" color="gray.400">
+                           {product.full_price}
                             </Text>
                           </Flex>
                         </Box>
