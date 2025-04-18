@@ -201,48 +201,59 @@ function CollectionDetails() {
                     : product.title;
                   return (
                     <Link key={product.id} to={`/products/${product.id}`}>
+                    <Box
+                      borderWidth="1px"
+                      borderColor="gray.600"
+                      borderRadius="lg"
+                      overflow="hidden"
+                      bg="transparent"
+                      _hover={{ shadow: 'md', transform: 'translateY(-4px)', borderColor: 'gray.500' }}
+                      transition="all 0.2s"
+                    >
                       <Box
-                        borderWidth="1px"
-                        borderColor="gray.600"
-                        borderRadius="lg"
-                        overflow="hidden"
-                        bg="transparent"
-                        _hover={{ shadow: 'md', transform: 'translateY(-4px)', borderColor: 'gray.500' }}
-                        transition="all 0.2s"
+                        position="relative"
+                        w="full"
+                        style={{ aspectRatio: '3 / 4' }} // Fixed container aspect ratio
+                        bg="gray.800" // Background for letterboxing
                       >
                         <Image
                           src={product.thumbnail}
                           alt={product.title}
                           w="full"
-                          style={{ aspectRatio: '3 / 4', objectFit: 'cover' }}
+                          h="full"
+                          objectFit="contain" // Show full image
+                          position="absolute"
+                          top="0"
+                          left="0"
                           loading="lazy"
                           onError={(e) => (e.currentTarget.src = 'https://placehold.co/225x300')}
                         />
-                        <Box p={4}>
-                          <Text fontWeight="bold" fontSize="md" color="white" noOfLines={1}>
-                            {cleanTitle}
-                          </Text>
-                          <Flex justify="space-between" align="center" mt={1}>
-                            <Text fontSize="sm" color="gray.300" noOfLines={1}>
-                              {product.brand}
-                            </Text>
-                            {product.discount && (
-                              <Text fontSize="xs" color="red.400">
-                                {product.discount}
-                              </Text>
-                            )}
-                          </Flex>
-                          <Flex mt={2} justify="space-between" align="center">
-                            <Text fontWeight="bold" fontSize="lg" color="var(--color-primary-hover)">
-                              {product.sale_price}
-                            </Text>
-                            <Text fontSize="sm" color="gray.400">
-                              {product.full_price}
-                            </Text>
-                          </Flex>
-                        </Box>
                       </Box>
-                    </Link>
+                      <Box p={4}>
+                        <Text fontWeight="bold" fontSize="md" color="white" noOfLines={1}>
+                          {cleanTitle}
+                        </Text>
+                        <Flex justify="space-between" align="center" mt={1}>
+                          <Text fontSize="sm" color="gray.300" noOfLines={1}>
+                            {product.brand}
+                          </Text>
+                          {product.discount && (
+                            <Text fontSize="xs" color="red.400">
+                              {product.discount}
+                            </Text>
+                          )}
+                        </Flex>
+                        <Flex mt={2} justify="space-between" align="center">
+                          <Text fontWeight="bold" fontSize="lg" color="var(--color-primary-hover)">
+                            {product.sale_price}
+                          </Text>
+                          <Text fontSize="sm" color="gray.400">
+                            {product.full_price}
+                          </Text>
+                        </Flex>
+                      </Box>
+                    </Box>
+                  </Link>
                   );
                 })}
               </SimpleGrid>
