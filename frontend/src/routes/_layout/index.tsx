@@ -131,17 +131,6 @@ function Home() {
     // TODO: Implement waitlist logic (e.g., API call or form redirect)
   };
 
-  // Split "Exclusive Brands" into individual letters for glitch effect
-  const heroText = "Exclusive Brands".split("").map((char, index) => (
-    <span
-      key={index}
-      className={`glitch-letter letter-${index}`}
-      data-text={char}
-    >
-      {char}
-    </span>
-  ));
-
   return (
     <Box bg="black.900">
       {/* Header with Logo */}
@@ -176,14 +165,24 @@ function Home() {
               as="h2"
               variant="glitch"
               size={{ base: "6xl", md: "7xl" }}
-              lineHeight="1"
+              className="glitch glitch-exclusive"
+              data-text="Exclusive"
             >
-              {heroText}
+              Exclusive
             </Heading>
-            <Text fontFamily="'DM Sans', sans-serif" fontSize={{ base: "xl", md: "2xl" }} color="gray.300">
+            <Heading
+              as="h2"
+              variant="glitch"
+              size={{ base: "6xl", md: "7xl" }}
+              className="glitch glitch-brands"
+              data-text="Brands"
+            >
+              Brands
+            </Heading>
+            <Text fontFamily="'DM Sans', sans-serif" fontSize={{ base: "xl", md: "2xl" }} color="cyan.500">
               Exclusive Access
             </Text>
-            <Text fontSize={{ base: "lg", md: "xl" }} color="gray.300">
+            <Text fontSize={{ base: "lg", md: "xl" }} color="cyan.500">
               Authenticated luxury goods, fully verified on the blockchain
             </Text>
             <Button
@@ -250,7 +249,7 @@ function Home() {
             <Heading as="h3" size="lg" mb={4} color="cyan.500">
               Luxury Brands
             </Heading>
-            <Text color="gray.300">
+            <Text color="cyan.500">
               LuxuryVerse has direct access to the world's top luxury brands. We have built our
               industry relationships over decades, ensuring that we have the best styles at the prices.
             </Text>
@@ -269,7 +268,7 @@ function Home() {
             <Heading as="h3" size="lg" mb={4} color="cyan.500">
               Exclusive Drops
             </Heading>
-            <Text color="gray.300">
+            <Text color="cyan.500">
               Each week, LuxuryVerse releases a limited selection of luxury goods to our members. We
               announce these drops one day in advance on X, releasing goods on a first come first serve
               basis exclusive to our members.
@@ -289,7 +288,7 @@ function Home() {
             <Heading as="h3" size="lg" mb={4} color="cyan.500">
               Authentic Goods
             </Heading>
-            <Text color="gray.300">
+            <Text color="cyan.500">
               LuxuryVerse goods are 100% authentic and guaranteed on the blockchain. Our goods and
               services are also supported by the Authentication Council.
             </Text>
@@ -314,10 +313,11 @@ function Home() {
           <Heading as="h2" size="xl" color="cyan.500">
             Launching September 2025
           </Heading>
-          <Text color="gray.300">First Drop: September 5th, 2025</Text>
+          <Text color="cyan.500">First Drop: September 5th, 2025</Text>
           <Flex gap={8} justify="center" wrap="wrap">
             {[
-              { value: countdown.days, label: "Days" },
+              { value: countdown.days,бот
+                label: "Days" },
               { value: countdown.hours, label: "Hours" },
               { value: countdown.minutes, label: "Minutes" },
               { value: countdown.seconds, label: "Seconds" },
@@ -326,7 +326,7 @@ function Home() {
                 <Text fontSize="4xl" fontWeight="bold" color="cyan.500">
                   {value}
                 </Text>
-                <Text color="gray.300">{label}</Text>
+                <Text color="cyan.500">{label}</Text>
               </VStack>
             ))}
           </Flex>
@@ -348,16 +348,16 @@ function Home() {
           <Heading as="h2" size="xl" color="cyan.500">
             Recent Drops
           </Heading>
-          <Text maxW="600px" textAlign="center" color="gray.300">
+          <Text maxW="600px" textAlign="center" color="cyan.500">
             Each week, LuxuryVerse releases a limited selection of luxury goods to our members.
           </Text>
           {error && <Text color="red.300">{error}</Text>}
-          {isLoading && <Text color="gray.300">Loading drops...</Text>}
+          {isLoading && <Text color="cyan.500">Loading drops...</Text>}
           {!isLoading && !Array.isArray(collections) && (
-            <Text color="gray.300">No valid collections available</Text>
+            <Text color="cyan.500">No valid collections available</Text>
           )}
           {!isLoading && Array.isArray(collections) && collections.length === 0 && (
-            <Text color="gray.300">No drops available</Text>
+            <Text color="cyan.500">No drops available</Text>
           )}
           {!isLoading && Array.isArray(collections) && collections.length > 0 && (
             <Grid
@@ -387,7 +387,7 @@ function Home() {
                       w="100%"
                       fallbackSrc="/images/placeholder.jpg"
                     />
-                    <Text fontSize="md" fontWeight="bold" color="gray.50">
+                    <Text fontSize="md" fontWeight="bold" color="cyan.500">
                       {product.title}
                     </Text>
                     <Text color="cyan.500">{product.price}</Text>
@@ -449,12 +449,12 @@ function Home() {
             ].map(({ question, answer }) => (
               <AccordionItem key={question}>
                 <AccordionButton>
-                  <Box flex="1" textAlign="left" color="gray.50">
+                  <Box flex="1" textAlign="left" color="cyan.500">
                     {question}
                   </Box>
                   <AccordionIcon color="cyan.500" />
                 </AccordionButton>
-                <AccordionPanel color="gray.300">
+                <AccordionPanel color="cyan.500">
                   {answer}
                 </AccordionPanel>
               </AccordionItem>
@@ -507,7 +507,7 @@ function Home() {
           <Heading as="h2" size="xl" color="cyan.500">
             Trust in Every Purchase
           </Heading>
-          <Text textAlign="center" maxW="600px" color="gray.300">
+          <Text textAlign="center" maxW="600px" color="cyan.500">
             LuxuryVerse partners with former members of Interpol, the FBI, and other agencies to guarantee authentic merchandise. All goods are transported, stored, and shipped from secure facilities.
           </Text>
         </VStack>
