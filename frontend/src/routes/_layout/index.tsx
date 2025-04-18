@@ -73,7 +73,7 @@ function Home() {
   // Fetch collections from the API
   useEffect(() => {
     setIsLoading(true);
-    const url = 'https://iconluxury.shop/api/v1/collections/'; 
+    const url = 'https://iconluxury.shop/api/v1/collections/';
     console.log('Fetching collections from:', url);
     axios
       .get(url, {
@@ -132,7 +132,14 @@ function Home() {
   };
 
   return (
-    <Box>
+    <Box bg="black.900">
+      {/* Header with Logo */}
+      <Box as="header" py={4} px={{ base: 4, md: 8 }} textAlign="center">
+        <Heading as="h1" variant="logo" className="luxuryverse-logo">
+          LUXURYVERSE
+        </Heading>
+      </Box>
+
       {/* Hero Section: Exclusive Brands */}
       <Box
         bgImage="url('/images/hero-bg.jpg')"
@@ -140,29 +147,46 @@ function Home() {
         bgPosition="center"
         py={{ base: 16, md: 24 }}
         px={{ base: 4, md: 8 }}
+        position="relative"
+        _before={{
+          content: '""',
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          bg: "black.900",
+          opacity: 0.5,
+        }}
       >
-        <VStack spacing={6} maxW="800px" align="flex-start">
-          <Heading as="h1" size={{ base: "2xl", md: "3xl" }} fontWeight="extrabold" lineHeight="1.2">
+        <VStack spacing={6} maxW="800px" align="flex-start" position="relative">
+          <Heading
+            as="h2"
+            size={{ base: "3xl", md: "4xl" }}
+            className="glitch"
+            data-text="Exclusive Brands"
+          >
             Exclusive Brands
           </Heading>
-          <Text fontSize={{ base: "xl", md: "2xl" }} fontWeight="bold">
+          <Heading as="h3" variant="nabla" size={{ base: "xl", md: "2xl" }} className="nabla-text">
             Exclusive Access
-          </Text>
-          <Text fontSize={{ base: "lg", md: "xl" }} opacity={0.9}>
+          </Heading>
+          <Text fontSize={{ base: "lg", md: "xl" }} color="gray.300">
             Authenticated luxury goods, fully verified on the blockchain
           </Text>
-          {/* <Button
+          <Button
             size="lg"
-            colorScheme="purple"
-            bgGradient="linear(to-r, purple.500, pink.500)"
-            _hover={{ bgGradient: "linear(to-r, purple.600, pink.600)" }}
+            variant="solid"
+            bg="gold.500"
+            color="black.900"
+            _hover={{ bg: "gold.600" }}
             onClick={handleJoinWaitlist}
             fontSize="xl"
             py={8}
             px={12}
           >
             Join The Waitlist
-          </Button> */}
+          </Button>
           <Flex gap={8} flexWrap="nowrap" overflowX="auto" mt={12} pb={2}>
             {[
               { src: "/images/balmain.jpg", alt: "Balmain Logo" },
@@ -180,6 +204,9 @@ function Home() {
                 boxSize="100px"
                 objectFit="contain"
                 fallbackSrc="/images/placeholder.jpg"
+                filter="grayscale(100%)"
+                _hover={{ filter: "grayscale(0%)" }}
+                transition="filter 0.3s ease"
               />
             ))}
           </Flex>
@@ -196,18 +223,20 @@ function Home() {
         >
           {/* Luxury Brands Card */}
           <VStack
-            bg="gray.700"
+            bg="gray.900"
+            border="1px solid"
+            borderColor="gray.700"
             borderRadius="md"
             p={6}
             flex="1"
             align="start"
             transition="all 0.3s"
-            _hover={{ transform: "translateY(-4px)", shadow: "lg" }}
+            _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "gold.500" }}
           >
-            <Heading as="h3" size="lg" mb={4}>
+            <Heading as="h3" size="lg" mb={4} color="gold.500">
               Luxury Brands
             </Heading>
-            <Text>
+            <Text color="gray.300">
               LuxuryVerse has direct access to the world's top luxury brands. We have built our
               industry relationships over decades, ensuring that we have the best styles at the prices.
             </Text>
@@ -215,43 +244,44 @@ function Home() {
 
           {/* Exclusive Drops Card */}
           <VStack
-            bg="gray.700"
+            bg="gray.900"
+            border="1px solid"
+            borderColor="gray.700"
             borderRadius="md"
             p={6}
             flex="1"
             align="start"
             transition="all 0.3s"
-            _hover={{ transform: "translateY(-4px)", shadow: "lg" }}
+            _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "gold.500" }}
           >
-            <Heading as="h3" size="lg" mb={4}>
+            <Heading as="h3" size="lg" mb={4} color="gold.500">
               Exclusive Drops
             </Heading>
-            <Text>
+            <Text color="gray.300">
               Each week, LuxuryVerse releases a limited selection of luxury goods to our members. We
               announce these drops one day in advance on X, releasing goods on a first come first serve
-              basis exclusive to our members. Over time, LuxuryVerse will move to daily drops and
-              additional membership levels, enabling earlier access or deeper discounts.
+              basis exclusive to our members.
             </Text>
           </VStack>
 
           {/* Authentic Goods Card */}
           <VStack
-            bg="gray.700"
+            bg="gray.900"
+            border="1px solid"
+            borderColor="gray.700"
             borderRadius="md"
             p={6}
             flex="1"
             align="start"
             transition="all 0.3s"
-            _hover={{ transform: "translateY(-4px)", shadow: "lg" }}
+            _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "gold.500" }}
           >
-            <Heading as="h3" size="lg" mb={4}>
+            <Heading as="h3" size="lg" mb={4} color="gold.500">
               Authentic Goods
             </Heading>
-            <Text>
+            <Text color="gray.300">
               LuxuryVerse goods are 100% authentic and guaranteed on the blockchain. Our goods and
-              services are also supported by the Authentication Council, a group of former FBI and
-              Interpol agents, dedicated to ensuring confidence and trust throughout the entire
-              experience.
+              services are also supported by the Authentication Council.
             </Text>
           </VStack>
         </Flex>
@@ -260,44 +290,40 @@ function Home() {
       {/* Launch Card */}
       <Box py={16} bg="gray.800" textAlign="center">
         <VStack
-          bg="gray.700"
+          bg="gray.900"
+          border="1px solid"
+          borderColor="gray.700"
           borderRadius="md"
           p={8}
           maxW="600px"
           mx="auto"
           spacing={6}
           transition="all 0.3s"
-          _hover={{ transform: "translateY(-4px)", shadow: "lg" }}
+          _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "gold.500" }}
         >
-          <Heading as="h2" size="xl">
+          <Heading
+            as="h2"
+            size="xl"
+            className="glitch"
+            data-text="Launching September 2025"
+          >
             Launching September 2025
           </Heading>
-          <Text>First Drop: September 5th, 2025</Text>
+          <Text color="gray.300">First Drop: September 5th, 2025</Text>
           <Flex gap={8} justify="center" wrap="wrap">
-            <VStack>
-              <Text fontSize="4xl" fontWeight="bold">
-                {countdown.days}
-              </Text>
-              <Text>Days</Text>
-            </VStack>
-            <VStack>
-              <Text fontSize="4xl" fontWeight="bold">
-                {countdown.hours}
-              </Text>
-              <Text>Hours</Text>
-            </VStack>
-            <VStack>
-              <Text fontSize="4xl" fontWeight="bold">
-                {countdown.minutes}
-              </Text>
-              <Text>Minutes</Text>
-            </VStack>
-            <VStack>
-              <Text fontSize="4xl" fontWeight="bold">
-                {countdown.seconds}
-              </Text>
-              <Text>Seconds</Text>
-            </VStack>
+            {[
+              { value: countdown.days, label: "Days" },
+              { value: countdown.hours, label: "Hours" },
+              { value: countdown.minutes, label: "Minutes" },
+              { value: countdown.seconds, label: "Seconds" },
+            ].map(({ value, label }) => (
+              <VStack key={label}>
+                <Text fontSize="4xl" fontWeight="bold" color="gold.500">
+                  {value}
+                </Text>
+                <Text color="gray.300">{label}</Text>
+              </VStack>
+            ))}
           </Flex>
         </VStack>
       </Box>
@@ -305,28 +331,33 @@ function Home() {
       {/* Recent Drops Card */}
       <Box py={16} px={{ base: 4, md: 8 }} maxW="1200px" mx="auto">
         <VStack
-          bg="gray.700"
+          bg="gray.900"
+          border="1px solid"
+          borderColor="gray.700"
           borderRadius="md"
           p={8}
           spacing={6}
           transition="all 0.3s"
-          _hover={{ transform: "translateY(-4px)", shadow: "lg" }}
+          _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "gold.500" }}
         >
-          <Heading as="h2" size="xl">
+          <Heading
+            as="h2"
+            size="xl"
+            className="glitch"
+            data-text="Recent Drops"
+          >
             Recent Drops
           </Heading>
-          <Text maxW="600px" textAlign="center">
-            Each week, LuxuryVerse releases a limited selection of luxury goods to our members. We
-            announce these drops one day in advance on X, releasing goods on a first come first serve
-            basis exclusive to our members.
+          <Text maxW="600px" textAlign="center" color="gray.300">
+            Each week, LuxuryVerse releases a limited selection of luxury goods to our members.
           </Text>
           {error && <Text color="red.300">{error}</Text>}
-          {isLoading && <Text color="gray.400">Loading drops...</Text>}
+          {isLoading && <Text color="gray.300">Loading drops...</Text>}
           {!isLoading && !Array.isArray(collections) && (
-            <Text color="gray.400">No valid collections available</Text>
+            <Text color="gray.300">No valid collections available</Text>
           )}
           {!isLoading && Array.isArray(collections) && collections.length === 0 && (
-            <Text color="gray.400">No drops available</Text>
+            <Text color="gray.300">No drops available</Text>
           )}
           {!isLoading && Array.isArray(collections) && collections.length > 0 && (
             <Grid
@@ -338,10 +369,14 @@ function Home() {
                 collection.products.map((product) => (
                   <VStack
                     key={product.id}
-                    bg="gray.600"
+                    bg="gray.800"
+                    border="1px solid"
+                    borderColor="gray.700"
                     borderRadius="md"
                     p={4}
                     align="start"
+                    transition="all 0.3s"
+                    _hover={{ borderColor: "gold.500", shadow: "md" }}
                   >
                     <Image
                       src={product.thumbnail}
@@ -352,11 +387,19 @@ function Home() {
                       w="100%"
                       fallbackSrc="/images/placeholder.jpg"
                     />
-                    <Text fontSize="md" fontWeight="bold">
+                    <Text fontSize="md" fontWeight="bold" color="gray.50">
                       {product.title}
                     </Text>
-                    <Text color="purple.300">{product.price}</Text>
-                    <Button size="sm" colorScheme="purple" variant="outline" w="full" mt={2}>
+                    <Text color="purple.500">{product.price}</Text>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      borderColor="gold.500"
+                      color="gold.500"
+                      w="full"
+                      mt={2}
+                      _hover={{ bg: "gold.500", color: "black.900" }}
+                    >
                       View Details
                     </Button>
                   </VStack>
@@ -370,96 +413,66 @@ function Home() {
       {/* FAQs */}
       <Box py={16} bg="gray.800" px={{ base: 4, md: 8 }}>
         <VStack maxW="1200px" mx="auto" spacing={8}>
-          <Heading as="h2" size="xl">
+          <Heading
+            as="h2"
+            size="xl"
+            className="glitch"
+            data-text="Frequently Asked Questions"
+          >
             Frequently Asked Questions
           </Heading>
           <Accordion allowToggle w="100%">
-            <AccordionItem>
-              <AccordionButton>
-                <Box flex="1" textAlign="left">
-                  What types of luxury goods do you offer?
-                </Box>
-                <AccordionIcon />
-              </AccordionButton>
-              <AccordionPanel>
-                We offer a wide range of luxury goods, including designer handbags, watches, jewelry,
-                apparel, and accessories from the world’s most prestigious brands.
-              </AccordionPanel>
-            </AccordionItem>
-            <AccordionItem>
-              <AccordionButton>
-                <Box flex="1" textAlign="left">
-                  How often are your drops?
-                </Box>
-                <AccordionIcon />
-              </AccordionButton>
-              <AccordionPanel>
-                Drops occur weekly, announced one day in advance on X, with plans to move to daily
-                drops in the future.
-              </AccordionPanel>
-            </AccordionItem>
-            <AccordionItem>
-              <AccordionButton>
-                <Box flex="1" textAlign="left">
-                  How do I know your products are authentic?
-                </Box>
-                <AccordionIcon />
-              </AccordionButton>
-              <AccordionPanel>
-                All products are 100% authentic, verified on the blockchain, and backed by the
-                Authentication Council, comprising former FBI and Interpol agents.
-              </AccordionPanel>
-            </AccordionItem>
-            <AccordionItem>
-              <AccordionButton>
-                <Box flex="1" textAlign="left">
-                  What payment options do you accept?
-                </Box>
-                <AccordionIcon />
-              </AccordionButton>
-              <AccordionPanel>
-                We accept cryptocurrency payments via wallet authentication, with additional methods
-                to be announced.
-              </AccordionPanel>
-            </AccordionItem>
-            <AccordionItem>
-              <AccordionButton>
-                <Box flex="1" textAlign="left">
-                  Do you offer international shipping?
-                </Box>
-                <AccordionIcon />
-              </AccordionButton>
-              <AccordionPanel>
-                Yes, we offer international shipping from our secure facilities, with details
-                provided at checkout.
-              </AccordionPanel>
-            </AccordionItem>
-            <AccordionItem>
-              <AccordionButton>
-                <Box flex="1" textAlign="left">
-                  How can I track my order?
-                </Box>
-                <AccordionIcon />
-              </AccordionButton>
-              <AccordionPanel>
-                Once shipped, you’ll receive a tracking link via email to monitor your order’s
-                progress.
-              </AccordionPanel>
-            </AccordionItem>
-            <AccordionItem>
-              <AccordionButton>
-                <Box flex="1" textAlign="left">
-                  How can I contact customer service?
-                </Box>
-                <AccordionIcon />
-              </AccordionButton>
-              <AccordionPanel>
-                Reach us at info@example.com, example.mail@hum.com, or call +0989 7876 9865 9 or
-                +(090) 8765 86543 85.
-              </AccordionPanel>
-            </AccordionItem>
+            {[
+              {
+                question: "What types of luxury goods do you offer?",
+                answer: "We offer a wide range of luxury goods, including designer handbags, watches, jewelry, apparel, and accessories from the world’s most prestigious brands.",
+              },
+              {
+                question: "How often are your drops?",
+                answer: "Drops occur weekly, announced one day in advance on X, with plans to move to daily drops in the future.",
+              },
+              {
+                question: "How do I know your products are authentic?",
+                answer: "All products are 100% authentic, verified on the blockchain, and backed by the Authentication Council.",
+              },
+              {
+                question: "What payment options do you accept?",
+                answer: "We accept cryptocurrency payments via wallet authentication, with additional methods to be announced.",
+              },
+              {
+                question: "Do you offer international shipping?",
+                answer: "Yes, we offer international shipping from our secure facilities, with details provided at checkout.",
+              },
+              {
+                question: "How can I track my order?",
+                answer: "Once shipped, you’ll receive a tracking link via email to monitor your order’s progress.",
+              },
+              {
+                question: "How can I contact customer service?",
+                answer: "Reach us at info@example.com, example.mail@hum.com, or call +0989 7876 9865 9 or +(090) 8765 86543 85.",
+              },
+            ].map(({ question, answer }) => (
+              <AccordionItem key={question}>
+                <AccordionButton>
+                  <Box flex="1" textAlign="left" color="gray.50">
+                    {question}
+                  </Box>
+                  <AccordionIcon color="gold.500" />
+                </AccordionButton>
+                <AccordionPanel color="gray.300">
+                  {answer}
+                </AccordionPanel>
+              </AccordionItem>
+            ))}
           </Accordion>
-          <Button as={Link} to="/faq" colorScheme="purple" variant="outline">
+          <Button
+            as={Link}
+            to="/faq"
+            variant="outline"
+            borderColor="gold.500"
+            color="gold.500"
+            _hover={{ bg: "gold.500", color: "black.900" }}
+          >
             See All FAQ
           </Button>
         </VStack>
@@ -468,19 +481,32 @@ function Home() {
       {/* Documents */}
       <Box py={16} px={{ base: 4, md: 8 }} maxW="1200px" mx="auto">
         <VStack spacing={8}>
-          <Heading as="h2" size="xl">
+          <Heading
+            as="h2"
+            size="xl"
+            className="glitch"
+            data-text="Read Documents"
+          >
             Read Documents
           </Heading>
           <Flex gap={8} wrap="wrap" justify="center">
-            <Button as="a" href="/docs/whitepaper.pdf" colorScheme="purple" variant="outline">
-              Whitepaper
-            </Button>
-            <Button as="a" href="/docs/presentation.pdf" colorScheme="purple" variant="outline">
-              Presentation
-            </Button>
-            <Button as="a" href="/docs/lightpaper.pdf" colorScheme="purple" variant="outline">
-              Lightpaper
-            </Button>
+            {[
+              { href: "/docs/whitepaper.pdf", label: "Whitepaper" },
+              { href: "/docs/presentation.pdf", label: "Presentation" },
+              { href: "/docs/lightpaper.pdf", label: "Lightpaper" },
+            ].map(({ href, label }) => (
+              <Button
+                key={label}
+                as="a"
+                href={href}
+                variant="outline"
+                borderColor="gold.500"
+                color="gold.500"
+                _hover={{ bg: "gold.500", color: "black.900" }}
+              >
+                {label}
+              </Button>
+            ))}
           </Flex>
         </VStack>
       </Box>
@@ -488,15 +514,16 @@ function Home() {
       {/* Authentication Council */}
       <Box py={16} px={{ base: 4, md: 8 }} maxW="1200px" mx="auto">
         <VStack spacing={8}>
-          <Heading as="h2" size="xl">
-            TRUST IN EVERY PURCHASE
+          <Heading
+            as="h2"
+            size="xl"
+            className="glitch"
+            data-text="Trust in Every Purchase"
+          >
+            Trust in Every Purchase
           </Heading>
-          <Text textAlign="center" maxW="600px">
-            LuxuryVerse partners with former members of Interpol, the United States Federal Bureau of
-            Investigation (FBI), and other agencies to guarantee its suppliers provide authentic
-            merchandise across the value chain. All goods are transported, stored, and shipped to
-            consumers from LuxuryVerse's secure facilities. Together, LuxuryVerse and the
-            Authentication Council provides total consumer confidence throughout the purchase process.
+          <Text textAlign="center" maxW="600px" color="gray.300">
+            LuxuryVerse partners with former members of Interpol, the FBI, and other agencies to guarantee authentic merchandise. All goods are transported, stored, and shipped from secure facilities.
           </Text>
         </VStack>
       </Box>
