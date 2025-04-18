@@ -312,7 +312,7 @@ function ProductDetails() {
             <SimpleGrid columns={{ base: 1, md: 2 }} spacing={8}>
               {/* Image Section */}
               {validatedImages ? (
-                <Box position="relative">
+                <Box position="relative" display="flex" flexDirection="column" alignItems="center">
                   <Image
                     src={validatedImages[currentImage] || 'https://placehold.co/400x500'}
                     alt={`${product.title || 'Product'} image ${currentImage + 1}`}
@@ -324,7 +324,7 @@ function ProductDetails() {
                     onError={(e) => (e.currentTarget.src = 'https://placehold.co/400x500')}
                   />
                   {validatedImages.length > 1 && (
-                    <HStack mt={4} overflowX="auto" spacing={2} pb={2} css={{ '&::-webkit-scrollbar': { height: '8px' }, '&::-webkit-scrollbar-thumb': { background: '#4A5568', borderRadius: '4px' } }}>
+                    <HStack mt={4} justify="center" spacing={2}>
                       {validatedImages.map((img, index) => (
                         <Image
                           key={index}
@@ -346,26 +346,30 @@ function ProductDetails() {
                     <>
                       <IconButton
                         aria-label="Previous image"
-                        icon={<ChevronLeftIcon boxSize={6} />}
+                        icon={<ChevronLeftIcon boxSize={5} />}
                         position="absolute"
                         left={{ base: '4px', md: '8px' }}
                         top="50%"
                         transform="translateY(-50%)"
-                        bg="blackAlpha.600"
+                        bg="gray.700"
                         color="white"
-                        _hover={{ bg: 'blackAlpha.800' }}
+                        _hover={{ bg: 'gray.600' }}
+                        borderRadius="full"
+                        size="sm"
                         onClick={() => setCurrentImage((prev) => (prev - 1 + validatedImages.length) % validatedImages.length)}
                       />
                       <IconButton
                         aria-label="Next image"
-                        icon={<ChevronRightIcon boxSize={6} />}
+                        icon={<ChevronRightIcon boxSize={5} />}
                         position="absolute"
                         right={{ base: '4px', md: '8px' }}
                         top="50%"
                         transform="translateY(-50%)"
-                        bg="blackAlpha.600"
+                        bg="gray.700"
                         color="white"
-                        _hover={{ bg: 'blackAlpha.800' }}
+                        _hover={{ bg: 'gray.600' }}
+                        borderRadius="full"
+                        size="sm"
                         onClick={() => setCurrentImage((prev) => (prev + 1) % validatedImages.length)}
                       />
                     </>
@@ -376,11 +380,11 @@ function ProductDetails() {
               )}
               {/* Product Details Section */}
               <VStack align="start" spacing={4}>
-                <Text as="h1" fontSize={{ base: '2xl', md: '3xl' }} fontWeight="medium" lineHeight="1.3">
-                  {product.title || 'Untitled Product'}
-                </Text>
                 <Text fontSize="lg" color="gray.300" fontWeight="bold">
                   {product.brand || 'Unknown Brand'}
+                </Text>
+                <Text as="h1" fontSize={{ base: '2xl', md: '3xl' }} fontWeight="medium" lineHeight="1.3">
+                  {product.title || 'Untitled Product'}
                 </Text>
                 {product.discount && (
                   <Tag colorScheme="green" px={3} py={1} borderRadius="full">
@@ -389,22 +393,22 @@ function ProductDetails() {
                 )}
                 <VStack align="start" spacing={2}>
                   {product.full_price && (
-                    <Text fontSize={{ base: '2xl', md: '3xl' }} color="gray.500">
+                    <Text fontSize={{ base: 'lg', md: 'xl' }} color="gray.500">
                       MSRP: {product.full_price}
                     </Text>
                   )}
-                  <Text fontSize={{ base: '4xl', md: '5xl' }} fontWeight="bold" color="yellow.400">
+                  <Text fontSize={{ base: '2xl', md: '3xl' }} fontWeight="bold" color="yellow.400">
                     {product.sale_price || 'N/A'}
                   </Text>
                 </VStack>
                 {product.description ? (
                   <Text
                     fontSize="lg"
-                    color="gray.700"
+                    color="gray.500"
                     dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(product.description) }}
                   />
                 ) : (
-                  <Text fontSize="lg" color="gray.700">
+                  <Text fontSize="lg" color="gray.500">
                     No description available
                   </Text>
                 )}
@@ -415,7 +419,7 @@ function ProductDetails() {
                     </Text>
                     <VStack align="start" spacing={1}>
                       {features.map((feature, index) => (
-                        <Text key={index} fontSize="md" color="gray.300">
+                        <Text key={index} fontSize="md" color="gray.500">
                           • {feature}
                         </Text>
                       ))}
