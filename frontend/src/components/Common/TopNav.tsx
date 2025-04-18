@@ -37,7 +37,7 @@ export default function TopNav() {
         width="100%"
         px={{ base: '1rem', md: '1rem' }}
         justify={{ base: 'space-between', md: 'space-between' }}
-        align="center"
+        align="flex-start" // Avoid centering with logo
         direction={{ base: 'row', md: 'row' }}
         gap={{ base: 2, md: 4 }}
       >
@@ -53,10 +53,8 @@ export default function TopNav() {
         </Heading>
         <Flex
           gap={4}
-          alignItems="center"
           flexWrap="wrap"
           justify="center"
-          height="100%"
         >
           {[
             { to: '/', label: 'Home' },
@@ -64,7 +62,7 @@ export default function TopNav() {
             { to: '/authenticity', label: 'Authenticity' },
             { to: '/faq', label: 'FAQ' },
             { to: '/contact', label: 'Contact' },
-            { to, label: text }, // Add the auth link (Profile/Login/Join)
+            { to, label: text }, // Auth link (Profile/Login/Join)
           ].map(({ to, label }) => (
             <Link
               key={to}
@@ -76,13 +74,11 @@ export default function TopNav() {
                     : 'var(--color-primary)', // Purple for others
                 textDecoration: 'none',
                 fontFamily: "'Special Gothic Expanded One', sans-serif",
-                display: 'flex',
-                alignItems: 'center',
-                fontWeight:
-                  label === text ? 'var(--font-weight-bold)' : 'var(--font-weight-normal)', // Bolder for auth link
+                fontWeight: 'var(--font-weight-normal)', // Same weight for all
+                textTransform: 'uppercase', // All caps
               }}
               _hover={{
-                color: 'var(--color-primary-hover)', // Green on hover for all
+                color: 'var(--color-primary-hover)', // Green on hover
               }}
               onClick={() => navigate({ to })}
             >
