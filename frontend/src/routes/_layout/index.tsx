@@ -324,8 +324,7 @@ function Home() {
       >
         <Flex maxW="1200px" mx="auto" direction={{ base: "column", lg: "row" }} align="center" gap={12} position="relative">
           <VStack align="flex-start" spacing={12} flex="1">
-            <Box position="relative" display="inline-block">
-              <Heading
+          <Heading
                 as="h2"
                 variant="glitch"
                 size="8xl"
@@ -333,6 +332,8 @@ function Home() {
                 data-text="EXCLUSIVE"
                 ref={exclusiveRef}
               />
+            <Box position="relative" display="inline-block">
+
               <Box
                 as="span"
                 ref={exclusiveCursorRef}
