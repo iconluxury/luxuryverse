@@ -234,8 +234,16 @@ function ProductDetails() {
   };
   const cleanTitle = useMemo(() => {
     if (product?.title && product?.brand) {
+      // Create regex for brand
       const brandRegex = new RegExp(`\\b${product.brand}\\b`, 'i');
-      return product.title.replace(brandRegex, '').trim();
+      // Create regex for men/mens/men's variations
+      const menRegex = /\b(men'?s|men)\b/i;
+      // Remove brand and men-related words, then trim
+      return product.title
+        .replace(brandRegex, '')
+        .replace(menRegex, '')
+        .trim()
+        .replace(/\s+/g, ' '); // Normalize multiple spaces
     }
     return product?.title || 'Untitled Product';
   }, [product?.title, product?.brand]);
