@@ -82,7 +82,7 @@ export default function TopNav() {
           style={{
             color: 'white',
             textDecoration: 'none',
-            fontFamily: "'DM Sans', sans-serif",
+            fontFamily: "'Special Gothic Expanded One', sans-serif",
           }}
         >
           Home
@@ -92,7 +92,7 @@ export default function TopNav() {
           style={{
             color: 'white',
             textDecoration: 'none',
-            fontFamily: "'DM Sans', sans-serif",
+            fontFamily: "'Special Gothic Expanded One', sans-serif",
           }}
         >
           Roadmap
@@ -102,7 +102,7 @@ export default function TopNav() {
           style={{
             color: 'white',
             textDecoration: 'none',
-            fontFamily: "'DM Sans', sans-serif",
+            fontFamily: "'Special Gothic Expanded One', sans-serif",
           }}
         >
           Authenticity
@@ -112,7 +112,7 @@ export default function TopNav() {
           style={{
             color: 'white',
             textDecoration: 'none',
-            fontFamily: "'DM Sans', sans-serif",
+            fontFamily: "'Special Gothic Expanded One', sans-serif",
           }}
         >
           FAQ
@@ -122,7 +122,7 @@ export default function TopNav() {
           style={{
             color: 'white',
             textDecoration: 'none',
-            fontFamily: "'DM Sans', sans-serif",
+            fontFamily: "'Special Gothic Expanded One', sans-serif",
           }}
         >
           Contact
