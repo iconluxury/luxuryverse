@@ -342,7 +342,7 @@ function Home() {
         bgImage="url('/images/hero-bg.jpg')"
         bgSize="cover"
         bgPosition="center"
-        py={{ base: 4, md: 8 }} // Reduced padding to decrease top space
+        py={{ base: 8, md: 12 }} // Reduced padding to decrease top space
         px={{ base: 4, md: 8 }}
         position="relative"
         width="100%"
