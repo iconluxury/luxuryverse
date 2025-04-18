@@ -14,10 +14,11 @@ import {
   AccordionIcon,
 } from "@chakra-ui/react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useAppKit } from "@reown/appkit/react";
 import axios from "axios";
 import Footer from "@/components/Common/Footer";
+import { gsap } from "gsap";
 
 // Define the route
 export const Route = createFileRoute("/_layout/")({
@@ -49,6 +50,107 @@ function Home() {
     seconds: 0,
   });
   const { open, address, isConnected, signMessageAsync } = useAppKit();
+
+  const exclusiveRef = useRef(null);
+  const brandsRef = useRef(null);
+
+  // GSAP Animation for Typewriter and Glitch
+  useEffect(() => {
+    const exclusiveElement = exclusiveRef.current;
+    const brandsElement = brandsRef.current;
+
+    // Split text into spans for typewriter effect
+    const exclusiveText = "eXCLUSIVE";
+    const brandsText = "bRANDS";
+    exclusiveElement.innerHTML = exclusiveText
+      .split("")
+      .map((char) => `<span>${char}</span>`)
+      .join("");
+    brandsElement.innerHTML = brandsText
+      .split("")
+      .map((char) => `<span>${char}</span>`)
+      .join("");
+
+    const exclusiveSpans = exclusiveElement.querySelectorAll("span");
+    const brandsSpans = brandsElement.querySelectorAll("span");
+
+    // Typewriter animation
+    gsap.fromTo(
+      exclusiveSpans,
+      { opacity: 0 },
+      {
+        opacity: 1,
+        duration: 0.1,
+        stagger: 0.1,
+        ease: "power1.in",
+      }
+    );
+    gsap.fromTo(
+      brandsSpans,
+      { opacity: 0 },
+      {
+        opacity: 1,
+        duration: 0.1,
+        stagger: 0.1,
+        ease: "power1.in",
+        delay: exclusiveText.length * 0.1,
+      }
+    );
+
+    // Glitch animation for eXCLUSIVE
+    const glitchExclusive = () => {
+      const colors = ["#c2a0e5d9", "#58fb6cd9", "#FFFFFF"];
+      const randomColor = colors[Math.floor(Math.random() * colors.length)];
+      gsap.to(exclusiveElement, {
+        color: randomColor,
+        x: gsap.utils.random(-5, 5),
+        y: gsap.utils.random(-5, 5),
+        skewX: gsap.utils.random(-5, 5),
+        duration: 0.2,
+        ease: "power1.inOut",
+        onComplete: () => {
+          gsap.to(exclusiveElement, {
+            color: "#c2a0e5d9",
+            x: 0,
+            y: 0,
+            skewX: 0,
+            duration: 0.2,
+            ease: "power1.inOut",
+          });
+        },
+      });
+      gsap.delayedCall(gsap.utils.random(4, 6), glitchExclusive);
+    };
+
+    // Glitch animation for bRANDS
+    const glitchBrands = () => {
+      const colors = ["#58fb6cd9", "#fbac58d9", "#00e5ffd9"];
+      const randomColor = colors[Math.floor(Math.random() * colors.length)];
+      gsap.to(brandsElement, {
+        color: randomColor,
+        x: gsap.utils.random(-5, 5),
+        y: gsap.utils.random(-5, 5),
+        skewX: gsap.utils.random(-5, 5),
+        duration: 0.2,
+        ease: "power1.inOut",
+        onComplete: () => {
+          gsap.to(brandsElement, {
+            color: "#58fb6cd9",
+            x: 0,
+            y: 0,
+            skewX: 0,
+            duration: 0.2,
+            ease: "power1.inOut",
+          });
+        },
+      });
+      gsap.delayedCall(gsap.utils.random(4, 6), glitchBrands);
+    };
+
+    // Start glitch animations after typewriter effect
+    gsap.delayedCall(exclusiveText.length * 0.1 + 0.5, glitchExclusive);
+    gsap.delayedCall((exclusiveText.length + brandsText.length) * 0.1 + 0.5, glitchBrands);
+  }, []);
 
   // Countdown logic for September 5, 2025 launch
   useEffect(() => {
@@ -133,6 +235,7 @@ function Home() {
 
   return (
     <Box bg="black.900">
+      {/* Header with Logo */}
 
       {/* Hero Section: Exclusive Brands */}
       <Box
@@ -160,31 +263,29 @@ function Home() {
               variant="glitch"
               size="8xl"
               className="glitch glitch-exclusive"
-              data-text="Exclusive"
-            >
-              Exclusive
-            </Heading>
+              data-text="eXCLUSIVE"
+              ref={exclusiveRef}
+            />
             <Heading
               as="h2"
               variant="glitch"
               size="8xl"
               className="glitch glitch-brands"
-              data-text="Brands"
-            >
-              Brands
-            </Heading>
-            <Text fontFamily="'DM Sans', sans-serif" fontSize={{ base: "xl", md: "2xl" }} color="green.500">
+              data-text="bRANDS"
+              ref={brandsRef}
+            />
+            <Text fontFamily="'DM Sans', sans-serif" fontSize={{ base: "xl", md: "2xl" }} color="purple.500">
               Exclusive Access
             </Text>
-            <Text fontSize={{ base: "lg", md: "xl" }} color="green.500">
+            <Text fontSize={{ base: "lg", md: "xl" }} color="purple.500">
               Authenticated luxury goods, fully verified on the blockchain
             </Text>
             <Button
               size="lg"
               variant="solid"
-              bg="green.500"
+              bg="purple.500"
               color="black.900"
-              _hover={{ bg: "green.600" }}
+              _hover={{ bg: "green.500" }}
               onClick={handleJoinWaitlist}
               fontSize="xl"
               py={8}
@@ -240,10 +341,10 @@ function Home() {
             transition="all 0.3s"
             _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
           >
-            <Heading as="h3" size="lg" mb={4} color="green.500">
+            <Heading as="h3" size="lg" mb={4} color="purple.500">
               Luxury Brands
             </Heading>
-            <Text color="green.500">
+            <Text color="purple.500">
               LuxuryVerse has direct access to the world's top luxury brands. We have built our
               industry relationships over decades, ensuring that we have the best styles at the prices.
             </Text>
@@ -259,10 +360,10 @@ function Home() {
             transition="all 0.3s"
             _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
           >
-            <Heading as="h3" size="lg" mb={4} color="green.500">
+            <Heading as="h3" size="lg" mb={4} color="purple.500">
               Exclusive Drops
             </Heading>
-            <Text color="green.500">
+            <Text color="purple.500">
               Each week, LuxuryVerse releases a limited selection of luxury goods to our members. We
               announce these drops one day in advance on X, releasing goods on a first come first serve
               basis exclusive to our members.
@@ -279,10 +380,10 @@ function Home() {
             transition="all 0.3s"
             _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
           >
-            <Heading as="h3" size="lg" mb={4} color="green.500">
+            <Heading as="h3" size="lg" mb={4} color="purple.500">
               Authentic Goods
             </Heading>
-            <Text color="green.500">
+            <Text color="purple.500">
               LuxuryVerse goods are 100% authentic and guaranteed on the blockchain. Our goods and
               services are also supported by the Authentication Council.
             </Text>
@@ -304,10 +405,10 @@ function Home() {
           transition="all 0.3s"
           _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
         >
-          <Heading as="h2" size="xl" color="green.500">
+          <Heading as="h2" size="xl" color="purple.500">
             Launching September 2025
           </Heading>
-          <Text color="green.500">First Drop: September 5th, 2025</Text>
+          <Text color="purple.500">First Drop: September 5th, 2025</Text>
           <Flex gap={8} justify="center" wrap="wrap">
             {[
               { value: countdown.days, label: "Days" },
@@ -316,10 +417,10 @@ function Home() {
               { value: countdown.seconds, label: "Seconds" },
             ].map(({ value, label }) => (
               <VStack key={label}>
-                <Text fontSize="4xl" fontWeight="bold" color="green.500">
+                <Text fontSize="4xl" fontWeight="bold" color="purple.500">
                   {value}
                 </Text>
-                <Text color="green.500">{label}</Text>
+                <Text color="purple.500">{label}</Text>
               </VStack>
             ))}
           </Flex>
@@ -338,19 +439,19 @@ function Home() {
           transition="all 0.3s"
           _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
         >
-          <Heading as="h2" size="xl" color="green.500">
+          <Heading as="h2" size="xl" color="purple.500">
             Recent Drops
           </Heading>
-          <Text maxW="600px" textAlign="center" color="green.500">
+          <Text maxW="600px" textAlign="center" color="purple.500">
             Each week, LuxuryVerse releases a limited selection of luxury goods to our members.
           </Text>
           {error && <Text color="red.300">{error}</Text>}
-          {isLoading && <Text color="green.500">Loading drops...</Text>}
+          {isLoading && <Text color="purple.500">Loading drops...</Text>}
           {!isLoading && !Array.isArray(collections) && (
-            <Text color="green.500">No valid collections available</Text>
+            <Text color="purple.500">No valid collections available</Text>
           )}
           {!isLoading && Array.isArray(collections) && collections.length === 0 && (
-            <Text color="green.500">No drops available</Text>
+            <Text color="purple.500">No drops available</Text>
           )}
           {!isLoading && Array.isArray(collections) && collections.length > 0 && (
             <Grid
@@ -380,15 +481,15 @@ function Home() {
                       w="100%"
                       fallbackSrc="/images/placeholder.jpg"
                     />
-                    <Text fontSize="md" fontWeight="bold" color="green.500">
+                    <Text fontSize="md" fontWeight="bold" color="purple.500">
                       {product.title}
                     </Text>
-                    <Text color="green.500">{product.price}</Text>
+                    <Text color="purple.500">{product.price}</Text>
                     <Button
                       size="sm"
                       variant="outline"
-                      borderColor="green.500"
-                      color="green.500"
+                      borderColor="purple.500"
+                      color="purple.500"
                       w="full"
                       mt={2}
                       _hover={{ bg: "green.500", color: "black.900" }}
@@ -406,7 +507,7 @@ function Home() {
       {/* FAQs */}
       <Box py={16} bg="gray.800" px={{ base: 4, md: 8 }}>
         <VStack maxW="1200px" mx="auto" spacing={8}>
-          <Heading as="h2" size="xl" color="green.500">
+          <Heading as="h2" size="xl" color="purple.500">
             Frequently Asked Questions
           </Heading>
           <Accordion allowToggle w="100%">
@@ -442,12 +543,12 @@ function Home() {
             ].map(({ question, answer }) => (
               <AccordionItem key={question}>
                 <AccordionButton>
-                  <Box flex="1" textAlign="left" color="green.500">
+                  <Box flex="1" textAlign="left" color="purple.500">
                     {question}
                   </Box>
-                  <AccordionIcon color="green.500" />
+                  <AccordionIcon color="purple.500" />
                 </AccordionButton>
-                <AccordionPanel color="green.500">
+                <AccordionPanel color="purple.500">
                   {answer}
                 </AccordionPanel>
               </AccordionItem>
@@ -457,8 +558,8 @@ function Home() {
             as={Link}
             to="/faq"
             variant="outline"
-            borderColor="green.500"
-            color="green.500"
+            borderColor="purple.500"
+            color="purple.500"
             _hover={{ bg: "green.500", color: "black.900" }}
           >
             See All FAQ
@@ -469,7 +570,7 @@ function Home() {
       {/* Documents */}
       <Box py={16} px={{ base: 4, md: 8 }} maxW="1200px" mx="auto">
         <VStack spacing={8}>
-          <Heading as="h2" size="xl" color="green.500">
+          <Heading as="h2" size="xl" color="purple.500">
             Read Documents
           </Heading>
           <Flex gap={8} wrap="wrap" justify="center">
@@ -483,8 +584,8 @@ function Home() {
                 as="a"
                 href={href}
                 variant="outline"
-                borderColor="green.500"
-                color="green.500"
+                borderColor="purple.500"
+                color="purple.500"
                 _hover={{ bg: "green.500", color: "black.900" }}
               >
                 {label}
@@ -497,10 +598,10 @@ function Home() {
       {/* Authentication Council */}
       <Box py={16} px={{ base: 4, md: 8 }} maxW="1200px" mx="auto">
         <VStack spacing={8}>
-          <Heading as="h2" size="xl" color="green.500">
+          <Heading as="h2" size="xl" color="purple.500">
             Trust in Every Purchase
           </Heading>
-          <Text textAlign="center" maxW="600px" color="green.500">
+          <Text textAlign="center" maxW="600px" color="purple.500">
             LuxuryVerse partners with former members of Interpol, the FBI, and other agencies to guarantee authentic merchandise. All goods are transported, stored, and shipped from secure facilities.
           </Text>
         </VStack>
