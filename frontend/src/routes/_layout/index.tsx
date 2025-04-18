@@ -496,12 +496,12 @@ function Home() {
             </Button>
           </VStack>
           <Box
-            mt={{ base: 6, md: 8 }}
-            overflow="hidden"
-            width="100%"
-            maxW={{ base: "1200px", lg: "1600px" }}
-            mx="auto"
-          >
+  mt={{ base: 2, md: 4 }} // Reduced from 6/8 to 2/4
+  overflow="hidden"
+  width="100%"
+  maxW={{ base: "1200px", lg: "1600px" }}
+  mx="auto"
+>
             <Box
               ref={logosWrapperRef}
               display="flex"
@@ -515,21 +515,21 @@ function Home() {
             >
               {brandLogos.map((img, index) => (
                 <Image
-                  key={`${img.alt}-${index}`}
-                  className="brand-logo"
-                  src={img.src}
-                  alt={img.alt}
-                  boxSize={{ base: "40px", md: "90px" }}
-                  objectFit="contain"
-                  fallbackSrc="https://via.placeholder.com/90"
-                  onError={(e) => {
-                    console.error(`Failed to load image: ${e.currentTarget.src}, alt: ${img.alt}`);
-                    e.currentTarget.src = "/images/placeholder.jpg";
-                  }}
-                  filter="grayscale(100%)"
-                  _hover={{ filter: "grayscale(0%)" }}
-                  transition="filter 0.3s ease"
-                />
+                key={`${img.alt}-${index}`}
+                className="brand-logo"
+                src={img.src}
+                alt={img.alt}
+                boxSize={{ base: "60px", md: "120px" }} // Increased from 40px/90px to 60px/120px
+                objectFit="contain"
+                fallbackSrc="https://via.placeholder.com/120" // Updated to match new size
+                onError={(e) => {
+                  console.error(`Failed to load image: ${e.currentTarget.src}, alt: ${img.alt}`);
+                  e.currentTarget.src = "/images/placeholder.jpg";
+                }}
+                filter="grayscale(100%)"
+                _hover={{ filter: "grayscale(0%)" }}
+                transition="filter 0.3s ease"
+              />
               ))}
             </Box>
           </Box>
@@ -538,11 +538,11 @@ function Home() {
 
       {/* Second Section (Three Cards) */}
       <Box
-        py={{ base: 4, md: 6 }}
-        px={{ base: 4, md: 8 }}
-        maxW={{ base: "1200px", lg: "1600px" }}
-        mx="auto"
-      >
+  py={{ base: 2, md: 4 }} // Reduced from 4/6 to 2/4
+  px={{ base: 4, md: 8 }}
+  maxW={{ base: "1200px", lg: "1600px" }}
+  mx="auto"
+>
         <Flex
           direction={{ base: "column", lg: "row" }}
           gap={8}
