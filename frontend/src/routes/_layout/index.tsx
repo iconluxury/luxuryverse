@@ -538,7 +538,9 @@ function Home() {
             transition="all 0.3s"
             _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
           >
-            <Heading as="h3" size="xl" mb={4} color="gray.400">
+            <Heading as="h3" size="xl" mb={4} color="gray.400"
+                         textTransform="uppercase"
+            >
               Luxury Brands
             </Heading>
             <Text fontSize="lg" color="gray.400">
@@ -557,7 +559,9 @@ function Home() {
             transition="all 0.3s"
             _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
           >
-            <Heading as="h3" size="xl" mb={4} color="gray.400">
+            <Heading as="h3" size="xl" mb={4} color="gray.400"
+                         textTransform="uppercase"
+            >
               Exclusive Drops
             </Heading>
             <Text fontSize="lg" color="gray.400">
@@ -577,7 +581,9 @@ function Home() {
             transition="all 0.3s"
             _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
           >
-            <Heading as="h3" size="xl" mb={4} color="gray.400">
+            <Heading as="h3" size="xl" mb={4} color="gray.400"
+                         textTransform="uppercase"
+            >
               Authentic Goods
             </Heading>
             <Text fontSize="lg" color="gray.400">
@@ -633,7 +639,9 @@ function Home() {
           mx="auto"
           px={{ base: 4, md: 8 }}
         >
-          <Heading as="h2" size="2xl" color="gray.400">
+          <Heading as="h2" size="2xl" color="gray.400"
+                       textTransform="uppercase"
+          >
             Frequently Asked Questions
           </Heading>
           <Accordion allowToggle w="100%">
