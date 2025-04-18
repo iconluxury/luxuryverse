@@ -1,549 +1,705 @@
-import { createFileRoute } from '@tanstack/react-router';
-import { Flex, Spinner, Box, Text, Tag, HStack, Divider, IconButton, Skeleton, SkeletonText, SimpleGrid, VStack } from '@chakra-ui/react';
-import { useState, useEffect, useMemo } from 'react';
-import { Link } from '@tanstack/react-router';
-import { ErrorBoundary } from 'react-error-boundary';
-import Footer from '../../../components/Common/Footer';
-import { Image, ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
-import DOMPurify from 'dompurify';
+import {
+  Box,
+  Button,
+  Flex,
+  Grid,
+  Heading,
+  Image,
+  Text,
+  VStack,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
+} from "@chakra-ui/react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useRef, useState } from "react";
+import { useAppKit } from "@reown/appkit/react";
+import axios from "axios";
+import Footer from "@/components/Common/Footer";
+import { gsap } from "gsap";
 
-// Interfaces
-interface Variant {
-  id: string;
-  title: string;
-  size: string;
-  inventory_quantity: number;
-  price: string;
-  compare_at_price: string;
-}
+// Define the route
+export const Route = createFileRoute("/_layout/")({
+  component: Home,
+});
 
+// TypeScript interfaces
 interface Product {
   id: string;
   title: string;
-  description: string;
-  brand: string;
   thumbnail: string;
-  images?: string[];
-  variants?: Variant[];
-  full_price: string;
-  sale_price: string;
-  discount: string | null;
-  collection_id?: string;
+  price: string;
 }
 
-// ErrorFallback component
-function ErrorFallback({ error }: { error: Error }) {
-  console.error('ErrorBoundary caught (suppressed):', error, error.stack);
-  return <Box />;
+interface Collection {
+  id: string;
+  title: string;
+  products: Product[];
 }
 
-// Define the route
-export const Route = createFileRoute('/_layout/products/$id')({
-  component: ProductDetails,
-});
-
-// ProductDetails component
-function ProductDetails() {
-  const [product, setProduct] = useState<Product | null>(null);
-  const [topProducts, setTopProducts] = useState<Product[]>([]);
-  const [productLoading, setProductLoading] = useState(true);
-  const [topProductsLoading, setTopProductsLoading] = useState(true);
+function Home() {
+  const [collections, setCollections] = useState<Collection[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [currentImage, setCurrentImage] = useState(0);
-  const API_BASE_URL = 'https://iconluxury.shop';
-  const { id } = Route.useParams();
+  const [isLoading, setIsLoading] = useState(true);
+  const [countdown, setCountdown] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
+  const { open, address, isConnected, signMessageAsync } = useAppKit();
 
-  // Debug third-party scripts
+  const exclusiveRef = useRef(null);
+  const brandsRef = useRef(null);
+  const exclusiveCursorRef = useRef(null);
+  const brandsCursorRef = useRef(null);
+
+  // GSAP Animation for Typewriter, 3D Slanted Cursor, and Glitch
   useEffect(() => {
-    console.log('Global objects:', Object.keys(window).filter(key => key.includes('cart') || key.includes('analytics')));
-  }, []);
-
-  const fetchWithRetry = async (url: string, retryCount = 6) => {
-    for (let attempt = 1; attempt <= retryCount; attempt++) {
-      try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 30000);
-        const response = await fetch(url, {
-          signal: controller.signal,
-          method: 'GET',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-          credentials: 'omit',
-        });
-        clearTimeout(timeoutId);
-
-        if (!response.ok) {
-          if (response.status === 404) throw new Error('Resource not found.');
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        return await response.json();
-      } catch (err: any) {
-        if (err.name === 'AbortError') {
-          err.message = 'Request timed out after 30s.';
-        }
-        console.error('Fetch error:', { url, attempt, error: err.message });
-        if (attempt === retryCount) {
-          throw err;
-        }
-        await new Promise((resolve) => setTimeout(resolve, 1000 * 2 ** attempt));
-      }
-    }
-  };
-
-  const fetchProduct = async () => {
-    try {
-      console.log('Fetching:', `${API_BASE_URL}/api/v1/products/${id}`);
-      const productData = await fetchWithRetry(`${API_BASE_URL}/api/v1/products/${id}`);
-      console.log('Fetch successful for', `${API_BASE_URL}/api/v1/products/${id}:`, productData);
-      if (!productData || typeof productData !== 'object') {
-        throw new Error('Invalid product data received');
-      }
-
-      const validatedProduct: Product = {
-        ...productData,
-        id: productData.id || '',
-        title: productData.title || 'Untitled Product',
-        description: productData.description || '',
-        brand: productData.brand || 'Unknown Brand',
-        thumbnail: productData.thumbnail || 'https://placehold.co/150x150',
-        images: Array.isArray(productData.images) ? productData.images : undefined,
-        variants: Array.isArray(productData.variants)
-          ? productData.variants
-              .filter((v: Variant) => {
-                const isValid =
-                  v &&
-                  typeof v === 'object' &&
-                  typeof v.id === 'string' &&
-                  typeof v.size === 'string' &&
-                  v.size !== '' &&
-                  v.size !== 'N/A' &&
-                  typeof v.price === 'string' &&
-                  typeof v.inventory_quantity === 'number' &&
-                  v.inventory_quantity > 0;
-                if (!isValid) {
-                  console.warn('Invalid variant filtered:', v);
-                }
-                return isValid;
-              })
-              .map((v: Variant) => ({
-                id: v.id,
-                title: v.title || 'Unknown',
-                size: v.size || 'N/A',
-                inventory_quantity: typeof v.inventory_quantity === 'number' ? v.inventory_quantity : 0,
-                price: v.price || 'N/A',
-                compare_at_price: v.compare_at_price || '',
-              }))
-          : undefined,
-        full_price: productData.full_price || '$950.00',
-        sale_price: productData.sale_price || '$380.00',
-        discount: productData.discount || '60% off',
-        collection_id: productData.collection_id || undefined,
-      };
-      setProduct(validatedProduct);
-      setError(null);
-    } catch (err: any) {
-      console.error('Fetch error (suppressed):', err.message);
-      setError(null);
-    } finally {
-      setProductLoading(false);
-    }
-  };
-
-  const fetchTopProducts = async () => {
-    try {
-      const topProductsUrl = product?.collection_id
-        ? `${API_BASE_URL}/api/v1/collections/${product.collection_id}`
-        : `${API_BASE_URL}/api/v1/collections/488238383399`;
-      console.log('Fetching:', topProductsUrl);
-      const collectionData = await fetchWithRetry(topProductsUrl);
-      console.log('Fetch successful for', topProductsUrl, ':', collectionData);
-
-      if (!collectionData || !Array.isArray(collectionData.products)) {
-        console.warn('Invalid collection data:', collectionData);
-        setTopProducts([]);
-        return;
-      }
-
-      const validatedTopProducts = collectionData.products
-        .filter(
-          (p: Product) =>
-            p &&
-            typeof p.id === 'string' &&
-            typeof p.title === 'string' &&
-            p.id !== id &&
-            Array.isArray(p.variants) &&
-            p.variants.some((v: Variant) => v.inventory_quantity > 0)
-        )
-        .map((p: Product) => {
-          const variants = Array.isArray(p.variants)
-            ? p.variants.filter(
-                (v: Variant) =>
-                  v &&
-                  typeof v === 'object' &&
-                  typeof v.id === 'string' &&
-                  typeof v.size === 'string' &&
-                  v.size !== '' &&
-                  v.size !== 'N/A' &&
-                  typeof v.inventory_quantity === 'number' &&
-                  v.inventory_quantity > 0
-              )
-            : [];
-          return {
-            ...p,
-            id: p.id || '',
-            title: p.title || 'Untitled Product',
-            description: p.description || '',
-            brand: p.brand || 'Unknown Brand',
-            thumbnail: p.thumbnail || 'https://placehold.co/150x150',
-            images: Array.isArray(p.images) ? p.images : undefined,
-            variants: variants,
-            full_price: p.full_price || '',
-            sale_price: p.sale_price || 'N/A',
-            discount: p.discount || null,
-            collection_id: p.collection_id || undefined,
-            total_inventory: variants.reduce((sum: number, v: Variant) => {
-              return sum + (typeof v.inventory_quantity === 'number' ? v.inventory_quantity : 0);
-            }, 0),
-            discount_value: p.discount ? parseFloat(p.discount.replace('% off', '')) || 0 : 0,
-          };
-        })
-        .sort((a, b) => {
-          const aDiscount = a.discount_value || 0;
-          const bDiscount = b.discount_value || 0;
-          const aInventory = a.total_inventory || 0;
-          const bInventory = b.total_inventory || 0;
-
-          if (aDiscount !== bDiscount) {
-            return bDiscount - aDiscount;
-          }
-          return bInventory - aInventory;
-        })
-        .slice(0, 5);
-
-      console.log('Top 5 products:', validatedTopProducts);
-      setTopProducts(validatedTopProducts);
-    } catch (topErr: any) {
-      console.warn('Top products fetch error (suppressed):', topErr.message);
-      setTopProducts([]);
-    } finally {
-      setTopProductsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (!id || typeof id !== 'string') {
-      setProductLoading(false);
+    if (!exclusiveRef.current || !brandsRef.current || !exclusiveCursorRef.current || !brandsCursorRef.current) {
+      console.error("Refs not found:", {
+        exclusiveRef: exclusiveRef.current,
+        brandsRef: brandsRef.current,
+        exclusiveCursorRef: exclusiveCursorRef.current,
+        brandsCursorRef: brandsCursorRef.current,
+      });
       return;
     }
 
-    fetchProduct();
-  }, [id]);
+    const exclusiveElement = exclusiveRef.current;
+    const brandsElement = brandsRef.current;
+    const exclusiveCursor = exclusiveCursorRef.current;
+    const brandsCursor = brandsCursorRef.current;
 
+    // Split text into spans for typewriter effect
+    const exclusiveText = "EXCLUSIVE";
+    const brandsText = "BRANDS";
+    exclusiveElement.innerHTML = exclusiveText
+      .split("")
+      .map((char) => `<span class="glitch-letter">${char}</span>`)
+      .join("");
+    brandsElement.innerHTML = brandsText
+      .split("")
+      .map((char) => `<span class="glitch-letter">${char}</span>`)
+      .join("");
+
+    const exclusiveSpans = exclusiveElement.querySelectorAll(".glitch-letter");
+    const brandsSpans = brandsElement.querySelectorAll(".glitch-letter");
+
+    // Set initial state: hide letters, set color to green for reveal
+    gsap.set([exclusiveElement, brandsElement], { color: "#58fb6cd9" });
+    gsap.set(exclusiveSpans, { opacity: 0 });
+    gsap.set(brandsSpans, { opacity: 0 });
+
+    // 3D Slanted Cursor Style
+    gsap.set([exclusiveCursor, brandsCursor], {
+      transformPerspective: 400,
+      rotateY: 30,
+      scale: 1.2,
+      color: "#58fb6cd9",
+      fontSize: "5.5rem",
+      lineHeight: "1",
+      fontWeight: "bold",
+      textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+      x: 0,
+    });
+
+    // Cursor blinking animation (always blinking)
+    gsap.to([exclusiveCursor, brandsCursor], {
+      opacity: 0,
+      repeat: -1,
+      yoyo: true,
+      duration: 0.5,
+      ease: "power1.inOut",
+    });
+
+    // Typewriter animation for EXCLUSIVE (cumulative letter reveal)
+    gsap.to(exclusiveSpans, {
+      opacity: 1,
+      y: 0,
+      rotateX: 0,
+      duration: 0.2,
+      stagger: 0.2,
+      ease: "power2.out",
+      onStart: () => {
+        gsap.set(exclusiveCursor, { opacity: 1 });
+      },
+      onUpdate: function () {
+        const currentIndex = Math.floor(this.progress() * exclusiveSpans.length);
+        gsap.set(exclusiveCursor, {
+          x: currentIndex * (exclusiveElement.offsetWidth / exclusiveText.length) + 5,
+        });
+      },
+    });
+
+    // Typewriter animation for BRANDS (cumulative letter reveal)
+    gsap.to(brandsSpans, {
+      opacity: 1,
+      y: 0,
+      rotateX: 0,
+      duration: 0.2,
+      stagger: 0.2,
+      ease: "power2.out",
+      delay: exclusiveText.length * 0.2,
+      onStart: () => {
+        gsap.set(brandsCursor, { opacity: 1 });
+      },
+      onUpdate: function () {
+        const currentIndex = Math.floor(this.progress() * brandsSpans.length);
+        gsap.set(brandsCursor, {
+          x: currentIndex * (brandsElement.offsetWidth / brandsText.length) + 5,
+        });
+      },
+    });
+
+    // Glitch animation for EXCLUSIVE
+    const glitchExclusive = () => {
+      const colors = ["#58fb6cd9", "#c2a0e5d9", "#FFFFFF"];
+      const randomColor = colors[Math.floor(Math.random() * colors.length)];
+      gsap.to(exclusiveElement, {
+        color: randomColor,
+        x: gsap.utils.random(-5, 5),
+        y: gsap.utils.random(-5, 5),
+        skewX: gsap.utils.random(-5, 5),
+        duration: 0.2,
+        ease: "power1.inOut",
+        onComplete: () => {
+          gsap.to(exclusiveElement, {
+            color: "#58fb6cd9",
+            x: 0,
+            y: 0,
+            skewX: 0,
+            duration: 0.2,
+            ease: "power1.inOut",
+          });
+        },
+      });
+      gsap.delayedCall(gsap.utils.random(4, 6), glitchExclusive);
+    };
+
+    // Glitch animation for BRANDS
+    const glitchBrands = () => {
+      const colors = ["#58fb6cd9", "#fbac58d9", "#00e5ffd9"];
+      const randomColor = colors[Math.floor(Math.random() * colors.length)];
+      gsap.to(brandsElement, {
+        color: randomColor,
+        x: gsap.utils.random(-5, 5),
+        y: gsap.utils.random(-5, 5),
+        skewX: gsap.utils.random(-5, 5),
+        duration: 0.2,
+        ease: "power1.inOut",
+        onComplete: () => {
+          gsap.to(brandsElement, {
+            color: "#58fb6cd9",
+            x: 0,
+            y: 0,
+            skewX: 0,
+            duration: 0.2,
+            ease: "power1.inOut",
+          });
+        },
+      });
+      gsap.delayedCall(gsap.utils.random(4, 6), glitchBrands);
+    };
+
+    // Start glitch animations after typewriter effect
+    gsap.delayedCall(exclusiveText.length * 0.2 + 0.5, glitchExclusive);
+    gsap.delayedCall((exclusiveText.length + brandsText.length) * 0.2 + 0.5, glitchBrands);
+  }, []);
+
+  // Countdown logic for September 5, 2025 launch
   useEffect(() => {
-    if (product) {
-      setTopProductsLoading(true);
-      fetchTopProducts();
+    const targetDate = new Date("2025-09-05T00:00:00Z").getTime();
+    const interval = setInterval(() => {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+      if (distance < 0) {
+        setCountdown({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+        clearInterval(interval);
+      } else {
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        setCountdown({ days, hours, minutes, seconds });
+      }
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Fetch collections from the API
+  useEffect(() => {
+    setIsLoading(true);
+    const url = 'https://iconluxury.shop/api/v1/collections/';
+    console.log('Fetching collections from:', url);
+    axios
+      .get(url, {
+        headers: { 'Accept': 'application/json' },
+        timeout: 10000,
+      })
+      .then((res) => {
+        console.log('API Response:', res.data);
+        const data = Array.isArray(res.data)
+          ? res.data
+          : Array.isArray(res.data?.collections)
+          ? res.data.collections
+          : [];
+        setCollections(data);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.error('Fetch error:', {
+          message: err.message,
+          code: err.code,
+          response: err.response ? {
+            status: err.response.status,
+            data: err.response.data,
+          } : null,
+        });
+        setError('Unable to load collections. Please try again later.');
+        setCollections([]);
+        setIsLoading(false);
+      });
+  }, []);
+
+  // Handle wallet authentication
+  const handleConnect = async () => {
+    try {
+      await open();
+      if (isConnected && address) {
+        const message = `Sign this message to authenticate with LuxuryVerse: ${address}`;
+        const signature = await signMessageAsync({ message });
+        const response = await axios.post("https://iconluxury.shop/api/v1/auth/wallet", {
+          address,
+          signature,
+          message,
+        });
+        localStorage.setItem("access_token", response.data.access_token);
+      }
+    } catch (err) {
+      console.error(err);
+      setError("Authentication failed");
     }
-  }, [product?.id]);
+  };
 
-  const validatedImages = useMemo(() => (Array.isArray(product?.images) ? product.images : undefined), [product?.images]);
-  const validatedVariants = useMemo(() => (Array.isArray(product?.variants) ? product.variants : undefined), [product?.variants]);
-
-  // Parse features from description or use placeholder
-  const features = useMemo(() => {
-    if (product?.description) {
-      const featureList = product.description
-        .split('\n')
-        .filter((line) => line.trim().startsWith('-') || line.trim().startsWith('*'))
-        .map((line) => line.trim().replace(/^[-*]\s*/, ''));
-      return featureList.length > 0 ? featureList : ['Premium materials', 'Designed for comfort', 'Exclusive styling'];
-    }
-    return ['Premium materials', 'Designed for comfort', 'Exclusive styling'];
-  }, [product?.description]);
-
-  if (productLoading) {
-    return (
-      <Flex justify="center" align="center" minH="100vh" bg="transparent">
-        <Spinner size="xl" color="var(--color-primary-hover)" />
-      </Flex>
-    );
-  }
-
-  if (!product) {
-    return (
-      <Box textAlign="center" py={16} color="gray.700" bg="transparent" w="100%">
-        <Text fontSize="lg" mb={4}>
-          Product not found for ID: {id}
-        </Text>
-        <Text fontSize="sm" mt={2}>
-          Please check your network connection or contact{' '}
-          <a href="mailto:support@iconluxury.shop" style={{ color: '#3182CE' }}>
-            support@iconluxury.shop
-          </a>.
-        </Text>
-        {topProducts.length > 0 && (
-          <Box mt={4}>
-            <Text fontSize="md" mb={2}>
-              Explore our top products:
-            </Text>
-            <HStack spacing={2} flexWrap="wrap" justify="center">
-              {topProducts.slice(0, 3).map((topProduct) => (
-                <Link key={topProduct.id} to={`/products/${topProduct.id}`} style={{ color: '#3182CE' }}>
-                  <Tag colorScheme="gray" m={1}>
-                    {topProduct.title || 'Untitled Product'}
-                  </Tag>
-                </Link>
-              ))}
-            </HStack>
-          </Box>
-        )}
-      </Box>
-    );
-  }
+  // Handle waitlist join (placeholder functionality)
+  const handleJoinWaitlist = () => {
+    console.log("Joined the waitlist");
+    // TODO: Implement waitlist logic (e.g., API call or form redirect)
+  };
 
   return (
-    <ErrorBoundary FallbackComponent={ErrorFallback}>
-      <Box bg="transparent" w="100%">
-        <Box py={8} px={{ base: 4, md: 8 }}>
-          <Box maxW="1200px" mx="auto" w="100%">
-            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={8}>
-              {/* Image Section */}
-              {validatedImages ? (
-                <Box position="relative" display="flex" flexDirection="column" alignItems="center">
-                  <Image
-                    src={validatedImages[currentImage] || 'https://placehold.co/400x500'}
-                    alt={`${product.title || 'Product'} image ${currentImage + 1}`}
-                    w="100%"
-                    maxW="400px"
-                    h="500px"
-                    objectFit="contain"
-                    mx="auto"
-                    onError={(e) => (e.currentTarget.src = 'https://placehold.co/400x500')}
-                  />
-                  {validatedImages.length > 1 && (
-                    <HStack mt={4} justify="center" spacing={2}>
-                      {validatedImages.map((img, index) => (
-                        <Image
-                          key={index}
-                          src={img}
-                          alt={`Thumbnail ${index + 1}`}
-                          w="80px"
-                          h="100px"
-                          objectFit="contain"
-                          cursor="pointer"
-                          borderRadius="md"
-                          border={index === currentImage ? '2px solid var(--color-primary-hover)' : '2px solid transparent'}
-                          onClick={() => setCurrentImage(index)}
-                          onError={(e) => (e.currentTarget.src = 'https://placehold.co/80x100')}
-                        />
-                      ))}
-                    </HStack>
-                  )}
-                  {validatedImages.length > 1 && (
-                    <>
-                      <IconButton
-                        aria-label="Previous image"
-                        icon={<ChevronLeftIcon boxSize={5} />}
-                        position="absolute"
-                        left={{ base: '4px', md: '8px' }}
-                        top="250px"
-                        transform="translateY(-50%)"
-                        bg="gray.700"
-                        color="white"
-                        _hover={{ bg: 'gray.600' }}
-                        borderRadius="full"
-                        size="sm"
-                        onClick={() => setCurrentImage((prev) => (prev - 1 + validatedImages.length) % validatedImages.length)}
-                      />
-                      <IconButton
-                        aria-label="Next image"
-                        icon={<ChevronRightIcon boxSize={5} />}
-                        position="absolute"
-                        right={{ base: '4px', md: '8px' }}
-                        top="250px"
-                        transform="translateY(-50%)"
-                        bg="gray.700"
-                        color="white"
-                        _hover={{ bg: 'gray.600' }}
-                        borderRadius="full"
-                        size="sm"
-                        onClick={() => setCurrentImage((prev) => (prev + 1) % validatedImages.length)}
-                      />
-                    </>
-                  )}
-                </Box>
-              ) : (
-                <Skeleton w="100%" maxW="400px" h="500px" mx="auto" />
-              )}
-              {/* Product Details Section */}
-              <VStack align="start" spacing={4}>
-                <Text as="h1" fontSize={{ base: '3xl', md: '4xl' }} fontWeight="medium" lineHeight="1.3">
-                  {product.title || 'Untitled Product'}
-                </Text>
-                <HStack spacing={2} alignItems="center">
-                  <Text
-                    fontSize="lg"
-                    fontWeight="bold"
-                    lineHeight="1.5"
-                    style={{ color: 'var(--color-primary-hover)' }}
-                  >
-                    {product.brand || 'Unknown Brand'}
-                  </Text>
-                  {product.discount && (
-                    <>
-                      <Text
-                        fontSize="lg"
-                        lineHeight="1.5"
-                        style={{ color: 'var(--color-primary-hover)' }}
-                      >
-                        |
-                      </Text>
-                      <Tag
-                        colorScheme="green"
-                        borderRadius="full"
-                        fontSize="lg"
-                        lineHeight="1.5"
-                        minH="auto"
-                        py={0}
-                        px={3}
-                        style={{
-                          color: 'var(--color-primary-hover)',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center'
-                        }}
-                      >
-                        {product.discount}
-                      </Tag>
-                    </>
-                  )}
-                </HStack>
-                {validatedVariants && validatedVariants.length > 0 && (
-                  <HStack spacing={2} flexWrap="wrap" maxW="100%" gap={2}>
-                    {validatedVariants.map((variant, index) => (
-                      <Box
-                        key={variant.id || `variant-${index}`}
-                        bg={variant.inventory_quantity > 0 ? 'gray.700' : 'red.900'}
-                        color="white"
-                        px={3}
-                        py={1}
-                        borderRadius="md"
-                        fontSize="md"
-                        cursor="pointer"
-                        _hover={{ bg: variant.inventory_quantity > 0 ? 'gray.600' : 'red.800' }}
-                      >
-                        {variant.size}
-                      </Box>
-                    ))}
-                  </HStack>
-                )}
-                <HStack spacing={2} align="center">
-                  <Text
-                    fontSize={{ base: '3xl', md: '4xl' }}
-                    fontWeight="bold"
-                    style={{ color: 'var(--color-primary-hover)' }}
-                  >
-                    {product.sale_price || 'N/A'}
-                  </Text>
-                  {product.full_price && (
-                    <Text fontSize={{ base: 'lg', md: 'xl' }} color="gray.500">
-                      MSRP: {product.full_price}
-                    </Text>
-                  )}
-                </HStack>
-                {product.description ? (
-                  <Text
-                    fontSize="lg"
-                    color="gray.500"
-                    dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(product.description) }}
-                  />
-                ) : (
-                  <Text fontSize="lg" color="gray.500">
-                    No description available
-                  </Text>
-                )}
-                {features.length > 0 && (
-                  <Box>
-                    <Text as="h2" fontSize="xl" mb={2}>
-                      Features
-                    </Text>
-                    <VStack align="start" spacing={1}>
-                      {features.map((feature, index) => (
-                        <Text key={index} fontSize="md" color="gray.300">
-                          • {feature}
-                        </Text>
-                      ))}
-                    </VStack>
-                  </Box>
-                )}
-              </VStack>
-            </SimpleGrid>
-            <Box mt={8}>
-              <Text as="h2" fontSize="xl" mb={4}>
-                Related Products
-              </Text>
-              {topProductsLoading ? (
-                <HStack spacing={4} flexWrap="wrap" justify="center">
-                  {[...Array(5)].map((_, index) => (
-                    <Box key={index} p={4} borderWidth="1px" borderRadius="md" textAlign="center" maxW="160px">
-                      <Skeleton w="120px" h="160px" mx="auto" startColor="gray.700" endColor="gray.600" />
-                      <SkeletonText mt={2} noOfLines={2} spacing="2" />
-                      <Skeleton mt={2} h="16px" w="100px" mx="auto" />
-                    </Box>
-                  ))}
-                </HStack>
-              ) : topProducts.length > 0 ? (
-                <HStack spacing={4} flexWrap="wrap" justify="center">
-                  {topProducts.map((topProduct) => (
-                    <Link key={topProduct.id} to={`/products/${topProduct.id}`}>
-                      <Box
-                        p={4}
-                        borderWidth="1px"
-                        borderRadius="md"
-                        textAlign="center"
-                        maxW="160px"
-                        bg="gray.800"
-                        _hover={{ transform: 'scale(1.05)', boxShadow: 'md' }}
-                        transition="all 0.2s"
-                      >
-                        <Image
-                          src={topProduct.thumbnail || 'https://placehold.co/120x160'}
-                          alt={topProduct.title || 'Product'}
-                          w="120px"
-                          h="160px"
-                          objectFit="contain"
-                          mx="auto"
-                          onError={(e) => (e.currentTarget.src = 'https://placehold.co/120x160')}
-                        />
-                        <Text mt={2} fontSize="sm" fontWeight="medium" noOfLines={2} color="white">
-                          {topProduct.title || 'Untitled Product'}
-                        </Text>
-                        <Text color="gray.300" fontSize="sm">
-                          {topProduct.sale_price || 'N/A'}
-                          {topProduct.discount && (
-                            <Text as="span" style={{ color: 'var(--color-primary-hover)' }} ml={1}>
-                              ({topProduct.discount})
-                            </Text>
-                          )}
-                        </Text>
-                      </Box>
-                    </Link>
-                  ))}
-                </HStack>
-              ) : (
-                <Text fontSize="md" color="gray.400">
-                  No related products available.
-                </Text>
-              )}
+    <Box bg="black.900">
+      {/* Hero Section: Exclusive Brands */}
+      <Box
+        bgImage="url('/images/hero-bg.jpg')"
+        bgSize="cover"
+        bgPosition="center"
+        py={{ base: 20, md: 32 }}
+        px={{ base: 4, md: 8 }}
+        position="relative"
+        _before={{
+          content: '""',
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          bg: "black.900",
+          opacity: 0.7,
+        }}
+      >
+        <Flex maxW="1200px" mx="auto" direction={{ base: "column", lg: "row" }} align="center" gap={12} position="relative">
+          <VStack align="flex-start" spacing={12} flex="1">
+            <Box position="relative" display="inline-block" whiteSpace="nowrap">
+              <Heading
+                as="h2"
+                variant="glitch"
+                size="8xl"
+                className="glitch glitch-exclusive"
+                data-text="EXCLUSIVE"
+                ref={exclusiveRef}
+              />
+              <Box
+                as="span"
+                ref={exclusiveCursorRef}
+                className="terminal-cursor"
+                position="absolute"
+                top="10%"
+                left="0"
+                color="#58fb6cd9"
+                fontSize="5.5rem"
+                lineHeight="1"
+                fontWeight="normal"
+                ml="0.05em"
+              >
+                |
+              </Box>
             </Box>
-            <Divider my={8} borderColor="gray.600" />
-          </Box>
-        </Box>
-        <Footer />
+            <Box position="relative" display="inline-block" whiteSpace="nowrap">
+              <Heading
+                as="h2"
+                variant="glitch"
+                size="8xl"
+                className="glitch glitch-brands"
+                data-text="BRANDS"
+                ref={brandsRef}
+              />
+              <Box
+                as="span"
+                ref={brandsCursorRef}
+                className="terminal-cursor"
+                position="absolute"
+                top="10%"
+                left="0"
+                color="#58fb6cd9"
+                fontSize="5.5rem"
+                lineHeight="1"
+                fontWeight="normal"
+                ml="0.05em"
+              >
+                |
+              </Box>
+            </Box>
+            <Text fontFamily="'DM Sans', sans-serif" fontSize={{ base: "xl", md: "2xl" }} color="purple.500">
+              Exclusive Access
+            </Text>
+            <Text fontSize={{ base: "lg", md: "xl" }} color="purple.500">
+              Authenticated luxury goods, fully verified on the blockchain
+            </Text>
+            <Button
+              size="lg"
+              variant="solid"
+              bg="green.500"
+              color="black.900"
+              _hover={{ bg: "purple.500" }}
+              onClick={handleJoinWaitlist}
+              fontSize="xl"
+              py={8}
+              px={12}
+            >
+              Join The Waitlist
+            </Button>
+          </VStack>
+          <Flex flex="1" justify="center" mt={{ base: 8, lg: 0 }}>
+            <Flex gap={8} flexWrap="wrap" justify="center">
+              {[
+                { src: "/images/balmain.jpg", alt: "Balmain Logo" },
+                { src: "/images/ferragamo.jpg", alt: "Ferragamo Logo" },
+                { src: "/images/the-row.jpg", alt: "The Row Logo" },
+                { src: "/images/roger-vivier.jpg", alt: "Roger Vivier Logo" },
+                { src: "/images/gianvito-rossi.jpg", alt: "Gianvito Rossi Logo" },
+                { src: "/images/etro.jpg", alt: "Etro Logo" },
+                { src: "/images/moschino.jpg", alt: "Moschino Logo" },
+              ].map((img) => (
+                <Image
+                  key={img.alt}
+                  src={img.src}
+                  alt={img.alt}
+                  boxSize={{ base: "80px", md: "100px" }}
+                  objectFit="contain"
+                  fallbackSrc="/images/placeholder.jpg"
+                  filter="grayscale(100%)"
+                  _hover={{ filter: "grayscale(0%)" }}
+                  transition="filter 0.3s ease"
+                />
+              ))}
+            </Flex>
+          </Flex>
+        </Flex>
       </Box>
-    </ErrorBoundary>
+
+      {/* Cards Section: Luxury Brands, Exclusive Drops, Authentic Goods */}
+      <Box py={16} px={{ base: 4, md: 8 }} maxW="1200px" mx="auto">
+        <Flex
+          direction={{ base: "column", lg: "row" }}
+          gap={8}
+          justify="space-between"
+          align="stretch"
+        >
+          <VStack
+            bg="gray.900"
+            border="1px solid"
+            borderColor="gray.700"
+            borderRadius="md"
+            p={6}
+            flex="1"
+            align="start"
+            transition="all 0.3s"
+            _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
+          >
+            <Heading as="h3" size="lg" mb={4} color="purple.500">
+              Luxury Brands
+            </Heading>
+            <Text color="purple.500">
+              LuxuryVerse has direct access to the world's top luxury brands. We have built our
+              industry relationships over decades, ensuring that we have the best styles at the prices.
+            </Text>
+          </VStack>
+          <VStack
+            bg="gray.900"
+            border="1px solid"
+            borderColor="gray.700"
+            borderRadius="md"
+            p={6}
+            flex="1"
+            align="start"
+            transition="all 0.3s"
+            _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
+          >
+            <Heading as="h3" size="lg" mb={4} color="purple.500">
+              Exclusive Drops
+            </Heading>
+            <Text color="purple.500">
+              Each week, LuxuryVerse releases a limited selection of luxury goods to our members. We
+              announce these drops one day in advance on X, releasing goods on a first come first serve
+              basis exclusive to our members.
+            </Text>
+          </VStack>
+          <VStack
+            bg="gray.900"
+            border="1px solid"
+            borderColor="gray.700"
+            borderRadius="md"
+            p={6}
+            flex="1"
+            align="start"
+            transition="all 0.3s"
+            _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
+          >
+            <Heading as="h3" size="lg" mb={4} color="purple.500">
+              Authentic Goods
+            </Heading>
+            <Text color="purple.500">
+              LuxuryVerse goods are 100% authentic and guaranteed on the blockchain. Our goods and
+              services are also supported by the Authentication Council.
+            </Text>
+          </VStack>
+        </Flex>
+      </Box>
+
+      {/* Launch Card */}
+      <Box py={16} bg="gray.800" textAlign="center">
+        <VStack
+          bg="gray.900"
+          border="1px solid"
+          borderColor="gray.700"
+          borderRadius="md"
+          p={8}
+          maxW="600px"
+          mx="auto"
+          spacing={6}
+          transition="all 0.3s"
+          _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
+        >
+          <Heading as="h2" size="xl" color="purple.500">
+            Launching September 2025
+          </Heading>
+          <Text color="purple.500">First Drop: September 5th, 2025</Text>
+          <Flex gap={8} justify="center" wrap="wrap">
+            {[
+              { value: countdown.days, label: "Days" },
+              { value: countdown.hours, label: "Hours" },
+              { value: countdown.minutes, label: "Minutes" },
+              { value: countdown.seconds, label: "Seconds" },
+            ].map(({ value, label }) => (
+              <VStack key={label}>
+                <Text fontSize="4xl" fontWeight="bold" color="purple.500">
+                  {value}
+                </Text>
+                <Text color="purple.500">{label}</Text>
+              </VStack>
+            ))}
+          </Flex>
+        </VStack>
+      </Box>
+
+      {/* Recent Drops Card */}
+      <Box py={16} px={{ base: 4, md: 8 }} maxW="1200px" mx="auto">
+        <VStack
+          bg="gray.900"
+          border="1px solid"
+          borderColor="gray.700"
+          borderRadius="md"
+          p={8}
+          spacing={6}
+          transition="all 0.3s"
+          _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
+        >
+          <Heading as="h2" size="xl" color="purple.500">
+            Recent Drops
+          </Heading>
+          <Text maxW="600px" textAlign="center" color="purple.500">
+            Each week, LuxuryVerse releases a limited selection of luxury goods to our members.
+          </Text>
+          {error && <Text color="red.300">{error}</Text>}
+          {isLoading && <Text color="purple.500">Loading drops...</Text>}
+          {!isLoading && !Array.isArray(collections) && (
+            <Text color="purple.500">No valid collections available</Text>
+          )}
+          {!isLoading && Array.isArray(collections) && collections.length === 0 && (
+            <Text color="purple.500">No drops available</Text>
+          )}
+          {!isLoading && Array.isArray(collections) && collections.length > 0 && (
+            <Grid
+              templateColumns={{ base: "1fr", md: "repeat(3, 1fr)" }}
+              gap={8}
+              w="100%"
+            >
+              {collections.flatMap((collection) =>
+                collection.products.map((product) => (
+                  <VStack
+                    key={product.id}
+                    bg="gray.800"
+                    border="1px solid"
+                    borderColor="gray.700"
+                    borderRadius="md"
+                    p={4}
+                    align="start"
+                    transition="all 0.3s"
+                    _hover={{ borderColor: "green.500", shadow: "md" }}
+                  >
+                    <Image
+                      src={product.thumbnail}
+                      alt={`${product.title} Image`}
+                      borderRadius="md"
+                      objectFit="cover"
+                      h="150px"
+                      w="100%"
+                      fallbackSrc="/images/placeholder.jpg"
+                    />
+                    <Text fontSize="md" fontWeight="bold" color="purple.500">
+                      {product.title}
+                    </Text>
+                    <Text color="purple.500">{product.price}</Text>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      borderColor="purple.500"
+                      color="purple.500"
+                      w="full"
+                      mt={2}
+                      _hover={{ bg: "green.500", color: "black.900" }}
+                    >
+                      View Details
+                    </Button>
+                  </VStack>
+                ))
+              )}
+            </Grid>
+          )}
+        </VStack>
+      </Box>
+
+      {/* FAQs */}
+      <Box py={16} bg="gray.800" px={{ base: 4, md: 8 }}>
+        <VStack maxW="1200px" mx="auto" spacing={8}>
+          <Heading as="h2" size="xl" color="purple.500">
+            Frequently Asked Questions
+          </Heading>
+          <Accordion allowToggle w="100%">
+            {[
+              {
+                question: "What types of luxury goods do you offer?",
+                answer: "We offer a wide range of luxury goods, including designer handbags, watches, jewelry, apparel, and accessories from the world’s most prestigious brands.",
+              },
+              {
+                question: "How often are your drops?",
+                answer: "Drops occur weekly, announced one day in advance on X, with plans to move to daily drops in the future.",
+              },
+              {
+                question: "How do I know your products are authentic?",
+                answer: "All products are 100% authentic, verified on the blockchain, and backed by the Authentication Council.",
+              },
+              {
+                question: "What payment options do you offer?",
+                answer: "We offer cryptocurrency payments via wallet authentication, with additional methods to be announced.",
+              },
+              {
+                question: "Do you offer international shipping?",
+                answer: "Yes, we offer international shipping from our secure facilities, with details provided at checkout.",
+              },
+              {
+                question: "How can I track my order?",
+                answer: "Once shipped, you’ll receive a tracking link via email to monitor your order’s progress.",
+              },
+              {
+                question: "How can I contact customer service?",
+                answer: "Reach us at info@example.com, example.mail@hum.com, or call +0989 7876 9865 9 or +(090) 8765 86543 85.",
+              },
+            ].map(({ question, answer }) => (
+              <AccordionItem key={question}>
+                <AccordionButton>
+                  <Box flex="1" textAlign="left" color="purple.500">
+                    {question}
+                  </Box>
+                  <AccordionIcon color="purple.500" />
+                </AccordionButton>
+                <AccordionPanel color="purple.500">
+                  {answer}
+                </AccordionPanel>
+              </AccordionItem>
+            ))}
+          </Accordion>
+          <Button
+            as={Link}
+            to="/faq"
+            variant="outline"
+            borderColor="purple.500"
+            color="purple.500"
+            _hover={{ bg: "green.500", color: "black.900" }}
+          >
+            See All FAQ
+          </Button>
+        </VStack>
+      </Box>
+
+      {/* Documents */}
+      <Box py={16} px={{ base: 4, md: 8 }} maxW="1200px" mx="auto">
+        <VStack spacing={8}>
+          <Heading as="h2" size="xl" color="purple.500">
+            Read Documents
+          </Heading>
+          <Flex gap={8} wrap="wrap" justify="center">
+            {[
+              { href: "/docs/whitepaper.pdf", label: "Whitepaper" },
+              { href: "/docs/presentation.pdf", label: "Presentation" },
+              { href: "/docs/lightpaper.pdf", label: "Lightpaper" },
+            ].map(({ href, label }) => (
+              <Button
+                key={label}
+                as="a"
+                href={href}
+                variant="outline"
+                borderColor="purple.500"
+                color="purple.500"
+                _hover={{ bg: "green.500", color: "black.900" }}
+              >
+                {label}
+              </Button>
+            ))}
+          </Flex>
+        </VStack>
+      </Box>
+
+      {/* Authentication Council */}
+      <Box py={16} px={{ base: 4, md: 8 }} maxW="1200px" mx="auto">
+        <VStack spacing={8}>
+          <Heading as="h2" size="xl" color="purple.500">
+            Trust in Every Purchase
+          </Heading>
+          <Text textAlign="center" maxW="600px" color="purple.500">
+            LuxuryVerse partners with former members of Interpol, the FBI, and other agencies to guarantee authentic merchandise. All goods are transported, stored, and shipped from secure facilities.
+          </Text>
+        </VStack>
+      </Box>
+
+      {/* Footer */}
+      <Footer />
+    </Box>
   );
 }
+
+export default Home;
