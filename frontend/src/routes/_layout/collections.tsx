@@ -117,14 +117,14 @@ function LatestDropsPage() {
   {/* Upcoming Drops Section */}
   {dropsData.upcoming.length > 0 && (
     <Box mb={16}>
-    <VStack spacing={8} textAlign="center">
+     <VStack spacing={4} textAlign="center">
         <Heading
           fontSize={{ base: "2xl", md: "3xl" }}
           color="white"
         >
           Upcoming Drops
         </Heading>
-        <Text fontSize="lg" color="white">
+        <Text fontSize="lg" color="white" mt={12}>
           2025-05-01, 10:00 AM
           <br />
           <Text as="span" color="gray.400">
