@@ -235,7 +235,7 @@ function CollectionDetails() {
   w="full"
   style={{ aspectRatio: '3 / 4' }}
   bg="white"
-  filter="brightness(0.85)" // Reduces brightness to 85% of original
+  filter="brightness(0.25)" // Reduces brightness to 85% of original
 >
   <Image
     src={product.thumbnail}
