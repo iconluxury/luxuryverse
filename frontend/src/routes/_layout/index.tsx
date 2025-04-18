@@ -99,7 +99,7 @@ function Home() {
       rotateY: 30,
       scale: 1.2,
       color: "#58fb6cd9",
-      fontSize: { base: "3rem", md: "5.5rem" },
+      fontSize: { base: "1rem", md: "5.5rem" }, // Smaller cursor on mobile
       lineHeight: "1",
       fontWeight: "bold",
       textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
@@ -200,7 +200,7 @@ function Home() {
             ease: "power1.out",
           });
       });
-      gsap.delayedCall(gsap.utils.random(1.5, 3), glitchExclusive); // Frequent glitches
+      gsap.delayedCall(gsap.utils.random(1.5, 3), glitchExclusive);
     };
 
     // Flashy Glitch animation for BRANDS (individual letters)
@@ -237,7 +237,7 @@ function Home() {
             ease: "power1.out",
           });
       });
-      gsap.delayedCall(gsap.utils.random(1.5, 3), glitchBrands); // Frequent glitches
+      gsap.delayedCall(gsap.utils.random(1.5, 3), glitchBrands);
     };
 
     // Start glitch animations after typewriter effect
@@ -333,9 +333,11 @@ function Home() {
         bgImage="url('/images/hero-bg.jpg')"
         bgSize="cover"
         bgPosition="center"
-        py={{ base: 10, md: 16 }}
-        px={{ base: 4, md: 8 }}
+        py={{ base: 6, md: 16 }}
+        px={{ base: 2, md: 8 }}
         position="relative"
+        overflowX="hidden"
+        width="100vw"
         _before={{
           content: '""',
           position: "absolute",
@@ -347,17 +349,26 @@ function Home() {
           opacity: 0.7,
         }}
       >
-        <Flex maxW="1200px" mx="auto" direction={{ base: "column", lg: "row" }} align={{ base: "flex-start", lg: "center" }} gap={{ base: 6, md: 12 }} position="relative">
-          <VStack align="flex-start" spacing={{ base: 6, md: 12 }} flex="1" ml={{ base: 0, md: 0 }}>
+        <Flex
+          maxW={{ base: "100%", md: "1200px" }}
+          mx="auto"
+          direction={{ base: "column", lg: "row" }}
+          align={{ base: "flex-start", lg: "center" }}
+          gap={{ base: 4, md: 12 }}
+          position="relative"
+        >
+          <VStack align="flex-start" spacing={{ base: 4, md: 12 }} flex="1" ml={{ base: 0, md: 0 }}>
             <Box position="relative" display="inline-block" whiteSpace="nowrap">
               <Heading
                 as="h2"
                 variant="glitch"
-                size={{ base: "7xl", md: "9xl" }}
+                size={{ base: "3xl", md: "9xl" }} // Smaller on mobile
                 className="glitch glitch-exclusive"
                 data-text="EXCLUSIVE"
                 ref={exclusiveRef}
-              />
+              >
+                EXCLUSIVE
+              </Heading>
               <Box
                 as="span"
                 ref={exclusiveCursorRef}
@@ -366,7 +377,7 @@ function Home() {
                 top={{ base: "5%", md: "10%" }}
                 left="0"
                 color="#58fb6cd9"
-                fontSize={{ base: "3rem", md: "5.5rem" }}
+                fontSize={{ base: "1rem", md: "5.5rem" }} // Smaller cursor on mobile
                 lineHeight="1"
                 fontWeight="normal"
                 ml="0.05em"
@@ -378,11 +389,13 @@ function Home() {
               <Heading
                 as="h2"
                 variant="glitch"
-                size={{ base: "7xl", md: "9xl" }}
+                size={{ base: "3xl", md: "9xl" }}
                 className="glitch glitch-brands"
                 data-text="BRANDS"
                 ref={brandsRef}
-              />
+              >
+                BRANDS
+              </Heading>
               <Box
                 as="span"
                 ref={brandsCursorRef}
@@ -391,7 +404,7 @@ function Home() {
                 top={{ base: "5%", md: "10%" }}
                 left="0"
                 color="#58fb6cd9"
-                fontSize={{ base: "3rem", md: "5.5rem" }}
+                fontSize={{ base: "1rem", md: "5.5rem" }}
                 lineHeight="1"
                 fontWeight="normal"
                 ml="0.05em"
@@ -400,7 +413,7 @@ function Home() {
               </Box>
             </Box>
             <Text fontSize={{ base: "sm", md: "xl" }} color="purple.500">
-            Exclusive Access to authenticated luxury goods, verified on the blockchain
+              Exclusive Access to authenticated luxury goods, verified on the blockchain
             </Text>
             <Button
               size="lg"
