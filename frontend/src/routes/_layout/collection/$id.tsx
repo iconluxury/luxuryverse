@@ -230,25 +230,26 @@ function CollectionDetails() {
                         _hover={{ shadow: 'md', transform: 'translateY(-4px)', borderColor: 'gray.500' }}
                         transition="all 0.2s"
                       >
-                        <Box
-                          position="relative"
-                          w="full"
-                          style={{ aspectRatio: '3 / 4' }}
-                          bg="white"
-                        >
-                          <Image
-                            src={product.thumbnail}
-                            alt={`${cleanedTitle} by ${product.brand || 'Unknown'}`}
-                            w="full"
-                            h="full"
-                            objectFit="contain"
-                            position="absolute"
-                            top="0"
-                            left="0"
-                            loading="lazy"
-                            onError={(e) => (e.currentTarget.src = 'https://placehold.co/225x300')}
-                          />
-                        </Box>
+                       <Box
+  position="relative"
+  w="full"
+  style={{ aspectRatio: '3 / 4' }}
+  bg="white"
+  filter="brightness(0.85)" // Reduces brightness to 85% of original
+>
+  <Image
+    src={product.thumbnail}
+    alt={`${cleanedTitle} by ${product.brand || 'Unknown'}`}
+    w="full"
+    h="full"
+    objectFit="contain"
+    position="absolute"
+    top="0"
+    left="0"
+    loading="lazy"
+    onError={(e) => (e.currentTarget.src = 'https://placehold.co/225x300')}
+  />
+</Box>
                         <Box p={4}>
                           <Text fontWeight="bold" fontSize="md" color="white" noOfLines={1}>
                             {product.brand || 'Unknown'}
