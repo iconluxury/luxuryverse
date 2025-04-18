@@ -84,7 +84,7 @@ const Footer = () => {
                 textTransform="uppercase" // Added for uppercase
                 _hover={{ color: 'white' }}
               >
-                LuxuryVerse
+              LuxuryVerse
               </Link>
               {' '}All rights reserved.
             </Text>
