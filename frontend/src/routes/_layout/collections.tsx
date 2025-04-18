@@ -122,7 +122,7 @@ function LatestDropsPage() {
           fontSize={{ base: "2xl", md: "3xl" }}
           color="white"
         >
-          Upcoming Drops
+          Upcoming
         </Heading>
         <Text fontSize="lg" color="white" mt={12}>
           2025-05-01, 10:00 AM
@@ -155,7 +155,7 @@ function LatestDropsPage() {
               textAlign="center"
               color="white"
             >
-              Past Drops
+              Past
             </Heading>
             <Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={8}>
               {dropsData.past.map(drop => (
