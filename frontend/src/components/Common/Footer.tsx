@@ -80,7 +80,7 @@ const Footer = () => {
                 fontSize="sm"
                 lineHeight="1.5"
                 fontFamily="'Special Gothic Expanded One', sans-serif"
-                _hover={{ color: 'green.400' }}
+                _hover={{ color: 'white' }}
               >
                 LuxuryVerse
               </Link>
