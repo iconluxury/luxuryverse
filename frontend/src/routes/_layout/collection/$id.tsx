@@ -1,10 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { Box, Text, Image, SimpleGrid, VStack, Heading, Skeleton, SkeletonText, Button, Flex } from '@chakra-ui/react';
+import { Box, Text, Image, SimpleGrid, VStack, Heading, Skeleton, SkeletonText, Button,Flex } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 import { ErrorBoundary } from 'react-error-boundary';
 import Footer from '../../../components/Common/Footer';
-import { useMemo, Suspense } from 'react';
 
 // Interfaces (unchanged)
 interface Variant {
@@ -56,18 +55,6 @@ function ErrorFallback({ error }: { error: Error }) {
   );
 }
 
-function SuspenseErrorFallback({ error }: { error: Error }) {
-  console.error('Suspense Error:', error);
-  return (
-    <Box textAlign="center" py={16} color="gray.300">
-      <Text fontSize="lg" mb={4}>
-        Something went wrong while loading!
-      </Text>
-      <Text fontSize="sm">{error.message}</Text>
-    </Box>
-  );
-}
-
 function CollectionDetails() {
   const API_BASE_URL = 'https://iconluxury.shop';
   const { id } = Route.useParams();
@@ -76,42 +63,52 @@ function CollectionDetails() {
     queryKey: ['collection', id],
     queryFn: async () => {
       const url = `${API_BASE_URL}/api/v1/collections/${id}`;
-      console.log('Fetching collection:', url);
+      console.log('Fetching:', url);
       const response = await fetch(url, {
         method: 'GET',
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          Pragma: 'no-cache',
+          Expires: '0',
         },
         credentials: 'omit',
+        cache: 'force-cache', // Leverage browser cache
       });
-  
+
       if (!response.ok) {
-        console.error(`Fetch failed with status: ${response.status}`);
         if (response.status === 404) throw new Error('Collection not found.');
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-  
-      const collectionData = await response.json();
+
+      // Stream response for large or chunked data
+      const reader = response.body?.getReader();
+      if (!reader) throw new Error('Response body is not readable.');
+
+      let receivedData = '';
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        receivedData += new TextDecoder().decode(value);
+      }
+
+      const collectionData = JSON.parse(receivedData);
       console.log('Raw API response:', JSON.stringify(collectionData, null, 2));
-      console.log('Products in response:', collectionData.products ? collectionData.products.length : 'No products field');
-  
+      console.log('Products count:', collectionData.products?.length || 0);
+
       if (!collectionData || typeof collectionData !== 'object') {
-        console.error('Invalid collection data:', collectionData);
         throw new Error('Invalid collection data received');
       }
-  
+
+      // Validate and transform data
       const validatedCollection: Collection = {
         id: collectionData.id || id,
         title: collectionData.title || 'Untitled Collection',
         description: collectionData.description || '',
         products: Array.isArray(collectionData.products)
           ? collectionData.products
-              .filter((p: Product) => {
-                const isValid = p && (p.id || p.title || p.brand); // Less strict: allow products with title or brand
-                console.log(`Product filter: Valid=${isValid}, Product=${JSON.stringify(p)}`);
-                return isValid;
-              })
+              .filter((p: Product) => p && p.id)
               .map((p: Product) => {
                 const variants = Array.isArray(p.variants) ? p.variants.filter((v: Variant) => v && v.id) : [];
                 return {
@@ -134,15 +131,15 @@ function CollectionDetails() {
               .sort((a, b) => (b.discount_value || 0) - (a.discount_value || 0))
           : [],
       };
-  
-      console.log('Validated collection products count:', validatedCollection.products.length);
+
+      // Store in localStorage as fallback
+      localStorage.setItem(`collection-${id}`, JSON.stringify(validatedCollection));
       return validatedCollection;
     },
-    suspense: false,
-    staleTime: 1000 * 60 * 5,
-    cacheTime: 1000 * 60 * 30,
-    retry: 3,
-    retryDelay: (attempt) => 1000 * 2 ** attempt,
+    staleTime: 1000 * 60 * 5, // 5 minutes
+    cacheTime: 1000 * 60 * 30, // 30 minutes
+    retry: 3, // Retry 3 times on failure
+    retryDelay: (attempt) => 1000 * 2 ** attempt, // Exponential backoff
   });
 
   if (isLoading) {
@@ -190,79 +187,73 @@ function CollectionDetails() {
       <Box bg="transparent" w="100%">
         <Box py={8} px={{ base: 4, md: 8 }} maxW="1200px" mx="auto" bg="transparent" borderRadius="lg">
           <VStack spacing={6} align="start">
-            <Heading as="h1" size="xl" color="green.500" textTransform="uppercase">
+            <Heading as="h1" size="xl" color="white">
               {collection.title}
             </Heading>
             {collection.description && (
-              <Box fontSize="md" color="white" dangerouslySetInnerHTML={{ __html: collection.description }} />
+              <Box fontSize="md" color="gray.300" dangerouslySetInnerHTML={{ __html: collection.description }} />
             )}
             {collection.products.length > 0 ? (
               <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing={6} w="100%">
                 {collection.products.map((product) => {
-                  const cleanTitle = useMemo(() => {
-                    if (product?.title && product?.brand) {
-                      const escapedBrand = product.brand.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-                      const brandRegex = new RegExp(`\\b${escapedBrand}\\b`, 'i');
-                      const menRegex = /\b(men'?s|men)\b/i;
-                      const cleaned = product.title
-                        .replace(brandRegex, '')
-                        .replace(menRegex, '')
-                        .trim()
-                        .replace(/\s+/g, ' ');
-                      console.log(`Cleaning title: "${product.title}" -> "${cleaned}" (Brand: "${product.brand}")`);
-                      return cleaned;
-                    }
-                    return product?.title || 'Untitled Product';
-                  }, [product?.title, product?.brand]);
-
+                  const cleanTitle = product.brand
+                    ? product.title.replace(new RegExp(`\\b${product.brand}\\b`, 'i'), '').trim()
+                    : product.title;
                   return (
                     <Link key={product.id} to={`/products/${product.id}`}>
+                    <Box
+                      borderWidth="1px"
+                      borderColor="gray.600"
+                      borderRadius="lg"
+                      overflow="hidden"
+                      bg="transparent"
+                      _hover={{ shadow: 'md', transform: 'translateY(-4px)', borderColor: 'gray.500' }}
+                      transition="all 0.2s"
+                    >
                       <Box
-                        borderWidth="1px"
-                        borderColor="gray.600"
-                        borderRadius="lg"
-                        overflow="hidden"
-                        bg="transparent"
-                        _hover={{ shadow: 'md', transform: 'translateY(-4px)', borderColor: 'gray.500' }}
-                        transition="all 0.2s"
+                        position="relative"
+                        w="full"
+                        style={{ aspectRatio: '3 / 4' }} // Fixed container aspect ratio
+                        bg="white" // Background for letterboxing
                       >
-                        <Box
-                          position="relative"
+                        <Image
+                          src={product.thumbnail}
+                          alt={product.title}
                           w="full"
-                          style={{ aspectRatio: '3 / 4' }}
-                          bg="white"
-                        >
-                          <Image
-                            src={product.thumbnail}
-                            alt={product.title}
-                            w="full"
-                            h="full"
-                            objectFit="contain"
-                            position="absolute"
-                            top="0"
-                            left="0"
-                            loading="lazy"
-                            onError={(e) => (e.currentTarget.src = 'https://placehold.co/225x300')}
-                          />
-                        </Box>
-                        <Box p={4}>
-                          <Text fontSize="md" fontWeight="medium" color="gray.400" noOfLines={1}>
+                          h="full"
+                          objectFit="contain" // Show full image
+                          position="absolute"
+                          top="0"
+                          left="0"
+                          loading="lazy"
+                          onError={(e) => (e.currentTarget.src = 'https://placehold.co/225x300')}
+                        />
+                      </Box>
+                      <Box p={4}>
+                        <Text fontWeight="bold" fontSize="md" color="white" noOfLines={1}>
+                          {cleanTitle}
+                        </Text>
+                        <Flex justify="space-between" align="center" mt={1}>
+                          <Text fontSize="sm" color="gray.300" noOfLines={1}>
                             {product.brand}
                           </Text>
-                          <Text fontWeight="bold" fontSize="md" color="white" noOfLines={1} mt={1}>
-                            {cleanTitle}
+                          {product.discount && (
+                            <Text fontSize="xs" color="red.400">
+                              {product.discount}
+                            </Text>
+                          )}
+                        </Flex>
+                        <Flex mt={2} justify="space-between" align="center">
+                          <Text fontWeight="bold" fontSize="lg" color="var(--color-primary-hover)">
+                            {product.sale_price}
                           </Text>
-                          <Flex mt={2} justify="space-between" align="center">
-                            <Text fontWeight="bold" fontSize="lg" color="var(--color-primary-hover)">
-                              {product.sale_price}
-                            </Text>
-                            <Text fontSize="sm" color="gray.500">
-                              MSRP: {product.full_price}
-                            </Text>
-                          </Flex>
-                        </Box>
+                          <Text fontSize="sm" color="gray.400">
+                            {product.full_price}
+                          </Text>
+                        </Flex>
                       </Box>
-                    </Link>
+                    </Box>
+                  </Link>
                   );
                 })}
               </SimpleGrid>
@@ -280,30 +271,5 @@ function CollectionDetails() {
 }
 
 export const Route = createFileRoute('/_layout/collection/$id')({
-  component: () => (
-    <ErrorBoundary FallbackComponent={SuspenseErrorFallback}>
-      <Suspense
-        fallback={
-          <Box maxW="1200px" mx="auto" py={8} px={{ base: 4, md: 8 }} bg="transparent">
-            <VStack spacing={4}>
-              <Skeleton height="40px" width="300px" />
-              <SkeletonText noOfLines={2} width="600px" />
-              <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing={6} w="100%">
-                {Array(4)
-                  .fill(0)
-                  .map((_, index) => (
-                    <Box key={index}>
-                      <Skeleton height="300px" />
-                      <SkeletonText mt={4} noOfLines={3} />
-                    </Box>
-                  ))}
-              </SimpleGrid>
-            </VStack>
-          </Box>
-        }
-      >
-        <CollectionDetails />
-      </Suspense>
-    </ErrorBoundary>
-  ),
+  component: CollectionDetails,
 });
