@@ -468,7 +468,7 @@ function Home() {
               px={{ base: 8, md: 12 }}
               alignSelf={{ base: "center", lg: "center" }}
             >
-     GET IN LINE
+              GET IN LINE
             </Button>
           </VStack>
           <Box
