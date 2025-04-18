@@ -53,16 +53,25 @@ function Home() {
 
   const exclusiveRef = useRef(null);
   const brandsRef = useRef(null);
+  const exclusiveCursorRef = useRef(null);
+  const brandsCursorRef = useRef(null);
 
-  // GSAP Animation for Typewriter and Glitch
+  // GSAP Animation for Typewriter, Cursor, and Glitch
   useEffect(() => {
-    if (!exclusiveRef.current || !brandsRef.current) {
-      console.error("Refs not found:", { exclusiveRef: exclusiveRef.current, brandsRef: brandsRef.current });
+    if (!exclusiveRef.current || !brandsRef.current || !exclusiveCursorRef.current || !brandsCursorRef.current) {
+      console.error("Refs not found:", {
+        exclusiveRef: exclusiveRef.current,
+        brandsRef: brandsRef.current,
+        exclusiveCursorRef: exclusiveCursorRef.current,
+        brandsCursorRef: brandsCursorRef.current,
+      });
       return;
     }
 
     const exclusiveElement = exclusiveRef.current;
     const brandsElement = brandsRef.current;
+    const exclusiveCursor = exclusiveCursorRef.current;
+    const brandsCursor = brandsCursorRef.current;
 
     // Split text into spans for typewriter effect
     const exclusiveText = "eXCLUSIVE";
@@ -82,7 +91,16 @@ function Home() {
     // Set initial color to green
     gsap.set([exclusiveElement, brandsElement], { color: "#58fb6cd9" });
 
-    // Typewriter animation
+    // Cursor blinking animation
+    gsap.to([exclusiveCursor, brandsCursor], {
+      opacity: 0,
+      repeat: -1,
+      yoyo: true,
+      duration: 0.5,
+      ease: "power1.inOut",
+    });
+
+    // Typewriter animation with cursor
     gsap.fromTo(
       exclusiveSpans,
       { opacity: 0 },
@@ -91,6 +109,18 @@ function Home() {
         duration: 0.1,
         stagger: 0.1,
         ease: "power1.in",
+        onStart: () => {
+          gsap.set(exclusiveCursor, { opacity: 1 });
+        },
+        onUpdate: function () {
+          const currentIndex = Math.floor(this.progress() * exclusiveSpans.length);
+          gsap.set(exclusiveCursor, {
+            x: currentIndex * (exclusiveElement.offsetWidth / exclusiveText.length),
+          });
+        },
+        onComplete: () => {
+          gsap.set(exclusiveCursor, { opacity: 0 });
+        },
       }
     );
     gsap.fromTo(
@@ -102,6 +132,18 @@ function Home() {
         stagger: 0.1,
         ease: "power1.in",
         delay: exclusiveText.length * 0.1,
+        onStart: () => {
+          gsap.set(brandsCursor, { opacity: 1 });
+        },
+        onUpdate: function () {
+          const currentIndex = Math.floor(this.progress() * brandsSpans.length);
+          gsap.set(brandsCursor, {
+            x: currentIndex * (brandsElement.offsetWidth / brandsText.length),
+          });
+        },
+        onComplete: () => {
+          gsap.set(brandsCursor, { opacity: 0 });
+        },
       }
     );
 
@@ -264,22 +306,56 @@ function Home() {
       >
         <Flex maxW="1200px" mx="auto" direction={{ base: "column", lg: "row" }} align="center" gap={12} position="relative">
           <VStack align="flex-start" spacing={12} flex="1">
-            <Heading
-              as="h2"
-              variant="glitch"
-              size="8xl"
-              className="glitch glitch-exclusive"
-              data-text="eXCLUSIVE"
-              ref={exclusiveRef}
-            />
-            <Heading
-              as="h2"
-              variant="glitch"
-              size="8xl"
-              className="glitch glitch-brands"
-              data-text="bRANDS"
-              ref={brandsRef}
-            />
+            <Box position="relative" display="inline-block">
+              <Heading
+                as="h2"
+                variant="glitch"
+                size="8xl"
+                className="glitch glitch-exclusive"
+                data-text="eXCLUSIVE"
+                ref={exclusiveRef}
+              />
+              <Box
+                as="span"
+                ref={exclusiveCursorRef}
+                className="terminal-cursor"
+                position="absolute"
+                top="10%"
+                left="100%"
+                color="#58fb6cd9"
+                fontSize="5.5rem"
+                lineHeight="1"
+                fontWeight="normal"
+                ml="0.1em"
+              >
+                |
+              </Box>
+            </Box>
+            <Box position="relative" display="inline-block">
+              <Heading
+                as="h2"
+                variant="glitch"
+                size="8xl"
+                className="glitch glitch-brands"
+                data-text="bRANDS"
+                ref={brandsRef}
+              />
+              <Box
+                as="span"
+                ref={brandsCursorRef}
+                className="terminal-cursor"
+                position="absolute"
+                top="10%"
+                left="100%"
+                color="#58fb6cd9"
+                fontSize="5.5rem"
+                lineHeight="1"
+                fontWeight="normal"
+                ml="0.1em"
+              >
+                |
+              </Box>
+            </Box>
             <Text fontFamily="'DM Sans', sans-serif" fontSize={{ base: "xl", md: "2xl" }} color="purple.500">
               Exclusive Access
             </Text>
@@ -531,8 +607,8 @@ function Home() {
                 answer: "All products are 100% authentic, verified on the blockchain, and backed by the Authentication Council.",
               },
               {
-                question: "What payment options do you accept?",
-                answer: "We accept cryptocurrency payments via wallet authentication, with additional methods to be announced.",
+                question: "What payment options do you offer?",
+                answer: "We offer cryptocurrency payments via wallet authentication, with additional methods to be announced.",
               },
               {
                 question: "Do you offer international shipping?",
