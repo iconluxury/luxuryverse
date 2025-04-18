@@ -10,127 +10,118 @@ import {
 
 const Footer = () => {
   return (
-    <Box bg="gray.800" color="white" py={10}>
-      <Box maxW="1200px" mx="auto" px={4}>
+    <Box bg="rgba(10, 10, 10, 0.5)" color="white" py={6} backdropFilter="blur(5px)" width="100%">
+      <Box maxW="80rem" mx="auto" px={{ base: 4, md: 8 }}>
         {/* Main Footer Content */}
         <Flex
           direction={{ base: "column", md: "row" }}
-          justify="space-between"
-          align={{ base: "center", md: "flex-start" }}
-          mb={8}
-          textAlign={{ base: "center", md: "left" }}
-          gap={{ base: 8, md: 4 }}
+          justify="flex-start"
+          align="flex-start"
+          mb={6}
+          textAlign="left"
+          gap={{ base: 6, md: 4 }}
         >
-          {/* Left Section: Company Info, Explore, and Shop */}
+          {/* Left Section: Company Info and Links */}
           <Flex
             direction={{ base: "column", md: "row" }}
-            gap={{ base: 8, md: 12 }}
-            align={{ base: "center", md: "flex-start" }}
+            gap={{ base: 6, md: 12 }}
+            align="flex-start"
             flex="2"
           >
             {/* Company Information */}
             <Box maxW={{ base: "100%", md: "400px" }}>
-              <Heading as="h4" size="md" mb={4}>
-                <Link href="https://luxuryverse.com" _hover={{ textDecoration: "none", color: "gray.500" }}>
-                  LuxuryVerse
+              <Heading
+                as="h4"
+                size="xs"
+                fontSize={{ base: '0.5rem', md: '0.875rem' }}
+                color="white"
+                fontFamily="'Special Gothic Expanded One', sans-serif"
+                lineHeight="1.1"
+                mb={4}
+              >
+                <Link href="https://luxuryverse.com" _hover={{ color: "#E0E0E0" }}>
+                  <Flex flexDir="column" align="flex-start" gap={0}>
+                    <span>Luxury</span>
+                    <span>Verse</span>
+                  </Flex>
                 </Link>
               </Heading>
-              <Text color="gray.300" mb={4}>
+              <Text color="gray.400" fontSize="sm">
                 Defining luxury through innovation, authenticity, and global connectivity. Join us in shaping the future of exclusivity.
               </Text>
             </Box>
 
-            {/* Explore Links */}
+            {/* Links (No Explore Title) */}
             <Box>
-              <Heading as="h4" size="md" mb={4}>
-                Explore
-              </Heading>
-              <HStack wrap="wrap" spacing={4} justify={{ base: "center", md: "flex-start" }}>
-                <Link href="/roadmap" color="gray.300" _hover={{ color: "gray.500" }}>
-                  Roadmap
-                </Link>
-                <Link href="/authenticity" color="gray.300" _hover={{ color: "gray.500" }}>
-                  Authenticity
-                </Link>
-                <Link href="/faq" color="gray.300" _hover={{ color: "gray.500" }}>
+              <HStack spacing={4} justify="flex-start">
+                <Link
+                  href="/faq"
+                  color="white"
+                  fontFamily="'Special Gothic Expanded One', sans-serif"
+                  fontWeight="normal"
+                  textTransform="uppercase"
+                  _hover={{ color: "#E0E0E0" }}
+                >
                   FAQ
-                </Link>
-                <Link href="/contact" color="gray.300" _hover={{ color: "gray.500" }}>
-                  Contact
-                </Link>
-              </HStack>
-            </Box>
-
-            {/* Shop Links */}
-            <Box>
-              <Heading as="h4" size="md" mb={4}>
-                Shop
-              </Heading>
-              <HStack wrap="wrap" spacing={4} justify={{ base: "center", md: "flex-start" }}>
-                <Link href="/join" color="gray.300" _hover={{ color: "gray.500" }}>
-                  Join
-                  </Link>
-                <Link href="/collections" color="gray.300" _hover={{ color: "gray.500" }}>
-                  Collections
                 </Link>
               </HStack>
             </Box>
           </Flex>
-
-          {/* Right Section: Contact (Email and Address) */}
-          <Box
-            textAlign={{ base: "center", md: "left" }}
-            flex="1"
-            minW={{ base: "100%", md: "200px" }}
-          >
-            <Heading as="h4" size="md" mb={4}>
-              Contact
-            </Heading>
-            <Text color="gray.300" mb={2}>
-              <strong>Email:</strong>{" "}
-              <Link href="mailto:info@luxuryverse.com" _hover={{ color: "gray.500" }}>
-                info@luxuryverse.com
-              </Link>
-            </Text>
-            <Text color="gray.300">
-              <strong>Address:</strong> 599 Broadway, New York, NY 10012, USA
-            </Text>
-          </Box>
         </Flex>
 
         {/* Bottom Footer - Copyright and Legal Links */}
         <Flex
-          justify="space-between"
+          justify="flex-start"
           align="center"
           borderTop="1px solid"
           borderColor="gray.700"
-          pt={6}
+          pt={4}
           flexWrap="wrap"
           gap={4}
-          textAlign={{ base: "center", md: "left" }}
+          textAlign="left"
         >
           <Text color="gray.400" fontSize="sm">
             © 2025{" "}
-            <Link href="https://luxuryverse.com" color="gray.200" _hover={{ color: "gray.500" }}>
+            <Link href="https://luxuryverse.com" color="gray.200" _hover={{ color: "#E0E0E0" }}>
               LuxuryVerse
             </Link>
             . All rights reserved.
           </Text>
-          <HStack
-            spacing={4}
-            flexWrap="wrap"
-            justify={{ base: "center", md: "flex-end" }}
-          >
-            <Link href="/privacy-policy" color="gray.400" fontSize="sm" _hover={{ color: "gray.500" }}>
+          <HStack spacing={4} justify="flex-start">
+            <Link
+              href="/privacy-policy"
+              color="gray.400"
+              fontSize="sm"
+              fontFamily="'Special Gothic Expanded One', sans-serif"
+              _hover={{ color: "#E0E0E0" }}
+            >
               Privacy Policy
             </Link>
-            <Link href="/terms-conditions" color="gray.400" fontSize="sm" _hover={{ color: "gray.500" }}>
+            <Link
+              href="/terms-conditions"
+              color="gray.400"
+              fontSize="sm"
+              fontFamily="'Special Gothic Expanded One', sans-serif"
+              _hover={{ color: "#E0E0E0" }}
+            >
               Terms and Conditions
             </Link>
-            <Link href="/cookies" color="gray.400" fontSize="sm" _hover={{ color: "gray.500" }}>
+            <Link
+              href="/cookies"
+              color="gray.400"
+              fontSize="sm"
+              fontFamily="'Special Gothic Expanded One', sans-serif"
+              _hover={{ color: "#E0E0E0" }}
+            >
               Cookie Policy
             </Link>
-            <Link href="/opt-out" color="gray.400" fontSize="sm" _hover={{ color: "gray.500" }}>
+            <Link
+              href="/opt-out"
+              color="gray.400"
+              fontSize="sm"
+              fontFamily="'Special Gothic Expanded One', sans-serif"
+              _hover={{ color: "#E0E0E0" }}
+            >
               Opt Out
             </Link>
           </HStack>
