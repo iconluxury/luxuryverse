@@ -3,7 +3,7 @@ import { Link, useNavigate } from '@tanstack/react-router';
 import { createContext, useContext, useState } from 'react';
 
 // AuthContext
-export const AuthContext = createContext({
+export const AuthProvider = createContext({
   user: null,
   isJoining: false,
   login: () => {},
@@ -12,7 +12,7 @@ export const AuthContext = createContext({
 });
 
 export default function TopNav() {
-  const { user, isJoining } = useContext(AuthContext);
+  const { user, isJoining } = useContext(AuthProvider);
   const navigate = useNavigate();
 
   const getButtonProps = () => {
