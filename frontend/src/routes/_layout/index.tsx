@@ -420,7 +420,7 @@ function Home() {
             align={{ base: "center", lg: "flex-start" }}
             spacing={{ base: 4, md: 6 }}
             maxW={{ base: "100%", lg: "800px" }}
-            textAlign={{ base: "center", lg: "left" }}
+            textAlign={{ base: "center", lg: "center" }}
             mx="auto"
           >
             <Box position="relative" display="inline-block" whiteSpace="nowrap">
