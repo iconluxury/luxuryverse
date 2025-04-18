@@ -107,7 +107,6 @@ function LatestDropsPage() {
 
   return (
     <Box
-      bg="gray.900"
       color="white"
       minH="100vh"
       display="flex"
@@ -121,7 +120,7 @@ function LatestDropsPage() {
             <VStack spacing={8} textAlign="center">
               <Heading
                 fontSize={{ base: '2xl', md: '3xl' }}
-                color="green.500"
+                color="white"
               >
                 Upcoming Drops
               </Heading>
