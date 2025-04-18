@@ -316,7 +316,7 @@ function Home() {
             ].map(({ value, label }) => (
               <VStack key={label}>
                 <Text fontSize="4xl" fontWeight="bold" color="cyan.500">
-                  {value
+                  {value}
                 </Text>
                 <Text color="gray.300">{label}</Text>
               </VStack>
