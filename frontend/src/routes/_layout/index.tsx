@@ -537,7 +537,6 @@ function Home() {
             flex="1"
             align="start"
             transition="all 0.3s"
-            _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
           >
             <Heading as="h3" size="xl" mb={4} color="gray.400"
                          textTransform="uppercase"
@@ -579,7 +578,6 @@ function Home() {
             flex="1"
             align="start"
             transition="all 0.3s"
-            _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
           >
             <Heading as="h3" size="xl" mb={4} color="gray.400"
                          textTransform="uppercase"
