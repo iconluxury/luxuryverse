@@ -44,21 +44,21 @@ export default function TopNav() {
         justify="center"
         width="100%"
         zIndex={10}
-        mt={{ base: '2rem', md: 0 }}
+        mt={{ base: '1rem', md: 0 }} // Reduced top margin on mobile
         backdropFilter="blur(5px)"
       >
         <Flex
-          maxW="80rem"
+          maxW={{ base: '100%', md: '80rem' }} // Ensure full width on mobile
           width="100%"
-          px={{ base: '1rem', md: '1rem' }}
+          px={{ base: '0.5rem', md: '1rem' }} // Tighter padding on mobile
           justify={{ base: 'space-between', md: 'space-between' }}
           align="center"
           direction={{ base: 'row', md: 'row' }}
-          gap={{ base: 2, md: 4 }}
+          gap={{ base: 1, md: 2 }} // Reduced gap
         >
           <Heading
-            size={{ base: 'xs', md: 'xs' }} // Extra small size for logo
-            fontSize={{ base: '0.875rem', md: '1rem' }} // Smaller font size: 14px mobile, 16px desktop
+            size="xs" // Smallest heading size
+            fontSize={{ base: '0.75rem', md: '0.875rem' }} // 12px mobile, 14px desktop
             color="var(--color-primary)"
             fontFamily="'Special Gothic Expanded One', sans-serif"
             lineHeight="1.2"
@@ -104,6 +104,7 @@ export default function TopNav() {
             bg="transparent"
             color="var(--color-primary)"
             _hover={{ color: 'var(--color-primary-hover)' }}
+            size="sm" // Smaller button size
           />
         </Flex>
       </Flex>
