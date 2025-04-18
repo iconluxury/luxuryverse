@@ -1,9 +1,20 @@
-import { Box, Text, Image, Grid, Heading, Skeleton, Flex, Icon } from '@chakra-ui/react';
+import {
+  Box,
+  Text,
+  Image,
+  Grid,
+  Heading,
+  Skeleton,
+  Flex,
+  Icon,
+  VStack,
+  Link as ChakraLink,
+} from '@chakra-ui/react';
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
 import { useState, useEffect } from 'react';
 import { LockIcon } from '@chakra-ui/icons';
-import Footer from "@/components/Common/Footer";
+import Footer from '@/components/Common/Footer';
 
 export const Route = createFileRoute('/_layout/collections')({
   component: LatestDropsPage,
@@ -107,80 +118,27 @@ function LatestDropsPage() {
         {/* Upcoming Drops Section */}
         {dropsData.upcoming.length > 0 && (
           <Box mb={16}>
-            <Heading
-              fontSize={{ base: '2xl', md: '3xl' }}
-              mb={8}
-              textAlign="center"
-              bgGradient="linear(to-r, purple.400, pink.400)"
-              bgClip="text"
-            >
-              Upcoming Drops
-            </Heading>
-            <Flex justify="center" gap={8} flexWrap="wrap">
-              {dropsData.upcoming.map(drop => (
-                <Box key={drop.id} width={{ base: '100%', md: '33.33%' }} maxW="400px" textAlign="center">
-                  <Box
-                    borderWidth={0}
-                    borderRadius="xl"
-                    overflow="hidden"
-                    bg="white"
-                    color="gray.900"
-                    opacity={0.7}
-                    boxShadow="0 4px 15px rgba(0, 0, 0, 0.2)"
-                  >
-                    <Box position="relative">
-                      <Image
-                        src={drop.image || 'https://placehold.co/400x400'}
-                        alt={drop.title || 'Drop Image'}
-                        style={{ aspectRatio: '4 / 3', objectFit: 'cover' }}
-                        w="full"
-                        loading="lazy"
-                        filter="grayscale(50%)"
-                      />
-                      <Flex
-                        position="absolute"
-                        top={0}
-                        left={0}
-                        right={0}
-                        bottom={0}
-                        bg="blackAlpha.600"
-                        align="center"
-                        justify="center"
-                        flexDirection="column"
-                        gap={2}
-                      >
-                        <Icon as={LockIcon} boxSize={10} color="white" />
-                        <Text color="white" fontWeight="bold" fontSize="sm">
-                          Unlocks: {drop.unlockDate}
-                        </Text>
-                      </Flex>
-                    </Box>
-                    <Box p={6}>
-                      <Text
-                        fontWeight="bold"
-                        fontSize={{ base: 'lg', md: 'xl' }}
-                        mb={3}
-                        noOfLines={1}
-                      >
-                        {drop.title || 'Untitled Drop'}
-                      </Text>
-                      <Box height={`${maxDescriptionHeight}px`} overflow="hidden">
-                        <Text
-                          fontSize="sm"
-                          color="gray.600"
-                          noOfLines={2}
-                          lineHeight="1.5"
-                        >
-                          {drop.description
-                            ? drop.description.replace(/<\/?p>/g, '')
-                            : 'No description available.'}
-                        </Text>
-                      </Box>
-                    </Box>
-                  </Box>
-                </Box>
-              ))}
-            </Flex>
+            <VStack spacing={8} textAlign="center">
+              <Heading
+                fontSize={{ base: '2xl', md: '3xl' }}
+                color="green.500"
+              >
+                Upcoming Drops
+              </Heading>
+              <Text fontSize="lg" color="white">
+                2025-05-01, 10:00 AM until sold out.
+              </Text>
+              <ChakraLink
+                color="green.500"
+                fontSize="lg"
+                fontWeight="bold"
+                textDecoration="underline"
+                _hover={{ color: "green.400" }}
+                onClick={() => console.log("Notify clicked - no action implemented")}
+              >
+                Notify
+              </ChakraLink>
+            </VStack>
           </Box>
         )}
 
@@ -191,8 +149,7 @@ function LatestDropsPage() {
               fontSize={{ base: '2xl', md: '3xl' }}
               mb={8}
               textAlign="center"
-              bgGradient="linear(to-r, purple.400, pink.400)"
-              bgClip="text"
+              color="white"
             >
               Past Drops
             </Heading>
@@ -205,15 +162,13 @@ function LatestDropsPage() {
                   >
                     <Box
                       role="link"
-                      borderWidth="1px"
+                      bg="gray.900"
+                      border="1px solid"
                       borderColor="gray.700"
-                      borderRadius="xl"
-                      overflow="hidden"
-                      bg="white"
-                      color="gray.900"
-                      _hover={{ boxShadow: 'lg', transform: 'scale(1.03)' }}
-                      transition="all 0.3s ease"
-                      boxShadow="0 4px 15px rgba(0, 0, 0, 0.2)"
+                      borderRadius="md"
+                      p={6}
+                      transition="all 0.3s"
+                      _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
                     >
                       <Box position="relative">
                         <Image
@@ -224,11 +179,12 @@ function LatestDropsPage() {
                           loading="lazy"
                         />
                       </Box>
-                      <Box p={6}>
+                      <Box mt={4}>
                         <Text
                           fontWeight="bold"
                           fontSize={{ base: 'lg', md: 'xl' }}
                           mb={3}
+                          color="gray.400"
                           noOfLines={1}
                         >
                           {drop.title || 'Untitled Drop'}
@@ -236,7 +192,7 @@ function LatestDropsPage() {
                         <Box height={`${maxDescriptionHeight}px`} overflow="hidden">
                           <Text
                             fontSize="sm"
-                            color="gray.600"
+                            color="gray.400"
                             noOfLines={2}
                             lineHeight="1.5"
                           >
