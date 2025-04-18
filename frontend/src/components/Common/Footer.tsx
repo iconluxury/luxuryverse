@@ -69,7 +69,7 @@ const Footer = () => {
           >
             <Text
               fontSize="sm"
-              color="gray.400"
+              color="gray.500"
               lineHeight="1.5"
               fontFamily="'Special Gothic Expanded One', sans-serif"
             >
