@@ -267,7 +267,7 @@ function ProductDetails() {
   if (productLoading) {
     return (
       <Flex justify="center" align="center" minH="100vh" bg="transparent">
-        <Spinner size="xl" color="var(--color-primary-hover)" />
+        <Spinner size="xl" color="green.500" />
       </Flex>
     );
   }
@@ -335,7 +335,7 @@ function ProductDetails() {
                           objectFit="contain"
                           cursor="pointer"
                           borderRadius="md"
-                          border={index === currentImage ? '2px solid var(--color-primary-hover)' : '2px solid transparent'}
+                          border={index === currentImage ? '2px solid green.500' : '2px solid transparent'}
                           onClick={() => setCurrentImage(index)}
                           onError={(e) => (e.currentTarget.src = 'https://placehold.co/80x100')}
                         />
@@ -353,7 +353,7 @@ function ProductDetails() {
                         transform="translateY(-50%)"
                         bg="gray.700"
                         color="white"
-                        _hover={{ bg: 'gray.600' }}
+                        _hover={{ bg: "gray.600" }}
                         borderRadius="full"
                         size="sm"
                         onClick={() => setCurrentImage((prev) => (prev - 1 + validatedImages.length) % validatedImages.length)}
@@ -367,7 +367,7 @@ function ProductDetails() {
                         transform="translateY(-50%)"
                         bg="gray.700"
                         color="white"
-                        _hover={{ bg: 'gray.600' }}
+                        _hover={{ bg: "gray.600" }}
                         borderRadius="full"
                         size="sm"
                         onClick={() => setCurrentImage((prev) => (prev + 1) % validatedImages.length)}
@@ -388,7 +388,7 @@ function ProductDetails() {
                     fontSize="lg"
                     fontWeight="bold"
                     lineHeight="1.5"
-                    style={{ color: 'var(--color-primary-hover)' }}
+                    color="purple.500"
                   >
                     {product.brand || 'Unknown Brand'}
                   </Text>
@@ -397,24 +397,19 @@ function ProductDetails() {
                       <Text
                         fontSize="lg"
                         lineHeight="1.5"
-                        style={{ color: 'var(--color-primary-hover)' }}
+                        color="purple.500"
                       >
                         |
                       </Text>
                       <Tag
+                        size="md"
+                        variant="solid"
                         colorScheme="green"
                         borderRadius="full"
                         fontSize="lg"
                         lineHeight="1.5"
-                        minH="auto"
-                        py={0}
                         px={3}
-                        style={{
-                          color: 'var(--color-primary-hover)',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center'
-                        }}
+                        py={0}
                       >
                         {product.discount}
                       </Tag>
@@ -444,7 +439,7 @@ function ProductDetails() {
                   <Text
                     fontSize={{ base: '3xl', md: '4xl' }}
                     fontWeight="bold"
-                    style={{ color: 'var(--color-primary-hover)' }}
+                    color="green.500"
                   >
                     {product.sale_price || 'N/A'}
                   </Text>
@@ -524,7 +519,7 @@ function ProductDetails() {
                         <Text color="gray.300" fontSize="sm">
                           {topProduct.sale_price || 'N/A'}
                           {topProduct.discount && (
-                            <Text as="span" style={{ color: 'var(--color-primary-hover)' }} ml={1}>
+                            <Text as="span" color="green.500" ml={1}>
                               ({topProduct.discount})
                             </Text>
                           )}
@@ -547,3 +542,5 @@ function ProductDetails() {
     </ErrorBoundary>
   );
 }
+
+export default ProductDetails;

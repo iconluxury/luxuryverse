@@ -1,5 +1,6 @@
 /* Import Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Special+Gothic+Expanded+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Micro+5&display=swap');
 
 /* Define CSS custom properties */
 :root {
@@ -16,7 +17,7 @@
   --font-family-body: 'DM Sans', sans-serif;
   --font-family-heading: 'Special Gothic Expanded One', sans-serif;
   --font-family-logo: 'Special Gothic Expanded One', sans-serif;
-  --font-family-glitch: 'Special Gothic Expanded One', sans-serif;
+  --font-family-glitch: 'Micro 5', sans-serif; /* Updated to Micro 5 */
   --font-size-base: 1rem; /* 16px */
   --font-size-sm: 0.875rem; /* 14px */
   --font-size-lg: 1.125rem; /* 18px */
@@ -332,4 +333,11 @@ input::placeholder, textarea::placeholder {
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   border: 0;
+}
+
+/* Micro 5 font class */
+.micro-5-regular {
+  font-family: "Micro 5", sans-serif;
+  font-weight: 400;
+  font-style: normal;
 }

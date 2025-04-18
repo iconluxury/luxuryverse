@@ -10,7 +10,7 @@ const theme = extendTheme({
   fonts: {
     heading: "'Special Gothic Expanded One', sans-serif",
     body: "'DM Sans', sans-serif",
-    glitch: "'Special Gothic Expanded One', sans-serif",
+    glitch: "'Micro 5', sans-serif", // Updated to Micro 5 for glitch effect
   },
   colors: {
     gray: {
@@ -28,14 +28,14 @@ const theme = extendTheme({
     purple: {
       300: "#d4b8f0d9",
       400: "#cbb0e8d9",
-      500: "#c2a0e5d9", // Light purple
+      500: "#c2a0e5d9", // Light purple, matches --color-primary
       600: "#a082c4d9",
       700: "#8569a3d9",
     },
     green: {
       300: "#7bff8cd9",
       400: "#6afe7dd9",
-      500: "#58fb6cd9", // Green for hover
+      500: "#58fb6cd9", // Green for hover, matches --color-primary-hover
       600: "#3cd950d9",
       700: "#2bb33cd9",
     },
@@ -47,7 +47,7 @@ const theme = extendTheme({
     },
     white: "#FFFFFF",
     black: {
-      900: "#0A0A0A", // Deep black
+      900: "#0A0A0A", // Deep black, matches --color-background
     },
   },
   breakpoints: {
@@ -84,7 +84,7 @@ const theme = extendTheme({
     none: 1,
     shorter: 1.25,
     short: 1.375,
-    base: 1.7,
+    base: 1.7, // Matches --line-height-base
     tall: 1.625,
     taller: 2,
   },
@@ -106,16 +106,16 @@ const theme = extendTheme({
   },
   radii: {
     none: "0",
-    sm: "0.125rem",
-    md: "0.5rem",
-    lg: "1rem",
-    full: "9999px",
+    sm: "0.125rem", // Matches --border-radius-sm
+    md: "0.5rem", // Matches --border-radius-md
+    lg: "1rem", // Matches --border-radius-lg
+    full: "9999px", // Matches --border-radius-full
   },
   shadows: {
-    sm: "0 1px 2px 0 rgba(0, 0, 0, 0.2)",
+    sm: "0 1px 2px 0 rgba(0, 0, 0, 0.2)", // Matches --shadow-sm
     base: "0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.2)",
-    md: "0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2)",
-    lg: "0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2)",
+    md: "0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2)", // Matches --shadow-md
+    lg: "0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2)", // Matches --shadow-lg
     xl: "0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2)",
   },
   components: {
@@ -149,7 +149,7 @@ const theme = extendTheme({
           textTransform: "uppercase",
         },
         glitch: {
-          fontFamily: "'Special Gothic Expanded One', sans-serif",
+          fontFamily: "'Micro 5', sans-serif", // Updated to Micro 5
           fontWeight: "normal",
           color: "purple.500",
         },
@@ -303,7 +303,7 @@ const theme = extendTheme({
         container: {
           fontFamily: "'DM Sans', sans-serif",
           color: "purple.500",
-          lineHeight: "1.5", // Match Text's lineHeight in ProductDetails
+          lineHeight: "1.5", // Matches ProductDetails Text
           minHeight: "auto", // Prevent default minHeight
           paddingY: 0, // Remove vertical padding
           paddingX: 3, // Consistent horizontal padding
@@ -312,9 +312,9 @@ const theme = extendTheme({
           justifyContent: "center",
         },
         label: {
-          fontSize: "lg", // Match Text's fontSize
+          fontSize: "lg", // Matches ProductDetails Text
           lineHeight: "1.5", // Ensure text inside Tag aligns
-          fontWeight: "normal", // Match brand Text's weight
+          fontWeight: "normal", // Matches brand Text
         },
       },
       sizes: {
@@ -339,7 +339,7 @@ const theme = extendTheme({
         },
         solid: {
           container: {
-            bg: "green.500",
+            bg: "green.500", // Matches --color-primary-hover
             color: "black.900",
             _hover: {
               bg: "green.600",
@@ -352,8 +352,8 @@ const theme = extendTheme({
   styles: {
     global: {
       "html, body": {
-        bg: "black.900",
-        color: "purple.500",
+        bg: "black.900", // Matches --color-background
+        color: "purple.500", // Matches --color-text
         fontFamily: "'DM Sans', sans-serif",
         lineHeight: "base",
         scrollBehavior: "smooth",
