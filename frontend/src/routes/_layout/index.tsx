@@ -585,44 +585,48 @@ function Home() {
               w="100%"
             >
               {collections.flatMap((collection) =>
-                collection.products.map((product) => (
-                  <VStack
-                    key={product.id}
-                    bg="gray.800"
-                    border="1px solid"
-                    borderColor="gray.700"
-                    borderRadius="md"
-                    p={4}
-                    align="start"
-                    transition="all 0.3s"
-                    _hover={{ borderColor: "green.500", shadow: "md" }}
-                  >
-                    <Image
-                      src={product.thumbnail}
-                      alt={`${product.title} Image`}
+                Array.isArray(collection.products) ? (
+                  collection.products.map((product) => (
+                    <VStack
+                      key={product.id}
+                      bg="gray.800"
+                      border="1px solid"
+                      borderColor="gray.700"
                       borderRadius="md"
-                      objectFit="cover"
-                      h="150px"
-                      w="100%"
-                      fallbackSrc="/images/placeholder.jpg"
-                    />
-                    <Text fontSize="md" fontWeight="bold" color="purple.500">
-                      {product.title}
-                    </Text>
-                    <Text color="purple.500">{product.price}</Text>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      borderColor="purple.500"
-                      color="purple.500"
-                      w="full"
-                      mt={2}
-                      _hover={{ bg: "green.500", color: "black.900" }}
+                      p={4}
+                      align="start"
+                      transition="all 0.3s"
+                      _hover={{ borderColor: "green.500", shadow: "md" }}
                     >
-                      View Details
-                    </Button>
-                  </VStack>
-                ))
+                      <Image
+                        src={product.thumbnail}
+                        alt={`${product.title} Image`}
+                        borderRadius="md"
+                        objectFit="cover"
+                        h="150px"
+                        w="100%"
+                        fallbackSrc="/images/placeholder.jpg"
+                      />
+                      <Text fontSize="md" fontWeight="bold" color="purple.500">
+                        {product.title}
+                      </Text>
+                      <Text color="purple.500">{product.price}</Text>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        borderColor="purple.500"
+                        color="purple.500"
+                        w="full"
+                        mt={2}
+                        _hover={{ bg: "green.500", color: "black.900" }}
+                      >
+                        View Details
+                      </Button>
+                    </VStack>
+                  ))
+                ) : (
+                  []
+                )
               )}
             </Grid>
           )}
