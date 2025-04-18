@@ -127,7 +127,7 @@ function LatestDropsPage() {
         <Text fontSize="xl" color="white" mt={12}>
   2025-05-01
   <br />
-  <Text as="span" fontSize="lg">
+  <Text as="span" fontSize="lg" color="white">
     10:00 AM -
   </Text>
   <Text as="span" fontSize="lg" color="gray.200">
