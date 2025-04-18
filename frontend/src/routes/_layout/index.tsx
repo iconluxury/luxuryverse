@@ -496,7 +496,7 @@ function Home() {
             </Button>
           </VStack>
           <Box
-  mt={{ base: 6, md: 8 }} // Reduced from 6/8 to 2/4
+  mt={{ base: 10, md: 12 }} // Reduced from 6/8 to 2/4
   overflow="hidden"
   width="100%"
   maxW={{ base: "1200px", lg: "1600px" }}
