@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null); // e.g., { address, xUsername, xProfile }
   const [isJoining, setJoining] = useState(false);
 
-  const login = async (userData) => {
+  const login | async (userData) => {
     setUser(userData);
     setJoining(false);
   };
@@ -71,35 +71,87 @@ export default function TopNav() {
       align="center"
       px={{ base: 4, md: 8 }}
     >
-      <Heading size="md" color="purple.300">
-        <Link to="/">LuxuryVerse</Link>
+      <Heading
+        size="md"
+        color="purple.300"
+        fontFamily="'YourCustomFont', sans-serif"
+      >
+        <Link
+          to="/"
+          style={{ fontFamily: "'YourCustomFont', sans-serif", color: 'inherit' }}
+        >
+          LuxuryVerse
+        </Link>
       </Heading>
       <Flex gap={4} alignItems="center">
-        <Link to="/" style={{ color: 'white', textDecoration: 'none' }}>
+        <Link
+          to="/"
+          style={{
+            color: 'white',
+            textDecoration: 'none',
+            fontFamily: "'YourCustomFont', sans-serif",
+          }}
+        >
           Home
         </Link>
-        <Link to="/roadmap" style={{ color: 'white', textDecoration: 'none' }}>
+        <Link
+          to="/roadmap"
+          style={{
+            color: 'white',
+            textDecoration: 'none',
+            fontFamily: "'YourCustomFont', sans-serif",
+          }}
+        >
           Roadmap
         </Link>
-        <Link to="/authenticity" style={{ color: 'white', textDecoration: 'none' }}>
+        <Link
+          to="/authenticity"
+          style={{
+            color: 'white',
+            textDecoration: 'none',
+            fontFamily: "'YourCustomFont', sans-serif",
+          }}
+        >
           Authenticity
         </Link>
-        <Link to="/faq" style={{ color: 'white', textDecoration: 'none' }}>
+        <Link
+          to="/faq"
+          style={{
+            color: 'white',
+            textDecoration: 'none',
+            fontFamily: "'YourCustomFont', sans-serif",
+          }}
+        >
           FAQ
         </Link>
-        <Link to="/contact" style={{ color: 'white', textDecoration: 'none' }}>
+        <Link
+          to="/contact"
+          style={{
+            color: 'white',
+            textDecoration: 'none',
+            fontFamily: "'YourCustomFont', sans-serif",
+          }}
+        >
           Contact
         </Link>
         <Button
           onClick={onClick}
           bg={bg}
           color={color}
-          _hover={{ bg: bg === 'purple.500' ? 'purple.600' : bg === 'yellow.400' ? 'yellow.500' : 'purple.400' }}
+          _hover={{
+            bg:
+              bg === 'purple.500'
+                ? 'purple.600'
+                : bg === 'yellow.400'
+                ? 'yellow.500'
+                : 'purple.400',
+          }}
           borderRadius="md"
           px={4}
           py={2}
           fontWeight="medium"
           size="sm"
+          fontFamily="'YourCustomFont', sans-serif"
         >
           {text}
         </Button>
