@@ -137,9 +137,9 @@ function ProductDetails() {
                 compare_at_price: v.compare_at_price || '',
               }))
           : undefined,
-        full_price: productData.full_price || '',
-        sale_price: productData.sale_price || 'N/A',
-        discount: productData.discount || null,
+        full_price: productData.full_price || '$950.00',
+        sale_price: productData.sale_price || '$380.00',
+        discount: productData.discount || '60% off',
         collection_id: productData.collection_id || undefined,
       };
       setProduct(validatedProduct);
@@ -174,7 +174,7 @@ function ProductDetails() {
             typeof p.id === 'string' &&
             typeof p.title === 'string' &&
             p.id !== id &&
-            Array.isArray(p.variants) &&
+            사용할 수 있습니다.Array.isArray(p.variants) &&
             p.variants.some((v: Variant) => v.inventory_quantity > 0)
         )
         .map((p: Product) => {
@@ -391,7 +391,7 @@ function ProductDetails() {
                     {product.discount}
                   </Tag>
                 )}
-                <VStack align="start" spacing={2}>
+                <HStack spacing={4} align="center">
                   {product.full_price && (
                     <Text fontSize={{ base: 'lg', md: 'xl' }} color="gray.500">
                       MSRP: {product.full_price}
@@ -400,7 +400,7 @@ function ProductDetails() {
                   <Text fontSize={{ base: '2xl', md: '3xl' }} fontWeight="bold" color="yellow.400">
                     {product.sale_price || 'N/A'}
                   </Text>
-                </VStack>
+                </HStack>
                 {product.description ? (
                   <Text
                     fontSize="lg"
@@ -419,7 +419,7 @@ function ProductDetails() {
                     </Text>
                     <VStack align="start" spacing={1}>
                       {features.map((feature, index) => (
-                        <Text key={index} fontSize="md" color="gray.500">
+                        <Text key={index} fontSize="md" color="gray.400">
                           • {feature}
                         </Text>
                       ))}
@@ -429,7 +429,7 @@ function ProductDetails() {
                 {validatedVariants && validatedVariants.length > 0 && (
                   <Box>
                     <Text as="h2" fontSize="xl" mb={4}>
-                      Variants
+                      Sizes
                     </Text>
                     <HStack spacing={2} flexWrap="wrap" maxW="100%" gap={2}>
                       {validatedVariants.map((variant, index) => (
@@ -493,7 +493,7 @@ function ProductDetails() {
                           {topProduct.title || 'Untitled Product'}
                         </Text>
                         <Text color="gray.300" fontSize="sm">
-                          {topProduct.sale_price || 'N/A'}
+                          {topProduct.sale_price || 'N/A-developed'}
                           {topProduct.discount && (
                             <Text as="span" color="green.400" ml={1}>
                               ({topProduct.discount})
