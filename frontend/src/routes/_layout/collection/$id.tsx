@@ -1,12 +1,43 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { Flex, Spinner, Box, Text, SimpleGrid, VStack, Heading, Skeleton, SkeletonText, Button } from '@chakra-ui/react';
+import { Flex, Spinner, Box, Text, SimpleGrid, VStack, Heading, Skeleton, SkeletonText } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 import { Link } from '@tanstack/react-router';
 import { ErrorBoundary } from 'react-error-boundary';
 import Footer from '../../../components/Common/Footer';
 import { Image } from '@chakra-ui/react';
 
-// ... Interfaces remain unchanged ...
+// Interfaces
+interface Variant {
+  id: string;
+  title: string;
+  size: string;
+  inventory_quantity: number;
+  price: string;
+  compare_at_price: string;
+}
+
+interface Product {
+  id: string;
+  title: string;
+  description: string;
+  brand: string;
+  thumbnail: string;
+  images?: string[];
+  variants?: Variant[];
+  full_price: string;
+  sale_price: string;
+  discount: string | null;
+  collection_id?: string;
+  total_inventory?: number;
+  discount_value?: number;
+}
+
+interface Collection {
+  id: string;
+  title: string;
+  description?: string;
+  products: Product[];
+}
 
 function ErrorFallback({ error }: { error: Error }) {
   console.error('ErrorBoundary caught:', error, error.stack);
