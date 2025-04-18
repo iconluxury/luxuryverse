@@ -409,7 +409,12 @@ function ProductDetails() {
                         minH="auto"
                         py={0}
                         px={3}
-                        style={{ color: 'var(--color-primary-hover)' }}
+                        style={{
+                          color: 'var(--color-primary-hover)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center'
+                        }}
                       >
                         {product.discount}
                       </Tag>
@@ -519,7 +524,7 @@ function ProductDetails() {
                         <Text color="gray.300" fontSize="sm">
                           {topProduct.sale_price || 'N/A'}
                           {topProduct.discount && (
-                            <Text as="span" color="green.400" ml={1}>
+                            <Text as="span" style={{ color: 'var(--color-primary-hover)' }} ml={1}>
                               ({topProduct.discount})
                             </Text>
                           )}
