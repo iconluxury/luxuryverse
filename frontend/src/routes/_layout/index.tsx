@@ -460,7 +460,6 @@ function Home() {
             </Flex>
           </Flex>
         </Flex>
-      </Box>
 
       {/* Cards Section: Luxury Brands, Exclusive Drops, Authentic Goods */}
       <Box py={16} px={{ base: 4, md: 8 }} maxW="1200px" mx="auto">
