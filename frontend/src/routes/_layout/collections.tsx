@@ -124,7 +124,7 @@ function LatestDropsPage() {
         >
           Upcoming
         </Heading>
-        <Text fontSize="lg" color="white" mt={12}>
+        <Text fontSize="xl" color="white" mt={12}>
         2025-05-01
         <br />
         10:00 AM -
@@ -135,7 +135,7 @@ function LatestDropsPage() {
           <ChakraLink
             as="span"
             color="green.500"
-            fontSize="lg"
+            fontSize="xl"
             fontWeight="bold"
             textDecoration="underline"
             _hover={{ color: "green.400" }}
