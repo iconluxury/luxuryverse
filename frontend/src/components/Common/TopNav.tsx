@@ -57,8 +57,8 @@ export default function TopNav() {
           gap={{ base: 2, md: 4 }}
         >
           <Heading
-            size={{ base: 'sm', md: 'sm' }} // Smaller size for logo
-            fontSize={{ base: '1rem', md: '1.25rem' }} // Fine-tuned font size
+            size={{ base: 'xs', md: 'xs' }} // Extra small size for logo
+            fontSize={{ base: '0.875rem', md: '1rem' }} // Smaller font size: 14px mobile, 16px desktop
             color="var(--color-primary)"
             fontFamily="'Special Gothic Expanded One', sans-serif"
             lineHeight="1.2"
