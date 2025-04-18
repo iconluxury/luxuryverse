@@ -46,7 +46,7 @@ function ErrorFallback({ error }: { error: Error }) {
 }
 
 // Define the route
-export const Route = createFileRoute('/_layout/collections/$id')({
+export const Route = createFileRoute('/_layout/collection/$id')({
   component: CollectionDetails,
 });
 
