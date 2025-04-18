@@ -242,7 +242,7 @@ function CollectionDetails() {
   style={{ aspectRatio: '3 / 4' }}
   bg="white"
   filter="brightness(0.85)" //85% of original
->4
+>
   <Image
     src={product.thumbnail}
     alt={`${cleanedTitle} by ${product.brand || 'Unknown'}`}
