@@ -10,7 +10,7 @@ const theme = extendTheme({
   fonts: {
     heading: "'Special Gothic Expanded One', sans-serif",
     body: "'DM Sans', sans-serif",
-    glitch: "'Rubik Glitch', system-ui",
+    hero: "'Special Gothic Expanded One', sans-serif",
   },
   colors: {
     gray: {
@@ -31,7 +31,6 @@ const theme = extendTheme({
       500: "#c2a0e5d9", // Light purple
       600: "#a082c4d9",
       700: "#8569a3d9",
-      800: "#a058fbd9", // Split complement (purple)
     },
     green: {
       300: "#7bff8cd9",
@@ -40,9 +39,13 @@ const theme = extendTheme({
       600: "#3cd950d9",
       700: "#2bb33cd9",
     },
-    red: {
-      500: "#fb58a0d9", // Split complement (red)
+    orange: {
+      500: "#fbac58d9", // Orange for glitch
     },
+    cyan: {
+      500: "#00e5ffd9", // Cyan for glitch
+    },
+    white: "#FFFFFF",
     black: {
       900: "#0A0A0A", // Deep black
     },
@@ -145,8 +148,8 @@ const theme = extendTheme({
           letterSpacing: "2px",
           textTransform: "uppercase",
         },
-        glitch: {
-          fontFamily: "'Rubik Glitch', system-ui",
+        hero: {
+          fontFamily: "'Special Gothic Expanded One', sans-serif",
           fontWeight: "normal",
           color: "purple.500",
         },

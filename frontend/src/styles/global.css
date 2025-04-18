@@ -1,5 +1,5 @@
 /* Import Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Rubik+Glitch&family=Special+Gothic+Expanded+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Special+Gothic+Expanded+One&display=swap');
 
 /* Define CSS custom properties */
 :root {
@@ -16,7 +16,7 @@
   --font-family-body: 'DM Sans', sans-serif;
   --font-family-heading: 'Special Gothic Expanded One', sans-serif;
   --font-family-logo: 'Special Gothic Expanded One', sans-serif;
-  --font-family-glitch: 'Rubik Glitch', system-ui;
+  --font-family-hero: 'Special Gothic Expanded One', sans-serif;
   --font-size-base: 1rem; /* 16px */
   --font-size-sm: 0.875rem; /* 14px */
   --font-size-lg: 1.125rem; /* 18px */
@@ -211,7 +211,7 @@ input::placeholder, textarea::placeholder {
 }
 
 .btn-outline:hover {
-  background: var(--color-primary);
+  background: var(--color-primary-hover);
   color: var(--color-text);
 }
 
@@ -225,118 +225,34 @@ input::placeholder, textarea::placeholder {
 /* Glitch Effect for Hero Heading */
 .glitch {
   position: relative;
-  color: var(--color-primary);
-  text-transform: uppercase;
-  animation: glitch-color 4s linear infinite;
+  font-family: var(--font-family-hero);
+  text-transform: none; /* Preserve mixed case */
 }
 
-.glitch-exclusive {
-  animation: glitch-exclusive 0.8s linear infinite;
+/* Letter styling for typing effect */
+.glitch-letter {
+  display: inline-block;
+  opacity: 0; /* Start hidden for typing effect */
 }
 
-.glitch-exclusive::before,
-.glitch-exclusive::after {
+/* Pseudo-elements for glitch effect */
+.glitch::before,
+.glitch::after {
   content: attr(data-text);
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  color: var(--color-primary); /* Matches base text */
+  color: inherit; /* Matches base text color */
 }
 
-.glitch-exclusive::before {
-  animation: glitch-exclusive-top 0.8s linear infinite, glitch-color 4s linear infinite;
+.glitch::before {
   clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
 }
 
-.glitch-exclusive::after {
-  animation: glitch-exclusive-bottom 1.2s linear infinite, glitch-color 4s linear infinite;
+.glitch::after {
   clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%);
-}
-
-.glitch-brands {
-  animation: glitch-brands 0.9s linear infinite 0.3s;
-}
-
-.glitch-brands::before,
-.glitch-brands::after {
-  content: attr(data-text);
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  color: var(--color-primary); /* Matches base text */
-}
-
-.glitch-brands::before {
-  animation: glitch-brands-top 0.9s linear infinite 0.3s, glitch-color 4s linear infinite 0.3s;
-  clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
-}
-
-.glitch-brands::after {
-  animation: glitch-brands-bottom 1.3s linear infinite 0.3s, glitch-color 4s linear infinite 0.3s;
-  clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%);
-}
-
-/* Color cycling animation for glitch effect */
-@keyframes glitch-color {
-  0%, 20% { color: #c2a0e5d9; } /* Light purple */
-  21%, 25% { color: #a058fbd9; } /* Purple (split complement) */
-  26%, 45% { color: #c2a0e5d9; } /* Light purple */
-  46%, 50% { color: #fb58a0d9; } /* Red (split complement) */
-  51%, 100% { color: #c2a0e5d9; } /* Light purple */
-}
-
-/* Random-like movement for Exclusive */
-@keyframes glitch-exclusive {
-  0%, 100% { transform: translate(0, 0); }
-  20% { transform: translate(4px, 2px) skew(2deg); }
-  40% { transform: translate(-3px, -1px) skew(-3deg); }
-  60% { transform: translate(2px, -2px) skew(4deg); }
-  80% { transform: translate(-4px, 1px) skew(-2deg); }
-}
-
-@keyframes glitch-exclusive-top {
-  0%, 100% { transform: translate(0, 0); }
-  20% { transform: translate(6px, -5px); }
-  40% { transform: translate(-5px, 4px); }
-  60% { transform: translate(3px, -3px); }
-  80% { transform: translate(-3px, 2px); }
-}
-
-@keyframes glitch-exclusive-bottom {
-  0%, 100% { transform: translate(0, 0); }
-  20% { transform: translate(-5px, 3px); }
-  40% { transform: translate(4px, -2px); }
-  60% { transform: translate(-3px, 1px); }
-  80% { transform: translate(2px, -4px); }
-}
-
-/* Random-like movement for Brands */
-@keyframes glitch-brands {
-  0%, 100% { transform: translate(0, 0); }
-  15% { transform: translate(5px, -1px) skew(3deg); }
-  30% { transform: translate(-4px, 2px) skew(-2deg); }
-  45% { transform: translate(3px, -3px) skew(5deg); }
-  60% { transform: translate(-2px, 1px) skew(-4deg); }
-}
-
-@keyframes glitch-brands-top {
-  0%, 100% { transform: translate(0, 0); }
-  15% { transform: translate(7px, -6px); }
-  30% { transform: translate(-6px, 5px); }
-  45% { transform: translate(4px, -4px); }
-  60% { transform: translate(-4px, 3px); }
-}
-
-@keyframes glitch-brands-bottom {
-  0%, 100% { transform: translate(0, 0); }
-  15% { transform: translate(-6px, 4px); }
-  30% { transform: translate(5px, -3px); }
-  45% { transform: translate(-4px, 2px); }
-  60% { transform: translate(3px, -5px); }
 }
 
 /* Logo Styling */
