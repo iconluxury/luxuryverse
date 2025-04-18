@@ -109,7 +109,7 @@ function LatestDropsPage() {
             <Heading
               fontSize={{ base: '2xl', md: '3xl' }}
               mb={8}
-柏              textAlign="center"
+              textAlign="center"
               color="white"
             >
               Upcoming Drops
@@ -124,55 +124,56 @@ function LatestDropsPage() {
                     overflow="hidden"
                     bg="white"
                     color="gray.900"
-                    opacity={0.7}
+                    opacity={drop.isLocked ? 0.7 : 1}
                     transition="all 0.3s ease"
                     boxShadow="0 4px 15px rgba(0, 0, 0, 0.2)"
                     p={6}
                   >
-                    <Flex
-                      align="center"
-                      justify="center"
-                      flexDirection="column"
-                      gap={4}
-                      minH="150px"
+                    <Text
+                      fontWeight="bold"
+                      fontSize={{ base: 'lg', md: 'xl' }}
+                      mb={3}
+                      noOfLines={1}
                     >
-                      <Icon as={TimeIcon} boxSize={8} color="gray.600" />
-                      <Text fontWeight="bold" fontSize="sm" color="gray.600">
-                        Unlocks: {drop.unlockDate}
-                      </Text>
-                      <Button
-                        size="sm"
-                        colorScheme="purple"
-                        variant="outline"
-                        borderColor="gray.600"
-                        color="gray.600"
-                        _hover={{ bg: 'purple.600', borderColor: 'purple.600', color: 'white' }}
-                      >
-                        Notify Me
-                      </Button>
-                    </Flex>
-                    <Box mt={4}>
+                      {drop.title || 'Untitled Drop'}
+                    </Text>
+                    <Box height={`${maxDescriptionHeight}px`} overflow="hidden" mb={4}>
                       <Text
-                        fontWeight="bold"
-                        fontSize={{ base: 'lg', md: 'xl' }}
-                        mb={3}
-                        noOfLines={1}
+                        fontSize="sm"
+                        color="gray.600"
+                        noOfLines={2}
+                        lineHeight="1.5"
                       >
-                        {drop.title || 'Untitled Drop'}
+                        {drop.description
+                          ? drop.description.replace(/<\/?p>/g, '')
+                          : 'No description available.'}
                       </Text>
-                      <Box height={`${maxDescriptionHeight}px`} overflow="hidden">
-                        <Text
-                          fontSize="sm"
-                          color="gray.600"
-                          noOfLines={2}
-                          lineHeight="1.5"
-                        >
-                          {drop.description
-                            ? drop.description.replace(/<\/?p>/g, '')
-                            : 'No description available.'}
-                        </Text>
-                      </Box>
                     </Box>
+                    {drop.isLocked && (
+                      <Flex
+                        align="center"
+                        justify="space-between"
+                        gap={4}
+                        flexWrap="wrap"
+                      >
+                        <Flex align="center" gap={2}>
+                          <Icon as={TimeIcon} boxSize={5} color="gray.600" />
+                          <Text fontSize="sm" color="gray.600">
+                            Shop Opens: {drop.unlockDate}
+                          </Text>
+                        </Flex>
+                        <Button
+                          size="sm"
+                          colorScheme="purple"
+                          variant="outline"
+                          borderColor="gray.600"
+                          color="gray.600"
+                          _hover={{ bg: 'purple.600', borderColor: 'purple.600', color: 'white' }}
+                        >
+                          Notify Me
+                        </Button>
+                      </Flex>
+                    )}
                   </Box>
                 </Box>
               ))}
