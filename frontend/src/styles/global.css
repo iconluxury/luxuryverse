@@ -1,24 +1,24 @@
 /* Import Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Nabla&family=Rubik+Glitch&family=Special+Gothic+Expanded+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Rubik+Glitch&family=Special+Gothic+Expanded+One&display=swap');
 
 /* Define CSS custom properties */
 :root {
   /* Colors */
-  --color-background: #0A0A0A; /* black.900 */
-  --color-text: #F5F6F5; /* gray.50 */
-  --color-muted: #A8ADA8; /* gray.300 */
-  --color-primary: #D4A017; /* gold.500 */
-  --color-primary-hover: #B8860B; /* gold.600 */
-  --color-accent: #2A6041; /* emerald.500 */
-  --color-accent-hover: #1F4A33; /* emerald.600 */
-  --color-secondary: #1C2526; /* gray.900 */
-  --color-border: #464E46; /* gray.700 */
+  --color-background: #0A0A0A; /* Deep black */
+  --color-text: #E6E6E6; /* Off-white */
+  --color-muted: #99A8B2; /* Light gray-blue */
+  --color-primary: #00E5FF; /* Light cyan */
+  --color-primary-hover: #00B8CC; /* Darker cyan */
+  --color-accent: #00B7EB; /* Neon blue */
+  --color-accent-hover: #009BC7; /* Deeper neon blue */
+  --color-secondary: #1A2526; /* Dark blue-gray */
+  --color-border: #3A4A4F; /* Medium blue-gray */
 
   /* Typography */
   --font-family-body: 'DM Sans', sans-serif;
-  --font-family-heading: 'Rubik Glitch', system-ui;
+  --font-family-heading: 'Special Gothic Expanded One', sans-serif;
   --font-family-logo: 'Special Gothic Expanded One', sans-serif;
-  --font-family-nabla: 'Nabla', system-ui;
+  --font-family-glitch: 'Rubik Glitch', system-ui;
   --font-size-base: 1rem; /* 16px */
   --font-size-sm: 0.875rem; /* 14px */
   --font-size-lg: 1.125rem; /* 18px */
@@ -64,7 +64,7 @@
 * {
   margin: 0;
   padding: 0;
-  boxSizing: border-box;
+  box-sizing: border-box;
 }
 
 html {
@@ -85,7 +85,7 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-family-heading);
   font-weight: var(--font-weight-normal);
   color: var(--color-primary);
-  lineHeight: var(--line-height-heading);
+  line-height: var(--line-height-heading);
   margin-bottom: var(--spacing-md);
 }
 
@@ -177,7 +177,7 @@ input:focus, textarea:focus {
   box-shadow: 0 0 0 1px var(--color-primary);
 }
 
-input::placeholders, textarea::placeholder {
+input::placeholder, textarea::placeholder {
   color: var(--color-muted);
   opacity: 0.6;
 }
@@ -222,7 +222,7 @@ input::placeholders, textarea::placeholder {
   padding: 0 var(--spacing-md);
 }
 
-/* Glitch Effect for Headings */
+/* Glitch Effect for Hero Heading */
 .glitch {
   position: relative;
   color: var(--color-primary);
@@ -247,7 +247,7 @@ input::placeholders, textarea::placeholder {
 }
 
 .glitch::after {
-  color: #6B46C1; /* purple.500 */
+  color: #0088A3; /* Darker blue for contrast */
   animation: glitch-bottom 1.5s linear infinite;
   clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%);
 }
@@ -277,14 +277,6 @@ input::placeholders, textarea::placeholder {
   text-transform: uppercase;
   letter-spacing: 2px;
   color: var(--color-primary);
-}
-
-/* Nabla for Subtitles */
-.nabla-text {
-  font-family: var(--font-family-nabla);
-  font-weight: var(--font-weight-normal);
-  color: var(--color-accent);
-  font-variation-settings: "EDPT" 100, "EHLT" 12;
 }
 
 /* Utilities */
