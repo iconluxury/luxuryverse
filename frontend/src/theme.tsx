@@ -10,7 +10,7 @@ const theme = extendTheme({
   fonts: {
     heading: "'Special Gothic Expanded One', sans-serif",
     body: "'DM Sans', sans-serif",
-    glitch: "'Jersey 15', sans-serif", // Updated to Jersey 15 for glitch effect
+    glitch: "'Dela Gothic One', sans-serif", 
   },
   colors: {
     gray: {
@@ -149,7 +149,7 @@ const theme = extendTheme({
           textTransform: "uppercase",
         },
         glitch: {
-          fontFamily: "'Jersey 15', sans-serif", // Updated to Jersey 15
+          fontFamily: "'Dela Gothic One', sans-serif", // Updated to Dela Gothic One
           fontWeight: "normal",
           color: "purple.500",
         },
