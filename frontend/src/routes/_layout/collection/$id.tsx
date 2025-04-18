@@ -41,7 +41,7 @@ interface Collection {
 function ErrorFallback({ error }: { error: Error }) {
   console.error('ErrorBoundary caught:', error, error.stack);
   return (
-    <Box textAlign="center" py={16} color="gray.300" bg="transparent" w="100%">
+    <Box textAlign="center" py={16} color="gray.200" bg="transparent" w="100%">
       <Text fontSize="lg" mb={4}>
         An unexpected error occurred.
       </Text>
@@ -165,7 +165,7 @@ function CollectionDetails() {
 
   if (error || !collection) {
     return (
-      <Box textAlign="center" py={16} color="gray.300" bg="transparent" w="100%">
+      <Box textAlign="center" py={16} color="gray.200" bg="transparent" w="100%">
         <Text fontSize="lg" mb={4}>
           {error?.message || `Collection not found for ID: ${id}`}
         </Text>
@@ -193,7 +193,7 @@ function CollectionDetails() {
               {collection.title}
             </Heading>
             {collection.description && (
-              <Box fontSize="md" color="gray.300" dangerouslySetInnerHTML={{ __html: collection.description }} />
+              <Box fontSize="md" color="gray.200" dangerouslySetInnerHTML={{ __html: collection.description }} />
             )}
             {collection.products.length > 0 ? (
               <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing={6} w="100%">
@@ -248,7 +248,7 @@ function CollectionDetails() {
                           <Text fontWeight="bold" fontSize="md" color="white" noOfLines={1}>
                             {product.brand}
                           </Text>
-                          <Text fontSize="sm" color="gray.300" noOfLines={1}>
+                          <Text fontSize="sm" color="gray.200" noOfLines={1}>
                             {cleanTitle}
                           </Text>
                           <Flex mt={2} justify="space-between" align="center">
@@ -266,7 +266,7 @@ function CollectionDetails() {
                 })}
               </SimpleGrid>
             ) : (
-              <Text fontSize="md" color="gray.300">
+              <Text fontSize="md" color="gray.200">
                 No products are currently available in this collection. Check back soon!
               </Text>
             )}
