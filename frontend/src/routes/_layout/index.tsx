@@ -340,7 +340,6 @@ function Home() {
       bg="black.900"
     >
       {/* Hero Section */}
-      // Hero Section
 <Box
   bgImage="url('/images/hero-bg.jpg')"
   bgSize="cover"
