@@ -41,23 +41,23 @@ export default function TopNav() {
       return {
         text: 'Profile',
         onClick: () => navigate({ to: '/profile' }),
-        bg: 'purple.500',
-        color: 'white',
+        bg: '#D4A017', // --color-primary
+        color: '#F5F6F5', // --color-text (white)
       };
     }
     if (isJoining) {
       return {
         text: 'Join',
         onClick: () => navigate({ to: '/join' }),
-        bg: 'yellow.400',
-        color: 'gray.900',
+        bg: '#D4A017', // --color-primary
+        color: '#F5F6F5', // --color-text
       };
     }
     return {
       text: 'Login',
       onClick: () => navigate({ to: '/join' }),
-      bg: 'purple.300',
-      color: 'gray.900',
+      bg: '#D4A017', // --color-primary
+      color: '#F5F6F5', // --color-text
     };
   };
 
@@ -65,22 +65,34 @@ export default function TopNav() {
 
   return (
     <Flex
-      bg="gray.800"
+      bg="rgba(10, 10, 10, 0.5)" // Black with 50% transparency
       p={4}
-      justify="space-between"
       align="center"
       px={{ base: 4, md: 8 }}
+      position="relative"
     >
-      <Heading size="md" color="purple.300">
+      {/* Left spacer for centering */}
+      <Flex flex={1} />
+      
+      {/* Centered Logo */}
+      <Heading
+        size="md"
+        color="purple.300"
+        position="absolute"
+        left="50%"
+        transform="translateX(-50%)"
+      >
         <Link to="/" className="luxuryverse-logo">
           LuxuryVerse
         </Link>
       </Heading>
-      <Flex gap={4} alignItems="center">
+      
+      {/* Right Navigation Links */}
+      <Flex flex={1} justify="flex-end" gap={4} alignItems="center">
         <Link
           to="/"
           style={{
-            color: 'white',
+            color: '#F5F6F5', // --color-text
             textDecoration: 'none',
             fontFamily: "'Special Gothic Expanded One', sans-serif",
           }}
@@ -90,7 +102,7 @@ export default function TopNav() {
         <Link
           to="/roadmap"
           style={{
-            color: 'white',
+            color: '#F5F6F5',
             textDecoration: 'none',
             fontFamily: "'Special Gothic Expanded One', sans-serif",
           }}
@@ -100,7 +112,7 @@ export default function TopNav() {
         <Link
           to="/authenticity"
           style={{
-            color: 'white',
+            color: '#F5F6F5',
             textDecoration: 'none',
             fontFamily: "'Special Gothic Expanded One', sans-serif",
           }}
@@ -110,7 +122,7 @@ export default function TopNav() {
         <Link
           to="/faq"
           style={{
-            color: 'white',
+            color: '#F5F6F5',
             textDecoration: 'none',
             fontFamily: "'Special Gothic Expanded One', sans-serif",
           }}
@@ -120,7 +132,7 @@ export default function TopNav() {
         <Link
           to="/contact"
           style={{
-            color: 'white',
+            color: '#F5F6F5',
             textDecoration: 'none',
             fontFamily: "'Special Gothic Expanded One', sans-serif",
           }}
@@ -132,19 +144,14 @@ export default function TopNav() {
           bg={bg}
           color={color}
           _hover={{
-            bg:
-              bg === 'purple.500'
-                ? 'purple.600'
-                : bg === 'yellow.400'
-                ? 'yellow.500'
-                : 'purple.400',
+            bg: '#B8860B', // --color-primary-hover
           }}
           borderRadius="md"
           px={4}
           py={2}
           fontWeight="medium"
           size="sm"
-          fontFamily="'DM Sans', sans-serif"
+          fontFamily="'Special Gothic Expanded One', sans-serif"
         >
           {text}
         </Button>
