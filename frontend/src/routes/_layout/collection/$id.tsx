@@ -187,7 +187,9 @@ function CollectionDetails() {
       <Box bg="transparent" w="100%">
         <Box py={8} px={{ base: 4, md: 8 }} maxW="1200px" mx="auto" bg="transparent" borderRadius="lg">
           <VStack spacing={6} align="start">
-            <Heading as="h1" size="xl" color="white">
+            <Heading as="h1" size="xl" color="#00FF00"
+          textTransform="uppercase"
+            >
               {collection.title}
             </Heading>
             {collection.description && (
