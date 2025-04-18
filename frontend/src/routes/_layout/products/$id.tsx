@@ -401,7 +401,7 @@ function ProductDetails() {
     fontSize="lg"
     fontWeight="bold"
     lineHeight="1.5"
-    color="purple.500"
+    color="gray.400"
     textTransform="uppercase"
   >
     {product.brand || 'Unknown Brand'}
