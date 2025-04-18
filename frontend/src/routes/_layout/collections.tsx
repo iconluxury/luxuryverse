@@ -144,7 +144,6 @@ function LatestDropsPage() {
       </VStack>
     </Box>
   )}
-
         {/* Past Drops Section */}
         {dropsData.past.length > 0 && (
           <Box>
