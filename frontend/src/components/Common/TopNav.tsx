@@ -1,12 +1,13 @@
-import { Flex, Heading, IconButton, Drawer, DrawerBody, DrawerHeader, DrawerOverlay, DrawerContent, DrawerCloseButton, VStack } from '@chakra-ui/react';
+import { Flex, Heading, IconButton, Drawer, DrawerBody, DrawerOverlay, DrawerContent, DrawerCloseButton, VStack } from '@chakra-ui/react';
 import { HamburgerIcon } from '@chakra-ui/icons';
-import { Link, useNavigate } from '@tanstack/react-router';
+import { Link, useNavigate, useLocation } from '@tanstack/react-router';
 import { useContext, useState } from 'react';
 import { AuthContext } from './AuthContext';
 
 export default function TopNav() {
   const { user, isJoining } = useContext(AuthContext);
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => setIsOpen(!isOpen);
@@ -22,7 +23,7 @@ export default function TopNav() {
     return {
       text: isJoining ? 'Join' : 'Shop',
       to: '/join',
-    }
+    };
   };
 
   const { text, to } = getAuthLinkProps();
@@ -60,9 +61,10 @@ export default function TopNav() {
           <Heading
             size="xs"
             fontSize={{ base: '0.5rem', md: '0.875rem' }}
-            color="white" // Logo color set to white
+            color="primary.500"
             fontFamily="'Special Gothic Expanded One', sans-serif"
             lineHeight="1.1"
+            className={pathname !== '/' ? 'glitch dela-gothic-one-regular' : ''}
           >
             <Link to="/" className="luxuryverse-logo">
               <Flex
@@ -70,8 +72,8 @@ export default function TopNav() {
                 align={{ base: 'flex-start', md: 'center' }}
                 gap={{ base: 0, md: 0.5 }}
               >
-                <span>Luxury</span>
-                <span>Verse</span>
+                <span data-text="Luxury">Luxury</span>
+                <span data-text="Verse">Verse</span>
               </Flex>
             </Link>
           </Heading>
@@ -88,13 +90,13 @@ export default function TopNav() {
                 key={to}
                 to={to}
                 style={{
-                  color: label === text ? '#00FF00' : 'white', // Green for Login/Join/Profile, white for others
+                  color: label === text ? '#00FF00' : 'primary.500', // Green for Shop/Join/Profile, blue-grey for others
                   textDecoration: 'none',
                   fontFamily: "'Special Gothic Expanded One', sans-serif",
                   fontWeight: 'var(--font-weight-normal)',
                   textTransform: 'uppercase',
                 }}
-                _hover={{ color: 'gray.400' }}
+                _hover={{ color: 'green.500' }}
                 onClick={() => navigate({ to })}
               >
                 {label}
@@ -108,8 +110,8 @@ export default function TopNav() {
             onClick={toggleMenu}
             aria-label="Toggle Menu"
             bg="transparent"
-            color="white" // Hamburger icon set to white
-            _hover={{ color: '#E0E0E0' }} // Light gray hover
+            color="white"
+            _hover={{ color: 'gray.300' }}
             size="xs"
             ml="auto"
           />
@@ -119,7 +121,7 @@ export default function TopNav() {
       <Drawer isOpen={isOpen} placement="right" onClose={closeMenu}>
         <DrawerOverlay />
         <DrawerContent bg="rgba(10, 10, 10, 0.9)" color="white" maxW={{ base: '75%', sm: '250px' }}>
-          <DrawerCloseButton color="white" /> {/* Close button set to white */}
+          <DrawerCloseButton color="white" />
           <DrawerBody>
             <VStack spacing={4} align="stretch">
               {navItems.map(({ to, label }) => (
@@ -127,7 +129,7 @@ export default function TopNav() {
                   key={to}
                   to={to}
                   style={{
-                    color: label === text ? '#00FF00' : 'white', // Green for Login/Join/Profile, white for others
+                    color: label === text ? '#00FF00' : 'primary.500', // Green for Shop/Join/Profile, blue-grey for others
                     textDecoration: 'none',
                     fontFamily: "'Special Gothic Expanded One', sans-serif",
                     fontWeight: 'var(--font-weight-normal)',
@@ -135,7 +137,7 @@ export default function TopNav() {
                     padding: '0.5rem',
                   }}
                   _hover={{
-                    color: label === text ? '#33FF33' : '#E0E0E0', // Lighter green for auth hover, light gray for others
+                    color: label === text ? 'green.400' : 'gray.300', // Lighter green for auth hover, light gray for others
                   }}
                   onClick={() => {
                     navigate({ to });
@@ -149,6 +151,92 @@ export default function TopNav() {
           </DrawerBody>
         </DrawerContent>
       </Drawer>
+      <style jsx global>{`
+        .glitch {
+          position: relative;
+          font-family: var(--font-family-glitch);
+          animation: glitch 0.3s linear infinite;
+        }
+
+        .glitch span {
+          position: relative;
+          display: inline-block;
+        }
+
+        .glitch span::before,
+        .glitch span::after {
+          content: attr(data-text);
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          clip: rect(0, 0, 0, 0);
+        }
+
+        .glitch span::before {
+          color: var(--color-primary-hover); /* Green (#58fb6cd9) */
+          animation: glitch-top 1s linear infinite;
+          clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
+        }
+
+        .glitch span::after {
+          color: cyan.500; /* Cyan (#00e5ffd9) */
+          animation: glitch-bottom 1.5s linear infinite;
+          clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%);
+        }
+
+        @keyframes glitch {
+          0% {
+            transform: translate(0);
+          }
+          20% {
+            transform: translate(-2px, 2px);
+          }
+          40% {
+            transform: translate(-2px, -2px);
+          }
+          60% {
+            transform: translate(2px, 2px);
+          }
+          80% {
+            transform: translate(2px, -2px);
+          }
+          100% {
+            transform: translate(0);
+          }
+        }
+
+        @keyframes glitch-top {
+          0% {
+            clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
+            transform: translate(-2px, -1px);
+          }
+          50% {
+            clip-path: polygon(0 0, 100% 0, 100% 10%, 0 10%);
+            transform: translate(2px, 1px);
+          }
+          100% {
+            clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
+            transform: translate(-2px, -1px);
+          }
+        }
+
+        @keyframes glitch-bottom {
+          0% {
+            clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%);
+            transform: translate(2px, 1px);
+          }
+          50% {
+            clip-path: polygon(0 90%, 100% 90%, 100% 100%, 0 100%);
+            transform: translate(-2px, -1px);
+          }
+          100% {
+            clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%);
+            transform: translate(2px, 1px);
+          }
+        }
+      `}</style>
     </>
   );
 }
