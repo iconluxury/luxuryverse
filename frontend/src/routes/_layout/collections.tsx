@@ -126,7 +126,7 @@ function LatestDropsPage() {
         </Heading>
         <Text fontSize="lg" color="white" mt={12}>
           2025-05-01, 10:00 AM -
-          <Text as="span" color="gray.400">
+          <Text as="span" color="gray.200">
             {' '}until sold out.
           </Text>
           <br />
