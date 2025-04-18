@@ -120,7 +120,6 @@ const Footer = () => {
               >
                 LuxuryVerse
               </Link>
-              {' '}All rights reserved.
             </Text>
 
             {/* Right Side - Terms and Opt Out */}
