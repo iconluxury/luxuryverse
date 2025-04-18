@@ -208,7 +208,7 @@ function CollectionDetails() {
               {collection.title}
             </Heading>
             {collection.description && (
-              <Box fontSize="md" color="gray.400" dangerouslySetInnerHTML={{ __html: collection.description }} />
+              <Box fontSize="lg" color="gray.400" dangerouslySetInnerHTML={{ __html: collection.description }} />
             )}
             {collection.products.length > 0 ? (
               <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing={6} w="100%">
