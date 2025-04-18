@@ -56,6 +56,11 @@ function Home() {
 
   // GSAP Animation for Typewriter and Glitch
   useEffect(() => {
+    if (!exclusiveRef.current || !brandsRef.current) {
+      console.error("Refs not found:", { exclusiveRef: exclusiveRef.current, brandsRef: brandsRef.current });
+      return;
+    }
+
     const exclusiveElement = exclusiveRef.current;
     const brandsElement = brandsRef.current;
 
@@ -64,15 +69,18 @@ function Home() {
     const brandsText = "bRANDS";
     exclusiveElement.innerHTML = exclusiveText
       .split("")
-      .map((char) => `<span>${char}</span>`)
+      .map((char) => `<span class="glitch-letter">${char}</span>`)
       .join("");
     brandsElement.innerHTML = brandsText
       .split("")
-      .map((char) => `<span>${char}</span>`)
+      .map((char) => `<span class="glitch-letter">${char}</span>`)
       .join("");
 
-    const exclusiveSpans = exclusiveElement.querySelectorAll("span");
-    const brandsSpans = brandsElement.querySelectorAll("span");
+    const exclusiveSpans = exclusiveElement.querySelectorAll(".glitch-letter");
+    const brandsSpans = brandsElement.querySelectorAll(".glitch-letter");
+
+    // Set initial color to green
+    gsap.set([exclusiveElement, brandsElement], { color: "#58fb6cd9" });
 
     // Typewriter animation
     gsap.fromTo(
@@ -99,7 +107,7 @@ function Home() {
 
     // Glitch animation for eXCLUSIVE
     const glitchExclusive = () => {
-      const colors = ["#c2a0e5d9", "#58fb6cd9", "#FFFFFF"];
+      const colors = ["#58fb6cd9", "#c2a0e5d9", "#FFFFFF"];
       const randomColor = colors[Math.floor(Math.random() * colors.length)];
       gsap.to(exclusiveElement, {
         color: randomColor,
@@ -110,7 +118,7 @@ function Home() {
         ease: "power1.inOut",
         onComplete: () => {
           gsap.to(exclusiveElement, {
-            color: "#c2a0e5d9",
+            color: "#58fb6cd9",
             x: 0,
             y: 0,
             skewX: 0,
@@ -235,8 +243,6 @@ function Home() {
 
   return (
     <Box bg="black.900">
-      {/* Header with Logo */}
-
       {/* Hero Section: Exclusive Brands */}
       <Box
         bgImage="url('/images/hero-bg.jpg')"
@@ -283,9 +289,9 @@ function Home() {
             <Button
               size="lg"
               variant="solid"
-              bg="purple.500"
+              bg="green.500"
               color="black.900"
-              _hover={{ bg: "green.500" }}
+              _hover={{ bg: "purple.500" }}
               onClick={handleJoinWaitlist}
               fontSize="xl"
               py={8}

@@ -229,7 +229,7 @@ input::placeholder, textarea::placeholder {
   text-transform: none; /* Preserve eXCLUSIVE and bRANDS casing */
 }
 
-.glitch span {
+.glitch-letter {
   display: inline-block;
   opacity: 0; /* Initially hidden for typewriter effect */
 }
