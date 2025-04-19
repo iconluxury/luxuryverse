@@ -62,18 +62,19 @@ const Footer = () => {
           gap={{ base: 4, md: 4 }}
         >
           <Box width="100%" maxW="80rem">
-            {/* Mobile Layout (X Pattern) */}
+            {/* Mobile/Tablet Layout (X Pattern) */}
             <VStack
               display={{ base: 'flex', md: 'none' }}
               spacing={4}
               align="center"
+              width="100%"
             >
               {/* Top Row: Privacy Policy + Cookie Policy */}
               <HStack
-                spacing={4}
+                spacing={{ base: 2, sm: 4 }}
                 justify="space-between"
                 width="100%"
-                maxW="sm"
+                maxW={{ base: 'xs', sm: 'sm' }}
               >
                 <Link
                   href="/privacy-policy"
@@ -107,6 +108,7 @@ const Footer = () => {
                 fontFamily="'Special Gothic Expanded One', sans-serif"
                 textTransform="uppercase"
                 textAlign="center"
+                width="100%"
               >
                 <Link
                   href="https://luxuryverse.com"
@@ -124,10 +126,10 @@ const Footer = () => {
 
               {/* Bottom Row: Terms and Conditions + Opt Out */}
               <HStack
-                spacing={4}
+                spacing={{ base: 2, sm: 4 }}
                 justify="space-between"
                 width="100%"
-                maxW="sm"
+                maxW={{ base: 'xs', sm: 'sm' }}
               >
                 <Link
                   href="/terms-conditions"
