@@ -38,13 +38,13 @@ function OptOutPage() {
             onClick={handleOptOut}
             bg="transparent"
             textDecoration="underline"
-            color="green.500"
+            color="#00FF00"
             _hover={{ Color:"gray.500"  }}
             p={0}
             fontSize="lg"
             fontWeight="medium"
           >
-        opt me out
+OPT ME OUT
           </Button>{" "}
           will show the consent banner, allowing you to decline non-essential cookies to disable targeted advertising while keeping essential cookies active.
         </Text>
