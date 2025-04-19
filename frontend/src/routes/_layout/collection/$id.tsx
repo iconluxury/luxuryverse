@@ -234,6 +234,9 @@ function CollectionDetails() {
                         bg="transparent"
                         _hover={{ shadow: 'md', transform: 'translateY(-4px)', borderColor: 'gray.500' }}
                         transition="all 0.2s"
+
+                        display="flex"
+                        flexDirection="column"
                         height="100%" 
                       >
                        <Box
@@ -262,7 +265,7 @@ function CollectionDetails() {
                           >
                             {product.brand || 'Unknown'}
                           </Text>
-                          <Text fontWeight="bold" fontSize="md" color="white" noOfLines={2}>
+                          <Text fontWeight="bold" fontSize="md" color="white">
                             {cleanedTitle}
                           </Text>
                           <Flex mt={2} justify="space-between" align="center">
