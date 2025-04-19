@@ -2,10 +2,10 @@ import React from 'react';
 import {
   Box,
   Flex,
-  Heading,
   Text,
   Link,
   HStack,
+  VStack,
 } from "@chakra-ui/react";
 
 const Footer = () => {
@@ -54,105 +54,198 @@ const Footer = () => {
         {/* Bottom Footer - Legal Links and Copyright */}
         <Flex
           justify="center"
-          align="baseline"
+          align="center"
           borderTop="1px solid"
           borderColor="gray.700"
           pt={4}
           flexWrap="wrap"
-          gap={{ base: 2, md: 4 }}
+          gap={{ base: 4, md: 4 }}
         >
-          <Flex
-            width="100%"
-            maxW="80rem"
-            justify="space-between"
-            align="baseline"
-            flexWrap="wrap"
-            gap={{ base: 2, md: 4 }}
-          >
-            {/* Left Side - Privacy and Cookie Policy */}
-            <HStack
-              spacing={{ base: 2, md: 4 }}
-              justify="flex-start"
-              align="baseline"
+          <Box width="100%" maxW="80rem">
+            {/* Mobile Layout (X Pattern) */}
+            <VStack
+              display={{ base: 'flex', md: 'none' }}
+              spacing={4}
+              align="center"
             >
-              <Link
-                href="/privacy-policy"
-                color="gray.400"
-                fontSize="sm"
-                fontFamily="'Special Gothic Expanded One', sans-serif"
-                lineHeight="1.5"
-                textTransform="uppercase"
-                _hover={{ color: 'white' }}
+              {/* Top Row: Privacy Policy + Cookie Policy */}
+              <HStack
+                spacing={4}
+                justify="space-between"
+                width="100%"
+                maxW="sm"
               >
-                Privacy Policy
-              </Link>
-              <Link
-                href="/cookies"
-                color="gray.400"
-                fontSize="sm"
-                fontFamily="'Special Gothic Expanded One', sans-serif"
-                lineHeight="1.5"
-                textTransform="uppercase"
-                _hover={{ color: 'white' }}
-              >
-                Cookie Policy
-              </Link>
-            </HStack>
+                <Link
+                  href="/privacy-policy"
+                  color="gray.400"
+                  fontSize="sm"
+                  fontFamily="'Special Gothic Expanded One', sans-serif"
+                  lineHeight="1.5"
+                  textTransform="uppercase"
+                  _hover={{ color: 'white' }}
+                >
+                  Privacy Policy
+                </Link>
+                <Link
+                  href="/cookies"
+                  color="gray.400"
+                  fontSize="sm"
+                  fontFamily="'Special Gothic Expanded One', sans-serif"
+                  lineHeight="1.5"
+                  textTransform="uppercase"
+                  _hover={{ color: 'white' }}
+                >
+                  Cookie Policy
+                </Link>
+              </HStack>
 
-            {/* Center - Copyright */}
-            <Text
-              fontSize="sm"
-              color="gray.500"
-              lineHeight="1.5"
-              fontFamily="'Special Gothic Expanded One', sans-serif"
-              textTransform="uppercase"
-              textAlign="center"
-            >
-            
-              <Link
-                href="https://luxuryverse.com"
-                color="#00FF00"
+              {/* Middle Row: Copyright */}
+              <Text
                 fontSize="sm"
+                color="gray.500"
                 lineHeight="1.5"
                 fontFamily="'Special Gothic Expanded One', sans-serif"
                 textTransform="uppercase"
-                _hover={{ color: 'white' }}
+                textAlign="center"
               >
-                LuxuryVerse
-              </Link>
-              {' '}© 2025
-            </Text>
+                <Link
+                  href="https://luxuryverse.com"
+                  color="#00FF00"
+                  fontSize="sm"
+                  lineHeight="1.5"
+                  fontFamily="'Special Gothic Expanded One', sans-serif"
+                  textTransform="uppercase"
+                  _hover={{ color: 'white' }}
+                >
+                  LuxuryVerse
+                </Link>
+                {' '}© 2025
+              </Text>
 
-            {/* Right Side - Terms and Opt Out */}
-            <HStack
-              spacing={{ base: 2, md: 4 }}
-              justify="flex-end"
+              {/* Bottom Row: Terms and Conditions + Opt Out */}
+              <HStack
+                spacing={4}
+                justify="space-between"
+                width="100%"
+                maxW="sm"
+              >
+                <Link
+                  href="/terms-conditions"
+                  color="gray.400"
+                  fontSize="sm"
+                  fontFamily="'Special Gothic Expanded One', sans-serif"
+                  lineHeight="1.5"
+                  textTransform="uppercase"
+                  _hover={{ color: 'white' }}
+                >
+                  Terms and Conditions
+                </Link>
+                <Link
+                  href="/opt-out"
+                  color="gray.400"
+                  fontSize="sm"
+                  fontFamily="'Special Gothic Expanded One', sans-serif"
+                  lineHeight="1.5"
+                  textTransform="uppercase"
+                  _hover={{ color: 'white' }}
+                >
+                  Opt Out
+                </Link>
+              </HStack>
+            </VStack>
+
+            {/* Desktop Layout */}
+            <Flex
+              display={{ base: 'none', md: 'flex' }}
+              justify="space-between"
               align="baseline"
+              flexWrap="wrap"
+              gap={{ base: 2, md: 4 }}
             >
-            <Link
-                href="/terms-conditions"
-                color="gray.400"
-                fontSize="sm"
-                fontFamily="'Special Gothic Expanded One', sans-serif"
-                lineHeight="1.5"
-                textTransform="uppercase"
-                _hover={{ color: 'white' }}
+              {/* Left Side - Privacy and Cookie Policy */}
+              <HStack
+                spacing={{ base: 2, md: 4 }}
+                justify="flex-start"
+                align="baseline"
               >
-                Terms and Conditions
-              </Link>
-              <Link
-                href="/opt-out"
-                color="gray.400"
+                <Link
+                  href="/privacy-policy"
+                  color="gray.400"
+                  fontSize="sm"
+                  fontFamily="'Special Gothic Expanded One', sans-serif"
+                  lineHeight="1.5"
+                  textTransform="uppercase"
+                  _hover={{ color: 'white' }}
+                >
+                  Privacy Policy
+                </Link>
+                <Link
+                  href="/cookies"
+                  color="gray.400"
+                  fontSize="sm"
+                  fontFamily="'Special Gothic Expanded One', sans-serif"
+                  lineHeight="1.5"
+                  textTransform="uppercase"
+                  _hover={{ color: 'white' }}
+                >
+                  Cookie Policy
+                </Link>
+              </HStack>
+
+              {/* Center - Copyright */}
+              <Text
                 fontSize="sm"
-                fontFamily="'Special Gothic Expanded One', sans-serif"
+                color="gray.500"
                 lineHeight="1.5"
+                fontFamily="'Special Gothic Expanded One', sans-serif"
                 textTransform="uppercase"
-                _hover={{ color: 'white' }}
+                textAlign="center"
               >
-                Opt Out
-              </Link>
-            </HStack>
-          </Flex>
+                <Link
+                  href="https://luxuryverse.com"
+                  color="#00FF00"
+                  fontSize="sm"
+                  lineHeight="1.5"
+                  fontFamily="'Special Gothic Expanded One', sans-serif"
+                  textTransform="uppercase"
+                  _hover={{ color: 'white' }}
+                >
+                  LuxuryVerse
+                </Link>
+                {' '}© 2025
+              </Text>
+
+              {/* Right Side - Terms and Opt Out */}
+              <HStack
+                spacing={{ base: 2, md: 4 }}
+                justify="flex-end"
+                align="baseline"
+              >
+                <Link
+                  href="/terms-conditions"
+                  color="gray.400"
+                  fontSize="sm"
+                  fontFamily="'Special Gothic Expanded One', sans-serif"
+                  lineHeight="1.5"
+                  textTransform="uppercase"
+                  _hover={{ color: 'white' }}
+                >
+                  Terms and Conditions
+                </Link>
+                <Link
+                  href="/opt-out"
+                  color="gray.400"
+                  fontSize="sm"
+                  fontFamily="'Special Gothic Expanded One', sans-serif"
+                  lineHeight="1.5"
+                  textTransform="uppercase"
+                  _hover={{ color: 'white' }}
+                >
+                  Opt Out
+                </Link>
+              </HStack>
+            </Flex>
+          </Box>
         </Flex>
       </Box>
     </Box>
