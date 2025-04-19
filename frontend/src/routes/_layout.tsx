@@ -128,7 +128,7 @@ function Layout() {
             window.dispatchEvent(new Event("consentChange"));
           }}
         >
-      Cookies are essential for site functionality. Read about{" "}
+      Cookies are essential for site functionality.{" "}
           <Link
             to="/cookies"
             style={{ 
@@ -140,8 +140,7 @@ function Layout() {
             }}
           >
             Cookies
-          </Link>{" "}
-          and{" "}
+          </Link>{" & "}
           <Link
             to="/privacy-policy"
             style={{ 
