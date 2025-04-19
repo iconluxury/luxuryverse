@@ -328,6 +328,13 @@ function ProductDetails() {
               {/* Image Section */}
               {validatedImages ? (
                 <Box position="relative" display="flex" flexDirection="column" alignItems="center">
+                                         <Box
+                    position="relative"
+                    w="full"
+                    style={{ aspectRatio: '3 / 4' }}
+                    bg="white"
+                    filter="brightness(0.85)" //85% of original
+                  >
                  <Image
   src={validatedImages[currentImage] || 'https://placehold.co/450x550'}
   alt={`${cleanTitle} image ${currentImage + 1}`}
@@ -337,7 +344,7 @@ function ProductDetails() {
   objectFit="contain"
   mx="auto"
   onError={(e) => (e.currentTarget.src = 'https://placehold.co/450x550')}
-/>
+/></Box>
 
                   {validatedImages.length > 1 && (
                     <HStack mt={4} justify="center" spacing={2}>
