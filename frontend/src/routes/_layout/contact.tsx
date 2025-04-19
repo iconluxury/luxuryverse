@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import Footer from '../../components/Common/Footer';
 
-export const Route = createFileRoute('/_layout/roadmap')({
+export const Route = createFileRoute('/_layout/contact')({
   component: ContactPage,
 });
 
