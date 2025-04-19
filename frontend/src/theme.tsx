@@ -26,9 +26,9 @@ const theme = extendTheme({
       900: "#1A1A1A", // Near-black gray (replaces blue-gray for --color-secondary)
     },
     primary: {
-      500: "#a0a7e5d9", // Blue-grey (matches --color-text)
-      600: "#858ca3d9", // Slightly darker for focus/active states
-      700: "#6b7280d9", // Darker for active states
+      500: "#6B6B6B", // Blue-grey (matches --color-text)
+      600: "#525252", // Slightly darker for focus/active states
+      700: "#404040", // Darker for active states
     },
     green: {
       300: "#7bff8cd9",
