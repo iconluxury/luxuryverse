@@ -124,6 +124,7 @@ const theme = extendTheme({
         fontWeight: "normal",
         color: "#00FF00",
         lineHeight: "short",
+        textTransform: "uppercase", // Transforms text to uppercase
       },
       sizes: {
         "9xl": { fontSize: "9xl" },
