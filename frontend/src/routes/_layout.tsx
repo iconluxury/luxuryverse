@@ -55,29 +55,40 @@ function Layout() {
       {!consentGiven && (
         <CookieConsent
           location="bottom"
-          buttonText="Yes, I accept"
-          declineButtonText="No, I decline"
           cookieName="luxuryverse-consent"
           enableDeclineButton
           style={{
-            background: "rgba(0, 0, 0, 0.5)", // Semi-transparent grey (50% opacity)
+            background: "rgba(0, 0, 0, 0.5)",
             color: theme.colors.white || "#FFFFFF",
             padding: "2px",
             fontSize: "12px",
             zIndex: 9999,
+            fontFamily: "'Special Gothic Expanded One', sans-serif",
+            textTransform: "uppercase",
+            textAlign: "center",
           }}
           buttonStyle={{
-            background: theme.colors.green[500] || "#EF4444",
-            color: theme.colors.white || "#FFFFFF",
+            background: "transparent",
+            color: theme.colors.green[500] || "#00FF00",
+            fontSize: "12px",
+            fontFamily: "'Special Gothic Expanded One', sans-serif",
+            textTransform: "uppercase",
+            textDecoration: "underline",
             padding: "4px 8px",
-            fontWeight: "medium",
+            fontWeight: "normal",
           }}
           declineButtonStyle={{
-            background: "rgba(0, 0, 0, 0)", // Semi-transparent grey (50% opacity)
+            background: "transparent",
             color: theme.colors.white || "#FFFFFF",
+            fontSize: "12px",
+            fontFamily: "'Special Gothic Expanded One', sans-serif",
+            textTransform: "uppercase",
+            textDecoration: "underline",
             padding: "4px 8px",
-            fontWeight: "medium",
+            fontWeight: "normal",
           }}
+          buttonText="Accept"
+          declineButtonText="Decline"
           expires={150}
           onAccept={() => {
             console.log("Accept clicked");
@@ -117,19 +128,31 @@ function Layout() {
             window.dispatchEvent(new Event("consentChange"));
           }}
         >
-         We use cookies to provide necessary site functionality and improve your experience. Read about{" "}
+          We use cookies to provide necessary site functionality and improve your experience. Read about{" "}
           <Link
             to="/cookies"
-            style={{ color: theme.colors.green[500] || "#EF4444", textDecoration: "underline" }}
+            style={{ 
+              color: theme.colors.green[500] || "#00FF00", 
+              textDecoration: "underline",
+              fontFamily: "'Special Gothic Expanded One', sans-serif",
+              textTransform: "uppercase",
+              fontSize: "12px",
+            }}
           >
             Cookies
           </Link>{" "}
-          and {" "}
+          and{" "}
           <Link
             to="/privacy-policy"
-            style={{ color: theme.colors.green[500] || "#EF4444", textDecoration: "underline" }}
+            style={{ 
+              color: theme.colors.green[500] || "#00FF00", 
+              textDecoration: "underline",
+              fontFamily: "'Special Gothic Expanded One', sans-serif",
+              textTransform: "uppercase",
+              fontSize: "12px",
+            }}
           >
-            Privacy 
+            Privacy
           </Link>
         </CookieConsent>
       )}
