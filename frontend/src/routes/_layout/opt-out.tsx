@@ -38,7 +38,6 @@ function OptOutPage() {
             onClick={handleOptOut}
             bg="transparent"
             color="#00FF00"
-            _hover={{ Color:"gray.500"  }}
             p={0}
             fontSize="lg"
             fontWeight="medium"
