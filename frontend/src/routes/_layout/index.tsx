@@ -467,6 +467,7 @@ function Home() {
               py={{ base: 6, md: 8 }}
               px={{ base: 8, md: 12 }}
               alignSelf={{ base: "center", lg: "center" }}
+              as={Link} to="/join"
             >
               GET IN LINE
             </Button>
