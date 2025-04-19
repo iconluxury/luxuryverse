@@ -128,7 +128,7 @@ function Layout() {
             window.dispatchEvent(new Event("consentChange"));
           }}
         >
-          We use cookies to provide necessary site functionality and improve your experience. Read about{" "}
+      Cookies are essential for site functionality. Read about{" "}
           <Link
             to="/cookies"
             style={{ 
