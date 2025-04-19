@@ -194,10 +194,10 @@ function JoinPage() {
         <VStack spacing={10} align="stretch">
           <VStack spacing={4} align="stretch">
             <Heading as="h1" size={['lg', 'xl']} color="green.400">
-              Join LuxuryVerse
+              Join The Waitlist
             </Heading>
             <Text fontSize={['md', 'lg']} color="gray.300">
-              Sign up in three simple steps to access exclusive digital collectibles.
+              Sign up in three simple steps to to verify your account and join the waitlist.
             </Text>
           </VStack>
 
