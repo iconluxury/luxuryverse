@@ -189,11 +189,11 @@ function JoinPage() {
   };
 
   return (
-    <Box bg="gray.900" minH="100vh" color="white" py={[8, 12]}>
+    <Box bg="rgba(255, 255, 0, 0.1)" minH="100vh" color="white" py={[8, 12]}>
       <Container maxW="container.md" px={[4, 6]} py={12}>
         <VStack spacing={10} align="stretch">
           <VStack spacing={4} align="stretch">
-            <Heading as="h1" size={['lg', 'xl']} color="yellow.400">
+            <Heading as="h1" size={['lg', 'xl']} color="green.400">
               Join LuxuryVerse
             </Heading>
             <Text fontSize={['md', 'lg']} color="gray.300">
@@ -234,9 +234,9 @@ function JoinPage() {
             <Tooltip label={isXConnected ? 'X Profile Connected' : 'Connect your X account'}>
               <Button
                 onClick={initiateXAuth}
-                bg="yellow.400"
+                bg="green.400"
                 color="gray.900"
-                _hover={{ bg: isXConnected ? 'yellow.400' : 'yellow.500' }}
+                _hover={{ bg: isXConnected ? 'green.400' : 'green.500' }}
                 px={6}
                 py={3}
                 isDisabled={!isConnected || isXConnected}
@@ -289,9 +289,9 @@ function JoinPage() {
                 </FormControl>
                 <Button
                   type="submit"
-                  bg="yellow.400"
+                  bg="green.400"
                   color="gray.900"
-                  _hover={{ bg: 'yellow.500' }}
+                  _hover={{ bg: 'green.500' }}
                   px={6}
                   py={3}
                   mt={4}
@@ -306,11 +306,11 @@ function JoinPage() {
 
           <Text fontSize="sm" color="gray.400">
             By joining, you agree to our{' '}
-            <Link href="/privacy" color="yellow.400" textDecoration="underline">
+            <Link href="/privacy" color="green.400" textDecoration="underline">
               Privacy Policy
             </Link>
             . Questions? Contact{' '}
-            <Link href="mailto:privacy@luxuryverse.com" color="yellow.400" textDecoration="underline">
+            <Link href="mailto:privacy@luxuryverse.com" color="green.400" textDecoration="underline">
               privacy@luxuryverse.com
             </Link>.
           </Text>
