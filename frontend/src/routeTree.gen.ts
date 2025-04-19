@@ -18,9 +18,11 @@ import { Route as LayoutRoadmapImport } from './routes/_layout/roadmap'
 import { Route as LayoutPrivacyPolicyImport } from './routes/_layout/privacy-policy'
 import { Route as LayoutOptOutImport } from './routes/_layout/opt-out'
 import { Route as LayoutJoinImport } from './routes/_layout/join'
+import { Route as LayoutFaqImport } from './routes/_layout/faq'
 import { Route as LayoutCookiesImport } from './routes/_layout/cookies'
 import { Route as LayoutContactImport } from './routes/_layout/contact'
 import { Route as LayoutCollectionsImport } from './routes/_layout/collections'
+import { Route as LayoutAuthenticityImport } from './routes/_layout/authenticity'
 import { Route as LayoutAuthCompleteImport } from './routes/_layout/auth-complete'
 import { Route as LayoutProductsIdImport } from './routes/_layout/products/$id'
 import { Route as LayoutCollectionIdImport } from './routes/_layout/collection/$id'
@@ -69,6 +71,12 @@ const LayoutJoinRoute = LayoutJoinImport.update({
   getParentRoute: () => LayoutRoute,
 } as any)
 
+const LayoutFaqRoute = LayoutFaqImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => LayoutRoute,
+} as any)
+
 const LayoutCookiesRoute = LayoutCookiesImport.update({
   id: '/cookies',
   path: '/cookies',
@@ -84,6 +92,12 @@ const LayoutContactRoute = LayoutContactImport.update({
 const LayoutCollectionsRoute = LayoutCollectionsImport.update({
   id: '/collections',
   path: '/collections',
+  getParentRoute: () => LayoutRoute,
+} as any)
+
+const LayoutAuthenticityRoute = LayoutAuthenticityImport.update({
+  id: '/authenticity',
+  path: '/authenticity',
   getParentRoute: () => LayoutRoute,
 } as any)
 
@@ -129,6 +143,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutAuthCompleteImport
       parentRoute: typeof LayoutImport
     }
+    '/_layout/authenticity': {
+      id: '/_layout/authenticity'
+      path: '/authenticity'
+      fullPath: '/authenticity'
+      preLoaderRoute: typeof LayoutAuthenticityImport
+      parentRoute: typeof LayoutImport
+    }
     '/_layout/collections': {
       id: '/_layout/collections'
       path: '/collections'
@@ -148,6 +169,13 @@ declare module '@tanstack/react-router' {
       path: '/cookies'
       fullPath: '/cookies'
       preLoaderRoute: typeof LayoutCookiesImport
+      parentRoute: typeof LayoutImport
+    }
+    '/_layout/faq': {
+      id: '/_layout/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof LayoutFaqImport
       parentRoute: typeof LayoutImport
     }
     '/_layout/join': {
@@ -220,9 +248,11 @@ declare module '@tanstack/react-router' {
 
 interface LayoutRouteChildren {
   LayoutAuthCompleteRoute: typeof LayoutAuthCompleteRoute
+  LayoutAuthenticityRoute: typeof LayoutAuthenticityRoute
   LayoutCollectionsRoute: typeof LayoutCollectionsRoute
   LayoutContactRoute: typeof LayoutContactRoute
   LayoutCookiesRoute: typeof LayoutCookiesRoute
+  LayoutFaqRoute: typeof LayoutFaqRoute
   LayoutJoinRoute: typeof LayoutJoinRoute
   LayoutOptOutRoute: typeof LayoutOptOutRoute
   LayoutPrivacyPolicyRoute: typeof LayoutPrivacyPolicyRoute
@@ -236,9 +266,11 @@ interface LayoutRouteChildren {
 
 const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutAuthCompleteRoute: LayoutAuthCompleteRoute,
+  LayoutAuthenticityRoute: LayoutAuthenticityRoute,
   LayoutCollectionsRoute: LayoutCollectionsRoute,
   LayoutContactRoute: LayoutContactRoute,
   LayoutCookiesRoute: LayoutCookiesRoute,
+  LayoutFaqRoute: LayoutFaqRoute,
   LayoutJoinRoute: LayoutJoinRoute,
   LayoutOptOutRoute: LayoutOptOutRoute,
   LayoutPrivacyPolicyRoute: LayoutPrivacyPolicyRoute,
@@ -256,9 +288,11 @@ const LayoutRouteWithChildren =
 export interface FileRoutesByFullPath {
   '': typeof LayoutRouteWithChildren
   '/auth-complete': typeof LayoutAuthCompleteRoute
+  '/authenticity': typeof LayoutAuthenticityRoute
   '/collections': typeof LayoutCollectionsRoute
   '/contact': typeof LayoutContactRoute
   '/cookies': typeof LayoutCookiesRoute
+  '/faq': typeof LayoutFaqRoute
   '/join': typeof LayoutJoinRoute
   '/opt-out': typeof LayoutOptOutRoute
   '/privacy-policy': typeof LayoutPrivacyPolicyRoute
@@ -272,9 +306,11 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/auth-complete': typeof LayoutAuthCompleteRoute
+  '/authenticity': typeof LayoutAuthenticityRoute
   '/collections': typeof LayoutCollectionsRoute
   '/contact': typeof LayoutContactRoute
   '/cookies': typeof LayoutCookiesRoute
+  '/faq': typeof LayoutFaqRoute
   '/join': typeof LayoutJoinRoute
   '/opt-out': typeof LayoutOptOutRoute
   '/privacy-policy': typeof LayoutPrivacyPolicyRoute
@@ -290,9 +326,11 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/_layout': typeof LayoutRouteWithChildren
   '/_layout/auth-complete': typeof LayoutAuthCompleteRoute
+  '/_layout/authenticity': typeof LayoutAuthenticityRoute
   '/_layout/collections': typeof LayoutCollectionsRoute
   '/_layout/contact': typeof LayoutContactRoute
   '/_layout/cookies': typeof LayoutCookiesRoute
+  '/_layout/faq': typeof LayoutFaqRoute
   '/_layout/join': typeof LayoutJoinRoute
   '/_layout/opt-out': typeof LayoutOptOutRoute
   '/_layout/privacy-policy': typeof LayoutPrivacyPolicyRoute
@@ -309,9 +347,11 @@ export interface FileRouteTypes {
   fullPaths:
     | ''
     | '/auth-complete'
+    | '/authenticity'
     | '/collections'
     | '/contact'
     | '/cookies'
+    | '/faq'
     | '/join'
     | '/opt-out'
     | '/privacy-policy'
@@ -324,9 +364,11 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/auth-complete'
+    | '/authenticity'
     | '/collections'
     | '/contact'
     | '/cookies'
+    | '/faq'
     | '/join'
     | '/opt-out'
     | '/privacy-policy'
@@ -340,9 +382,11 @@ export interface FileRouteTypes {
     | '__root__'
     | '/_layout'
     | '/_layout/auth-complete'
+    | '/_layout/authenticity'
     | '/_layout/collections'
     | '/_layout/contact'
     | '/_layout/cookies'
+    | '/_layout/faq'
     | '/_layout/join'
     | '/_layout/opt-out'
     | '/_layout/privacy-policy'
@@ -380,9 +424,11 @@ export const routeTree = rootRoute
       "filePath": "_layout.tsx",
       "children": [
         "/_layout/auth-complete",
+        "/_layout/authenticity",
         "/_layout/collections",
         "/_layout/contact",
         "/_layout/cookies",
+        "/_layout/faq",
         "/_layout/join",
         "/_layout/opt-out",
         "/_layout/privacy-policy",
@@ -398,6 +444,10 @@ export const routeTree = rootRoute
       "filePath": "_layout/auth-complete.tsx",
       "parent": "/_layout"
     },
+    "/_layout/authenticity": {
+      "filePath": "_layout/authenticity.tsx",
+      "parent": "/_layout"
+    },
     "/_layout/collections": {
       "filePath": "_layout/collections.tsx",
       "parent": "/_layout"
@@ -408,6 +458,10 @@ export const routeTree = rootRoute
     },
     "/_layout/cookies": {
       "filePath": "_layout/cookies.tsx",
+      "parent": "/_layout"
+    },
+    "/_layout/faq": {
+      "filePath": "_layout/faq.tsx",
       "parent": "/_layout"
     },
     "/_layout/join": {
