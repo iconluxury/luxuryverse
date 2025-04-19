@@ -24,6 +24,7 @@
     "@tanstack/router-devtools": "^1.116.0",
     "axios": "1.7.4",
     "dompurify": "^3.2.5",
+    "framer-motion": "^10.18.0",
     "gsap": "^3.12.7",
     "html-react-parser": "^5.2.3",
     "qr": "^0.4.0",
