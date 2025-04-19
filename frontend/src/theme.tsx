@@ -122,7 +122,7 @@ const theme = extendTheme({
       baseStyle: {
         fontFamily: "'Special Gothic Expanded One', sans-serif",
         fontWeight: "normal",
-        color: "primary.500", // Updated to blue-grey
+        color: "gray.200",
         lineHeight: "short",
       },
       sizes: {
