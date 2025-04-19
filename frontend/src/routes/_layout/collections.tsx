@@ -180,7 +180,7 @@ function LatestDropsPage() {
   )}
       {/* Past Drops Section */}
         {dropsData.past.length > 0 && (
-          <Box>
+          <Box mb={16}>
             <Heading
               fontSize={{ base: '2xl', md: '3xl' }}
               mb={8}
