@@ -82,14 +82,41 @@ function LatestDropsPage() {
     return (
       <Box p={4} bg="gray.900" color="white" minH="100vh" display="flex" justifyContent="center" alignItems="center">
         <Box maxW={{ base: "1200px", lg: "1600px" }} w="full" px={{ base: 4, md: 8 }} py={0}>
-          <Skeleton height="20px" width="200px" mb={6} />
+        <Skeleton
+              height="20px"
+              width="200px"
+              mb={6}
+              startColor="transparent" // Added
+              endColor="rgba(255, 255, 255, 0.1)" // Added
+              borderRadius="md"
+            />
           <Flex justify="center" gap={8}>
-            <Skeleton height="200px" width={{ base: "100%", md: "33.33%" }} borderRadius="md" />
+          <Skeleton
+  height="200px"
+  width={{ base: "100%", md: "33.33%" }}
+  startColor="transparent" // Added
+  endColor="rgba(255, 255, 255, 0.1)" // Added
+  borderRadius="md"
+/>
           </Flex>
-          <Skeleton height="20px" width="200px" mt={12} mb={6} />
+          <Skeleton
+  height="20px"
+  width="200px"
+  mt={12}
+  mb={6}
+  startColor="transparent" // Added
+  endColor="rgba(255, 255, 255, 0.1)" // Added
+  borderRadius="md"
+/>
           <Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={8}>
             {selectedDrops.map((_, index) => (
-              <Skeleton key={index} height="200px" borderRadius="md" />
+       <Skeleton
+       key={index}
+       height="200px"
+       startColor="transparent" // Added
+       endColor="rgba(255, 255, 255, 0.1)" // Added
+       borderRadius="md"
+     />
             ))}
           </Grid>
         </Box>
