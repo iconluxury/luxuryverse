@@ -309,10 +309,6 @@ function JoinPage() {
             <Link href="/privacy" color="green.400" textDecoration="underline">
               Privacy Policy
             </Link>
-            . Questions? Contact{' '}
-            <Link href="mailto:privacy@luxuryverse.com" color="green.400" textDecoration="underline">
-              privacy@luxuryverse.com
-            </Link>.
           </Text>
         </VStack>
       </Container>
