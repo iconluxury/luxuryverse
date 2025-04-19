@@ -13,10 +13,10 @@ import {
 import Footer from '../../components/Common/Footer';
 
 export const Route = createFileRoute('/_layout/roadmap')({
-  component: CookiePolicyPage,
+  component: RoadmapPage,
 });
 
-function CookiePolicyPage() {
+function RoadmapPage() {
   return (
     <Box>
       <Container maxW="1000px" mx="auto" px={4} py={16} color="gray.800">
@@ -42,4 +42,4 @@ function CookiePolicyPage() {
   );
 }
 
-export default CookiePolicyPage;
+export default RoadmapPage;
