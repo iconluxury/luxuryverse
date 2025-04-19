@@ -159,7 +159,7 @@ const theme = extendTheme({
     Text: {
       baseStyle: {
         fontFamily: "'DM Sans', sans-serif",
-        color: "primary.500", // Updated to blue-grey
+        color: "primary.300", // Updated to blue-grey
         lineHeight: "base",
       },
     },
