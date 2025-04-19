@@ -235,11 +235,11 @@ function Home() {
   // GSAP Animation for Brand Logos Scrolling
   useEffect(() => {
     if (!logosWrapperRef.current) return;
-
+  
     const logos = logosWrapperRef.current.querySelectorAll(".brand-logo");
     const wrapperWidth = logosWrapperRef.current.offsetWidth;
     const totalWidth = Array.from(logos).reduce((sum, logo) => sum + logo.offsetWidth + 24, 0); // 24px gap
-
+  
     // Duplicate logos for seamless looping
     gsap.set(logosWrapperRef.current, { x: 0 });
     const timeline = gsap.timeline({ repeat: -1, paused: false });
@@ -251,21 +251,29 @@ function Home() {
         gsap.set(logosWrapperRef.current, { x: 0 }); // Reset position for seamless loop
       },
     });
-
-    // Pause on hover
-    logosWrapperRef.current.addEventListener("mouseenter", () => timeline.pause());
-    logosWrapperRef.current.addEventListener("mouseleave", () => timeline.play());
-
-    // Resume on click or focus
-    logosWrapperRef.current.addEventListener("click", () => timeline.play());
-    logosWrapperRef.current.addEventListener("focus", () => timeline.play());
-
+  
+    // Define event listener functions
+    const handleMouseEnter = () => timeline.pause();
+    const handleMouseLeave = () => timeline.play();
+    const handleClick = () => timeline.play();
+    const handleFocus = () => timeline.play();
+  
+    // Add event listeners
+    const wrapper = logosWrapperRef.current;
+    wrapper.addEventListener("mouseenter", handleMouseEnter);
+    wrapper.addEventListener("mouseleave", handleMouseLeave);
+    wrapper.addEventListener("click", handleClick);
+    wrapper.addEventListener("focus", handleFocus);
+  
+    // Cleanup
     return () => {
       timeline.kill();
-      logosWrapperRef.current.removeEventListener("mouseenter", () => {});
-      logosWrapperRef.current.removeEventListener("mouseleave", () => {});
-      logosWrapperRef.current.removeEventListener("click", () => {});
-      logosWrapperRef.current.removeEventListener("focus", () => {});
+      if (wrapper) {
+        wrapper.removeEventListener("mouseenter", handleMouseEnter);
+        wrapper.removeEventListener("mouseleave", handleMouseLeave);
+        wrapper.removeEventListener("click", handleClick);
+        wrapper.removeEventListener("focus", handleFocus);
+      }
     };
   }, []);
 
