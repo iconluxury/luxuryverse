@@ -168,7 +168,7 @@ function JoinPage() {
       }
       toast({
         title: 'Submission Successful',
-        description: 'Your details have been submitted. Welcome to LuxuryVerse!',
+        description: 'Your details have been submitted.',
         status: 'success',
         duration: 5000,
         isClosable: true,
