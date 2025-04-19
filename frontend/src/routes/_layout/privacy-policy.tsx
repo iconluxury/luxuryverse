@@ -28,7 +28,7 @@ function PrivacyPolicyPage() {
             Last Updated: September 2025
           </Text>
 
-          {/* 9. Contact Information */}
+          {/* Contact Information */}
           <Box w="full" id="contact-information">
             <Heading as="h2" size="lg" fontWeight="medium" mb={4}>
               Contact

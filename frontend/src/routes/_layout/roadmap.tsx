@@ -12,22 +12,18 @@ import {
 } from "@chakra-ui/react";
 import Footer from '../../components/Common/Footer';
 
-export const Route = createFileRoute('/_layout/terms-conditions')({
-  component: TermsPage,
+export const Route = createFileRoute('/_layout/roadmap')({
+  component: CookiePolicyPage,
 });
 
-function TermsPage() {
+function CookiePolicyPage() {
   return (
     <Box>
       <Container maxW="1000px" mx="auto" px={4} py={16} color="gray.800">
         <VStack spacing={8} align="start" w="full">
           <Heading as="h1" size="xl" fontWeight="medium">
-            Terms and Conditions
+        Roadmap
           </Heading>
-          <Text fontSize="lg" color="gray.600">
-            Last Updated: September 2025
-          </Text>
-
           {/* Contact Information */}
           <Box w="full" id="contact-information">
           <Heading as="h2" size="lg" fontWeight="medium" mb={4}>
@@ -46,4 +42,4 @@ function TermsPage() {
   );
 }
 
-export default TermsPage;
+export default CookiePolicyPage;

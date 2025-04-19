@@ -295,8 +295,8 @@ function ProductDetails() {
         </Text>
         <Text fontSize="sm" mt={2}>
           Please check your network connection or contact{' '}
-          <a href="mailto:support@iconluxury.shop" style={{ color: '#3182CE' }}>
-            support@iconluxury.shop
+          <a href="mailto:support@luxuryverse.com" style={{ color: '#3182CE' }}>
+            support@luxuryverse.com
           </a>.
         </Text>
         {topProducts.length > 0 && (
