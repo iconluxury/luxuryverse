@@ -26,6 +26,7 @@ const theme = extendTheme({
       900: "#1A1A1A", // Near-black gray (replaces blue-gray for --color-secondary)
     },
     primary: {
+      300: "#A0A0A0",
       500: "#6B6B6B", 
       600: "#525252", // Slightly darker for focus/active states
       700: "#404040", // Darker for active states
@@ -159,7 +160,7 @@ const theme = extendTheme({
     Text: {
       baseStyle: {
         fontFamily: "'DM Sans', sans-serif",
-        color: "primary.300", // Updated to blue-grey
+        color: "primary.300", 
         lineHeight: "base",
       },
     },
