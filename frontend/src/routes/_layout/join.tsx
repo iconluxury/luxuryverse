@@ -298,7 +298,7 @@ function JoinPage() {
                   isLoading={isSubmitting}
                   loadingText="Submitting..."
                 >
-                  Join Now
+              Submit
                 </Button>
               </form>
             )}
