@@ -189,7 +189,7 @@ function JoinPage() {
   };
 
   return (
-    <Box bg="rgba(255, 255, 0, 0.1)" minH="100vh" color="white" py={[8, 12]}>
+    <Box bg="transparent" minH="100vh" color="white" py={[8, 12]}>
       <Container maxW="container.md" px={[4, 6]} py={12}>
         <VStack spacing={10} align="stretch">
           <VStack spacing={4} align="stretch">
