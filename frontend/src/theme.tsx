@@ -14,16 +14,16 @@ const theme = extendTheme({
   },
   colors: {
     gray: {
-      50: "#E6E6E6", // Off-white
-      100: "#D4D4D4",
-      200: "#B2B2B2",
-      300: "#a0a7e5d9", // Updated to blue-grey for body text (matches --color-text)
-      400: "#7A8A94",
-      500: "#5C6A74",
-      600: "#465056",
-      700: "#3A4A4F", // Medium blue-gray (matches --color-border)
-      800: "#2E3A3F",
-      900: "#1A2526", // Dark blue-gray (matches --color-secondary)
+      50: "#E6E6E6",  // Off-white
+      100: "#D4D4D4", // Very light gray
+      200: "#B2B2B2", // Light gray
+      300: "#A0A0A0", // Neutral gray for body text
+      400: "#8A8A8A", // Medium-light gray
+      500: "#6B6B6B", // Medium gray
+      600: "#525252", // Medium-dark gray
+      700: "#404040", // Dark gray (replaces blue-gray for --color-border)
+      800: "#2E2E2E", // Very dark gray
+      900: "#1A1A1A", // Near-black gray (replaces blue-gray for --color-secondary)
     },
     primary: {
       500: "#a0a7e5d9", // Blue-grey (matches --color-text)
@@ -122,7 +122,7 @@ const theme = extendTheme({
       baseStyle: {
         fontFamily: "'Special Gothic Expanded One', sans-serif",
         fontWeight: "normal",
-        color: "gray.200",
+        color: "#00FF00",
         lineHeight: "short",
       },
       sizes: {
