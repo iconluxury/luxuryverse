@@ -22,7 +22,7 @@ function FaqPage() {
       <Container maxW="1000px" mx="auto" px={4} py={16} color="gray.800">
         <VStack spacing={8} align="start" w="full">
           <Heading as="h1" size="xl" fontWeight="medium">
-          Frequently Asked Questions
+                    FAQ
           </Heading>
           {/* Contact Information */}
           <Box w="full" id="contact-information">
