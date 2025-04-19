@@ -37,7 +37,6 @@ function OptOutPage() {
             as="span"
             onClick={handleOptOut}
             bg="transparent"
-            textDecoration="underline"
             color="#00FF00"
             _hover={{ Color:"gray.500"  }}
             p={0}
