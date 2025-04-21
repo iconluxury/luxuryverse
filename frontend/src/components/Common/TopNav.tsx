@@ -1,13 +1,22 @@
-import { Flex, Heading, IconButton, Drawer, DrawerBody, DrawerHeader, DrawerOverlay, DrawerContent, DrawerCloseButton, VStack } from '@chakra-ui/react';
+import { Flex, Heading, IconButton, Drawer, DrawerBody, DrawerOverlay, DrawerContent, DrawerCloseButton, VStack, Text } from '@chakra-ui/react';
 import { HamburgerIcon } from '@chakra-ui/icons';
 import { Link, useNavigate } from '@tanstack/react-router';
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { AuthContext } from './AuthContext';
 
 export default function TopNav() {
   const { user, isJoining } = useContext(AuthContext);
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
+  const [cartCount, setCartCount] = useState(0);
+
+  // Load cart count from localStorage
+  useEffect(() => {
+    const savedCart = localStorage.getItem('cart');
+    const cartItems = savedCart ? JSON.parse(savedCart) : [];
+    const totalItems = cartItems.reduce((total: number, item: { quantity: number }) => total + item.quantity, 0);
+    setCartCount(totalItems);
+  }, []);
 
   const toggleMenu = () => setIsOpen(!isOpen);
   const closeMenu = () => setIsOpen(false);
@@ -22,7 +31,7 @@ export default function TopNav() {
     return {
       text: isJoining ? 'Join' : 'Shop',
       to: '/join',
-    }
+    };
   };
 
   const { text, to } = getAuthLinkProps();
@@ -34,6 +43,7 @@ export default function TopNav() {
     { to: '/faq', label: 'FAQ' },
     { to: '/contact', label: 'Contact' },
     { to, label: text },
+    { to: '/cart', label: `Cart (${cartCount})` }, // Add Cart link to navItems
   ];
 
   return (
@@ -60,7 +70,7 @@ export default function TopNav() {
           <Heading
             size="xs"
             fontSize={{ base: '0.5rem', md: '0.875rem' }}
-            color="white" // Logo color set to white
+            color="white"
             fontFamily="'Special Gothic Expanded One', sans-serif"
             lineHeight="1.1"
           >
@@ -88,7 +98,7 @@ export default function TopNav() {
                 key={to}
                 to={to}
                 style={{
-                  color: label === text ? '#00FF00' : 'white', // Green for Login/Join/Profile, white for others
+                  color: label === text ? '#00FF00' : 'white',
                   textDecoration: 'none',
                   fontFamily: "'Special Gothic Expanded One', sans-serif",
                   fontWeight: 'var(--font-weight-normal)',
@@ -101,25 +111,35 @@ export default function TopNav() {
               </Link>
             ))}
           </Flex>
-          {/* Mobile Menu Button */}
-          <IconButton
-            display={{ base: 'flex', md: 'none' }}
-            icon={<HamburgerIcon />}
-            onClick={toggleMenu}
-            aria-label="Toggle Menu"
-            bg="transparent"
-            color="white" // Hamburger icon set to white
-            _hover={{ color: '#E0E0E0' }} // Light gray hover
-            size="xs"
-            ml="auto"
-          />
+          {/* Mobile Menu Button and Cart Preview */}
+          <Flex display={{ base: 'flex', md: 'none' }} align="center" gap={2}>
+            <Link to="/cart">
+              <Text
+                fontSize="xs"
+                color="white"
+                fontFamily="'Special Gothic Expanded One', sans-serif"
+                textTransform="uppercase"
+              >
+                Cart ({cartCount})
+              </Text>
+            </Link>
+            <IconButton
+              icon={<HamburgerIcon />}
+              onClick={toggleMenu}
+              aria-label="Toggle Menu"
+              bg="transparent"
+              color="white"
+              _hover={{ color: '#E0E0E0' }}
+              size="xs"
+            />
+          </Flex>
         </Flex>
       </Flex>
       {/* Mobile Drawer Menu */}
       <Drawer isOpen={isOpen} placement="right" onClose={closeMenu}>
         <DrawerOverlay />
         <DrawerContent bg="rgba(10, 10, 10, 0.9)" color="white" maxW={{ base: '75%', sm: '250px' }}>
-          <DrawerCloseButton color="white" /> {/* Close button set to white */}
+          <DrawerCloseButton color="white" />
           <DrawerBody>
             <VStack spacing={4} align="stretch">
               {navItems.map(({ to, label }) => (
@@ -127,7 +147,7 @@ export default function TopNav() {
                   key={to}
                   to={to}
                   style={{
-                    color: label === text ? '#00FF00' : 'white', // Green for Login/Join/Profile, white for others
+                    color: label === text ? '#00FF00' : 'white',
                     textDecoration: 'none',
                     fontFamily: "'Special Gothic Expanded One', sans-serif",
                     fontWeight: 'var(--font-weight-normal)',
@@ -135,7 +155,7 @@ export default function TopNav() {
                     padding: '0.5rem',
                   }}
                   _hover={{
-                    color: label === text ? '#33FF33' : '#E0E0E0', // Lighter green for auth hover, light gray for others
+                    color: label === text ? '#33FF33' : '#E0E0E0',
                   }}
                   onClick={() => {
                     navigate({ to });
