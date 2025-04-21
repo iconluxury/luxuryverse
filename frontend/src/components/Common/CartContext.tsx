@@ -31,13 +31,24 @@ const CartContext = createContext<CartContextType>({
 
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const [cart, setCart] = useState<CartItem[]>(() => {
-    const savedCart = localStorage.getItem('cart');
-    return savedCart ? JSON.parse(savedCart) : [];
+    try {
+      const savedCart = localStorage.getItem('cart');
+      if (savedCart) {
+        const parsed = JSON.parse(savedCart);
+        if (Array.isArray(parsed) && parsed.every((item) => item.product_id && item.variant_id)) {
+          return parsed;
+        }
+      }
+      return [];
+    } catch (err) {
+      console.error('Failed to parse cart from localStorage:', err);
+      return [];
+    }
   });
 
   const [cartCount, setCartCount] = useState(0);
 
-  // Update cart count whenever cart changes
+  // Update cart count and localStorage whenever cart changes
   useEffect(() => {
     const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
     setCartCount(totalItems);
@@ -45,6 +56,10 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   }, [cart]);
 
   const addToCart = (newItem: CartItem) => {
+    if (!newItem.product_id || !newItem.variant_id) {
+      console.error('Invalid item added to cart:', newItem);
+      return;
+    }
     setCart((prevCart) => {
       const existingItem = prevCart.find(
         (item) => item.product_id === newItem.product_id && item.variant_id === newItem.variant_id
@@ -52,11 +67,11 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       if (existingItem) {
         return prevCart.map((item) =>
           item.product_id === newItem.product_id && item.variant_id === newItem.variant_id
-            ? { ...item, quantity: item.quantity + 1 }
+            ? { ...item, quantity: item.quantity + (newItem.quantity || 1) }
             : item
         );
       }
-      return [...prevCart, newItem];
+      return [...prevCart, { ...newItem, quantity: newItem.quantity || 1 }];
     });
   };
 
