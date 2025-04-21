@@ -157,7 +157,8 @@ function Home() {
     });
 
     const glitchExclusive = () => {
-      const colors = ["#58fb6cd9", "#ff00ff", "#00e5ff", "#ffea00", "#ff5555"];
+      //const colors = ["#58fb6cd9", "#ff00ff", "#00e5ff", "#ffea00", "#ff5555"];
+      const colors = ["#ff00ff","#FFFFFF"];
       exclusiveSpans.forEach((span) => {
         gsap
           .timeline()
