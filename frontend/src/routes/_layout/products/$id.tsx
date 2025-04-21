@@ -426,23 +426,31 @@ function ProductDetails() {
       />
       {/* Discount Tag */}
       {product.discount && (
-        <Tag
-          size="md"
-          variant="solid"
-          colorScheme="green"
-          borderRadius="sm" // Small border radius
-          position="absolute"
-          top="10px"
-          left="10px"
-          fontSize="lg"
-          lineHeight="1.5"
-          textTransform="uppercase"
-          px={3}
-          py={1}
-        >
-          {product.discount}
-        </Tag>
-      )}
+  <Tag
+    size="md"
+    variant="solid"
+    colorScheme="green"
+    borderRadius="sm" // Small border radius
+    position="absolute"
+    top="10px"
+    left="10px"
+    fontSize="lg"
+    lineHeight="1.5"
+    textTransform="uppercase"
+    px={3}
+    py={1}
+    bg="green.600" // Darker green background
+    color="white" // White text
+    _hover={{
+      bg: 'green.700', // Even darker green on hover
+      transform: 'translateY(-2px)', // Subtle lift effect
+      boxShadow: 'sm', // Small shadow on hover
+    }}
+    transition="all 0.2s"
+  >
+    {product.discount}
+  </Tag>
+)}
     </Box>
     {validatedImages.length > 1 && (
       <HStack mt={4} justify="center" spacing={2}>
