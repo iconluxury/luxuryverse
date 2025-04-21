@@ -85,15 +85,20 @@ function Cart() {
                       {item.brand} {item.title}
                     </Text>
                     
-                    <Text fontSize="xs" color="gray.400" textTransform="uppercase">
+                    <Text fontSize="sm" color="gray.300" textTransform="uppercase">
                       {item.brand}
                     </Text>
                     
                     <Text fontSize="xs" color="gray.400">
-                      Size: {item.size}
+                    Size:{' '} 
+                      <Text fontSize="sm" color="gray.300" textTransform="uppercase">
+                     {item.size}</Text>
                     </Text>
                     <Text fontSize="xs" color="gray.400">
-                      Quantity: {item.quantity}
+                    Quantity:{' '} 
+                    <Text fontSize="sm" color="gray.300" textTransform="uppercase">
+                   {item.quantity}
+                      </Text>
                     </Text>
                   </VStack>
                   <HStack spacing={2} align="center">
@@ -102,7 +107,10 @@ function Cart() {
                         {item.price}
                       </Text>
                       <Text fontSize="xs" color="gray.500">
-                        MSRP: {item.full_price}
+                      MSRP:{' '} 
+                      <Text fontSize="sm" color="gray.300" textTransform="uppercase">
+                        {item.full_price}
+                        </Text>
                       </Text>
                     </VStack>
                     <Text
