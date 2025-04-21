@@ -14,7 +14,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(
 logger = logging.getLogger(__name__)
 
 # API Router
-crypto_router = APIRouter(prefix="/crypto", tags=["crypto"])
+router = APIRouter(prefix="/crypto", tags=["crypto"])
 
 # CoinMarketCap API configuration
 COINMARKETCAP_API_KEY: Optional[str] = os.getenv("COINMARKETCAP_API_KEY")  # Set in .env file
@@ -34,7 +34,7 @@ class CryptoPriceConversion(BaseModel):
     last_updated: str
 
 # Root endpoint
-@crypto_router.get("/", tags=["root"])
+@router.get("/", tags=["root"])
 async def root():
     return {
         "path": "/crypto",
@@ -42,12 +42,12 @@ async def root():
     }
 
 # Health check endpoint
-@crypto_router.get("/health", tags=["health"])
+@router.get("/health", tags=["health"])
 async def health_check():
     return {"status": "healthy"}
 
 # Endpoint to fetch crypto prices and optionally convert product prices
-@crypto_router.get("/prices", response_model=List[CryptoPriceResponse | CryptoPriceConversion])
+@router.get("/prices", response_model=List[CryptoPriceResponse | CryptoPriceConversion])
 async def get_crypto_prices(
     symbols: Optional[str] = Query(
         None, description="Comma-separated list of crypto symbols (e.g., BTC,ETH,USDT)"
