@@ -606,15 +606,15 @@ function ProductDetails() {
     isDisabled={
       !selectedVariant || validatedVariants.find((v) => v.id === selectedVariant)?.inventory_quantity <= 0
     }
-    bg="green.500"
+    bg="green.700"
     color="white"
     _hover={{
-      bg: 'green.600', // Darker green on hover
+      bg: '#00FF00', // Darker green on hover
       transform: 'translateY(-2px)', // Subtle lift effect
       boxShadow: 'md',
     }}
     _disabled={{
-      bg: 'green.600', // Keep green when disabled
+      bg: 'green.700', // Keep green when disabled
       color: 'white',
       opacity: 0.7, // Slightly faded but still green
       cursor: 'not-allowed',
