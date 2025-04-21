@@ -51,9 +51,9 @@ function Cart() {
     <Box w="100%">
       <Box py={4} px={{ base: 2, md: 4 }}>
         <Box maxW="1200px" mx="auto" w="100%">
-          <Text as="h1" fontSize="xl" mb={2} textTransform="uppercase" color="gray.900">
-            Your Cart
-          </Text>
+        <Text as="h1" fontSize="xl" mb={2} textTransform="uppercase" color="white">
+          Your Cart
+        </Text>
           {cart.length === 0 ? (
             <Text fontSize="sm" color="gray.600">
               Your cart is empty.
@@ -81,7 +81,7 @@ function Cart() {
                     onError={(e) => (e.currentTarget.src = 'https://placehold.co/60x80')}
                   />
                   <VStack align="start" flex={1} spacing={0}>
-                    <Text fontSize="sm" fontWeight="medium" color="gray.900" textTransform="uppercase">
+                    <Text fontSize="sm" fontWeight="medium" color="white" textTransform="uppercase">
                       {item.brand} {item.title}
                     </Text>
                     <Text fontSize="xs" color="gray.600" textTransform="uppercase">
@@ -118,23 +118,23 @@ function Cart() {
               ))}
               {/* Compact Text-Only Table */}
               <Divider borderColor="gray.300" />
-              <Text as="h3" fontSize="md" fontWeight="bold" color="gray.900" mt={2}>
+              <Text as="h3" fontSize="md" fontWeight="bold" color="white" mt={2}>
                 SUMMARY
               </Text>
               <Table variant="simple" size="sm" colorScheme="gray">
-                <Thead>
-                  <Tr>
-                    <Th color="gray.600" textTransform="uppercase" fontSize="xs">Title</Th>
-                    <Th color="gray.600" textTransform="uppercase" fontSize="xs">Size</Th>
-                    <Th color="gray.600" textTransform="uppercase" fontSize="xs">Qty</Th>
-                    <Th color="gray.600" textTransform="uppercase" fontSize="xs">Prices</Th>
-                    <Th color="gray.600" textTransform="uppercase" fontSize="xs">Total</Th>
-                  </Tr>
-                </Thead>
+                  <Thead>
+                    <Tr>
+                      <Th color="white" textTransform="uppercase" fontSize="xs">Title</Th>
+                      <Th color="white" textTransform="uppercase" fontSize="xs">Size</Th>
+                      <Th color="white" textTransform="uppercase" fontSize="xs">Qty</Th>
+                      <Th color="white" textTransform="uppercase" fontSize="xs">Prices</Th>
+                      <Th color="white" textTransform="uppercase" fontSize="xs">Total</Th>
+                    </Tr>
+                  </Thead>
                 <Tbody>
                   {cart.map((item, index) => (
                     <Tr key={`${item.product_id}-${item.variant_id}-${index}`}>
-                      <Td color="gray.900" textTransform="uppercase" fontSize="xs">
+                      <Td color="white" textTransform="uppercase" fontSize="xs">
                         {item.brand} {item.title}
                       </Td>
                       <Td color="gray.600" fontSize="xs">{item.size}</Td>
@@ -154,9 +154,9 @@ function Cart() {
                     Terms and Conditions
                   </Text>
                 </Link>
-                <Text fontSize="md" fontWeight="bold" color="gray.900">
-                  Subtotal: ${calculateSubtotal()}
-                </Text>
+                <Text fontSize="md" fontWeight="bold" color="white">
+                    Subtotal: ${calculateSubtotal()}
+                  </Text>
               </HStack>
               <HStack justify="flex-end" w="100%" spacing={2}>
                 <Button
