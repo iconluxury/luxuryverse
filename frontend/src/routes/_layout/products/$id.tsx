@@ -577,7 +577,7 @@ function ProductDetails() {
                     ))}
                   </Select>
                   <HStack spacing={4} align="center">
-                    <Text fontSize={{ base: '3xl', md: '4xl' }} fontWeight="bold" color="green.500">
+                    <Text fontSize={{ base: '3xl', md: '4xl' }} fontWeight="bold" color="#00FF00">
                       {`${convertPrice(product.sale_price, selectedCurrency)} ${selectedCurrency}`}
                     </Text>
                   </HStack>
