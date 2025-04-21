@@ -183,7 +183,7 @@ function Cart() {
                   variant="outline"
                   size="lg"
                   textTransform="uppercase"
-                  onClick={() => navigate({ to: '/' })}
+                  onClick={() => navigate({ to: '/collections' })}
                 >
                   Keep Shopping
                 </Button>
