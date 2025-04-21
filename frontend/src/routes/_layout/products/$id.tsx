@@ -6,6 +6,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import Footer from '../../../components/Common/Footer';
 import { Image, ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import DOMPurify from 'dompurify';
+import useCustomToast from '../../../hooks/useCustomToast';
 
 // Interfaces
 interface Variant {
@@ -72,6 +73,7 @@ function ProductDetails() {
   const { id } = Route.useParams();
   const navigate = useNavigate();
   const isMobile = useBreakpointValue({ base: true, md: false });
+  const showToast = useCustomToast();
 
   // Save cart to localStorage whenever it changes
   useEffect(() => {
@@ -311,7 +313,7 @@ function ProductDetails() {
 
     const variant = validatedVariants.find((v) => v.id === selectedVariant);
     if (!variant || variant.inventory_quantity <= 0) {
-      alert('Selected variant is out of stock.');
+      showToast('Error', 'Selected variant is out of stock.', 'error');
       return;
     }
 
@@ -341,7 +343,11 @@ function ProductDetails() {
       return [...prevCart, cartItem];
     });
 
-    alert(`${cleanTitle} (${variant.size}) added to cart!`);
+    showToast(
+      'Added to Cart',
+      `${cleanTitle} (${variant.size}) added to cart!`,
+      'success'
+    );
   };
 
   // Remove from Cart Handler
