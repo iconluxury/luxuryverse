@@ -439,10 +439,10 @@ function ProductDetails() {
     textTransform="uppercase"
     px={3}
     py={1}
-    bg="green.600" // Darker green background
+    bg="green.700" // Darker green background
     color="white" // White text
     _hover={{
-      bg: 'green.700', // Even darker green on hover
+      bg: 'green.800', // Even darker green on hover
       transform: 'translateY(-2px)', // Subtle lift effect
       boxShadow: 'sm', // Small shadow on hover
     }}
