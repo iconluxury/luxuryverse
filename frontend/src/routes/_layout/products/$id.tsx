@@ -412,74 +412,93 @@ function ProductDetails() {
             <SimpleGrid columns={{ base: 1, md: 2 }} spacing={8}>
               {/* Image Section */}
               {validatedImages ? (
-                <Box position="relative" display="flex" flexDirection="column" alignItems="center">
-                  <Box position="relative" w="full" style={{ aspectRatio: '3 / 4' }} bg="white" filter="brightness(0.85)">
-                    <Image
-                      src={validatedImages[currentImage] || 'https://placehold.co/450x550'}
-                      alt={`${cleanTitle} image ${currentImage + 1}`}
-                      w="100%"
-                      maxW="450px"
-                      h="550px"
-                      objectFit="contain"
-                      mx="auto"
-                      onError={(e) => (e.currentTarget.src = 'https://placehold.co/450x550')}
-                    />
-                  </Box>
-                  {validatedImages.length > 1 && (
-                    <HStack mt={4} justify="center" spacing={2}>
-                      {validatedImages.map((img, index) => (
-                        <Image
-                          key={index}
-                          src={img}
-                          alt={`Thumbnail ${index + 1}`}
-                          w="90px"
-                          h="110px"
-                          objectFit="contain"
-                          cursor="pointer"
-                          borderRadius="md"
-                          border={index === currentImage ? '2px solid green.500' : '2px solid transparent'}
-                          onClick={() => setCurrentImage(index)}
-                          onError={(e) => (e.currentTarget.src = 'https://placehold.co/90x110')}
-                        />
-                      ))}
-                    </HStack>
-                  )}
-                  {validatedImages.length > 1 && (
-                    <>
-                      <IconButton
-                        aria-label="Previous image"
-                        icon={<ChevronLeftIcon boxSize={5} />}
-                        position="absolute"
-                        left={{ base: '4px', md: '8px' }}
-                        top="250px"
-                        transform="translateY(-50%)"
-                        bg="gray.700"
-                        color="white"
-                        _hover={{ bg: 'gray.600' }}
-                        borderRadius="full"
-                        size="sm"
-                        onClick={() => setCurrentImage((prev) => (prev - 1 + validatedImages.length) % validatedImages.length)}
-                      />
-                      <IconButton
-                        aria-label="Next image"
-                        icon={<ChevronRightIcon boxSize={5} />}
-                        position="absolute"
-                        right={{ base: '4px', md: '8px' }}
-                        top="250px"
-                        transform="translateY(-50%)"
-                        bg="gray.700"
-                        color="white"
-                        _hover={{ bg: 'gray.600' }}
-                        borderRadius="full"
-                        size="sm"
-                        onClick={() => setCurrentImage((prev) => (prev + 1) % validatedImages.length)}
-                      />
-                    </>
-                  )}
-                </Box>
-              ) : (
-                <Skeleton w="100%" maxW="400px" h="500px" mx="auto" />
-              )}
+  <Box position="relative" display="flex" flexDirection="column" alignItems="center">
+    <Box position="relative" w="full" style={{ aspectRatio: '3 / 4' }} bg="white" filter="brightness(0.85)">
+      <Image
+        src={validatedImages[currentImage] || 'https://placehold.co/450x550'}
+        alt={`${cleanTitle} image ${currentImage + 1}`}
+        w="100%"
+        maxW="450px"
+        h="550px"
+        objectFit="contain"
+        mx="auto"
+        onError={(e) => (e.currentTarget.src = 'https://placehold.co/450x550')}
+      />
+      {/* Discount Tag */}
+      {product.discount && (
+        <Tag
+          size="md"
+          variant="solid"
+          colorScheme="green"
+          borderRadius="sm" // Small border radius
+          position="absolute"
+          top="10px"
+          left="10px"
+          fontSize="lg"
+          lineHeight="1.5"
+          textTransform="uppercase"
+          px={3}
+          py={1}
+        >
+          {product.discount}
+        </Tag>
+      )}
+    </Box>
+    {validatedImages.length > 1 && (
+      <HStack mt={4} justify="center" spacing={2}>
+        {validatedImages.map((img, index) => (
+          <Image
+            key={index}
+            src={img}
+            alt={`Thumbnail ${index + 1}`}
+            w="90px"
+            h="110px"
+            objectFit="contain"
+            cursor="pointer"
+            borderRadius="md"
+            border={index === currentImage ? '2px solid green.500' : '2px solid transparent'}
+            onClick={() => setCurrentImage(index)}
+            onError={(e) => (e.currentTarget.src = 'https://placehold.co/90x110')}
+          />
+        ))}
+      </HStack>
+    )}
+    {validatedImages.length > 1 && (
+      <>
+        <IconButton
+          aria-label="Previous image"
+          icon={<ChevronLeftIcon boxSize={5} />}
+          position="absolute"
+          left={{ base: '4px', md: '8px' }}
+          top="250px"
+          transform="translateY(-50%)"
+          bg="gray.700"
+          color="white"
+          _hover={{ bg: 'gray.600' }}
+          borderRadius="full"
+          size="sm"
+          onClick={() => setCurrentImage((prev) => (prev - 1 + validatedImages.length) % validatedImages.length)}
+        />
+        <IconButton
+          aria-label="Next image"
+          icon={<ChevronRightIcon boxSize={5} />}
+          position="absolute"
+          right={{ base: '4px', md: '8px' }}
+          top="250px"
+          transform="translateY(-50%)"
+          bg="gray.700"
+          color="white"
+          _hover={{ bg: 'gray.600' }}
+          borderRadius="full"
+          size="sm"
+          onClick={() => setCurrentImage((prev) => (prev + 1) % validatedImages.length)}
+        />
+      </>
+    )}
+  </Box>
+) : (
+  <Skeleton w="100%" maxW="400px" h="500px" mx="auto" />
+)}
 
               {/* Product Details Section */}
               <VStack align="start" spacing={4}>
@@ -567,23 +586,6 @@ function ProductDetails() {
         <Text fontSize={{ base: 'md', md: 'lg' }} color="gray.500">
           MSRP: {product.full_price}
         </Text>
-      )}
-      {product.discount && (
-        <Tag
-          size="md"
-          variant="solid"
-          colorScheme="green"
-          borderRadius="full"
-          fontSize="lg"
-          lineHeight="1.5"
-          textTransform="uppercase"
-          px={3}
-          py={0}
-          mt={0}
-          transform="translateY(2px)"
-        >
-          {product.discount}
-        </Tag>
       )}
     </HStack>
                 </VStack>
