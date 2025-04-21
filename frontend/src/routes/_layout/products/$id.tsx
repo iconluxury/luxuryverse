@@ -590,17 +590,36 @@ function ProductDetails() {
     </HStack>
                 </VStack>
                 {validatedVariants && validatedVariants.length > 0 && (
-                  <Button
-                    colorScheme="green"
-                    size="lg"
-                    onClick={handleAddToCart}
-                    isDisabled={
-                      !selectedVariant || validatedVariants.find((v) => v.id === selectedVariant)?.inventory_quantity <= 0
-                    }
-                  >
-                    Add to Cart
-                  </Button>
-                )}
+  <Button
+    colorScheme="green"
+    size="lg"
+    onClick={handleAddToCart}
+    isDisabled={
+      !selectedVariant || validatedVariants.find((v) => v.id === selectedVariant)?.inventory_quantity <= 0
+    }
+    bg="green.500"
+    color="white"
+    _hover={{
+      bg: 'green.600', // Darker green on hover
+      transform: 'translateY(-2px)', // Subtle lift effect
+      boxShadow: 'md',
+    }}
+    _disabled={{
+      bg: 'green.500', // Keep green when disabled
+      color: 'white',
+      opacity: 0.7, // Slightly faded but still green
+      cursor: 'not-allowed',
+      _hover: {
+        bg: 'green.500', // Prevent hover effect when disabled
+        transform: 'none', // No lift when disabled
+        boxShadow: 'none',
+      },
+    }}
+    transition="all 0.2s"
+  >
+    Add to Cart
+  </Button>
+)}
                 <Text as="h2" fontSize="xl" mb={2}>
                   Product Description
                 </Text>
