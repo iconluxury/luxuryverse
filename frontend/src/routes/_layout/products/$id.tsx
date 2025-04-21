@@ -38,7 +38,8 @@ interface CartItem {
   variant_id: string;
   title: string;
   brand: string;
-  price: string;
+  price: string; // Sale price
+  full_price: string; // Full price (MSRP)
   image: string;
   size: string;
   quantity: number;
@@ -323,7 +324,8 @@ function ProductDetails() {
       variant_id: variant.id,
       title: cleanTitle,
       brand: product.brand,
-      price: variant.price,
+      price: variant.price, // Sale price
+      full_price: product.full_price, // Full price (MSRP)
       image: product.thumbnail || 'https://placehold.co/150x150',
       size: variant.size,
       quantity: 1,
@@ -729,11 +731,11 @@ function ProductDetails() {
                           onError={(e) => (e.currentTarget.src = 'https://placehold.co/80x100')}
                         />
                         <VStack align="start" flex={1}>
-                          <Text fontSize="md" fontWeight="medium" color="white">
+                          <Text fontSize="md" fontWeight="medium" color="white" textTransform="uppercase">
                             {item.brand} {item.title}
                           </Text>
-                          <Text fontSize="sm" color="gray.400">
-                            Style: {item.title}
+                          <Text fontSize="sm" color="gray.400" textTransform="uppercase">
+                            Brand: {item.brand}
                           </Text>
                           <Text fontSize="sm" color="gray.400">
                             Size: {item.size}
@@ -742,19 +744,26 @@ function ProductDetails() {
                             Quantity: {item.quantity}
                           </Text>
                         </VStack>
-                        <Text fontSize="md" fontWeight="bold" color="green.500">
-                          {item.price}
-                        </Text>
-                        <Text
-                          as="button"
-                          color="green.500"
-                          fontSize="sm"
-                          textTransform="uppercase"
-                          textDecoration="underline"
-                          onClick={() => handleRemoveFromCart(item.product_id, item.variant_id)}
-                        >
-                          Remove
-                        </Text>
+                        <HStack spacing={4} align="center">
+                          <VStack align="end" spacing={0}>
+                            <Text fontSize="md" fontWeight="bold" color="green.500">
+                              {item.price}
+                            </Text>
+                            <Text fontSize="sm" color="gray.500">
+                              MSRP: {item.full_price}
+                            </Text>
+                          </VStack>
+                          <Text
+                            as="button"
+                            color="green.500"
+                            fontSize="sm"
+                            textTransform="uppercase"
+                            textDecoration="underline"
+                            onClick={() => handleRemoveFromCart(item.product_id, item.variant_id)}
+                          >
+                            Remove
+                          </Text>
+                        </HStack>
                       </HStack>
                     ))}
                     <Divider borderColor="gray.600" />
