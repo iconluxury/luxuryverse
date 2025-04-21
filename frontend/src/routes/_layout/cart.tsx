@@ -73,10 +73,11 @@ function Cart() {
                   spacing={2}
                 >    <Box
                 position="relative"
-                w="full"
-                style={{ aspectRatio: '3 / 4' }}
+                w="60px" // Constrain the Box width to match the image
+                h="80px" // Constrain the Box height to match the image
                 bg="white"
                 filter="brightness(0.85)"
+                overflow="hidden" // Prevent image overflow
               >
                   <Image
                     src={item.image}
