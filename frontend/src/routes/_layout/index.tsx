@@ -465,20 +465,26 @@ function Home() {
               Exclusive access to luxury goods, verified and authenticated on the blockchain.
             </Text>
             <Button
-              size="lg"
-              variant="solid"
-              bg="green.600"
-              color="white"
-              _hover={{ bg: "green.700" }}
-              onClick={handleJoinWaitlist}
-              fontSize={{ base: "md", md: "xl" }}
-              py={{ base: 6, md: 8 }}
-              px={{ base: 8, md: 12 }}
-              alignSelf={{ base: "center", lg: "center" }}
-              as={Link} to="/join"
-            >
-              GET IN LINE
-            </Button>
+  size="2xl"
+  bg="transparent"
+  color="#00FF00"
+  textTransform="uppercase"
+  fontFamily="'Special Gothic Expanded One', sans-serif"
+  fontWeight="normal"
+  fontSize={{ base: "md", md: "xl" }}
+  py={{ base: 6, md: 8 }}
+  px={{ base: 8, md: 12 }}
+  _hover={{
+    bg: "transparent",
+    color: "#33FF33",
+  }}
+  onClick={handleJoinWaitlist}
+  alignSelf={{ base: "center", lg: "center" }}
+  as={Link}
+  to="/join"
+>
+  GET IN LINE
+</Button>
           </VStack>
           <Box
             mt={{ base: 10, md: 12 }}
