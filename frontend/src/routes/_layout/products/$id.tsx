@@ -586,9 +586,10 @@ function ProductDetails() {
                     <Text fontSize={{ base: '3xl', md: '4xl' }} fontWeight="bold" color="#00FF00">
                       {`${convertPrice(product.sale_price, selectedCurrency)} ${selectedCurrency}`}
                     </Text>
-                  </HStack>
-                  <HStack spacing={4} align="center">
+                 
+      
       {product.full_price && (
+
         <Text fontSize={{ base: 'md', md: 'lg' }} color="gray.400">
           MSRP: {product.full_price}
         </Text>
