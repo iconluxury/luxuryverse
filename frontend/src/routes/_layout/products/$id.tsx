@@ -521,7 +521,7 @@ function ProductDetails() {
                           key={variant.id || `variant-${index}`}
                           bg={
                             selectedVariant === variant.id
-                              ? '#00FF00'
+                              ? 'green.500'
                               : variant.inventory_quantity > 0
                               ? 'gray.700'
                               : 'red.900'
@@ -553,7 +553,7 @@ function ProductDetails() {
                     width={{ base: '120px', md: '150px' }}
                     bg="transparent"
                     color="white"
-                    borderColor="#00FF00"
+                    borderColor="green.500"
                     _hover={{ borderColor: 'green.400' }}
                     _focus={{ borderColor: 'green.400', boxShadow: '0 0 0 1px green.400' }}
                     sx={{
@@ -577,7 +577,7 @@ function ProductDetails() {
                     ))}
                   </Select>
                   <HStack spacing={4} align="center">
-                    <Text fontSize={{ base: '3xl', md: '4xl' }} fontWeight="bold" color="#00FF00">
+                    <Text fontSize={{ base: '3xl', md: '4xl' }} fontWeight="bold" color="green.500">
                       {`${convertPrice(product.sale_price, selectedCurrency)} ${selectedCurrency}`}
                     </Text>
                   </HStack>
@@ -676,7 +676,7 @@ function ProductDetails() {
                         <Text color="gray.300" fontSize="sm">
                           {topProduct.sale_price || 'N/A'}
                           {topProduct.discount && (
-                            <Text as="span" color="#00FF00" ml={1}>
+                            <Text as="span" color="green.500" ml={1}>
                               ({topProduct.discount})
                             </Text>
                           )}
