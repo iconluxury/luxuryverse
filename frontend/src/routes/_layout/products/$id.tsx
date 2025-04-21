@@ -596,38 +596,39 @@ function ProductDetails() {
     </HStack>
                 </VStack>
                 {validatedVariants && validatedVariants.length > 0 && (
-                  <Button
-                  colorScheme="green"
-                  size="lg"
-                  onClick={handleAddToCart}
-                  isDisabled={
-                    !selectedVariant || validatedVariants.find((v) => v.id === selectedVariant)?.inventory_quantity <= 0
-                  }
-                  bg="transparent" // No background by default
-                  color="#00FF00" // Default text color
-                  textTransform="uppercase" // Default CAPS
-                  _hover={{
-                    bg: 'transparent',
-                    borderWidth: '2px', // Ensure border is visible on hover
-                    borderStyle: 'solid',
-                    borderColor: 'green.500',
-                    color: '#00CC00', // Slightly darker green on hover
-                  }}
-                  _disabled={{
-                    bg: 'transparent', // No background in disabled state
-                    color: '#00FF00', // Maintain text color in disabled state
-                    opacity: 0.7,
-                    cursor: 'not-allowed',
-                    _hover: {
-                      bg: 'transparent',
-                      transform: 'none',
-                      boxShadow: 'none',
-                    },
-                  }}
-                  transition="all 0.2s"
-                >
-                  ADD TO CART
-                </Button>
+              <Button
+              size="lg"
+              onClick={handleAddToCart}
+              isDisabled={
+                !selectedVariant || validatedVariants.find((v) => v.id === selectedVariant)?.inventory_quantity <= 0
+              }
+              bg="transparent"
+              color="#00FF00"
+              textTransform="uppercase"
+              fontFamily="'Special Gothic Expanded One', sans-serif"
+              fontWeight="normal"
+              _hover={{
+                bg: 'transparent',
+                borderWidth: '2px',
+                borderStyle: 'solid',
+                borderColor: 'green.500',
+                color: '#33FF33',
+              }}
+              _disabled={{
+                bg: 'transparent',
+                color: '#00FF00',
+                opacity: 0.7,
+                cursor: 'not-allowed',
+                _hover: {
+                  bg: 'transparent',
+                  borderWidth: '0',
+                  color: '#00FF00',
+                },
+              }}
+              transition="all 0.2s"
+            >
+              ADD TO CART
+            </Button>
 )}
                 <Text as="h2" fontSize="xl" mb={2}>
                   Product Description
