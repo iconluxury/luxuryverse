@@ -564,6 +564,7 @@ function ProductDetails() {
                         : `${convertPrice(product.sale_price, selectedCurrency)} ${selectedCurrency}`}
                     </Text>
                   </HStack>
+                  <HStack spacing={4} align="center">
                   {product.full_price && selectedCurrency === 'USD' && (
         <Text fontSize={{ base: 'md', md: 'lg' }} color="gray.500">
           MSRP: {product.full_price}
@@ -585,6 +586,7 @@ function ProductDetails() {
           {product.discount}
         </Tag>
       )}
+          </HStack>
                 </VStack>
                 {validatedVariants && validatedVariants.length > 0 && (
                   <Button
