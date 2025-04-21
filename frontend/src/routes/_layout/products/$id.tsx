@@ -531,7 +531,7 @@ function ProductDetails() {
                           key={variant.id || `variant-${index}`}
                           bg={
                             selectedVariant === variant.id
-                              ? 'green.600'
+                              ? 'green.700'
                               : variant.inventory_quantity > 0
                               ? 'gray.700'
                               : 'red.900'
