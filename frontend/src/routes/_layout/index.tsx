@@ -51,7 +51,6 @@ function Home() {
   const cursorRef = useRef(null);
   const logosWrapperRef = useRef(null);
 
-  // GSAP Animation for Headings
   useEffect(() => {
     if (!exclusiveRef.current || !brandsRef.current || !cursorRef.current) {
       console.error("Refs not found:", {
@@ -61,11 +60,11 @@ function Home() {
       });
       return;
     }
-
+  
     const exclusiveElement = exclusiveRef.current;
     const brandsElement = brandsRef.current;
     const cursor = cursorRef.current;
-
+  
     const exclusiveText = "EXCLUSIVE";
     const brandsText = "BRANDS";
     exclusiveElement.innerHTML = exclusiveText
@@ -76,14 +75,14 @@ function Home() {
       .split("")
       .map((char) => `<span class="glitch-letter">${char}</span>`)
       .join("");
-
+  
     const exclusiveSpans = exclusiveElement.querySelectorAll(".glitch-letter");
     const brandsSpans = brandsElement.querySelectorAll(".glitch-letter");
-
+  
     gsap.set([exclusiveElement, brandsElement], { opacity: 0, color: "#00ff00" });
     gsap.set(exclusiveSpans, { opacity: 0 });
     gsap.set(brandsSpans, { opacity: 0 });
-
+  
     gsap.set(cursor, {
       transformPerspective: 400,
       rotateY: 30,
@@ -95,7 +94,7 @@ function Home() {
       textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
       x: 0,
     });
-
+  
     gsap.to(cursor, {
       opacity: 0,
       repeat: -1,
@@ -103,7 +102,7 @@ function Home() {
       duration: 0.5,
       ease: "power1.inOut",
     });
-
+  
     gsap.to(exclusiveElement, {
       opacity: 1,
       duration: 0.1,
@@ -120,15 +119,16 @@ function Home() {
           },
           onUpdate: function () {
             const currentIndex = Math.floor(this.progress() * exclusiveSpans.length);
+            const letterWidth = exclusiveElement.offsetWidth / exclusiveText.length;
             gsap.set(cursor, {
-              x: currentIndex * (exclusiveElement.offsetWidth / exclusiveText.length) + 5,
-              top: { base: "5%", md: "10%" },
+              x: currentIndex * letterWidth, // Removed +5 offset to align with letter start
+              top: { base: "0%", md: "5%" }, // Lowered to align with text baseline
             });
           },
         });
       },
     });
-
+  
     gsap.to(brandsElement, {
       opacity: 1,
       duration: 0.1,
@@ -146,16 +146,18 @@ function Home() {
           },
           onUpdate: function () {
             const currentIndex = Math.floor(this.progress() * brandsSpans.length);
+            const letterWidth = brandsElement.offsetWidth / brandsText.length;
             const brandsOffsetTop = exclusiveElement.offsetHeight + 20; // Adjust based on layout
             gsap.set(cursor, {
-              x: currentIndex * (brandsElement.offsetWidth / brandsText.length) + 5,
-              top: `calc(${brandsOffsetTop}px + 10%)`,
+              x: currentIndex * letterWidth, // Removed +5 offset
+              top: `calc(${brandsOffsetTop}px + 5%)`, // Adjusted for better alignment
             });
           },
         });
       },
     });
-
+  
+    // Glitch animations remain unchanged
     const glitchExclusive = () => {
       const colors = ["#00FF00", "#ffffff"];
       exclusiveSpans.forEach((span) => {
@@ -174,7 +176,6 @@ function Home() {
             duration,
             ease: "none",
           });
-        // 20% chance for a double glitch
         if (Math.random() < 0.2) {
           timeline.to(span, {
             x: gsap.utils.random(-12, 12),
@@ -191,7 +192,7 @@ function Home() {
       });
       gsap.delayedCall(gsap.utils.random(0.5, 3), glitchExclusive);
     };
-
+  
     const glitchBrands = () => {
       const colors = ["#00FF00", "#ffffff"];
       brandsSpans.forEach((span) => {
@@ -210,7 +211,6 @@ function Home() {
             duration,
             ease: "none",
           });
-        // 20% chance for a double glitch
         if (Math.random() < 0.2) {
           timeline.to(span, {
             x: gsap.utils.random(-8, 8),
@@ -227,11 +227,11 @@ function Home() {
       });
       gsap.delayedCall(gsap.utils.random(0.5, 3), glitchBrands);
     };
-
+  
     gsap.delayedCall(exclusiveText.length * 0.2 + 0.5, glitchExclusive);
     gsap.delayedCall((exclusiveText.length + brandsText.length) * 0.2 + 0.5, glitchBrands);
   }, []);
-
+  
   // GSAP Animation for Brand Logos Scrolling
   useEffect(() => {
     if (!logosWrapperRef.current) return;
