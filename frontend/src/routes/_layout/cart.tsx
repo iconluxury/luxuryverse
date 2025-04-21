@@ -269,7 +269,7 @@ function Cart() {
                     <Text as="span" fontSize="lg" color="#00FF00">
                       {`${convertPrice(calculateSubtotal(), selectedCurrency)} ${selectedCurrency}`}
                     </Text>{' '}
-                    : TOTAL
+              
                   </Text>
                   <Select
                     value={selectedCurrency}
