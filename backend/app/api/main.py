@@ -1,7 +1,7 @@
 # app/api/main.py
 from fastapi import APIRouter, Request
-from app.api.routes import utils, shopify, private,
-from app.api.routes.api_router import router as crypto_router
+from app.api.routes import utils, shopify, private
+from app.api.routes import router as crypto_router
 from app.api.routes.x_auth import router as x_auth_router
 from app.core.config import settings
 
