@@ -739,21 +739,25 @@ function ProductDetails() {
                         <Text fontSize="md" fontWeight="bold" color="green.500">
                           {item.price}
                         </Text>
-                        <Button
-                          colorScheme="red"
-                          size="sm"
+                        <Text
+                          as="button"
+                          color="green.500"
+                          fontSize="sm"
                           textTransform="uppercase"
+                          textDecoration="underline"
                           onClick={() => handleRemoveFromCart(item.product_id, item.variant_id)}
                         >
                           Remove
-                        </Button>
+                        </Text>
                       </HStack>
                     ))}
                     <Divider borderColor="gray.600" />
                     <HStack justify="space-between" w="100%" align="center">
-                      <Text fontSize="sm" color="red.500">
-                        Free Shipping on All Orders Over $250, Some Exceptions May Apply
-                      </Text>
+                      <Link to="/terms-and-conditions">
+                        <Text fontSize="sm" color="gray.400" textDecoration="underline">
+                          Terms and Conditions
+                        </Text>
+                      </Link>
                       <Text fontSize="lg" fontWeight="bold" color="white">
                         Subtotal: ${calculateSubtotal()}
                       </Text>
