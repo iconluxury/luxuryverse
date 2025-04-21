@@ -611,8 +611,6 @@ function ProductDetails() {
       bg: 'transparent',
       borderColor: '#00FF00', 
       color: '#00FF00',
-      transform: 'translateY(-2px)', // Subtle lift effect
-      boxShadow: 'md',
     }}
     _disabled={{
       bg: 'green.700', // Keep green when disabled
