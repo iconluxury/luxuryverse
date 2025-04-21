@@ -273,9 +273,13 @@ function Cart() {
     alignItems="center"
     px={2} // Optional: padding for better appearance
   >
-    <Text as="span" fontSize="4xl" color="#00FF00">
-      {`${convertPrice(calculateSubtotal(), selectedCurrency)} ${selectedCurrency}`}
-    </Text>
+   <Text
+  as="span"
+  fontSize={{ base: "lg", md: "3xl" }}
+  color="#00FF00"
+>
+  {`${convertPrice(calculateSubtotal(), selectedCurrency)} ${selectedCurrency}`}
+</Text>
   </Text>
   <Select
     value={selectedCurrency}
