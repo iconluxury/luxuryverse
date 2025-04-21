@@ -71,7 +71,7 @@ function Cart() {
                   borderWidth="1px"
                   borderRadius="sm"
                   spacing={2}
-                >
+                >    <Box position="relative" w="full" style={{ aspectRatio: '3 / 4' }} bg="white" filter="brightness(0.85)">
                   <Image
                     src={item.image}
                     alt={item.title}
@@ -79,7 +79,7 @@ function Cart() {
                     h="80px"
                     objectFit="contain"
                     onError={(e) => (e.currentTarget.src = 'https://placehold.co/60x80')}
-                  />
+                  /></Box>
                 <VStack align="start" flex={1} spacing={0}>
 
   <Text fontSize="sm" fontWeight="medium" color="gray.300" textTransform="uppercase">
