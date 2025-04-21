@@ -418,6 +418,21 @@ function Home() {
               >
                 EXCLUSIVE
               </Heading>
+              <Box
+                as="span"
+                ref={exclusiveCursorRef}
+                className="terminal-cursor"
+                position="absolute"
+                top={{ base: "5%", md: "10%" }}
+                left="0"
+                color="#58fb6cd9"
+                fontSize={{ base: "1rem", md: "5.5rem" }}
+                lineHeight="1"
+                fontWeight="normal"
+                ml="0.05em"
+              >
+                |
+              </Box>
             </Box>
             <Box position="relative" display="inline-block" whiteSpace="nowrap">
               <Heading
