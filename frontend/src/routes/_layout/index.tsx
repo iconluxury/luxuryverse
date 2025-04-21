@@ -465,12 +465,13 @@ function Home() {
               Exclusive access to luxury goods, verified and authenticated on the blockchain.
             </Text>
             <Button
-  size="2xl"
+  size="3xl"
   bg="transparent"
   color="#00FF00"
   textTransform="uppercase"
   fontFamily="'Special Gothic Expanded One', sans-serif"
   fontWeight="normal"
+  textAlign="left"
   fontSize={{ base: "md", md: "xl" }}
   py={{ base: 6, md: 8 }}
   px={{ base: 8, md: 12 }}
