@@ -51,8 +51,8 @@ function Cart() {
     <Box w="100%">
       <Box py={4} px={{ base: 2, md: 4 }}>
         <Box maxW="1200px" mx="auto" w="100%">
-        <Text as="h1" fontSize="xl" mb={2} textTransform="uppercase" color="white">
-          Your Cart
+        <Text as="h1" fontSize="xl" fontWeight="bold"  mb={2} textTransform="uppercase" color="white">
+          Cart
         </Text>
           {cart.length === 0 ? (
             <Text fontSize="sm" color="gray.400">
@@ -61,7 +61,7 @@ function Cart() {
           ) : (
             <VStack spacing={2} align="start">
               <Text fontSize="sm" color="gray.400">
-                {cartCount} {cartCount === 1 ? 'Item' : 'Items'} in Your Cart
+                {cartCount} {cartCount === 1 ? 'Item' : 'Items'} in your Cart
               </Text>
               {cart.map((item, index) => (
                 <HStack
