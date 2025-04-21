@@ -255,7 +255,7 @@ function Cart() {
       }}
       transition="all 0.2s"
     >
-      Checkout Now
+    {' '}Checkout
     </Button>
   </Link>
 </HStack>
