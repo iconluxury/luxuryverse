@@ -89,12 +89,12 @@ function Cart() {
                       {item.brand}
                     </Text>
                     
-                    <Text fontSize="xs" color="gray.400">
+                    <Text fontSize="xs" fontWeight="bold" color="gray.400">
                     Size:{' '} 
                       <Text fontSize="sm" color="gray.300" textTransform="uppercase">
                      {item.size}</Text>
                     </Text>
-                    <Text fontSize="xs" color="gray.400">
+                    <Text fontSize="xs" fontWeight="bold" color="gray.400">
                     Quantity:{' '} 
                     <Text fontSize="sm" color="gray.300" textTransform="uppercase">
                    {item.quantity}
@@ -106,7 +106,7 @@ function Cart() {
                       <Text fontSize="sm" fontWeight="bold" color="green.500">
                         {item.price}
                       </Text>
-                      <Text fontSize="xs" color="gray.500">
+                      <Text fontSize="xs" fontWeight="bold" color="gray.400">
                       MSRP:{' '} 
                       <Text fontSize="sm" fontWeight="medium" color="gray.300" textTransform="uppercase">
                         {item.full_price}
