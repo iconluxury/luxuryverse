@@ -443,10 +443,8 @@ function ProductDetails() {
     color="white" // White text
     _hover={{
       bg: 'transparent', // Even darker green on hover
-      borderColor: '#00FF00', // Green border on hover
-      color: '00FF00', // Black text on hover
-      transform: 'translateY(-2px)', // Subtle lift effect
-      boxShadow: 'sm', // Small shadow on hover
+      borderColor: '#00FF00', 
+      color: '#00FF00',
     }}
     transition="all 0.2s"
   >
