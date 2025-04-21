@@ -134,114 +134,72 @@ function Cart() {
               Your cart is empty.
             </Text>
           ) : (
-            <VStack spacing={2} align="start">
+            <VStack spacing={4} align="start">
               <Text fontSize="sm" color="gray.400">
                 {cartCount} {cartCount === 1 ? 'item' : 'items'} in your cart
               </Text>
-              {cart.map((item, index) => (
-                <HStack
-                  key={`${item.product_id}-${item.variant_id}-${index}`}
-                  w="100%"
-                  p={2}
-                  borderWidth="1px"
-                  borderRadius="sm"
-                  spacing={2}
-                  align="start"
-                >
-                  <Box
-                    position="relative"
-                    w="60px"
-                    h="80px"
-                    minW="60px"
-                    minH="80px"
-                    bg="white"
-                    filter="brightness(0.85)"
-                    overflow="hidden"
-                    flexShrink={0}
-                    boxSizing="border-box"
-                  >
-                    <Image
-                      src={item.image}
-                      alt={item.title}
-                      w="100%"
-                      h="100%"
-                      maxW="60px"
-                      maxH="80px"
-                      objectFit="contain"
-                      onError={(e) => (e.currentTarget.src = 'https://placehold.co/60x80')}
-                      boxSizing="border-box"
-                    />
-                  </Box>
-                  <VStack align="start" flex={1} spacing={0}>
-                    <Text fontSize="sm" fontWeight="medium" color="gray.300" textTransform="uppercase">
-                      {item.brand}
-                    </Text>
-                    <Text fontSize="sm" fontWeight="medium" color="white" textTransform="uppercase">
-                      {item.brand} {item.title}
-                    </Text>
-                    <HStack>
-                      <Text fontSize="xs" fontWeight="bold" color="gray.400" textTransform="uppercase">
-                        Size:
-                      </Text>
-                      <Text fontSize="sm" color="gray.300" textTransform="uppercase">
-                        {item.size || 'N/A'}
-                      </Text>
-                    </HStack>
-                    <HStack>
-                      <Text fontSize="xs" fontWeight="bold" color="gray.400" textTransform="uppercase">
-                        Quantity:
-                      </Text>
-                      <Text fontSize="sm" color="gray.300" textTransform="uppercase">
-                        {item.quantity}
-                      </Text>
-                    </HStack>
-                  </VStack>
-                  <HStack spacing={2} align="center">
-                    <VStack align="end" spacing={1}>
-                      <HStack spacing={2}>
-                        <Text fontSize="sm" fontWeight="bold" color="#00FF00">
-                          {item.price}
-                        </Text>
-                        <Text fontSize="xs" fontWeight="medium" color="gray.300" textTransform="uppercase">
-                          / {item.full_price}
-                        </Text>
-                      </HStack>
-                      <Text
-                        as="button"
-                        color="#00ff00"
-                        fontSize="xs"
-                        textTransform="uppercase"
-                        textDecoration="underline"
-                        onClick={() => handleRemoveFromCart(item.product_id, item.variant_id)}
-                      >
-                        Remove
-                      </Text>
-                    </VStack>
-                  </HStack>
-                </HStack>
-              ))}
               {/* Compact Text-Only Table */}
-              <Text as="h3" fontSize="md" fontWeight="bold" color="white" mt={2}>
-                SUMMARY
-              </Text>
               <Table variant="simple" size="sm" colorScheme="gray">
                 <Thead>
                   <Tr>
-                    <Th color="white" textTransform="uppercase" fontSize="xs">Title</Th>
-                    <Th color="white" textTransform="uppercase" fontSize="xs">Size</Th>
-                    <Th color="white" textTransform="uppercase" fontSize="xs">Qty</Th>
-                    <Th color="white" textTransform="uppercase" fontSize="xs">Price / MSRP</Th>
-                    <Th color="white" textTransform="uppercase" fontSize="xs">Total</Th>
+                    <Th color="white" textTransform="uppercase" fontSize="xs" w="60px">
+                      Image
+                    </Th>
+                    <Th color="white" textTransform="uppercase" fontSize="xs">
+                      Title
+                    </Th>
+                    <Th color="white" textTransform="uppercase" fontSize="xs">
+                      Size
+                    </Th>
+                    <Th color="white" textTransform="uppercase" fontSize="xs">
+                      Qty
+                    </Th>
+                    <Th color="white" textTransform="uppercase" fontSize="xs">
+                      Price / MSRP
+                    </Th>
+                    <Th color="white" textTransform="uppercase" fontSize="xs">
+                      Total
+                    </Th>
+                    <Th color="white" textTransform="uppercase" fontSize="xs">
+                      Action
+                    </Th>
                   </Tr>
                 </Thead>
                 <Tbody>
                   {cart.map((item, index) => (
                     <Tr key={`${item.product_id}-${item.variant_id}-${index}`}>
+                      <Td>
+                        <Box
+                          w="40px"
+                          h="60px"
+                          bg="white"
+                          filter="brightness(0.85)"
+                          overflow="hidden"
+                          flexShrink={0}
+                          boxSizing="border-box"
+                        >
+                          <Image
+                            src={item.image}
+                            alt={item.title}
+                            w="100%"
+                            h="100%"
+                            maxW="40px"
+                            maxH="60px"
+                            objectFit="contain"
+                            onError={(e) => (e.currentTarget.src = 'https://placehold.co/40x60')}
+                            boxSizing="border-box"
+                          />
+                        </Box>
+                      </Td>
                       <Td color="white" textTransform="uppercase" fontSize="xs">
                         {item.brand} {item.title}
                       </Td>
-                      <Td color="gray.400" fontSize="xs">{item.size}</Td>
-                      <Td color="gray.400" fontSize="xs">{item.quantity}</Td>
+                      <Td color="gray.400" fontSize="xs">
+                        {item.size}
+                      </Td>
+                      <Td color="gray.400" fontSize="xs">
+                        {item.quantity}
+                      </Td>
                       <Td color="gray.400" fontSize="xs">
                         <Text as="span" color="#00ff00">
                           {convertPrice(item.price.replace('$', ''), selectedCurrency)} {selectedCurrency}
@@ -254,6 +212,18 @@ function Cart() {
                       <Td color="#00FF00" fontSize="xs">
                         {convertPrice(calculateItemTotalPrice(item), selectedCurrency)} {selectedCurrency}
                       </Td>
+                      <Td>
+                        <Text
+                          as="button"
+                          color="#00ff00"
+                          fontSize="xs"
+                          textTransform="uppercase"
+                          textDecoration="underline"
+                          onClick={() => handleRemoveFromCart(item.product_id, item.variant_id)}
+                        >
+                          Remove
+                        </Text>
+                      </Td>
                     </Tr>
                   ))}
                 </Tbody>
@@ -265,57 +235,54 @@ function Cart() {
                   </Text>
                 </Link>
                 <HStack spacing={2} alignItems="stretch" height="40px">
-  <Text
-    fontSize="md"
-    fontWeight="bold"
-    color="white"
-    display="flex"
-    alignItems="center"
-    px={2} // Optional: padding for better appearance
-  >
-   <Text
-  as="span"
-  fontSize={{ base: "md", md: "3xl" }}
-  color="#00FF00"
->
-  {`${convertPrice(calculateSubtotal(), selectedCurrency)} ${selectedCurrency}`}
-</Text>
-  </Text>
-  <Select
-    value={selectedCurrency}
-    onChange={(e) => setSelectedCurrency(e.target.value)}
-    width={{ base: '120px', md: '150px' }}
-    bg="transparent"
-    color="white"
-    borderColor="green.500"
-    fontSize="md"
-    height="40px" // Explicitly set height
-    _hover={{ borderColor: 'green.400' }}
-    _focus={{ borderColor: 'green.400', boxShadow: '0 0 0 1px green.400' }}
-    sx={{
-      '> option': {
-        background: 'gray.800',
-        color: 'white',
-        _hover: {
-          background: 'green.700',
-          color: 'white',
-      }},
-    }}
-  >
-    <option value="USD" style={{ background: 'gray.800', color: 'white' }}>
-      USD
-    </option>
-    {cryptoPrices.map((crypto) => (
-      <option
-        key={crypto.symbol}
-        value={crypto.symbol}
-        style={{ background: 'gray.800', color: 'white' }}
-      >
-        {crypto.symbol}
-      </option>
-    ))}
-  </Select>
-</HStack>
+                  <Text
+                    fontSize="md"
+                    fontWeight="bold"
+                    color="white"
+                    display="flex"
+                    alignItems="center"
+                    px={2}
+                  >
+                    <Text as="span" fontSize={{ base: 'md', md: '3xl' }} color="#00FF00">
+                      {`${convertPrice(calculateSubtotal(), selectedCurrency)} ${selectedCurrency}`}
+                    </Text>
+                  </Text>
+                  <Select
+                    value={selectedCurrency}
+                    onChange={(e) => setSelectedCurrency(e.target.value)}
+                    width={{ base: '120px', md: '150px' }}
+                    bg="transparent"
+                    color="white"
+                    borderColor="green.500"
+                    fontSize="md"
+                    height="40px"
+                    _hover={{ borderColor: 'green.400' }}
+                    _focus={{ borderColor: 'green.400', boxShadow: '0 0 0 1px green.400' }}
+                    sx={{
+                      '> option': {
+                        background: 'gray.800',
+                        color: 'white',
+                        _hover: {
+                          background: 'green.700',
+                          color: 'white',
+                        },
+                      },
+                    }}
+                  >
+                    <option value="USD" style={{ background: 'gray.800', color: 'white' }}>
+                      USD
+                    </option>
+                    {cryptoPrices.map((crypto) => (
+                      <option
+                        key={crypto.symbol}
+                        value={crypto.symbol}
+                        style={{ background: 'gray.800', color: 'white' }}
+                      >
+                        {crypto.symbol}
+                      </option>
+                    ))}
+                  </Select>
+                </HStack>
               </HStack>
               <HStack justify="flex-end" w="100%" spacing={2}>
                 <Button
@@ -336,17 +303,17 @@ function Cart() {
                   border="none"
                   borderRadius="0"
                   _hover={{
-                    bg: "transparent",
-                    color: "#00CC00",
+                    bg: 'transparent',
+                    color: '#00CC00',
                   }}
                   _disabled={{
-                    bg: "transparent",
-                    color: "#00FF00",
+                    bg: 'transparent',
+                    color: '#00FF00',
                     opacity: 0.7,
-                    cursor: "not-allowed",
+                    cursor: 'not-allowed',
                     _hover: {
-                      bg: "transparent",
-                      color: "#00FF00",
+                      bg: 'transparent',
+                      color: '#00FF00',
                     },
                   }}
                   transition="all 0.2s"
@@ -372,17 +339,17 @@ function Cart() {
                     border="none"
                     borderRadius="0"
                     _hover={{
-                      bg: "transparent",
-                      color: "#E0E0E0",
+                      bg: 'transparent',
+                      color: '#E0E0E0',
                     }}
                     _disabled={{
-                      bg: "transparent",
-                      color: "white",
+                      bg: 'transparent',
+                      color: 'white',
                       opacity: 0.7,
-                      cursor: "not-allowed",
+                      cursor: 'not-allowed',
                       _hover: {
-                        bg: "transparent",
-                        color: "white",
+                        bg: 'transparent',
+                        color: 'white',
                       },
                     }}
                     transition="all 0.2s"
