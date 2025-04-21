@@ -181,7 +181,6 @@ function Cart() {
               </HStack>
             </VStack>
           )}
-          <Divider my={4} borderColor="gray.300" />
         </Box>
       </Box>
       <Footer />
