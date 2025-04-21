@@ -181,7 +181,7 @@ function Home() {
             ease: "none",
           })
           .to(span, {
-            color: "#58fb6cd9",
+            color: "#00FF00",
             x: 0,
             y: 0,
             scale: 1,
