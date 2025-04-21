@@ -607,26 +607,31 @@ function ProductDetails() {
       textTransform="uppercase"
       fontFamily="'Special Gothic Expanded One', sans-serif"
       fontWeight="normal"
-      textAlign="left" // Ensure text is left-aligned
-      justifyContent="flex-start" // Align content to the left within the button
-      alignItems="flex-start" // Ensure vertical alignment supports left text
-      width="100%" // Full width to give space for left-aligned text
-      px={4} // Consistent padding for left-aligned text
-      py={2} // Vertical padding for better appearance
+      textAlign="left"
+      justifyContent="flex-start"
+      width="100%"
+      px={4}
+      py={2}
       border="none"
       borderRadius="0"
+      textDecoration="none" // Link-like appearance
+      display="inline-block" // Makes it behave more like a link
+      cursor="pointer" // Pointer cursor for interactivity
       _hover={{
         bg: "transparent",
         color: "#00CC00", // Darker green on hover
+        textDecoration: "underline", // Underline on hover like a link
       }}
       _disabled={{
         bg: "transparent",
         color: "#00FF00",
         opacity: 0.7,
         cursor: "not-allowed",
+        textDecoration: "none", // No underline when disabled
         _hover: {
           bg: "transparent",
           color: "#00FF00", // Maintain color when disabled
+          textDecoration: "none",
         },
       }}
       transition="all 0.2s"
