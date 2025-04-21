@@ -157,7 +157,7 @@ function Home() {
     });
     const glitchExclusive = () => {
       //const colors = ["#58fb6cd9", "#ff00ff", "#00e5ff", "#ffea00", "#ff5555"];
-      const colors = ["#ff00ff","#ffffff"];
+      const colors = ["#00FF00","#ffffff"];
       exclusiveSpans.forEach((span) => {
         gsap
           .timeline()
@@ -193,7 +193,7 @@ function Home() {
     };
 
     const glitchBrands = () => {
-      const colors = ["#ff00ff","#ffffff"];
+      const colors = ["#00FF00","#ffffff"];
       brandsSpans.forEach((span) => {
         gsap
           .timeline()
