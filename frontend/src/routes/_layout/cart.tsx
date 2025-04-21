@@ -61,7 +61,7 @@ function Cart() {
           ) : (
             <VStack spacing={2} align="start">
               <Text fontSize="sm" color="gray.400">
-                {cartCount} {cartCount === 1 ? 'Item' : 'Items'} in your Cart
+                {cartCount} {cartCount === 1 ? 'Item' : 'Items'} in your cart
               </Text>
               {cart.map((item, index) => (
                 <HStack
