@@ -563,7 +563,7 @@ function ProductDetails() {
                     </Text>
                   </HStack>
                   <HStack spacing={4} align="center">
-                  {product.full_price && selectedCurrency === 'USD' && (
+      {product.full_price && (
         <Text fontSize={{ base: 'md', md: 'lg' }} color="gray.500">
           MSRP: {product.full_price}
         </Text>
@@ -580,11 +580,12 @@ function ProductDetails() {
           px={3}
           py={0}
           mt={0}
+          transform="translateY(2px)"
         >
           {product.discount}
         </Tag>
       )}
-          </HStack>
+    </HStack>
                 </VStack>
                 {validatedVariants && validatedVariants.length > 0 && (
                   <Button
