@@ -64,81 +64,87 @@ function Cart() {
                 {cartCount} {cartCount === 1 ? 'item' : 'items'} in your cart
               </Text>
               {cart.map((item, index) => (
-                <HStack
-                  key={`${item.product_id}-${item.variant_id}-${index}`}
-                  w="100%"
-                  p={2}
-                  borderWidth="1px"
-                  borderRadius="sm"
-                  spacing={2}
-                >    <Box
-                position="relative"
-                w="60px" // Constrain the Box width to match the image
-                h="80px" // Constrain the Box height to match the image
-                bg="white"
-                filter="brightness(0.85)"
-                overflow="hidden" // Prevent image overflow
-              >
-                  <Image
-                    src={item.image}
-                    alt={item.title}
-                    w="60px"
-                    h="80px"
-                    objectFit="contain"
-                    onError={(e) => (e.currentTarget.src = 'https://placehold.co/60x80')}
-                  /></Box>
-                <VStack align="start" flex={1} spacing={0}>
-
-  <Text fontSize="sm" fontWeight="medium" color="gray.300" textTransform="uppercase">
-    {item.brand}
-  </Text>
-  <Text fontSize="sm" fontWeight="medium" color="white" textTransform="uppercase">
-    {item.brand} {item.title}
-  </Text>
-
-  <HStack>
-    <Text fontSize="xs" fontWeight="bold" color="gray.400"  textTransform="uppercase">
-      Size:
-    </Text>
-    <Text fontSize="sm" color="gray.300" textTransform="uppercase">
-      {item.size}
-    </Text>
+  <HStack
+    key={`${item.product_id}-${item.variant_id}-${index}`}
+    w="100%"
+    p={2}
+    borderWidth="1px"
+    borderRadius="sm"
+    spacing={2}
+    align="start" // Ensure consistent alignment
+  >
+    <Box
+      position="relative"
+      w="60px"
+      h="80px"
+      minW="60px" // Prevent shrinking
+      minH="80px" // Prevent shrinking
+      bg="white"
+      filter="brightness(0.85)"
+      overflow="hidden"
+      flexShrink={0} // Prevent container from growing
+      boxSizing="border-box" // Ensure padding/border don’t affect size
+    >
+      <Image
+        src={item.image}
+        alt={item.title}
+        w="100%"
+        h="100%"
+        maxW="60px"
+        maxH="80px"
+        objectFit="contain"
+        onError={(e) => (e.currentTarget.src = 'https://placehold.co/60x80')}
+        boxSizing="border-box"
+      />
+    </Box>
+    <VStack align="start" flex={1} spacing={0}>
+      <Text fontSize="sm" fontWeight="medium" color="gray.300" textTransform="uppercase">
+        {item.brand}
+      </Text>
+      <Text fontSize="sm" fontWeight="medium" color="white" textTransform="uppercase">
+        {item.brand} {item.title}
+      </Text>
+      <HStack>
+        <Text fontSize="xs" fontWeight="bold" color="gray.400" textTransform="uppercase">
+          Size:
+        </Text>
+        <Text fontSize="sm" color="gray.300" textTransform="uppercase">
+          {item.size || 'N/A'}
+        </Text>
+      </HStack>
+      <HStack>
+        <Text fontSize="xs" fontWeight="bold" color="gray.400" textTransform="uppercase">
+          Quantity:
+        </Text>
+        <Text fontSize="sm" color="gray.300" textTransform="uppercase">
+          {item.quantity}
+        </Text>
+      </HStack>
+    </VStack>
+    <HStack spacing={2} align="center">
+      <VStack align="end" spacing={1}>
+        <HStack spacing={2}>
+          <Text fontSize="sm" fontWeight="bold" color="green.500">
+            {item.price}
+          </Text>
+          <Text fontSize="xs" fontWeight="medium" color="gray.300" textTransform="uppercase">
+            / {item.full_price}
+          </Text>
+        </HStack>
+        <Text
+          as="button"
+          color="#00ff00"
+          fontSize="xs"
+          textTransform="uppercase"
+          textDecoration="underline"
+          onClick={() => handleRemoveFromCart(item.product_id, item.variant_id)}
+        >
+          Remove
+        </Text>
+      </VStack>
+    </HStack>
   </HStack>
-
-  <HStack>
-    <Text fontSize="xs" fontWeight="bold" color="gray.400" textTransform="uppercase">
-      Quantity:
-    </Text>
-    <Text fontSize="sm" color="gray.300" textTransform="uppercase">
-      {item.quantity}
-    </Text>
-  </HStack>
-</VStack>
-                  <HStack spacing={2} align="center">
-                  <VStack align="end" spacing={1}>
-  <HStack spacing={2}>
-    <Text fontSize="sm" fontWeight="bold" color="green.500">
-      {item.price}
-    </Text>
-    <Text fontSize="xs" fontWeight="medium" color="gray.300" textTransform="uppercase">
-      / {item.full_price}
-    </Text>
-  </HStack>
-  <Text
-                      as="button"
-                      color="#00ff00"
-                      fontSize="xs"
-                      textTransform="uppercase"
-                      textDecoration="underline"
-                      onClick={() => handleRemoveFromCart(item.product_id, item.variant_id)}
-                    >
-                      Remove
-                    </Text>
-</VStack>
-
-                  </HStack>
-                </HStack>
-              ))}
+))}
               {/* Compact Text-Only Table */}
               <Text as="h3" fontSize="md" fontWeight="bold" color="white" mt={2}>
                 SUMMARY
