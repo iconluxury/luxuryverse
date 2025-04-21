@@ -251,7 +251,11 @@ function Cart() {
                         </Text>
                       </Td>
                       <Td color="#00FF00" fontSize="xs">
-                        {convertPrice(calculateItemTotalPrice(item), selectedCurrency)} {selectedCurrency}
+                        {convertPrice(calculateItemTotalPrice(item), selectedCurrency)} 
+                        
+                      </Td>
+                      <Td color="white" fontSize="xs">
+                      {selectedCurrency}
                       </Td>
                       <Td>
                         <Text
