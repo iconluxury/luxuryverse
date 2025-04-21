@@ -609,7 +609,9 @@ function ProductDetails() {
     bg="green.700"
     color="white"
     _hover={{
-      bg: '#00FF00', // Darker green on hover
+      bg: 'transparent',
+      borderColor: '#00FF00', 
+      color: '#00FF00',
       transform: 'translateY(-2px)', // Subtle lift effect
       boxShadow: 'md',
     }}
