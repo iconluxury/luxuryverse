@@ -71,7 +71,13 @@ function Cart() {
                   borderWidth="1px"
                   borderRadius="sm"
                   spacing={2}
-                >    <Box position="relative" w="full" style={{ aspectRatio: '3 / 4' }} bg="white" filter="brightness(0.85)">
+                >    <Box
+                position="relative"
+                w="full"
+                style={{ aspectRatio: '3 / 4' }}
+                bg="white"
+                filter="brightness(0.85)"
+              >
                   <Image
                     src={item.image}
                     alt={item.title}
