@@ -36,7 +36,7 @@ interface Product {
 interface Collection {
   id: string;
   title: string;
-  subtitle?: string; // Added subtitle as optional
+  subtitle?: string;
   products: Product[];
 }
 
@@ -155,37 +155,28 @@ function Home() {
         });
       },
     });
+
     const glitchExclusive = () => {
-      //const colors = ["#58fb6cd9", "#ff00ff", "#00e5ff", "#ffea00", "#ff5555"];
-      const colors = ["#00FF00","#ffffff"];
+      const colors = ["#00FF00", "#ffffff"];
       exclusiveSpans.forEach((span) => {
         gsap
           .timeline()
           .to(span, {
             color: colors[Math.floor(Math.random() * colors.length)],
-            x: gsap.utils.random(-20, 20),
-            y: gsap.utils.random(-20, 20),
-            scale: gsap.utils.random(0.9, 1.1),
-            rotate: gsap.utils.random(-10, 10),
-            duration: 0.08,
+            x: gsap.utils.random(-10, 10),
+            duration: 0.05,
             ease: "none",
           })
           .to(span, {
             color: colors[Math.floor(Math.random() * colors.length)],
-            x: gsap.utils.random(-15, 15),
-            y: gsap.utils.random(-15, 15),
-            scale: gsap.utils.random(0.95, 1.05),
-            rotate: gsap.utils.random(-5, 5),
-            duration: 0.08,
+            x: gsap.utils.random(-5, 5),
+            duration: 0.05,
             ease: "none",
           })
           .to(span, {
             color: "#00FF00",
             x: 0,
-            y: 0,
-            scale: 1,
-            rotate: 0,
-            duration: 0.1,
+            duration: 0.05,
             ease: "power1.out",
           });
       });
@@ -193,35 +184,26 @@ function Home() {
     };
 
     const glitchBrands = () => {
-      const colors = ["#00FF00","#ffffff"];
+      const colors = ["#00FF00", "#ffffff"];
       brandsSpans.forEach((span) => {
         gsap
           .timeline()
           .to(span, {
             color: colors[Math.floor(Math.random() * colors.length)],
-            x: gsap.utils.random(-20, 20),
-            y: gsap.utils.random(-20, 20),
-            scale: gsap.utils.random(0.9, 1.1),
-            rotate: gsap.utils.random(-10, 10),
-            duration: 0.08,
+            x: gsap.utils.random(-10, 10),
+            duration: 0.05,
             ease: "none",
           })
           .to(span, {
             color: colors[Math.floor(Math.random() * colors.length)],
-            x: gsap.utils.random(-15, 15),
-            y: gsap.utils.random(-15, 15),
-            scale: gsap.utils.random(0.95, 1.05),
-            rotate: gsap.utils.random(-5, 5),
-            duration: 0.08,
+            x: gsap.utils.random(-5, 5),
+            duration: 0.05,
             ease: "none",
           })
           .to(span, {
             color: "#00FF00",
             x: 0,
-            y: 0,
-            scale: 1,
-            rotate: 0,
-            duration: 0.1,
+            duration: 0.05,
             ease: "power1.out",
           });
       });
@@ -238,34 +220,30 @@ function Home() {
   
     const logos = logosWrapperRef.current.querySelectorAll(".brand-logo");
     const wrapperWidth = logosWrapperRef.current.offsetWidth;
-    const totalWidth = Array.from(logos).reduce((sum, logo) => sum + logo.offsetWidth + 24, 0); // 24px gap
-  
-    // Duplicate logos for seamless looping
+    const totalWidth = Array.from(logos).reduce((sum, logo) => sum + logo.offsetWidth + 24, 0);
+
     gsap.set(logosWrapperRef.current, { x: 0 });
     const timeline = gsap.timeline({ repeat: -1, paused: false });
     timeline.to(logosWrapperRef.current, {
-      x: -totalWidth / 3, // Move by one set of logos (since tripled)
-      duration: 20, // Adjust for speed
+      x: -totalWidth / 3,
+      duration: 20,
       ease: "none",
       onComplete: () => {
-        gsap.set(logosWrapperRef.current, { x: 0 }); // Reset position for seamless loop
+        gsap.set(logosWrapperRef.current, { x: 0 });
       },
     });
   
-    // Define event listener functions
     const handleMouseEnter = () => timeline.pause();
     const handleMouseLeave = () => timeline.play();
     const handleClick = () => timeline.play();
     const handleFocus = () => timeline.play();
   
-    // Add event listeners
     const wrapper = logosWrapperRef.current;
     wrapper.addEventListener("mouseenter", handleMouseEnter);
     wrapper.addEventListener("mouseleave", handleMouseLeave);
     wrapper.addEventListener("click", handleClick);
     wrapper.addEventListener("focus", handleFocus);
   
-    // Cleanup
     return () => {
       timeline.kill();
       if (wrapper) {
@@ -465,26 +443,26 @@ function Home() {
               Exclusive access to luxury goods, verified and authenticated on the blockchain.
             </Text>
             <Button
-  size="3xl"
-  bg="transparent"
-  color="#00FF00"
-  textTransform="uppercase"
-  fontFamily="'Special Gothic Expanded One', sans-serif"
-  fontWeight="normal"
-  fontSize={{ base: "md", md: "xl" }}
-  py={{ base: 6, md: 8 }}
-  px={{ base: 8, md: 12 }}
-  _hover={{
-    bg: "transparent",
-    color: "#33FF33",
-  }}
-  onClick={handleJoinWaitlist}
-  alignSelf={{ base: "center", lg: "center" }}
-  as={Link}
-  to="/join"
->
-  GET IN LINE
-</Button>
+              size="3xl"
+              bg="transparent"
+              color="#00FF00"
+              textTransform="uppercase"
+              fontFamily="'Special Gothic Expanded One', sans-serif"
+              fontWeight="normal"
+              fontSize={{ base: "md", md: "xl" }}
+              py={{ base: 6, md: 8 }}
+              px={{ base: 8, md: 12 }}
+              _hover={{
+                bg: "transparent",
+                color: "#33FF33",
+              }}
+              onClick={handleJoinWaitlist}
+              alignSelf={{ base: "center", lg: "center" }}
+              as={Link}
+              to="/join"
+            >
+              GET IN LINE
+            </Button>
           </VStack>
           <Box
             mt={{ base: 10, md: 12 }}
@@ -703,7 +681,6 @@ function Home() {
           </Accordion>
         </VStack>
       </Box>
-
 
       {/* Footer */}
       <Footer />
