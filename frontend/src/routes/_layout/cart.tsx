@@ -157,26 +157,79 @@ function Cart() {
                   </Text>
               </HStack>
               <HStack justify="flex-end" w="100%" spacing={2}>
-                <Button
-                  colorScheme="gray"
-                  variant="outline"
-                  size="md"
-                  textTransform="uppercase"
-                  onClick={() => navigate({ to: '/collections' })}
-                >
-                  Keep Shopping
-                </Button>
-                <Link to="/cart">
-                  <Button
-                    colorScheme="red"
-                    size="md"
-                    textTransform="uppercase"
-                    isDisabled={cart.length === 0}
-                  >
-                    Checkout Now
-                  </Button>
-                </Link>
-              </HStack>
+  <Button
+    size="md"
+    onClick={() => navigate({ to: '/collections' })}
+    bg="transparent"
+    color="#00FF00" // Green text
+    textTransform="uppercase"
+    fontFamily="'Special Gothic Expanded One', sans-serif"
+    fontWeight="normal"
+    textAlign="left"
+    justifyContent="flex-start"
+    alignItems="flex-start"
+    width="100%"
+    maxW="150px" // Limit width for consistency
+    px={4}
+    py={2}
+    border="none"
+    borderRadius="0"
+    _hover={{
+      bg: "transparent",
+      color: "#00CC00", // Darker green on hover
+    }}
+    _disabled={{
+      bg: "transparent",
+      color: "#00FF00",
+      opacity: 0.7,
+      cursor: "not-allowed",
+      _hover: {
+        bg: "transparent",
+        color: "#00FF00",
+      },
+    }}
+    transition="all 0.2s"
+  >
+    Keep Shopping
+  </Button>
+  <Link to="/cart">
+    <Button
+      size="md"
+      isDisabled={cart.length === 0}
+      bg="transparent"
+      color="white" // White text
+      textTransform="uppercase"
+      fontFamily="'Special Gothic Expanded One', sans-serif"
+      fontWeight="normal"
+      textAlign="left"
+      justifyContent="flex-start"
+      alignItems="flex-start"
+      width="100%"
+      maxW="150px" // Limit width for consistency
+      px={4}
+      py={2}
+      border="none"
+      borderRadius="0"
+      _hover={{
+        bg: "transparent",
+        color: "#E0E0E0", // Slightly darker white (light gray) on hover
+      }}
+      _disabled={{
+        bg: "transparent",
+        color: "white",
+        opacity: 0.7,
+        cursor: "not-allowed",
+        _hover: {
+          bg: "transparent",
+          color: "white",
+        },
+      }}
+      transition="all 0.2s"
+    >
+      Checkout Now
+    </Button>
+  </Link>
+</HStack>
             </VStack>
           )}
         </Box>
