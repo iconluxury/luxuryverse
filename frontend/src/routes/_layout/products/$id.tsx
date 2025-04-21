@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { Flex, Spinner, Box, Text, Tag, HStack, Divider, IconButton, Skeleton, SkeletonText, SimpleGrid, VStack, Button, useBreakpointValue } from '@chakra-ui/react';
+import { Flex, Spinner, Box, Text, Tag, HStack, Divider, IconButton, Skeleton, SkeletonText, SimpleGrid, VStack, Button, useBreakpointValue, Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
 import { useState, useEffect, useMemo } from 'react';
 import { Link, useNavigate } from '@tanstack/react-router';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -370,22 +370,10 @@ function ProductDetails() {
     return cart.reduce((total, item) => total + item.quantity, 0);
   };
 
-  // Group Cart Items by Quantity
-  const groupItemsByQuantity = () => {
-    const grouped: { [key: number]: CartItem[] } = {};
-    cart.forEach((item) => {
-      const qty = item.quantity;
-      if (!grouped[qty]) {
-        grouped[qty] = [];
-      }
-      grouped[qty].push(item);
-    });
-    return grouped;
-  };
-
-  // Get Items with Size 10
-  const getSize10Items = (items: CartItem[]) => {
-    return items.filter((item) => item.size.toLowerCase() === '10');
+  // Calculate Total Price for an Item
+  const calculateItemTotalPrice = (item: CartItem) => {
+    const price = parseFloat(item.price.replace('$', '')) || 0;
+    return (price * item.quantity).toFixed(2);
   };
 
   if (productLoading) {
@@ -784,47 +772,37 @@ function ProductDetails() {
                         </HStack>
                       </HStack>
                     ))}
-                    {/* Total Details by Quantity */}
+                    {/* Compact Text-Only Table */}
                     <Divider borderColor="gray.600" />
                     <Text as="h3" fontSize="lg" fontWeight="bold" color="gray.50" mt={4}>
-                      Total Details by Quantity
+                      Cart Summary
                     </Text>
-                    {Object.entries(groupItemsByQuantity())
-                      .sort(([qtyA], [qtyB]) => Number(qtyA) - Number(qtyB))
-                      .map(([qty, items]) => (
-                        <Box key={qty} w="100%">
-                          <Text fontSize="md" fontWeight="medium" color="white" mb={2}>
-                            Quantity: {qty}
-                          </Text>
-                          <VStack spacing={2} align="start">
-                            {items.map((item, index) => (
-                              <Box
-                                key={`${item.product_id}-${item.variant_id}-${index}`}
-                                p={2}
-                                bg={item.size.toLowerCase() === '10' ? 'green.900' : 'gray.700'}
-                                borderRadius="md"
-                                w="100%"
-                              >
-                                <Text fontSize="sm" color="white" textTransform="uppercase">
-                                  {item.brand} {item.title}
-                                </Text>
-                                <Text fontSize="sm" color="gray.400">
-                                  Size: {item.size}
-                                </Text>
-                                <Text fontSize="sm" color="green.500">
-                                  Price: {item.price}
-                                </Text>
-                                <Text fontSize="sm" color="gray.500">
-                                  MSRP: {item.full_price}
-                                </Text>
-                                <Text fontSize="sm" color="gray.400">
-                                  Quantity: {item.quantity}
-                                </Text>
-                              </Box>
-                            ))}
-                          </VStack>
-                        </Box>
-                      ))}
+                    <Table variant="simple" size="sm" colorScheme="gray">
+                      <Thead>
+                        <Tr>
+                          <Th color="gray.400" textTransform="uppercase">Title</Th>
+                          <Th color="gray.400" textTransform="uppercase">Size</Th>
+                          <Th color="gray.400" textTransform="uppercase">Qty</Th>
+                          <Th color="gray.400" textTransform="uppercase">Prices</Th>
+                          <Th color="gray.400" textTransform="uppercase">Total Price</Th>
+                        </Tr>
+                      </Thead>
+                      <Tbody>
+                        {cart.map((item, index) => (
+                          <Tr key={`${item.product_id}-${item.variant_id}-${index}`}>
+                            <Td color="white" textTransform="uppercase">
+                              {item.brand} {item.title}
+                            </Td>
+                            <Td color="gray.400">{item.size}</Td>
+                            <Td color="gray.400">{item.quantity}</Td>
+                            <Td color="gray.400">
+                              <Text as="span" color="green.500">{item.price}</Text> / <Text as="span" color="gray.500">{item.full_price}</Text>
+                            </Td>
+                            <Td color="green.500">${calculateItemTotalPrice(item)}</Td>
+                          </Tr>
+                        ))}
+                      </Tbody>
+                    </Table>
                     <Divider borderColor="gray.600" mt={4} />
                     <HStack justify="space-between" w="100%" align="center">
                       <Link to="/terms-and-conditions">
