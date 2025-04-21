@@ -124,7 +124,7 @@ function Cart() {
     <HStack spacing={2} align="center">
       <VStack align="end" spacing={1}>
         <HStack spacing={2}>
-          <Text fontSize="sm" fontWeight="bold" color="green.500">
+          <Text fontSize="sm" fontWeight="bold" color="#00FF00">
             {item.price}
           </Text>
           <Text fontSize="xs" fontWeight="medium" color="gray.300" textTransform="uppercase">
@@ -167,8 +167,8 @@ function Cart() {
                       </Td>
                       <Td color="gray.400" fontSize="xs">{item.size}</Td>
                       <Td color="gray.400" fontSize="xs">{item.quantity}</Td>
-                      <Td fontSize="xs">
-                        <Text as="span" color="#00FF00">{item.price}</Text> / <Text as="span" color="gray.500">{item.full_price}</Text>
+                      <Td color="gray.400" fontSize="xs">
+                        <Text as="span" color="#00ff00">{item.price}</Text> / <Text as="span" color="gray.500">{item.full_price}</Text>
                       </Td>
                       <Td color="green.500" fontSize="xs">${calculateItemTotalPrice(item)}</Td>
                     </Tr>
