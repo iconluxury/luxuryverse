@@ -355,7 +355,7 @@ function ProductDetails() {
       size: variant.size,
       quantity: 1,
     };
- propuestas    addToCart(cartItem);
+    addToCart(cartItem);
     navigate({ to: '/cart' });
   };
 
