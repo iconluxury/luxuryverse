@@ -555,6 +555,9 @@ function ProductDetails() {
                 )}
                 {/* Price and Currency Selector */}
                 <VStack align="start" spacing={1}>
+                <Text fontSize="lg" fontWeight="medium" color="gray.50">
+                      Select Currency
+                    </Text>
                   <Select
                     value={selectedCurrency}
                     onChange={(e) => setSelectedCurrency(e.target.value)}
