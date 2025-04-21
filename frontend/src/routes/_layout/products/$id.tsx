@@ -442,9 +442,7 @@ function ProductDetails() {
     bg="green.700" // Darker green background
     color="white" // White text
     _hover={{
-      bg: 'transparent', // Even darker green on hover
-      borderColor: '#00FF00', 
-      color: '#00FF00',
+      bg: 'green.800', // Even darker green on hover
     }}
     transition="all 0.2s"
   >
