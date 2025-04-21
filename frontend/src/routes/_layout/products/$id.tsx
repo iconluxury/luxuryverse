@@ -442,7 +442,7 @@ function ProductDetails() {
     bg="green.700" // Darker green background
     color="white" // White text
     _hover={{
-      bg: 'green.800', // Even darker green on hover
+      bg: '#00FF00', // Even darker green on hover
       transform: 'translateY(-2px)', // Subtle lift effect
       boxShadow: 'sm', // Small shadow on hover
     }}
