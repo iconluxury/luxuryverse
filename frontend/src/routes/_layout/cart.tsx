@@ -84,9 +84,13 @@ function Cart() {
                     <Text fontSize="sm" fontWeight="medium" color="white" textTransform="uppercase">
                       {item.brand} {item.title}
                     </Text>
-                    <Text fontSize="xs" color="gray.400" textTransform="uppercase">
-                      Brand: {item.brand}
+                    
+                    <Text fontSize="xs" color="gray.400">
+                    Brand:
+                    <Text textTransform="uppercase">
+                      {item.brand}</Text>
                     </Text>
+                    
                     <Text fontSize="xs" color="gray.400">
                       Size: {item.size}
                     </Text>
