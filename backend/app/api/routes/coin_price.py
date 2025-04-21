@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import APIRouter, FastAPI, HTTPException, Query
 from pydantic import BaseModel
 from typing import List, Optional
 import logging
@@ -14,17 +14,24 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(
 logger = logging.getLogger(__name__)
 
 # FastAPI app
-app = FastAPI(title="Crypto Price API", description="API for fetching cryptocurrency prices for product pricing conversions")
+app = FastAPI(
+    title="Crypto Price API",
+    description="Standalone API for fetching cryptocurrency prices for product pricing conversions",
+    version="1.0.0"
+)
+
+# API Router
+crypto_router = APIRouter(prefix="/crypto", tags=["crypto"])
 
 # CoinMarketCap API configuration
-COINMARKETCAP_API_KEY: Optional[str] = 'de11073e-8892-445c-8cf6-0e2cd69705fd'
+COINMARKETCAP_API_KEY: Optional[str] = os.getenv("COINMARKETCAP_API_KEY")  # Set in .env file
 COINMARKETCAP_API_URL: str = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest"
 
 # Pydantic models for response
 class CryptoPriceResponse(BaseModel):
     symbol: str
     price_usd: float
-    last_updated: str  # Timestamp of price update
+    last_updated: str
 
 class CryptoPriceConversion(BaseModel):
     symbol: str
@@ -33,8 +40,21 @@ class CryptoPriceConversion(BaseModel):
     product_price_crypto: float
     last_updated: str
 
+# Root endpoint
+@crypto_router.get("/", tags=["root"])
+async def root():
+    return {
+        "path": "/crypto",
+        "message": "Welcome to the Crypto Price API"
+    }
+
+# Health check endpoint
+@crypto_router.get("/health", tags=["health"])
+async def health_check():
+    return {"status": "healthy"}
+
 # Endpoint to fetch crypto prices and optionally convert product prices
-@app.get("/crypto/prices", response_model=List[CryptoPriceResponse | CryptoPriceConversion], tags=["crypto"])
+@crypto_router.get("/prices", response_model=List[CryptoPriceResponse | CryptoPriceConversion])
 async def get_crypto_prices(
     symbols: Optional[str] = Query(
         None, description="Comma-separated list of crypto symbols (e.g., BTC,ETH,USDT)"
@@ -50,21 +70,17 @@ async def get_crypto_prices(
     """
     logger.info(f"Fetching crypto prices for symbols: {symbols if symbols else 'default'}, product_price_usd: {product_price_usd}")
 
-    # Validate API key
     if not COINMARKETCAP_API_KEY:
         logger.error("Missing CoinMarketCap API key")
         raise HTTPException(status_code=500, detail="Server configuration error: Missing CoinMarketCap API key")
 
-    # Default symbols if none provided
     default_symbols = "BTC,ETH,USDT,XRP,BNB,SOL,USDC,DOGE,TRX,ADA"
     symbols_to_fetch = symbols if symbols else default_symbols
 
-    # Validate product price if provided
     if product_price_usd is not None and product_price_usd <= 0:
         logger.error("Invalid product price: must be positive")
         raise HTTPException(status_code=400, detail="Product price must be positive")
 
-    # Prepare API request
     headers = {
         "Accepts": "application/json",
         "X-CMC_PRO_API_KEY": COINMARKETCAP_API_KEY,
@@ -75,24 +91,20 @@ async def get_crypto_prices(
     }
 
     try:
-        # Make API request
         response = requests.get(COINMARKETCAP_API_URL, headers=headers, params=parameters)
         response.raise_for_status()
         data = response.json()
 
-        # Check for API errors
         if "data" not in data or not data["data"]:
             error_message = data.get("status", {}).get("error_message", "Unknown error")
             logger.error(f"Invalid API response: {error_message}")
             raise HTTPException(status_code=400, detail=f"Invalid API response: {error_message}")
 
-        # Process prices
         prices = []
         for symbol, info in data["data"].items():
             price = info["quote"]["USD"]["price"]
             last_updated = info["quote"]["USD"]["last_updated"]
 
-            # Handle product price conversion if provided
             if product_price_usd is not None:
                 if price <= 0:
                     logger.warning(f"Skipping conversion for {symbol}: price is zero or negative")
@@ -141,8 +153,5 @@ async def get_crypto_prices(
         logger.error(f"Unexpected error fetching crypto prices: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Unexpected error: {str(e)}")
 
-# Health check endpoint
-@app.get("/health", tags=["health"])
-async def health_check():
-    """Verify the API is running."""
-    return {"status": "ok"}
+# Include router in app
+app.include_router(crypto_router)
