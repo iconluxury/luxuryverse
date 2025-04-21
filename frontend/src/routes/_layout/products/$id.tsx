@@ -613,19 +613,19 @@ function ProductDetails() {
       boxShadow: 'md',
     }}
     _disabled={{
-      bg: 'green.500', // Keep green when disabled
+      bg: 'green.600', // Keep green when disabled
       color: 'white',
       opacity: 0.7, // Slightly faded but still green
       cursor: 'not-allowed',
       _hover: {
-        bg: 'green.500', // Prevent hover effect when disabled
+        bg: 'green.700', // Prevent hover effect when disabled
         transform: 'none', // No lift when disabled
         boxShadow: 'none',
       },
     }}
     transition="all 0.2s"
   >
-    Add to Cart
+ADD TO CART
   </Button>
 )}
                 <Text as="h2" fontSize="xl" mb={2}>
