@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { Box, Text, HStack, Divider, Image, VStack, Button, Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
+import { Box, Text, HStack, Image, VStack, Button, Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
 import { Link, useNavigate } from '@tanstack/react-router';
 import Footer from '../../components/Common/Footer';
 import { useCart } from '../../components/Common/CartContext';
@@ -117,7 +117,6 @@ function Cart() {
                 </HStack>
               ))}
               {/* Compact Text-Only Table */}
-              <Divider borderColor="gray.300" />
               <Text as="h3" fontSize="md" fontWeight="bold" color="white" mt={2}>
                 SUMMARY
               </Text>
@@ -180,7 +179,6 @@ function Cart() {
               </HStack>
             </VStack>
           )}
-          <Divider my={4} borderColor="gray.300" />
         </Box>
       </Box>
       <Footer />
