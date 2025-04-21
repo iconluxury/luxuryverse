@@ -1,9 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { Box, Text, HStack, Divider, Image, VStack, Button, Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
-import { useState, useEffect } from 'react';
 import { Link, useNavigate } from '@tanstack/react-router';
 import Footer from '../../components/Common/Footer';
 import useCustomToast from '../../hooks/useCustomToast';
+import { useCart } from '../../CartContext';
 
 // Interfaces
 interface CartItem {
@@ -26,22 +26,13 @@ export const Route = createFileRoute('/cart')({
 
 // Cart component
 function Cart() {
-  const [cart, setCart] = useState<CartItem[]>([]);
+  const { cart, removeFromCart, cartCount } = useCart();
   const navigate = useNavigate();
   const showToast = useCustomToast();
 
-  // Load cart from localStorage on mount
-  useEffect(() => {
-    const savedCart = localStorage.getItem('cart');
-    const cartItems = savedCart ? JSON.parse(savedCart) : [];
-    setCart(cartItems);
-  }, []);
-
   // Remove from Cart Handler
   const handleRemoveFromCart = (productId: string, variantId: string) => {
-    const updatedCart = cart.filter((item) => !(item.product_id === productId && item.variant_id === variantId));
-    setCart(updatedCart);
-    localStorage.setItem('cart', JSON.stringify(updatedCart));
+    removeFromCart(productId, variantId);
     showToast('Removed from Cart', 'Item removed from your cart.', 'info');
   };
 
@@ -51,11 +42,6 @@ function Cart() {
       const price = parseFloat(item.price.replace('$', '')) || 0;
       return total + price * item.quantity;
     }, 0).toFixed(2);
-  };
-
-  // Calculate Total Items
-  const calculateTotalItems = () => {
-    return cart.reduce((total, item) => total + item.quantity, 0);
   };
 
   // Calculate Total Price for an Item
@@ -78,7 +64,7 @@ function Cart() {
           ) : (
             <VStack spacing={4} align="start">
               <Text fontSize="md" color="gray.400">
-                {calculateTotalItems()} {calculateTotalItems() === 1 ? 'Item' : 'Items'} in Your Cart
+                {cartCount} {cartCount === 1 ? 'Item' : 'Items'} in Your Cart
               </Text>
               {cart.map((item, index) => (
                 <HStack

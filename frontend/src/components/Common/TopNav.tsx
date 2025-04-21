@@ -1,22 +1,15 @@
 import { Flex, Heading, IconButton, Drawer, DrawerBody, DrawerOverlay, DrawerContent, DrawerCloseButton, VStack, Text } from '@chakra-ui/react';
 import { HamburgerIcon } from '@chakra-ui/icons';
 import { Link, useNavigate } from '@tanstack/react-router';
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useState } from 'react';
 import { AuthContext } from './AuthContext';
+import { useCart } from './CartContext';
 
 export default function TopNav() {
   const { user, isJoining } = useContext(AuthContext);
+  const { cartCount } = useCart();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
-  const [cartCount, setCartCount] = useState(0);
-
-  // Load cart count from localStorage
-  useEffect(() => {
-    const savedCart = localStorage.getItem('cart');
-    const cartItems = savedCart ? JSON.parse(savedCart) : [];
-    const totalItems = cartItems.reduce((total: number, item: { quantity: number }) => total + item.quantity, 0);
-    setCartCount(totalItems);
-  }, []);
 
   const toggleMenu = () => setIsOpen(!isOpen);
   const closeMenu = () => setIsOpen(false);
@@ -43,7 +36,7 @@ export default function TopNav() {
     { to: '/faq', label: 'FAQ' },
     { to: '/contact', label: 'Contact' },
     { to, label: text },
-    { to: '/cart', label: `Cart (${cartCount})` }, // Add Cart link to navItems
+    { to: '/cart', label: `Cart (${cartCount})` },
   ];
 
   return (
