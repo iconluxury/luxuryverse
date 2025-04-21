@@ -599,47 +599,50 @@ function ProductDetails() {
     </HStack>
                 </VStack>
                 {validatedVariants && validatedVariants.length > 0 && (
-                  <Button
-  size="lg"
-  onClick={handleAddToCart}
-  isDisabled={
-    !selectedVariant || validatedVariants.find((v) => v.id === selectedVariant)?.inventory_quantity <= 0
-  }
-  bg="transparent"
-  color="#00FF00"
-  textTransform="uppercase"
-  fontFamily="'Special Gothic Expanded One', sans-serif"
-  fontWeight="normal"
-  textAlign="left" // Ensure text is left-aligned
-  width="100%"
-  px={4}
-  py={2}
-  border="none"
-  borderRadius="0"
-  textDecoration="none"
-  display="inline-block" // Treat as inline-block to respect textAlign
-  cursor="pointer"
-  _hover={{
-    bg: "transparent",
-    color: "#00CC00",
-    textDecoration: "underline",
-  }}
-  _disabled={{
-    bg: "transparent",
-    color: "#00FF00",
-    opacity: 0.7,
-    cursor: "not-allowed",
-    textDecoration: "none",
-    _hover: {
-      bg: "transparent",
-      color: "#00FF00",
-      textDecoration: "none",
-    },
-  }}
-  transition="all 0.2s"
->
-  ADD TO CART
-</Button>
+       <Button
+       size="lg"
+       onClick={handleAddToCart}
+       isDisabled={
+         !selectedVariant || validatedVariants.find((v) => v.id === selectedVariant)?.inventory_quantity <= 0
+       }
+       bg="transparent"
+       color="#00FF00"
+       textTransform="uppercase"
+       fontFamily="'Special Gothic Expanded One', sans-serif"
+       fontWeight="normal"
+       width="100%"
+       px={4}
+       py={2}
+       border="none"
+       borderRadius="0"
+       textDecoration="none"
+       cursor="pointer"
+       sx={{
+         display: "flex",
+         justifyContent: "flex-start", // Force left alignment of content
+         textAlign: "left", // Ensure text is left-aligned
+       }}
+       _hover={{
+         bg: "transparent",
+         color: "#00CC00",
+         textDecoration: "underline",
+       }}
+       _disabled={{
+         bg: "transparent",
+         color: "#00FF00",
+         opacity: 0.7,
+         cursor: "not-allowed",
+         textDecoration: "none",
+         _hover: {
+           bg: "transparent",
+           color: "#00FF00",
+           textDecoration: "none",
+         },
+       }}
+       transition="all 0.2s"
+     >
+       ADD TO CART
+     </Button>
 )}
                 <Text as="h2" fontSize="xl" mb={2}>
                   Product Description
