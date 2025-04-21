@@ -609,17 +609,18 @@ function ProductDetails() {
     color="white"
     _hover={{
       bg: 'transparent',
-      borderColor: '#00FF00', 
+      borderColor: 'green.500',
       color: '#00FF00',
     }}
     _disabled={{
-      bg: 'green.700', // Keep green when disabled
+      bg: 'green.700', 
       color: 'white',
-      opacity: 0.7, // Slightly faded but still green
+      opacity: 0.7, 
       cursor: 'not-allowed',
       _hover: {
-        bg: 'green.700', // Prevent hover effect when disabled
-        transform: 'none', // No lift when disabled
+        bg: 'green.700',
+        
+        transform: 'none', 
         boxShadow: 'none',
       },
     }}
