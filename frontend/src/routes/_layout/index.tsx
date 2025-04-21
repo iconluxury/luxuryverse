@@ -471,7 +471,6 @@ function Home() {
   textTransform="uppercase"
   fontFamily="'Special Gothic Expanded One', sans-serif"
   fontWeight="normal"
-  textAlign="left"
   fontSize={{ base: "md", md: "xl" }}
   py={{ base: 6, md: 8 }}
   px={{ base: 8, md: 12 }}
