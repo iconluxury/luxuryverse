@@ -150,7 +150,7 @@ function Home() {
             const letterWidth = brandsElement.offsetWidth / brandsText.length;
             const brandsOffsetTop = exclusiveElement.offsetHeight + 20;
             gsap.set(cursor, {
-              x: (currentIndex + 1) * letterWidth, // Position after the current letter
+              x: (currentIndex + 1) * letterWidth + 5, // Position after the current letter
               top: `calc(${brandsOffsetTop}px + 2%)`, // Adjusted for better alignment
             });
           },
