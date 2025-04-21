@@ -80,27 +80,33 @@ function Cart() {
                     objectFit="contain"
                     onError={(e) => (e.currentTarget.src = 'https://placehold.co/60x80')}
                   />
-                  <VStack align="start" flex={1} spacing={0}>
-                    <Text fontSize="sm" fontWeight="medium" color="white" textTransform="uppercase">
-                      {item.brand} {item.title}
-                    </Text>
-                    
-                    <Text fontSize="sm" fontWeight="medium" color="gray.300" textTransform="uppercase">
-                      {item.brand}
-                    </Text>
-                    
-                    <Text fontSize="xs" fontWeight="bold" color="gray.400">
-                    Size:{' '} 
-                      <Text fontSize="sm" color="gray.300" textTransform="uppercase">
-                     {item.size}</Text>
-                    </Text>
-                    <Text fontSize="xs" fontWeight="bold" color="gray.400">
-                    Quantity:{' '} 
-                    <Text fontSize="sm" color="gray.300" textTransform="uppercase">
-                   {item.quantity}
-                      </Text>
-                    </Text>
-                  </VStack>
+                <VStack align="start" flex={1} spacing={0}>
+  <Text fontSize="sm" fontWeight="medium" color="white" textTransform="uppercase">
+    {item.brand} {item.title}
+  </Text>
+
+  <Text fontSize="sm" fontWeight="medium" color="gray.300" textTransform="uppercase">
+    {item.brand}
+  </Text>
+
+  <HStack>
+    <Text fontSize="xs" fontWeight="bold" color="gray.400">
+      Size:
+    </Text>
+    <Text fontSize="sm" color="gray.300" textTransform="uppercase">
+      {item.size}
+    </Text>
+  </HStack>
+
+  <HStack>
+    <Text fontSize="xs" fontWeight="bold" color="gray.400">
+      Quantity:
+    </Text>
+    <Text fontSize="sm" color="gray.300" textTransform="uppercase">
+      {item.quantity}
+    </Text>
+  </HStack>
+</VStack>
                   <HStack spacing={2} align="center">
                     <VStack align="end" spacing={0}>
                       <Text fontSize="sm" fontWeight="bold" color="green.500">
