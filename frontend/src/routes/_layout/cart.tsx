@@ -219,7 +219,7 @@ function Cart() {
     }}
     transition="all 0.2s"
   >
-    Keep Shopping{' '}
+    Keep Shopping{' '}/{' '}
   </Button>
   <Link to="/cart">
     <Button
