@@ -13,13 +13,6 @@ load_dotenv()
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
-# FastAPI app
-app = FastAPI(
-    title="Crypto Price API",
-    description="Standalone API for fetching cryptocurrency prices for product pricing conversions",
-    version="1.0.0"
-)
-
 # API Router
 crypto_router = APIRouter(prefix="/crypto", tags=["crypto"])
 
