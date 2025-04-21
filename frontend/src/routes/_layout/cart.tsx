@@ -116,7 +116,7 @@ function Cart() {
     return converted.toFixed(6);
   };
 
-  // Calculate Item Total Price
+  // Calculate Item Total Price in USD
   const calculateItemTotalPrice = (item: CartItem) => {
     const price = parseFloat(item.price.replace('$', '')) || 0;
     return (price * item.quantity).toFixed(2);
@@ -243,9 +243,17 @@ function Cart() {
                       <Td color="gray.400" fontSize="xs">{item.size}</Td>
                       <Td color="gray.400" fontSize="xs">{item.quantity}</Td>
                       <Td color="gray.400" fontSize="xs">
-                        <Text as="span" color="#00ff00">{item.price}</Text> / <Text as="span" color="gray.500">{item.full_price}</Text>
+                        <Text as="span" color="#00ff00">
+                          {convertPrice(item.price.replace('$', ''), selectedCurrency)} {selectedCurrency}
+                        </Text>{' '}
+                        /{' '}
+                        <Text as="span" color="gray.500">
+                          {convertPrice(item.full_price.replace('$', ''), selectedCurrency)} {selectedCurrency}
+                        </Text>
                       </Td>
-                      <Td color="#00FF00" fontSize="xs">${calculateItemTotalPrice(item)}</Td>
+                      <Td color="#00FF00" fontSize="xs">
+                        {convertPrice(calculateItemTotalPrice(item), selectedCurrency)} {selectedCurrency}
+                      </Td>
                     </Tr>
                   ))}
                 </Tbody>
@@ -263,10 +271,11 @@ function Cart() {
                   <Select
                     value={selectedCurrency}
                     onChange={(e) => setSelectedCurrency(e.target.value)}
-                    width={{ base: '100px', md: '120px' }}
+                    width={{ base: '120px', md: '150px' }}
                     bg="transparent"
                     color="white"
                     borderColor="green.500"
+                    fontSize="md"
                     _hover={{ borderColor: 'green.400' }}
                     _focus={{ borderColor: 'green.400', boxShadow: '0 0 0 1px green.400' }}
                     sx={{
