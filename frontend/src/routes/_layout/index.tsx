@@ -83,7 +83,7 @@ function Home() {
     const exclusiveSpans = exclusiveElement.querySelectorAll(".glitch-letter");
     const brandsSpans = brandsElement.querySelectorAll(".glitch-letter");
 
-    gsap.set([exclusiveElement, brandsElement], { opacity: 0, color: "#FFFFFF" });
+    gsap.set([exclusiveElement, brandsElement], { opacity: 0, color: "#00ff00" });
     gsap.set(exclusiveSpans, { opacity: 0 });
     gsap.set(brandsSpans, { opacity: 0 });
 
