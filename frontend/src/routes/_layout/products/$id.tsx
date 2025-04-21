@@ -589,7 +589,7 @@ function ProductDetails() {
                   </HStack>
                   <HStack spacing={4} align="center">
       {product.full_price && (
-        <Text fontSize={{ base: 'md', md: 'lg' }} color="gray.500">
+        <Text fontSize={{ base: 'md', md: 'lg' }} color="gray.400">
           MSRP: {product.full_price}
         </Text>
       )}
