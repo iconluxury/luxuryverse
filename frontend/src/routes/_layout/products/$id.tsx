@@ -593,13 +593,14 @@ function ProductDetails() {
                     </Text>
                  
       
-      {product.full_price && (
-
-        <Text fontSize={{ base: 'md', md: 'lg' }} color="gray.400">
-          MSRP: {product.full_price}
-        </Text>
-      )}
+      
     </HStack>
+    {product.full_price && (
+
+<Text fontSize={{ base: 'md', md: 'lg' }} color="gray.400">
+  MSRP: {product.full_price}
+</Text>
+)}
                 </VStack>
                 {validatedVariants && validatedVariants.length > 0 && (
  <Button
