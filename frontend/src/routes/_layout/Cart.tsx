@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { Box, Text, HStack, Divider, Image, VStack, Button, Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from '@tanstack/react-router';
-import Footer from '../../../components/Common/Footer';
+import Footer from '../../components/Common/Footer';
 import useCustomToast from '../../../hooks/useCustomToast';
 
 // Interfaces
