@@ -3,7 +3,7 @@ import { Box, Text, HStack, Divider, Image, VStack, Button, Table, Thead, Tbody,
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from '@tanstack/react-router';
 import Footer from '../../components/Common/Footer';
-import useCustomToast from '../../../hooks/useCustomToast';
+import useCustomToast from '../../hooks/useCustomToast';
 
 // Interfaces
 interface CartItem {
