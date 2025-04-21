@@ -149,7 +149,7 @@ function Cart() {
               </Table>
               <Divider borderColor="gray.300" mt={2} />
               <HStack justify="space-between" w="100%" align="center" spacing={2}>
-                <Link to="/terms-and-conditions">
+                <Link to="/terms-conditions">
                   <Text fontSize="xs" color="gray.400" textDecoration="underline">
                     Terms and Conditions
                   </Text>
