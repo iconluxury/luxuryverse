@@ -296,7 +296,10 @@ function Cart() {
       '> option': {
         background: 'gray.800',
         color: 'white',
-      },
+        _hover: {
+          background: 'green.700',
+          color: 'white',
+      }},
     }}
   >
     <option value="USD" style={{ background: 'gray.800', color: 'white' }}>
