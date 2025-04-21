@@ -38,6 +38,11 @@ function Cart() {
   const [cryptoPrices, setCryptoPrices] = useState<CryptoPrice[]>([]);
   const API_BASE_URL = 'https://iconluxury.shop';
 
+  // Debug cart state
+  useEffect(() => {
+    console.log('Cart state:', cart);
+  }, [cart]);
+
   // Fetch crypto prices
   useEffect(() => {
     const fetchCryptoPrices = async () => {
@@ -91,6 +96,7 @@ function Cart() {
 
   // Remove from Cart Handler
   const handleRemoveFromCart = (productId: string, variantId: string) => {
+    console.log('Removing item:', { productId, variantId });
     removeFromCart(productId, variantId);
   };
 
@@ -162,12 +168,48 @@ function Cart() {
                     </Th>
                     <Th color="white" textTransform="uppercase" fontSize="xs">
                       Action
+                      <Select
+                        value={selectedCurrency}
+                        onChange={(e) => setSelectedCurrency(e.target.value)}
+                        width="100px"
+                        bg="transparent"
+                        color="white"
+                        borderColor="green.500"
+                        fontSize="xs"
+                        height="24px"
+                        mt={1}
+                        _hover={{ borderColor: 'green.400' }}
+                        _focus={{ borderColor: 'green.400', boxShadow: '0 0 0 1px green.400' }}
+                        sx={{
+                          '> option': {
+                            background: 'gray.800',
+                            color: 'white',
+                            _hover: {
+                              background: 'green.700',
+                              color: 'white',
+                            },
+                          },
+                        }}
+                      >
+                        <option value="USD" style={{ background: 'gray.800', color: 'white' }}>
+                          USD
+                        </option>
+                        {cryptoPrices.map((crypto) => (
+                          <option
+                            key={crypto.symbol}
+                            value={crypto.symbol}
+                            style={{ background: 'gray.800', color: 'white' }}
+                          >
+                            {crypto.symbol}
+                          </option>
+                        ))}
+                      </Select>
                     </Th>
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {cart.map((item, index) => (
-                    <Tr key={`${item.product_id}-${item.variant_id}-${index}`}>
+                  {cart.map((item) => (
+                    <Tr key={`${item.product_id}-${item.variant_id}`}>
                       <Td>
                         <Box
                           w="40px"
@@ -234,55 +276,18 @@ function Cart() {
                     Terms and Conditions
                   </Text>
                 </Link>
-                <HStack spacing={2} alignItems="stretch" height="40px">
-                  <Text
-                    fontSize="md"
-                    fontWeight="bold"
-                    color="white"
-                    display="flex"
-                    alignItems="center"
-                    px={2}
-                  >
-                    <Text as="span" fontSize={{ base: 'md', md: '3xl' }} color="#00FF00">
-                      {`${convertPrice(calculateSubtotal(), selectedCurrency)} ${selectedCurrency}`}
-                    </Text>
+                <Text
+                  fontSize="md"
+                  fontWeight="bold"
+                  color="white"
+                  display="flex"
+                  alignItems="center"
+                  px={2}
+                >
+                  <Text as="span" fontSize={{ base: 'md', md: '3xl' }} color="#00FF00">
+                    {`${convertPrice(calculateSubtotal(), selectedCurrency)} ${selectedCurrency}`}
                   </Text>
-                  <Select
-                    value={selectedCurrency}
-                    onChange={(e) => setSelectedCurrency(e.target.value)}
-                    width={{ base: '120px', md: '150px' }}
-                    bg="transparent"
-                    color="white"
-                    borderColor="green.500"
-                    fontSize="md"
-                    height="40px"
-                    _hover={{ borderColor: 'green.400' }}
-                    _focus={{ borderColor: 'green.400', boxShadow: '0 0 0 1px green.400' }}
-                    sx={{
-                      '> option': {
-                        background: 'gray.800',
-                        color: 'white',
-                        _hover: {
-                          background: 'green.700',
-                          color: 'white',
-                        },
-                      },
-                    }}
-                  >
-                    <option value="USD" style={{ background: 'gray.800', color: 'white' }}>
-                      USD
-                    </option>
-                    {cryptoPrices.map((crypto) => (
-                      <option
-                        key={crypto.symbol}
-                        value={crypto.symbol}
-                        style={{ background: 'gray.800', color: 'white' }}
-                      >
-                        {crypto.symbol}
-                      </option>
-                    ))}
-                  </Select>
-                </HStack>
+                </Text>
               </HStack>
               <HStack justify="flex-end" w="100%" spacing={2}>
                 <Button
@@ -320,7 +325,7 @@ function Cart() {
                 >
                   Keep Shopping
                 </Button>
-                <Link to="/cart">
+                <Link to="/checkout">
                   <Button
                     size="md"
                     isDisabled={cart.length === 0}
