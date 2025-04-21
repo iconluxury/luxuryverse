@@ -565,27 +565,26 @@ function ProductDetails() {
                     </Text>
                   </HStack>
                   {product.full_price && selectedCurrency === 'USD' && (
-                    <Text fontSize={{ base: 'md', md: 'lg' }} color="gray.500">
-                      MSRP: {product.full_price}
-                    </Text>
-                    
-                  )}
-                  {product.discount && (
-                    <Tag
-                      size="md"
-                      variant="solid"
-                      colorScheme="green"
-                      borderRadius="full"
-                      fontSize="lg"
-                      lineHeight="1.5"
-                      textTransform="uppercase"
-                      px={3}
-                      py={0}
-                      mt={0}
-                    >
-                      {product.discount}
-                    </Tag>
-                  )}
+        <Text fontSize={{ base: 'md', md: 'lg' }} color="gray.500">
+          MSRP: {product.full_price}
+        </Text>
+      )}
+      {product.discount && (
+        <Tag
+          size="md"
+          variant="solid"
+          colorScheme="green"
+          borderRadius="full"
+          fontSize="lg"
+          lineHeight="1.5"
+          textTransform="uppercase"
+          px={3}
+          py={0}
+          mt={0}
+        >
+          {product.discount}
+        </Tag>
+      )}
                 </VStack>
                 {validatedVariants && validatedVariants.length > 0 && (
                   <Button
