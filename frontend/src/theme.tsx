@@ -254,7 +254,7 @@ const theme = extendTheme({
             },
             _focus: {
               borderColor: "primary.500", // Updated to blue-grey
-              boxShadow: "0 0 0 1px #a0a7e5d9",
+              boxShadow: "0 0 0 1px rgba(219, 221, 236, 0.85)",
             },
           },
         },
