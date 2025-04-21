@@ -108,7 +108,7 @@ function Cart() {
                       </Text>
                       <Text fontSize="xs" color="gray.500">
                       MSRP:{' '} 
-                      <Text fontSize="sm" color="gray.300" textTransform="uppercase">
+                      <Text fontSize="sm" fontWeight="medium" color="gray.300" textTransform="uppercase">
                         {item.full_price}
                         </Text>
                       </Text>
