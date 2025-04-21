@@ -265,10 +265,10 @@ function CollectionDetails() {
                           >
                             {product.brand || 'Unknown'}
                           </Text>
-                          <Text fontWeight="bold" fontSize="md" color="white">
+                          <Text fontWeight="bold" fontSize="md" color="white" height="3em">
                             {cleanedTitle}
                           </Text>
-                          <Flex mt={2} justify="space-between" verticalAlign="bottom" align="center">
+                          <Flex mt={2} justify="space-between" align="center">
                             <Text fontWeight="bold" fontSize="2xl" color="var(--color-primary-hover)">
                               {product.sale_price}
                             </Text>
