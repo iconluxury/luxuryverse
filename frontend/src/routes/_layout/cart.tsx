@@ -230,7 +230,7 @@ function Cart() {
                     <Th color="white" textTransform="uppercase" fontSize="xs">Title</Th>
                     <Th color="white" textTransform="uppercase" fontSize="xs">Size</Th>
                     <Th color="white" textTransform="uppercase" fontSize="xs">Qty</Th>
-                    <Th color="white" textTransform="uppercase" fontSize="xs">Prices</Th>
+                    <Th color="white" textTransform="uppercase" fontSize="xs">Price / MSRP</Th>
                     <Th color="white" textTransform="uppercase" fontSize="xs">Total</Th>
                   </Tr>
                 </Thead>
@@ -271,7 +271,6 @@ function Cart() {
     color="white"
     display="flex"
     alignItems="center"
-    bg="gray.700" // Optional: for visibility
     px={2} // Optional: padding for better appearance
   >
     <Text as="span" fontSize="2xl" color="#00FF00">
