@@ -453,6 +453,7 @@ function ProductDetails() {
     {validatedImages.length > 1 && (
       <HStack mt={4} justify="center" spacing={2}>
         {validatedImages.map((img, index) => (
+           <Box position="relative" w="full" style={{ aspectRatio: '3 / 4' }} bg="white" filter="brightness(0.85)">
           <Image
             key={index}
             src={img}
@@ -466,6 +467,7 @@ function ProductDetails() {
             onClick={() => setCurrentImage(index)}
             onError={(e) => (e.currentTarget.src = 'https://placehold.co/90x110')}
           />
+          </Box>
         ))}
       </HStack>
     )}
