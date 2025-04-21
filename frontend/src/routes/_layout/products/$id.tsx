@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { Flex, Spinner, Box, Text, Tag, HStack, Divider, IconButton, Skeleton, SkeletonText, SimpleGrid, VStack } from '@chakra-ui/react';
+import { Flex, Spinner, Box, Text, Tag, HStack, Divider, IconButton, Skeleton, SkeletonText, SimpleGrid, VStack, Button, Select } from '@chakra-ui/react';
 import { useState, useEffect, useMemo } from 'react';
 import { Link } from '@tanstack/react-router';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -31,6 +31,18 @@ interface Product {
   collection_id?: string;
 }
 
+interface CartItem {
+  customer_id: string | null; // Nullable for guest users
+  product_id: string;
+  variant_id: string;
+  title: string;
+  brand: string;
+  price: string;
+  image: string;
+  size: string;
+  quantity: number;
+}
+
 // ErrorFallback component
 function ErrorFallback({ error }: { error: Error }) {
   console.error('ErrorBoundary caught (suppressed):', error, error.stack);
@@ -50,8 +62,19 @@ function ProductDetails() {
   const [topProductsLoading, setTopProductsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [currentImage, setCurrentImage] = useState(0);
+  const [selectedVariant, setSelectedVariant] = useState<string | null>(null);
+  const [cart, setCart] = useState<CartItem[]>(() => {
+    // Load cart from localStorage on mount
+    const savedCart = localStorage.getItem('cart');
+    return savedCart ? JSON.parse(savedCart) : [];
+  });
   const API_BASE_URL = 'https://iconluxury.shop';
   const { id } = Route.useParams();
+
+  // Save cart to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }, [cart]);
 
   // Debug third-party scripts
   useEffect(() => {
@@ -144,6 +167,10 @@ function ProductDetails() {
       };
       setProduct(validatedProduct);
       setError(null);
+      // Set default selected variant if available
+      if (validatedProduct.variants && validatedProduct.variants.length > 0) {
+        setSelectedVariant(validatedProduct.variants[0].id);
+      }
     } catch (err: any) {
       console.error('Fetch error (suppressed):', err.message);
       setError(null);
@@ -232,18 +259,16 @@ function ProductDetails() {
       setTopProductsLoading(false);
     }
   };
+
   const cleanTitle = useMemo(() => {
     if (product?.title && product?.brand) {
-      // Create regex for brand
       const brandRegex = new RegExp(`\\b${product.brand}\\b`, 'i');
-      // Create regex for men/mens/men's variations
       const menRegex = /\b(men'?s|men)\b/i;
-      // Remove brand and men-related words, then trim
       return product.title
         .replace(brandRegex, '')
         .replace(menRegex, '')
         .trim()
-        .replace(/\s+/g, ' '); // Normalize multiple spaces
+        .replace(/\s+/g, ' ');
     }
     return product?.title || 'Untitled Product';
   }, [product?.title, product?.brand]);
@@ -267,7 +292,6 @@ function ProductDetails() {
   const validatedImages = useMemo(() => (Array.isArray(product?.images) ? product.images : undefined), [product?.images]);
   const validatedVariants = useMemo(() => (Array.isArray(product?.variants) ? product.variants : undefined), [product?.variants]);
 
-  // Parse features from description or use placeholder
   const features = useMemo(() => {
     if (product?.description) {
       const featureList = product.description
@@ -278,6 +302,50 @@ function ProductDetails() {
     }
     return ['Premium materials', 'Designed for comfort', 'Exclusive styling'];
   }, [product?.description]);
+
+  // Add to Cart Handler
+  const handleAddToCart = () => {
+    if (!product || !selectedVariant || !validatedVariants) return;
+
+    const variant = validatedVariants.find((v) => v.id === selectedVariant);
+    if (!variant || variant.inventory_quantity <= 0) {
+      alert('Selected variant is out of stock.');
+      return;
+    }
+
+    const cartItem: CartItem = {
+      customer_id: null, // Set to null for guest users; update with actual customer ID when backend is integrated
+      product_id: product.id,
+      variant_id: variant.id,
+      title: cleanTitle,
+      brand: product.brand,
+      price: variant.price,
+      image: product.thumbnail || 'https://placehold.co/150x150',
+      size: variant.size,
+      quantity: 1,
+    };
+
+    setCart((prevCart) => {
+      const existingItem = prevCart.find(
+        (item) => item.product_id === cartItem.product_id && item.variant_id === cartItem.variant_id
+      );
+      if (existingItem) {
+        return prevCart.map((item) =>
+          item.product_id === cartItem.product_id && item.variant_id === cartItem.variant_id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
+      }
+      return [...prevCart, cartItem];
+    });
+
+    alert(`${cleanTitle} (${variant.size}) added to cart!`);
+  };
+
+  // Remove from Cart Handler
+  const handleRemoveFromCart = (productId: string, variantId: string) => {
+    setCart((prevCart) => prevCart.filter((item) => !(item.product_id === productId && item.variant_id === variantId)));
+  };
 
   if (productLoading) {
     return (
@@ -328,40 +396,40 @@ function ProductDetails() {
               {/* Image Section */}
               {validatedImages ? (
                 <Box position="relative" display="flex" flexDirection="column" alignItems="center">
-                                         <Box
+                  <Box
                     position="relative"
                     w="full"
                     style={{ aspectRatio: '3 / 4' }}
                     bg="white"
-                    filter="brightness(0.85)" //85% of original
+                    filter="brightness(0.85)"
                   >
-                 <Image
-  src={validatedImages[currentImage] || 'https://placehold.co/450x550'}
-  alt={`${cleanTitle} image ${currentImage + 1}`}
-  w="100%"
-  maxW="450px"
-  h="550px"
-  objectFit="contain"
-  mx="auto"
-  onError={(e) => (e.currentTarget.src = 'https://placehold.co/450x550')}
-/></Box>
-
+                    <Image
+                      src={validatedImages[currentImage] || 'https://placehold.co/450x550'}
+                      alt={`${cleanTitle} image ${currentImage + 1}`}
+                      w="100%"
+                      maxW="450px"
+                      h="550px"
+                      objectFit="contain"
+                      mx="auto"
+                      onError={(e) => (e.currentTarget.src = 'https://placehold.co/450x550')}
+                    />
+                  </Box>
                   {validatedImages.length > 1 && (
                     <HStack mt={4} justify="center" spacing={2}>
                       {validatedImages.map((img, index) => (
-                      <Image
-                        key={index}
-                        src={img}
-                        alt={`Thumbnail ${index + 1}`}
-                        w="90px"
-                        h="110px"
-                        objectFit="contain"
-                        cursor="pointer"
-                        borderRadius="md"
-                        border={index === currentImage ? '2px solid green.500' : '2px solid transparent'}
-                        onClick={() => setCurrentImage(index)}
-                        onError={(e) => (e.currentTarget.src = 'https://placehold.co/90x110')}
-                      />
+                        <Image
+                          key={index}
+                          src={img}
+                          alt={`Thumbnail ${index + 1}`}
+                          w="90px"
+                          h="110px"
+                          objectFit="contain"
+                          cursor="pointer"
+                          borderRadius="md"
+                          border={index === currentImage ? '2px solid green.500' : '2px solid transparent'}
+                          onClick={() => setCurrentImage(index)}
+                          onError={(e) => (e.currentTarget.src = 'https://placehold.co/90x110')}
+                        />
                       ))}
                     </HStack>
                   )}
@@ -403,61 +471,74 @@ function ProductDetails() {
               )}
               {/* Product Details Section */}
               <VStack align="start" spacing={4}>
-              <VStack align="start" spacing={1}>
-  <Text
-    fontSize="lg"
-    fontWeight="bold"
-    lineHeight="1.5"
-    color="gray.400"
-    textTransform="uppercase"
-  >
-    {product.brand || 'Unknown Brand'}
-  </Text>
-  <Text
-    as="h1"
-    fontSize={{ base: '3xl', md: '4xl' }}
-    fontWeight="medium"
-    lineHeight="1.3"
-    color="gray.50"
-  >
-    {cleanTitle}
-  </Text>
-  {product.discount && (
-    <Tag
-      size="md"
-      variant="solid"
-      colorScheme="green"
-      borderRadius="full"
-      fontSize="lg"
-      lineHeight="1.5"
-      textTransform="uppercase"
-      px={3}
-      py={0}
-      mt={0}
-    >
-      {product.discount}
-    </Tag>
-  )}
-</VStack>
-
+                <VStack align="start" spacing={1}>
+                  <Text
+                    fontSize="lg"
+                    fontWeight="bold"
+                    lineHeight="1.5"
+                    color="gray.400"
+                    textTransform="uppercase"
+                  >
+                    {product.brand || 'Unknown Brand'}
+                  </Text>
+                  <Text
+                    as="h1"
+                    fontSize={{ base: '3xl', md: '4xl' }}
+                    fontWeight="medium"
+                    lineHeight="1.3"
+                    color="gray.50"
+                  >
+                    {cleanTitle}
+                  </Text>
+                  {product.discount && (
+                    <Tag
+                      size="md"
+                      variant="solid"
+                      colorScheme="green"
+                      borderRadius="full"
+                      fontSize="lg"
+                      lineHeight="1.5"
+                      textTransform="uppercase"
+                      px={3}
+                      py={0}
+                      mt={0}
+                    >
+                      {product.discount}
+                    </Tag>
+                  )}
+                </VStack>
                 {validatedVariants && validatedVariants.length > 0 && (
-                  <HStack spacing={2} flexWrap="wrap" maxW="100%" gap={2}>
-                    {validatedVariants.map((variant, index) => (
-                      <Box
-                        key={variant.id || `variant-${index}`}
-                        bg={variant.inventory_quantity > 0 ? 'gray.700' : 'red.900'}
-                        color="white"
-                        px={3}
-                        py={1}
-                        borderRadius="md"
-                        fontSize="md"
-                        cursor="pointer"
-                        _hover={{ bg: variant.inventory_quantity > 0 ? 'gray.600' : 'red.800' }}
-                      >
-                        {variant.size}
-                      </Box>
-                    ))}
-                  </HStack>
+                  <>
+                    <Select
+                      value={selectedVariant || ''}
+                      onChange={(e) => setSelectedVariant(e.target.value)}
+                      placeholder="Select size"
+                      bg="gray.700"
+                      color="white"
+                      borderColor="gray.600"
+                      _hover={{ borderColor: 'gray.500' }}
+                      maxW="200px"
+                    >
+                      {validatedVariants.map((variant) => (
+                        <option
+                          key={variant.id}
+                          value={variant.id}
+                          disabled={variant.inventory_quantity <= 0}
+                          style={{ color: variant.inventory_quantity <= 0 ? 'gray' : 'white' }}
+                        >
+                          {variant.size} {variant.inventory_quantity <= 0 ? '(Out of Stock)' : ''}
+                        </option>
+                      ))}
+                    </Select>
+                    <Button
+                      colorScheme="green"
+                      size="lg"
+                      onClick={handleAddToCart}
+                      isDisabled={!selectedVariant || validatedVariants.find((v) => v.id === selectedVariant)?.inventory_quantity <= 0}
+                    >
+                      Add to Cart
+                    </Button>
+                  </>
                 )}
                 <HStack spacing={2} align="center">
                   <Text
@@ -486,7 +567,7 @@ function ProductDetails() {
                   <Text fontSize="lg" color="gray.400">
                     No description available
                   </Text>
-                    )}
+                )}
                 {features.length > 0 && (
                   <Box>
                     <Text as="h2" fontSize="xl" mb={2}>
@@ -503,6 +584,62 @@ function ProductDetails() {
                 )}
               </VStack>
             </SimpleGrid>
+            <Divider my={8} borderColor="gray.600" />
+            {/* Cart Section */}
+            <Box mt={8}>
+              <Text as="h2" fontSize="xl" mb={4}>
+                Your Cart
+              </Text>
+              {cart.length === 0 ? (
+                <Text fontSize="md" color="gray.400">
+                  Your cart is empty.
+                </Text>
+              ) : (
+                <VStack spacing={4} align="start">
+                  {cart.map((item, index) => (
+                    <HStack
+                      key={`${item.product_id}-${item.variant_id}-${index}`}
+                      w="100%"
+                      p={4}
+                      borderWidth="1px"
+                      borderRadius="md"
+                      bg="gray.800"
+                      spacing={4}
+                    >
+                      <Image
+                        src={item.image}
+                        alt={item.title}
+                        w="80px"
+                        h="100px"
+                        objectFit="contain"
+                        onError={(e) => (e.currentTarget.src = 'https://placehold.co/80x100')}
+                      />
+                      <VStack align="start" flex={1}>
+                        <Text fontSize="md" fontWeight="medium" color="white">
+                          {item.brand} {item.title}
+                        </Text>
+                        <Text fontSize="sm" color="gray.400">
+                          Size: {item.size}
+                        </Text>
+                        <Text fontSize="sm" color="gray.400">
+                          Quantity: {item.quantity}
+                        </Text>
+                        <Text fontSize="md" color="green.500">
+                          {item.price}
+                        </Text>
+                      </VStack>
+                      <Button
+                        colorScheme="red"
+                        size="sm"
+                        onClick={() => handleRemoveFromCart(item.product_id, item.variant_id)}
+                      >
+                        Remove
+                      </Button>
+                    </HStack>
+                  ))}
+                </VStack>
+              )}
+            </Box>
             <Divider my={8} borderColor="gray.600" />
             <Box mt={8}>
               <Text as="h2" fontSize="xl" mb={4}>
