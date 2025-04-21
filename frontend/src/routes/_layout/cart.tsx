@@ -170,7 +170,7 @@ function Cart() {
                       <Td color="gray.400" fontSize="xs">
                         <Text as="span" color="#00ff00">{item.price}</Text> / <Text as="span" color="gray.500">{item.full_price}</Text>
                       </Td>
-                      <Td color="green.500" fontSize="xs">${calculateItemTotalPrice(item)}</Td>
+                      <Td color="#00FF00" fontSize="xs">${calculateItemTotalPrice(item)}</Td>
                     </Tr>
                   ))}
                 </Tbody>
