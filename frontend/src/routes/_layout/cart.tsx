@@ -167,7 +167,6 @@ function Cart() {
                       Total
                     </Th>
                     <Th color="white" textTransform="uppercase" fontSize="xs">
-                      Action
                       <Select
                         value={selectedCurrency}
                         onChange={(e) => setSelectedCurrency(e.target.value)}
