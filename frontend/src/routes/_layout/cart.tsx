@@ -182,7 +182,7 @@ function Cart() {
                   </Text>
                 </Link>
                 <Text fontSize="md" fontWeight="bold" color="white">
-                    Subtotal: ${calculateSubtotal()}
+                  ${calculateSubtotal()}: SUBTOTAL
                   </Text>
               </HStack>
               <HStack justify="flex-end" w="100%" spacing={2}>
