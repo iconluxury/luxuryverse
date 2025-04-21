@@ -1,12 +1,13 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { Flex, Spinner, Box, Text, Tag, HStack, Divider, IconButton, Skeleton,SkeletonText , VStack, Button, useBreakpointValue ,SimpleGrid } from '@chakra-ui/react';
+import { Flex, Spinner, Box, Text, Tag, HStack, Divider, IconButton, Skeleton, SkeletonText, VStack, Button, useBreakpointValue, SimpleGrid } from '@chakra-ui/react';
 import { useState, useEffect, useMemo } from 'react';
-import { Link } from '@tanstack/react-router';
+import { Link, useNavigate } from '@tanstack/react-router';
 import { ErrorBoundary } from 'react-error-boundary';
 import Footer from '../../../components/Common/Footer';
 import { Image, ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import DOMPurify from 'dompurify';
 import useCustomToast from '../../../hooks/useCustomToast';
+import { useCart } from '../../../components/Common/CartContext';
 
 // Interfaces
 interface Variant {
@@ -65,19 +66,12 @@ function ProductDetails() {
   const [error, setError] = useState<string | null>(null);
   const [currentImage, setCurrentImage] = useState(0);
   const [selectedVariant, setSelectedVariant] = useState<string | null>(null);
-  const [cartCount, setCartCount] = useState(0);
+  const { cartCount, addToCart } = useCart();
   const API_BASE_URL = 'https://iconluxury.shop';
   const { id } = Route.useParams();
   const isMobile = useBreakpointValue({ base: true, md: false });
   const showToast = useCustomToast();
-
-  // Load cart count from localStorage
-  useEffect(() => {
-    const savedCart = localStorage.getItem('cart');
-    const cartItems = savedCart ? JSON.parse(savedCart) : [];
-    const totalItems = cartItems.reduce((total: number, item: { quantity: number }) => total + item.quantity, 0);
-    setCartCount(totalItems);
-  }, []);
+  const navigate = useNavigate();
 
   // Debug third-party scripts
   useEffect(() => {
@@ -329,32 +323,14 @@ function ProductDetails() {
       quantity: 1,
     };
 
-    // Update cart in localStorage
-    const savedCart = localStorage.getItem('cart');
-    let cartItems: CartItem[] = savedCart ? JSON.parse(savedCart) : [];
-    const existingItem = cartItems.find(
-      (item) => item.product_id === cartItem.product_id && item.variant_id === cartItem.variant_id
-    );
-    if (existingItem) {
-      cartItems = cartItems.map((item) =>
-        item.product_id === cartItem.product_id && item.variant_id === cartItem.variant_id
-          ? { ...item, quantity: item.quantity + 1 }
-          : item
-      );
-    } else {
-      cartItems.push(cartItem);
-    }
-    localStorage.setItem('cart', JSON.stringify(cartItems));
-
-    // Update cart count
-    const totalItems = cartItems.reduce((total: number, item: { quantity: number }) => total + item.quantity, 0);
-    setCartCount(totalItems);
-
+    addToCart(cartItem);
     showToast(
       'Added to Cart',
       `${cleanTitle} (${variant.size}) added to cart!`,
       'success'
     );
+    // Navigate to /collections after adding to cart
+    navigate({ to: '/cart' });
   };
 
   if (productLoading) {
