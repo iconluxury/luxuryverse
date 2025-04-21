@@ -547,42 +547,43 @@ function ProductDetails() {
                   </>
                 )}
                 {/* Price and Currency Selector */}
-                <VStack align="start" spacing={2}>
-                  <HStack spacing={2} align="center">
-                    <Text fontSize={{ base: '3xl', md: '4xl' }} fontWeight="bold" color="green.500">
-                      {selectedCurrency === 'USD'
-                        ? product.sale_price || 'N/A'
-                        : `${convertPrice(product.sale_price, selectedCurrency)} ${selectedCurrency}`}
-                    </Text>
-                    {product.full_price && selectedCurrency === 'USD' && (
-                      <Text fontSize={{ base: 'lg', md: 'xl' }} color="gray.500">
-                        MSRP: {product.full_price}
-                      </Text>
-                    )}
-                  </HStack>
-                  <Select
-                    value={selectedCurrency}
-                    onChange={(e) => setSelectedCurrency(e.target.value)}
-                    width={{ base: '150px', md: '200px' }}
-                    bg="gray.700"
-                    color="white"
-                    borderColor="gray.600"
-                    _hover={{ borderColor: 'gray.500' }}
-                  >
-                    <option value="USD" style={{ background: '#2D3748', color: 'white' }}>
-                      USD
-                    </option>
-                    {cryptoPrices.map((crypto) => (
-                      <option
-                        key={crypto.symbol}
-                        value={crypto.symbol}
-                        style={{ background: '#2D3748', color: 'white' }}
-                      >
-                        {crypto.symbol}
-                      </option>
-                    ))}
-                  </Select>
-                </VStack>
+{/* Price and Currency Selector */}
+<VStack align="start" spacing={1}>
+  <HStack spacing={4} align="center">
+    <Text fontSize={{ base: '3xl', md: '4xl' }} fontWeight="bold" color="green.500">
+      {selectedCurrency === 'USD'
+        ? product.sale_price || 'N/A'
+        : `${convertPrice(product.sale_price, selectedCurrency)} ${selectedCurrency}`}
+    </Text>
+    <Select
+      value={selectedCurrency}
+      onChange={(e) => setSelectedCurrency(e.target.value)}
+      width={{ base: '120px', md: '150px' }}
+      bg="gray.700"
+      color="white"
+      borderColor="gray.600"
+      _hover={{ borderColor: 'gray.500' }}
+    >
+      <option value="USD" style={{ background: '#2D3748', color: 'white' }}>
+        USD
+      </option>
+      {cryptoPrices.map((crypto) => (
+        <option
+          key={crypto.symbol}
+          value={crypto.symbol}
+          style={{ background: '#2D3748', color: 'white' }}
+        >
+          {crypto.symbol}
+        </option>
+      ))}
+    </Select>
+  </HStack>
+  {product.full_price && selectedCurrency === 'USD' && (
+    <Text fontSize={{ base: 'md', md: 'lg' }} color="gray.500">
+      MSRP: {product.full_price}
+    </Text>
+  )}
+</VStack>
                 <Text as="h2" fontSize="xl" mb={2}>
                   Product Description
                 </Text>
