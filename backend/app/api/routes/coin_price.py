@@ -152,6 +152,3 @@ async def get_crypto_prices(
     except Exception as e:
         logger.error(f"Unexpected error fetching crypto prices: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Unexpected error: {str(e)}")
-
-# Include router in app
-app.include_router(crypto_router)
