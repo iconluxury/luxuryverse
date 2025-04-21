@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { Flex, Spinner, Box, Text, Tag, HStack, Divider, IconButton, Skeleton, SkeletonText, SimpleGrid, VStack, Button } from '@chakra-ui/react';
+import { Flex, Spinner, Box, Text, Tag, HStack, Divider, IconButton, Skeleton, SkeletonText, SimpleGrid, VStack, Button, useBreakpointValue } from '@chakra-ui/react';
 import { useState, useEffect, useMemo } from 'react';
-import { Link } from '@tanstack/react-router';
+import { Link, useNavigate } from '@tanstack/react-router';
 import { ErrorBoundary } from 'react-error-boundary';
 import Footer from '../../../components/Common/Footer';
 import { Image, ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
@@ -70,6 +70,8 @@ function ProductDetails() {
   });
   const API_BASE_URL = 'https://iconluxury.shop';
   const { id } = Route.useParams();
+  const navigate = useNavigate();
+  const isMobile = useBreakpointValue({ base: true, md: false });
 
   // Save cart to localStorage whenever it changes
   useEffect(() => {
@@ -347,6 +349,19 @@ function ProductDetails() {
     setCart((prevCart) => prevCart.filter((item) => !(item.product_id === productId && item.variant_id === variantId)));
   };
 
+  // Calculate Subtotal
+  const calculateSubtotal = () => {
+    return cart.reduce((total, item) => {
+      const price = parseFloat(item.price.replace('$', '')) || 0;
+      return total + price * item.quantity;
+    }, 0).toFixed(2);
+  };
+
+  // Calculate Total Items
+  const calculateTotalItems = () => {
+    return cart.reduce((total, item) => total + item.quantity, 0);
+  };
+
   if (productLoading) {
     return (
       <Flex justify="center" align="center" minH="100vh" bg="transparent">
@@ -586,62 +601,6 @@ function ProductDetails() {
               </VStack>
             </SimpleGrid>
             <Divider my={8} borderColor="gray.600" />
-            {/* Cart Section */}
-            <Box mt={8}>
-              <Text as="h2" fontSize="xl" mb={4}>
-                Your Cart
-              </Text>
-              {cart.length === 0 ? (
-                <Text fontSize="md" color="gray.400">
-                  Your cart is empty.
-                </Text>
-              ) : (
-                <VStack spacing={4} align="start">
-                  {cart.map((item, index) => (
-                    <HStack
-                      key={`${item.product_id}-${item.variant_id}-${index}`}
-                      w="100%"
-                      p={4}
-                      borderWidth="1px"
-                      borderRadius="md"
-                      bg="gray.800"
-                      spacing={4}
-                    >
-                      <Image
-                        src={item.image}
-                        alt={item.title}
-                        w="80px"
-                        h="100px"
-                        objectFit="contain"
-                        onError={(e) => (e.currentTarget.src = 'https://placehold.co/80x100')}
-                      />
-                      <VStack align="start" flex={1}>
-                        <Text fontSize="md" fontWeight="medium" color="white">
-                          {item.brand} {item.title}
-                        </Text>
-                        <Text fontSize="sm" color="gray.400">
-                          Size: {item.size}
-                        </Text>
-                        <Text fontSize="sm" color="gray.400">
-                          Quantity: {item.quantity}
-                        </Text>
-                        <Text fontSize="md" color="green.500">
-                          {item.price}
-                        </Text>
-                      </VStack>
-                      <Button
-                        colorScheme="red"
-                        size="sm"
-                        onClick={() => handleRemoveFromCart(item.product_id, item.variant_id)}
-                      >
-                        Remove
-                      </Button>
-                    </HStack>
-                  ))}
-                </VStack>
-              )}
-            </Box>
-            <Divider my={8} borderColor="gray.600" />
             <Box mt={8}>
               <Text as="h2" fontSize="xl" mb={4}>
                 Related Products
@@ -698,6 +657,130 @@ function ProductDetails() {
                 <Text fontSize="md" color="gray.400">
                   No related products available.
                 </Text>
+              )}
+            </Box>
+            <Divider my={8} borderColor="gray.600" />
+            {/* Cart Section */}
+            <Box mt={8}>
+              <Text as="h2" fontSize="xl" mb={4} textTransform="uppercase" color="gray.50">
+                Cart
+              </Text>
+              {isMobile ? (
+                // Compact Mobile View
+                <HStack
+                  justify="space-between"
+                  align="center"
+                  bg="gray.800"
+                  p={4}
+                  borderRadius="md"
+                  borderWidth="1px"
+                  borderColor="gray.600"
+                >
+                  <Link to="/cart">
+                    <Text fontSize="md" color="gray.400">
+                      {calculateTotalItems()} {calculateTotalItems() === 1 ? 'Item' : 'Items'} in Cart
+                    </Text>
+                  </Link>
+                  <Link to="/cart">
+                    <Button
+                      colorScheme="red"
+                      size="sm"
+                      textTransform="uppercase"
+                      isDisabled={cart.length === 0}
+                    >
+                      Checkout
+                    </Button>
+                  </Link>
+                </HStack>
+              ) : (
+                // Expanded Desktop View
+                cart.length === 0 ? (
+                  <Text fontSize="md" color="gray.400">
+                    Your cart is empty.
+                  </Text>
+                ) : (
+                  <VStack spacing={4} align="start">
+                    <Text fontSize="md" color="gray.400">
+                      {calculateTotalItems()} {calculateTotalItems() === 1 ? 'Item' : 'Items'} in Your Cart
+                    </Text>
+                    {cart.map((item, index) => (
+                      <HStack
+                        key={`${item.product_id}-${item.variant_id}-${index}`}
+                        w="100%"
+                        p={4}
+                        borderWidth="1px"
+                        borderRadius="md"
+                        bg="gray.800"
+                        borderColor="gray.600"
+                        spacing={4}
+                      >
+                        <Image
+                          src={item.image}
+                          alt={item.title}
+                          w="80px"
+                          h="100px"
+                          objectFit="contain"
+                          onError={(e) => (e.currentTarget.src = 'https://placehold.co/80x100')}
+                        />
+                        <VStack align="start" flex={1}>
+                          <Text fontSize="md" fontWeight="medium" color="white">
+                            {item.brand} {item.title}
+                          </Text>
+                          <Text fontSize="sm" color="gray.400">
+                            Style: {item.title}
+                          </Text>
+                          <Text fontSize="sm" color="gray.400">
+                            Size: {item.size}
+                          </Text>
+                          <Text fontSize="sm" color="gray.400">
+                            Quantity: {item.quantity}
+                          </Text>
+                        </VStack>
+                        <Text fontSize="md" fontWeight="bold" color="green.500">
+                          {item.price}
+                        </Text>
+                        <Button
+                          colorScheme="red"
+                          size="sm"
+                          textTransform="uppercase"
+                          onClick={() => handleRemoveFromCart(item.product_id, item.variant_id)}
+                        >
+                          Remove
+                        </Button>
+                      </HStack>
+                    ))}
+                    <Divider borderColor="gray.600" />
+                    <HStack justify="space-between" w="100%" align="center">
+                      <Text fontSize="sm" color="red.500">
+                        Free Shipping on All Orders Over $250, Some Exceptions May Apply
+                      </Text>
+                      <Text fontSize="lg" fontWeight="bold" color="white">
+                        Subtotal: ${calculateSubtotal()}
+                      </Text>
+                    </HStack>
+                    <HStack justify="flex-end" w="100%" spacing={4}>
+                      <Button
+                        colorScheme="gray"
+                        variant="outline"
+                        size="lg"
+                        textTransform="uppercase"
+                        onClick={() => navigate({ to: '/' })}
+                      >
+                        Keep Shopping
+                      </Button>
+                      <Link to="/cart">
+                        <Button
+                          colorScheme="red"
+                          size="lg"
+                          textTransform="uppercase"
+                          isDisabled={cart.length === 0}
+                        >
+                          Checkout Now
+                        </Button>
+                      </Link>
+                    </HStack>
+                  </VStack>
+                )
               )}
             </Box>
             <Divider my={8} borderColor="gray.600" />
