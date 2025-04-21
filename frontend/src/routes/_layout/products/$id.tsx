@@ -324,11 +324,6 @@ function ProductDetails() {
     };
 
     addToCart(cartItem);
-    showToast(
-      'Added to Cart',
-      `${cleanTitle} (${variant.size}) added to cart!`,
-      'success'
-    );
     // Navigate to /collections after adding to cart
     navigate({ to: '/cart' });
   };

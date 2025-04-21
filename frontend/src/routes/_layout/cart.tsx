@@ -28,12 +28,10 @@ export const Route = createFileRoute('/cart')({
 function Cart() {
   const { cart, removeFromCart, cartCount } = useCart();
   const navigate = useNavigate();
-  const showToast = useCustomToast();
 
   // Remove from Cart Handler
   const handleRemoveFromCart = (productId: string, variantId: string) => {
     removeFromCart(productId, variantId);
-    showToast('Removed from Cart', 'Item removed from your cart.', 'info');
   };
 
   // Calculate Subtotal
