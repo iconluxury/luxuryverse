@@ -4,6 +4,8 @@ from typing import List, Optional
 import logging
 import requests
 import os
+from cachetools import TTLCache
+import hashlib
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
@@ -12,8 +14,11 @@ logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/crypto", tags=["crypto"])
 
 # CoinMarketCap API configuration
-COINMARKETCAP_API_KEY: Optional[str] = 'de11073e-8892-445c-8cf6-0e2cd69705fd'
+COINMARKETCAP_API_KEY: Optional[str] = os.getenv("COINMARKETCAP_API_KEY", "de11073e-8892-445c-8cf6-0e2cd69705fd")
 COINMARKETCAP_API_URL: str = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest"
+
+# Initialize in-memory cache (5-minute TTL, max 100 entries)
+cache = TTLCache(maxsize=100, ttl=300)
 
 # Pydantic models for response
 class CryptoPriceResponse(BaseModel):
@@ -55,6 +60,7 @@ async def get_crypto_prices(
     Fetch latest cryptocurrency prices in USD for product pricing conversions.
     Optionally converts a product price (in USD) to equivalent crypto amounts.
     If no symbols are provided, fetches prices for a default set of popular coins.
+    Uses caching to reduce API calls and avoid rate limits.
     """
     logger.info(f"Fetching crypto prices for symbols: {symbols if symbols else 'default'}, product_price_usd: {product_price_usd}")
 
@@ -68,6 +74,13 @@ async def get_crypto_prices(
     if product_price_usd is not None and product_price_usd <= 0:
         logger.error("Invalid product price: must be positive")
         raise HTTPException(status_code=400, detail="Product price must be positive")
+
+    # Generate cache key based on symbols and product price
+    cache_key = hashlib.md5(f"{symbols_to_fetch}:{product_price_usd}".encode()).hexdigest()
+    cached_data = cache.get(cache_key)
+    if cached_data:
+        logger.info(f"Cache hit for key: {cache_key}")
+        return cached_data
 
     headers = {
         "Accepts": "application/json",
@@ -120,7 +133,10 @@ async def get_crypto_prices(
             logger.warning("No valid prices returned after processing")
             raise HTTPException(status_code=404, detail="No valid prices available for the requested symbols")
 
-        logger.info(f"Successfully fetched prices for {len(prices)} symbols")
+        # Store in cache
+        cache[cache_key] = prices
+        logger.info(f"Cache miss; stored prices for key: {cache_key}, {len(prices)} symbols")
+
         return prices
 
     except requests.exceptions.HTTPError as e:
@@ -140,3 +156,4 @@ async def get_crypto_prices(
     except Exception as e:
         logger.error(f"Unexpected error fetching crypto prices: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Unexpected error: {str(e)}")
+
