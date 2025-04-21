@@ -68,7 +68,7 @@ async def get_crypto_prices(
         logger.error("Missing CoinMarketCap API key")
         raise HTTPException(status_code=500, detail="Server configuration error: Missing CoinMarketCap API key")
 
-    default_symbols = "BTC,ETH,USDT,XRP,BNB,SOL,USDC,DOGE,TRX,ADA"
+    default_symbols = "BTC,ETH,XRP,BNB,SOL,DOGE,TRX,ADA"
     symbols_to_fetch = symbols if symbols else default_symbols
 
     if product_price_usd is not None and product_price_usd <= 0:

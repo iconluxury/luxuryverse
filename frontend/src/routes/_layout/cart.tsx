@@ -267,8 +267,9 @@ function Cart() {
                 <HStack spacing={2} align="center">
                   <Text fontSize="md" fontWeight="bold" color="white">
                     <Text as="span" fontSize="lg" color="#00FF00">
-                      {`${convertPrice(calculateSubtotal(), selectedCurrency)}`}
+                      {`${convertPrice(calculateSubtotal(), selectedCurrency)} ${selectedCurrency}`}
                     </Text>{' '}
+                    : TOTAL
                   </Text>
                   <Select
                     value={selectedCurrency}
