@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/crypto", tags=["crypto"])
 
 # CoinMarketCap API configuration
-COINMARKETCAP_API_KEY: Optional[str] = os.getenv("COINMARKETCAP_API_KEY")  # Set in .env file
+COINMARKETCAP_API_KEY: Optional[str] = 'de11073e-8892-445c-8cf6-0e2cd69705fd'
 COINMARKETCAP_API_URL: str = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest"
 
 # Pydantic models for response
