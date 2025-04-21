@@ -370,6 +370,24 @@ function ProductDetails() {
     return cart.reduce((total, item) => total + item.quantity, 0);
   };
 
+  // Group Cart Items by Quantity
+  const groupItemsByQuantity = () => {
+    const grouped: { [key: number]: CartItem[] } = {};
+    cart.forEach((item) => {
+      const qty = item.quantity;
+      if (!grouped[qty]) {
+        grouped[qty] = [];
+      }
+      grouped[qty].push(item);
+    });
+    return grouped;
+  };
+
+  // Get Items with Size 10
+  const getSize10Items = (items: CartItem[]) => {
+    return items.filter((item) => item.size.toLowerCase() === '10');
+  };
+
   if (productLoading) {
     return (
       <Flex justify="center" align="center" minH="100vh" bg="transparent">
@@ -766,7 +784,48 @@ function ProductDetails() {
                         </HStack>
                       </HStack>
                     ))}
+                    {/* Total Details by Quantity */}
                     <Divider borderColor="gray.600" />
+                    <Text as="h3" fontSize="lg" fontWeight="bold" color="gray.50" mt={4}>
+                      Total Details by Quantity
+                    </Text>
+                    {Object.entries(groupItemsByQuantity())
+                      .sort(([qtyA], [qtyB]) => Number(qtyA) - Number(qtyB))
+                      .map(([qty, items]) => (
+                        <Box key={qty} w="100%">
+                          <Text fontSize="md" fontWeight="medium" color="white" mb={2}>
+                            Quantity: {qty}
+                          </Text>
+                          <VStack spacing={2} align="start">
+                            {items.map((item, index) => (
+                              <Box
+                                key={`${item.product_id}-${item.variant_id}-${index}`}
+                                p={2}
+                                bg={item.size.toLowerCase() === '10' ? 'green.900' : 'gray.700'}
+                                borderRadius="md"
+                                w="100%"
+                              >
+                                <Text fontSize="sm" color="white" textTransform="uppercase">
+                                  {item.brand} {item.title}
+                                </Text>
+                                <Text fontSize="sm" color="gray.400">
+                                  Size: {item.size}
+                                </Text>
+                                <Text fontSize="sm" color="green.500">
+                                  Price: {item.price}
+                                </Text>
+                                <Text fontSize="sm" color="gray.500">
+                                  MSRP: {item.full_price}
+                                </Text>
+                                <Text fontSize="sm" color="gray.400">
+                                  Quantity: {item.quantity}
+                                </Text>
+                              </Box>
+                            ))}
+                          </VStack>
+                        </Box>
+                      ))}
+                    <Divider borderColor="gray.600" mt={4} />
                     <HStack justify="space-between" w="100%" align="center">
                       <Link to="/terms-and-conditions">
                         <Text fontSize="sm" color="gray.400" textDecoration="underline">
