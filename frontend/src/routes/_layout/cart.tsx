@@ -271,6 +271,7 @@ function Cart() {
     color="white"
     display="flex"
     alignItems="center"
+    bg="gray.700" // Optional: for visibility
     px={2} // Optional: padding for better appearance
   >
     <Text as="span" fontSize="2xl" color="#00FF00">
