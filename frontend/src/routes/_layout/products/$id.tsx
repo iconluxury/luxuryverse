@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import {
   Flex, Spinner, Box, Text, Tag, HStack, Divider, IconButton, Skeleton, SkeletonText, VStack, Button,
-  useBreakpointValue, SimpleGrid, Select, // Added Select
+  useBreakpointValue, SimpleGrid, Select,
 } from '@chakra-ui/react';
 import { useState, useEffect, useMemo } from 'react';
 import { Link, useNavigate } from '@tanstack/react-router';
@@ -12,7 +12,7 @@ import DOMPurify from 'dompurify';
 import useCustomToast from '../../../hooks/useCustomToast';
 import { useCart } from '../../../components/Common/CartContext';
 
-// Interfaces (unchanged)
+// Interfaces
 interface Variant {
   id: string;
   title: string;
@@ -49,39 +49,21 @@ interface CartItem {
   quantity: number;
 }
 
-// Crypto Price Interface
 interface CryptoPrice {
   symbol: string;
   price_usd: number;
   last_updated: string;
 }
 
-// ErrorFallback component (unchanged)
 function ErrorFallback({ error }: { error: Error }) {
   console.error('ErrorBoundary caught (suppressed):', error, error.stack);
   return <Box />;
 }
 
-// Define the route
 export const Route = createFileRoute('/_layout/products/$id')({
   component: ProductDetails,
 });
 
-// Crypto prices data (from provided JSON)
-const cryptoPrices: CryptoPrice[] = [
-  { symbol: 'ADA', price_usd: 0.6315456129292082, last_updated: '2025-04-21T16:36:00.000Z' },
-  { symbol: 'BNB', price_usd: 602.1948853315994, last_updated: '2025-04-21T16:35:00.000Z' },
-  { symbol: 'BTC', price_usd: 87836.45468251112, last_updated: '2025-04-21T16:36:00.000Z' },
-  { symbol: 'DOGE', price_usd: 0.1598748929095517, last_updated: '2025-04-21T16:36:00.000Z' },
-  { symbol: 'ETH', price_usd: 1613.212186504242, last_updated: '2025-04-21T16:36:00.000Z' },
-  { symbol: 'SOL', price_usd: 137.40873252733, last_updated: '2025-04-21T16:35:00.000Z' },
-  { symbol: 'TRX', price_usd: 0.2434232485516772, last_updated: '2025-04-21T16:36:00.000Z' },
-  { symbol: 'USDC', price_usd: 0.9999398549069642, last_updated: '2025-04-21T16:36:00.000Z' },
-  { symbol: 'USDT', price_usd: 1.0002704851872342, last_updated: '2025-04-21T16:35:00.000Z' },
-  { symbol: 'XRP', price_usd: 2.1040266825184695, last_updated: '2025-04-21T16:36:00.000Z' },
-];
-
-// ProductDetails component
 function ProductDetails() {
   const [product, setProduct] = useState<Product | null>(null);
   const [topProducts, setTopProducts] = useState<Product[]>([]);
@@ -90,7 +72,8 @@ function ProductDetails() {
   const [error, setError] = useState<string | null>(null);
   const [currentImage, setCurrentImage] = useState(0);
   const [selectedVariant, setSelectedVariant] = useState<string | null>(null);
-  const [selectedCurrency, setSelectedCurrency] = useState<string>('USD'); // New state for currency
+  const [selectedCurrency, setSelectedCurrency] = useState<string>('USD');
+  const [cryptoPrices, setCryptoPrices] = useState<CryptoPrice[]>([]);
   const { cartCount, addToCart } = useCart();
   const API_BASE_URL = 'https://iconluxury.shop';
   const { id } = Route.useParams();
@@ -98,12 +81,12 @@ function ProductDetails() {
   const showToast = useCustomToast();
   const navigate = useNavigate();
 
-  // Debug third-party scripts (unchanged)
+  // Debug third-party scripts
   useEffect(() => {
     console.log('Global objects:', Object.keys(window).filter(key => key.includes('cart') || key.includes('analytics')));
   }, []);
 
-  // Fetch with retry (unchanged)
+  // Fetch with retry
   const fetchWithRetry = async (url: string, retryCount = 6) => {
     for (let attempt = 1; attempt <= retryCount; attempt++) {
       try {
@@ -137,7 +120,27 @@ function ProductDetails() {
     }
   };
 
-  // Fetch product (unchanged)
+  // Fetch crypto prices
+  useEffect(() => {
+    const fetchCryptoPrices = async () => {
+      try {
+        console.log('Fetching crypto prices:', `${API_BASE_URL}/api/v1/crypto/prices`);
+        const prices = await fetchWithRetry(`${API_BASE_URL}/api/v1/crypto/prices`);
+        console.log('Crypto prices fetched:', prices);
+        if (!Array.isArray(prices)) {
+          throw new Error('Invalid crypto prices data received');
+        }
+        setCryptoPrices(prices);
+      } catch (err: any) {
+        console.error('Crypto prices fetch error:', err.message);
+        setCryptoPrices([]); // Fallback to empty array
+        showToast('Error', 'Failed to load cryptocurrency prices.', 'error');
+      }
+    };
+    fetchCryptoPrices();
+  }, []);
+
+  // Fetch product
   const fetchProduct = async () => {
     try {
       console.log('Fetching:', `${API_BASE_URL}/api/v1/products/${id}`);
@@ -199,7 +202,7 @@ function ProductDetails() {
     }
   };
 
-  // Fetch top products (unchanged)
+  // Fetch top products
   const fetchTopProducts = async () => {
     try {
       const topProductsUrl = product?.collection_id
@@ -277,7 +280,7 @@ function ProductDetails() {
     }
   };
 
-  // Clean title (unchanged)
+  // Clean title
   const cleanTitle = useMemo(() => {
     if (product?.title && product?.brand) {
       const brandRegex = new RegExp(`\\b${product.brand}\\b`, 'i');
@@ -291,7 +294,7 @@ function ProductDetails() {
     return product?.title || 'Untitled Product';
   }, [product?.title, product?.brand]);
 
-  // Effect hooks (unchanged)
+  // Effect hooks
   useEffect(() => {
     if (!id || typeof id !== 'string') {
       setProductLoading(false);
@@ -307,7 +310,7 @@ function ProductDetails() {
     }
   }, [product?.id]);
 
-  // Memoized values (unchanged)
+  // Memoized values
   const validatedImages = useMemo(() => (Array.isArray(product?.images) ? product.images : undefined), [product?.images]);
   const validatedVariants = useMemo(() => (Array.isArray(product?.variants) ? product.variants : undefined), [product?.variants]);
   const features = useMemo(() => {
@@ -332,10 +335,10 @@ function ProductDetails() {
       return 'N/A';
     }
     const converted = usdValue / crypto.price_usd;
-    return converted.toFixed(6); // Adjust precision as needed
+    return converted.toFixed(6);
   };
 
-  // Add to Cart Handler (unchanged)
+  // Add to Cart Handler
   const handleAddToCart = () => {
     if (!product || !selectedVariant || !validatedVariants) return;
     const variant = validatedVariants.find((v) => v.id === selectedVariant);
@@ -359,7 +362,7 @@ function ProductDetails() {
     navigate({ to: '/cart' });
   };
 
-  // Loading state (unchanged)
+  // Loading state
   if (productLoading) {
     return (
       <Flex justify="center" align="center" minH="100vh" bg="transparent">
@@ -368,7 +371,7 @@ function ProductDetails() {
     );
   }
 
-  // Product not found (unchanged)
+  // Product not found
   if (!product) {
     return (
       <Box textAlign="center" py={16} color="gray.700" bg="transparent" w="100%">
@@ -407,7 +410,7 @@ function ProductDetails() {
         <Box py={8} px={{ base: 4, md: 8 }}>
           <Box maxW="1200px" mx="auto" w="100%">
             <SimpleGrid columns={{ base: 1, md: 2 }} spacing={8}>
-              {/* Image Section (unchanged) */}
+              {/* Image Section */}
               {validatedImages ? (
                 <Box position="relative" display="flex" flexDirection="column" alignItems="center">
                   <Box position="relative" w="full" style={{ aspectRatio: '3 / 4' }} bg="white" filter="brightness(0.85)">
@@ -506,6 +509,9 @@ function ProductDetails() {
                 </VStack>
                 {validatedVariants && validatedVariants.length > 0 && (
                   <>
+                    <Text fontSize="lg" fontWeight="medium" color="gray.50">
+                      Select Size
+                    </Text>
                     <HStack spacing={2} flexWrap="wrap" maxW="100%" gap={2}>
                       {validatedVariants.map((variant, index) => (
                         <Box
@@ -534,56 +540,64 @@ function ProductDetails() {
                         </Box>
                       ))}
                     </HStack>
-                    <Button
-                      colorScheme="green"
-                      size="lg"
-                      onClick={handleAddToCart}
-                      isDisabled={
-                        !selectedVariant || validatedVariants.find((v) => v.id === selectedVariant)?.inventory_quantity <= 0
-                      }
-                    >
-                      Add to Cart
-                    </Button>
                   </>
                 )}
                 {/* Price and Currency Selector */}
-{/* Price and Currency Selector */}
-<VStack align="start" spacing={1}>
-  <HStack spacing={4} align="center">
-    <Text fontSize={{ base: '3xl', md: '4xl' }} fontWeight="bold" color="green.500">
-      {selectedCurrency === 'USD'
-        ? product.sale_price || 'N/A'
-        : `${convertPrice(product.sale_price, selectedCurrency)} ${selectedCurrency}`}
-    </Text>
-    <Select
-      value={selectedCurrency}
-      onChange={(e) => setSelectedCurrency(e.target.value)}
-      width={{ base: '120px', md: '150px' }}
-      bg="gray.700"
-      color="white"
-      borderColor="gray.600"
-      _hover={{ borderColor: 'gray.500' }}
-    >
-      <option value="USD" style={{ background: '#2D3748', color: 'white' }}>
-        USD
-      </option>
-      {cryptoPrices.map((crypto) => (
-        <option
-          key={crypto.symbol}
-          value={crypto.symbol}
-          style={{ background: '#2D3748', color: 'white' }}
-        >
-          {crypto.symbol}
-        </option>
-      ))}
-    </Select>
-  </HStack>
-  {product.full_price && selectedCurrency === 'USD' && (
-    <Text fontSize={{ base: 'md', md: 'lg' }} color="gray.500">
-      MSRP: {product.full_price}
-    </Text>
-  )}
-</VStack>
+                <VStack align="start" spacing={1}>
+                  <Select
+                    value={selectedCurrency}
+                    onChange={(e) => setSelectedCurrency(e.target.value)}
+                    width={{ base: '120px', md: '150px' }}
+                    bg="transparent"
+                    color="white"
+                    borderColor="green.500"
+                    _hover={{ borderColor: 'green.400' }}
+                    _focus={{ borderColor: 'green.400', boxShadow: '0 0 0 1px green.400' }}
+                    sx={{
+                      '> option': {
+                        background: 'gray.800',
+                        color: 'white',
+                      },
+                    }}
+                  >
+                    <option value="USD" style={{ background: 'gray.800', color: 'white' }}>
+                      USD
+                    </option>
+                    {cryptoPrices.map((crypto) => (
+                      <option
+                        key={crypto.symbol}
+                        value={crypto.symbol}
+                        style={{ background: 'gray.800', color: 'white' }}
+                      >
+                        {crypto.symbol}
+                      </option>
+                    ))}
+                  </Select>
+                  <HStack spacing={4} align="center">
+                    <Text fontSize={{ base: '3xl', md: '4xl' }} fontWeight="bold" color="green.500">
+                      {selectedCurrency === 'USD'
+                        ? product.sale_price || 'N/A'
+                        : `${convertPrice(product.sale_price, selectedCurrency)} ${selectedCurrency}`}
+                    </Text>
+                  </HStack>
+                  {product.full_price && selectedCurrency === 'USD' && (
+                    <Text fontSize={{ base: 'md', md: 'lg' }} color="gray.500">
+                      MSRP: {product.full_price}
+                    </Text>
+                  )}
+                </VStack>
+                {validatedVariants && validatedVariants.length > 0 && (
+                  <Button
+                    colorScheme="green"
+                    size="lg"
+                    onClick={handleAddToCart}
+                    isDisabled={
+                      !selectedVariant || validatedVariants.find((v) => v.id === selectedVariant)?.inventory_quantity <= 0
+                    }
+                  >
+                    Add to Cart
+                  </Button>
+                )}
                 <Text as="h2" fontSize="xl" mb={2}>
                   Product Description
                 </Text>
@@ -615,7 +629,7 @@ function ProductDetails() {
               </VStack>
             </SimpleGrid>
             <Divider my={8} borderColor="gray.600" />
-            {/* Related Products (unchanged) */}
+            {/* Related Products */}
             <Box mt={8}>
               <Text as="h2" fontSize="xl" mb={4}>
                 Related Products
