@@ -248,7 +248,7 @@ function Cart() {
                         </Text>{' '}
                         /{' '}
                         <Text as="span" color="gray.500">
-                          {convertPrice(item.full_price.replace('$', ''), selectedCurrency)} {selectedCurrency}
+                          {item.full_price}
                         </Text>
                       </Td>
                       <Td color="#00FF00" fontSize="xs">
@@ -266,7 +266,10 @@ function Cart() {
                 </Link>
                 <HStack spacing={2} align="center">
                   <Text fontSize="md" fontWeight="bold" color="white">
-                    {`${convertPrice(calculateSubtotal(), selectedCurrency)} ${selectedCurrency} : TOTAL`}
+                    <Text as="span" fontSize="lg" color="#00FF00">
+                      {`${convertPrice(calculateSubtotal(), selectedCurrency)} ${selectedCurrency}`}
+                    </Text>{' '}
+                    : TOTAL
                   </Text>
                   <Select
                     value={selectedCurrency}
