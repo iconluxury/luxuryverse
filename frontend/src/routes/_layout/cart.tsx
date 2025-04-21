@@ -273,7 +273,7 @@ function Cart() {
     alignItems="center"
     px={2} // Optional: padding for better appearance
   >
-    <Text as="span" fontSize="3xl" color="#00FF00">
+    <Text as="span" fontSize="2xl" color="#00FF00">
       {`${convertPrice(calculateSubtotal(), selectedCurrency)} ${selectedCurrency}`}
     </Text>
   </Text>
