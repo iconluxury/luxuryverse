@@ -138,7 +138,7 @@ function Cart() {
               {/* Compact Text-Only Table */}
               <Divider borderColor="gray.600" />
               <Text as="h3" fontSize="lg" fontWeight="bold" color="gray.50" mt={4}>
-                Cart Summary
+               SUMMARY
               </Text>
               <Table variant="simple" size="sm" colorScheme="gray">
                 <Thead>

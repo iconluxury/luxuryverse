@@ -87,7 +87,6 @@ function LatestDropsPage() {
               width="200px"
               mb={6}
               startColor="transparent" // Added
-              endColor="rgba(255, 255, 255, 0.1)" // Added
               borderRadius="md"
             />
           <Flex justify="center" gap={8}>
@@ -95,7 +94,6 @@ function LatestDropsPage() {
   height="200px"
   width={{ base: "100%", md: "33.33%" }}
   startColor="transparent" // Added
-  endColor="rgba(255, 255, 255, 0.1)" // Added
   borderRadius="md"
 />
           </Flex>
@@ -105,7 +103,6 @@ function LatestDropsPage() {
   mt={12}
   mb={6}
   startColor="transparent" // Added
-  endColor="rgba(255, 255, 255, 0.1)" // Added
   borderRadius="md"
 />
           <Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={8}>
@@ -114,7 +111,6 @@ function LatestDropsPage() {
        key={index}
        height="200px"
        startColor="transparent" // Added
-       endColor="rgba(255, 255, 255, 0.1)" // Added
        borderRadius="md"
      />
             ))}
