@@ -596,36 +596,37 @@ function ProductDetails() {
     </HStack>
                 </VStack>
                 {validatedVariants && validatedVariants.length > 0 && (
-  <Button
-    colorScheme="green"
-    size="lg"
-    onClick={handleAddToCart}
-    isDisabled={
-      !selectedVariant || validatedVariants.find((v) => v.id === selectedVariant)?.inventory_quantity <= 0
-    }
-    bg="green.700"
-    color="white"
-    _hover={{
-      bg: 'transparent',
-      borderColor: 'green.500',
-      color: '#00FF00',
-    }}
-    _disabled={{
-      bg: 'green.700', 
-      color: 'white',
-      opacity: 0.7, 
-      cursor: 'not-allowed',
-      _hover: {
-        bg: 'green.700',
-        
-        transform: 'none', 
-        boxShadow: 'none',
-      },
-    }}
-    transition="all 0.2s"
-  >
-ADD TO CART
-  </Button>
+                  <Button
+  colorScheme="green"
+  size="lg"
+  onClick={handleAddToCart}
+  isDisabled={
+    !selectedVariant || validatedVariants.find((v) => v.id === selectedVariant)?.inventory_quantity <= 0
+  }
+  bg="green.700"
+  color="white"
+  _hover={{
+    bg: 'transparent',
+    borderWidth: '2px', // Add border width
+    borderStyle: 'solid', // Add border style
+    borderColor: 'green.500',
+    color: '#00FF00',
+  }}
+  _disabled={{
+    bg: 'green.700',
+    color: 'white',
+    opacity: 0.7,
+    cursor: 'not-allowed',
+    _hover: {
+      bg: 'green.700',
+      transform: 'none',
+      boxShadow: 'none',
+    },
+  }}
+  transition="all 0.2s"
+>
+  ADD TO CART
+</Button>
 )}
                 <Text as="h2" fontSize="xl" mb={2}>
                   Product Description
