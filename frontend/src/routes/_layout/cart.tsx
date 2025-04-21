@@ -81,16 +81,16 @@ function Cart() {
                     onError={(e) => (e.currentTarget.src = 'https://placehold.co/60x80')}
                   />
                 <VStack align="start" flex={1} spacing={0}>
-  <Text fontSize="sm" fontWeight="medium" color="white" textTransform="uppercase">
-    {item.brand} {item.title}
-  </Text>
 
   <Text fontSize="sm" fontWeight="medium" color="gray.300" textTransform="uppercase">
     {item.brand}
   </Text>
+  <Text fontSize="sm" fontWeight="medium" color="white" textTransform="uppercase">
+    {item.brand} {item.title}
+  </Text>
 
   <HStack>
-    <Text fontSize="xs" fontWeight="bold" color="gray.400">
+    <Text fontSize="xs" fontWeight="bold" color="gray.400"  textTransform="uppercase">
       Size:
     </Text>
     <Text fontSize="sm" color="gray.300" textTransform="uppercase">
@@ -99,7 +99,7 @@ function Cart() {
   </HStack>
 
   <HStack>
-    <Text fontSize="xs" fontWeight="bold" color="gray.400">
+    <Text fontSize="xs" fontWeight="bold" color="gray.400" textTransform="uppercase">
       Quantity:
     </Text>
     <Text fontSize="sm" color="gray.300" textTransform="uppercase">
@@ -108,17 +108,16 @@ function Cart() {
   </HStack>
 </VStack>
                   <HStack spacing={2} align="center">
-                    <VStack align="end" spacing={0}>
-                      <Text fontSize="sm" fontWeight="bold" color="green.500">
-                        {item.price}
-                      </Text>
-                      <Text fontSize="xs" fontWeight="bold" color="gray.400">
-                      MSRP:{' '} 
-                      <Text fontSize="sm" fontWeight="medium" color="gray.300" textTransform="uppercase">
-                        {item.full_price}
-                        </Text>
-                      </Text>
-                    </VStack>
+                  <VStack align="end" spacing={1}>
+  <HStack spacing={2}>
+    <Text fontSize="sm" fontWeight="bold" color="green.500">
+      {item.price}
+    </Text>
+    <Text fontSize="xs" fontWeight="medium" color="gray.300" textTransform="uppercase">
+      / {item.full_price}
+    </Text>
+  </HStack>
+</VStack>
                     <Text
                       as="button"
                       color="green.500"
