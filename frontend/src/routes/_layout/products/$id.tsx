@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { Flex, Spinner, Box, Text, Tag, HStack, Divider, IconButton, Skeleton, SkeletonText, SimpleGrid, VStack, Button, Select } from '@chakra-ui/react';
+import { Flex, Spinner, Box, Text, Tag, HStack, Divider, IconButton, Skeleton, SkeletonText, SimpleGrid, VStack, Button } from '@chakra-ui/react';
 import { useState, useEffect, useMemo } from 'react';
 import { Link } from '@tanstack/react-router';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -509,27 +509,28 @@ function ProductDetails() {
                 </VStack>
                 {validatedVariants && validatedVariants.length > 0 && (
                   <>
-                    <Select
-                      value={selectedVariant || ''}
-                      onChange={(e) => setSelectedVariant(e.target.value)}
-                      placeholder="Select size"
-                      bg="gray.700"
-                      color="white"
-                      borderColor="gray.600"
-                      _hover={{ borderColor: 'gray.500' }}
-                      maxW="200px"
-                    >
-                      {validatedVariants.map((variant) => (
-                        <option
-                          key={variant.id}
-                          value={variant.id}
-                          disabled={variant.inventory_quantity <= 0}
-                          style={{ color: variant.inventory_quantity <= 0 ? 'gray' : 'white' }}
+                    <HStack spacing={2} flexWrap="wrap" maxW="100%" gap={2}>
+                      {validatedVariants.map((variant, index) => (
+                        <Box
+                          key={variant.id || `variant-${index}`}
+                          bg={selectedVariant === variant.id ? 'green.500' : variant.inventory_quantity > 0 ? 'gray.700' : 'red.900'}
+                          color="white"
+                          px={3}
+                          py={1}
+                          borderRadius="md"
+                          fontSize="md"
+                          cursor={variant.inventory_quantity > 0 ? 'pointer' : 'not-allowed'}
+                          _hover={variant.inventory_quantity > 0 ? { bg: 'gray.600' } : { bg: 'red.800' }}
+                          onClick={() => {
+                            if (variant.inventory_quantity > 0) {
+                              setSelectedVariant(variant.id);
+                            }
+                          }}
                         >
-                          {variant.size} {variant.inventory_quantity <= 0 ? '(Out of Stock)' : ''}
-                        </option>
+                          {variant.size}
+                        </Box>
                       ))}
-                    </Select>
+                    </HStack>
                     <Button
                       colorScheme="green"
                       size="lg"
