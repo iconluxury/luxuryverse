@@ -275,7 +275,7 @@ function Cart() {
   >
    <Text
   as="span"
-  fontSize={{ base: "lg", md: "3xl" }}
+  fontSize={{ base: "md", md: "3xl" }}
   color="#00FF00"
 >
   {`${convertPrice(calculateSubtotal(), selectedCurrency)} ${selectedCurrency}`}
