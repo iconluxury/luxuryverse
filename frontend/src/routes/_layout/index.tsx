@@ -48,26 +48,23 @@ function Home() {
 
   const exclusiveRef = useRef(null);
   const brandsRef = useRef(null);
-  const exclusiveCursorRef = useRef(null);
-  const brandsCursorRef = useRef(null);
+  const cursorRef = useRef(null);
   const logosWrapperRef = useRef(null);
 
   // GSAP Animation for Headings
   useEffect(() => {
-    if (!exclusiveRef.current || !brandsRef.current || !exclusiveCursorRef.current || !brandsCursorRef.current) {
+    if (!exclusiveRef.current || !brandsRef.current || !cursorRef.current) {
       console.error("Refs not found:", {
         exclusiveRef: exclusiveRef.current,
         brandsRef: brandsRef.current,
-        exclusiveCursorRef: exclusiveCursorRef.current,
-        brandsCursorRef: brandsCursorRef.current,
+        cursorRef: cursorRef.current,
       });
       return;
     }
 
     const exclusiveElement = exclusiveRef.current;
     const brandsElement = brandsRef.current;
-    const exclusiveCursor = exclusiveCursorRef.current;
-    const brandsCursor = brandsCursorRef.current;
+    const cursor = cursorRef.current;
 
     const exclusiveText = "EXCLUSIVE";
     const brandsText = "BRANDS";
@@ -87,7 +84,7 @@ function Home() {
     gsap.set(exclusiveSpans, { opacity: 0 });
     gsap.set(brandsSpans, { opacity: 0 });
 
-    gsap.set([exclusiveCursor, brandsCursor], {
+    gsap.set(cursor, {
       transformPerspective: 400,
       rotateY: 30,
       scale: 1.2,
@@ -99,7 +96,7 @@ function Home() {
       x: 0,
     });
 
-    gsap.to([exclusiveCursor, brandsCursor], {
+    gsap.to(cursor, {
       opacity: 0,
       repeat: -1,
       yoyo: true,
@@ -119,12 +116,13 @@ function Home() {
           stagger: 0.2,
           ease: "power2.out",
           onStart: () => {
-            gsap.set(exclusiveCursor, { opacity: 1 });
+            gsap.set(cursor, { opacity: 1 });
           },
           onUpdate: function () {
             const currentIndex = Math.floor(this.progress() * exclusiveSpans.length);
-            gsap.set(exclusiveCursor, {
+            gsap.set(cursor, {
               x: currentIndex * (exclusiveElement.offsetWidth / exclusiveText.length) + 5,
+              top: { base: "5%", md: "10%" },
             });
           },
         });
@@ -144,12 +142,14 @@ function Home() {
           stagger: 0.2,
           ease: "power2.out",
           onStart: () => {
-            gsap.set(brandsCursor, { opacity: 1 });
+            gsap.set(cursor, { opacity: 1 });
           },
           onUpdate: function () {
             const currentIndex = Math.floor(this.progress() * brandsSpans.length);
-            gsap.set(brandsCursor, {
+            const brandsOffsetTop = exclusiveElement.offsetHeight + 20; // Adjust based on layout
+            gsap.set(cursor, {
               x: currentIndex * (brandsElement.offsetWidth / brandsText.length) + 5,
+              top: `calc(${brandsOffsetTop}px + 10%)`,
             });
           },
         });
@@ -159,55 +159,73 @@ function Home() {
     const glitchExclusive = () => {
       const colors = ["#00FF00", "#ffffff"];
       exclusiveSpans.forEach((span) => {
-        gsap
-          .timeline()
+        const timeline = gsap.timeline();
+        const duration = gsap.utils.random(0.03, 0.07);
+        timeline
+          .to(span, {
+            color: colors[Math.floor(Math.random() * colors.length)],
+            x: gsap.utils.random(-15, 15),
+            duration,
+            ease: "none",
+          })
           .to(span, {
             color: colors[Math.floor(Math.random() * colors.length)],
             x: gsap.utils.random(-10, 10),
-            duration: 0.05,
+            duration,
             ease: "none",
-          })
-          .to(span, {
-            color: colors[Math.floor(Math.random() * colors.length)],
-            x: gsap.utils.random(-5, 5),
-            duration: 0.05,
-            ease: "none",
-          })
-          .to(span, {
-            color: "#00FF00",
-            x: 0,
-            duration: 0.05,
-            ease: "power1.out",
           });
+        // 20% chance for a double glitch
+        if (Math.random() < 0.2) {
+          timeline.to(span, {
+            x: gsap.utils.random(-12, 12),
+            duration: duration * 0.5,
+            ease: "none",
+          });
+        }
+        timeline.to(span, {
+          color: "#00FF00",
+          x: 0,
+          duration: duration,
+          ease: "power1.out",
+        });
       });
-      gsap.delayedCall(gsap.utils.random(1.5, 3), glitchExclusive);
+      gsap.delayedCall(gsap.utils.random(0.5, 3), glitchExclusive);
     };
 
     const glitchBrands = () => {
       const colors = ["#00FF00", "#ffffff"];
       brandsSpans.forEach((span) => {
-        gsap
-          .timeline()
+        const timeline = gsap.timeline();
+        const duration = gsap.utils.random(0.03, 0.07);
+        timeline
           .to(span, {
             color: colors[Math.floor(Math.random() * colors.length)],
             x: gsap.utils.random(-10, 10),
-            duration: 0.05,
+            duration,
             ease: "none",
           })
           .to(span, {
             color: colors[Math.floor(Math.random() * colors.length)],
-            x: gsap.utils.random(-5, 5),
-            duration: 0.05,
+            x: gsap.utils.random(-7, 7),
+            duration,
             ease: "none",
-          })
-          .to(span, {
-            color: "#00FF00",
-            x: 0,
-            duration: 0.05,
-            ease: "power1.out",
           });
+        // 20% chance for a double glitch
+        if (Math.random() < 0.2) {
+          timeline.to(span, {
+            x: gsap.utils.random(-8, 8),
+            duration: duration * 0.5,
+            ease: "none",
+          });
+        }
+        timeline.to(span, {
+          color: "#00FF00",
+          x: 0,
+          duration: duration,
+          ease: "power1.out",
+        });
       });
-      gsap.delayedCall(gsap.utils.random(1.5, 3), glitchBrands);
+      gsap.delayedCall(gsap.utils.random(0.5, 3), glitchBrands);
     };
 
     gsap.delayedCall(exclusiveText.length * 0.2 + 0.5, glitchExclusive);
@@ -398,7 +416,7 @@ function Home() {
               </Heading>
               <Box
                 as="span"
-                ref={exclusiveCursorRef}
+                ref={cursorRef}
                 className="terminal-cursor"
                 position="absolute"
                 top={{ base: "5%", md: "10%" }}
@@ -423,21 +441,6 @@ function Home() {
               >
                 BRANDS
               </Heading>
-              <Box
-                as="span"
-                ref={brandsCursorRef}
-                className="terminal-cursor"
-                position="absolute"
-                top={{ base: "5%", md: "10%" }}
-                left="0"
-                color="#58fb6cd9"
-                fontSize={{ base: "1rem", md: "5.5rem" }}
-                lineHeight="1"
-                fontWeight="normal"
-                ml="0.05em"
-              >
-                |
-              </Box>
             </Box>
             <Text fontSize={{ base: "md", md: "2xl" }} color="white">
               Exclusive access to luxury goods, verified and authenticated on the blockchain.
@@ -531,9 +534,7 @@ function Home() {
             align="start"
             transition="all 0.3s"
           >
-            <Heading as="h3" size="xl" mb={4} color="gray.400"
-                         textTransform="uppercase"
-            >
+            <Heading as="h3" size="xl" mb={4} color="gray.400" textTransform="uppercase">
               Luxury Brands
             </Heading>
             <Text fontSize="lg" color="gray.400">
@@ -551,9 +552,7 @@ function Home() {
             align="start"
             transition="all 0.3s"
           >
-            <Heading as="h3" size="xl" mb={4} color="gray.400"
-                         textTransform="uppercase"
-            >
+            <Heading as="h3" size="xl" mb={4} color="gray.400" textTransform="uppercase">
               Exclusive Drops
             </Heading>
             <Text fontSize="lg" color="gray.400">
@@ -572,9 +571,7 @@ function Home() {
             align="start"
             transition="all 0.3s"
           >
-            <Heading as="h3" size="xl" mb={4} color="gray.400"
-                         textTransform="uppercase"
-            >
+            <Heading as="h3" size="xl" mb={4} color="gray.400" textTransform="uppercase">
               Verified Goods
             </Heading>
             <Text fontSize="lg" color="gray.400">
@@ -596,9 +593,7 @@ function Home() {
           mx="auto"
           px={{ base: 4, md: 8 }}
         >
-          <Heading as="h2" size="2xl" color="gray.400" 
-                    textTransform="uppercase"
-          >
+          <Heading as="h2" size="2xl" color="gray.400" textTransform="uppercase">
             Trust in Every Purchase
           </Heading>
           <Text
@@ -630,9 +625,7 @@ function Home() {
           mx="auto"
           px={{ base: 4, md: 8 }}
         >
-          <Heading as="h2" size="2xl" color="gray.400"
-                       textTransform="uppercase"
-          >
+          <Heading as="h2" size="2xl" color="gray.400" textTransform="uppercase">
             Frequently Asked Questions
           </Heading>
           <Accordion allowToggle w="100%">
