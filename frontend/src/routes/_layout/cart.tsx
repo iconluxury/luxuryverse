@@ -117,8 +117,7 @@ function Cart() {
       / {item.full_price}
     </Text>
   </HStack>
-</VStack>
-                    <Text
+  <Text
                       as="button"
                       color="green.500"
                       fontSize="xs"
@@ -128,6 +127,8 @@ function Cart() {
                     >
                       Remove
                     </Text>
+</VStack>
+
                   </HStack>
                 </HStack>
               ))}
