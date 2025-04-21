@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { Flex, Spinner, Box, Text, Tag, HStack, Divider, IconButton, Skeleton, VStack, Button, useBreakpointValue } from '@chakra-ui/react';
+import { Flex, Spinner, Box, Text, Tag, HStack, Divider, IconButton, Skeleton, VStack, Button, useBreakpointValue ,SimpleGrid } from '@chakra-ui/react';
 import { useState, useEffect, useMemo } from 'react';
 import { Link } from '@tanstack/react-router';
 import { ErrorBoundary } from 'react-error-boundary';
