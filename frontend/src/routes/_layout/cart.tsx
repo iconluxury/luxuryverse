@@ -264,44 +264,52 @@ function Cart() {
                     Terms and Conditions
                   </Text>
                 </Link>
-                <HStack spacing={2} align="center">
-                  <Text fontSize="md" fontWeight="bold" color="white">
-                    <Text as="span" fontSize="2xl" color="#00FF00">
-                      {`${convertPrice(calculateSubtotal(), selectedCurrency)} ${selectedCurrency}`}
-                    </Text>{' '}
-              
-                  </Text>
-                  <Select
-                    value={selectedCurrency}
-                    onChange={(e) => setSelectedCurrency(e.target.value)}
-                    width={{ base: '120px', md: '150px' }}
-                    bg="transparent"
-                    color="white"
-                    borderColor="green.500"
-                    fontSize="md"
-                    _hover={{ borderColor: 'green.400' }}
-                    _focus={{ borderColor: 'green.400', boxShadow: '0 0 0 1px green.400' }}
-                    sx={{
-                      '> option': {
-                        background: 'gray.800',
-                        color: 'white',
-                      },
-                    }}
-                  >
-                    <option value="USD" style={{ background: 'gray.800', color: 'white' }}>
-                      USD
-                    </option>
-                    {cryptoPrices.map((crypto) => (
-                      <option
-                        key={crypto.symbol}
-                        value={crypto.symbol}
-                        style={{ background: 'gray.800', color: 'white' }}
-                      >
-                        {crypto.symbol}
-                      </option>
-                    ))}
-                  </Select>
-                </HStack>
+                <HStack spacing={2} alignItems="stretch" height="40px">
+  <Text
+    fontSize="md"
+    fontWeight="bold"
+    color="white"
+    display="flex"
+    alignItems="center"
+    bg="gray.700" // Optional: for visibility
+    px={2} // Optional: padding for better appearance
+  >
+    <Text as="span" fontSize="2xl" color="#00FF00">
+      {`${convertPrice(calculateSubtotal(), selectedCurrency)} ${selectedCurrency}`}
+    </Text>
+  </Text>
+  <Select
+    value={selectedCurrency}
+    onChange={(e) => setSelectedCurrency(e.target.value)}
+    width={{ base: '120px', md: '150px' }}
+    bg="transparent"
+    color="white"
+    borderColor="green.500"
+    fontSize="md"
+    height="40px" // Explicitly set height
+    _hover={{ borderColor: 'green.400' }}
+    _focus={{ borderColor: 'green.400', boxShadow: '0 0 0 1px green.400' }}
+    sx={{
+      '> option': {
+        background: 'gray.800',
+        color: 'white',
+      },
+    }}
+  >
+    <option value="USD" style={{ background: 'gray.800', color: 'white' }}>
+      USD
+    </option>
+    {cryptoPrices.map((crypto) => (
+      <option
+        key={crypto.symbol}
+        value={crypto.symbol}
+        style={{ background: 'gray.800', color: 'white' }}
+      >
+        {crypto.symbol}
+      </option>
+    ))}
+  </Select>
+</HStack>
               </HStack>
               <HStack justify="flex-end" w="100%" spacing={2}>
                 <Button
