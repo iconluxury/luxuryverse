@@ -55,12 +55,12 @@ function Cart() {
           Your Cart
         </Text>
           {cart.length === 0 ? (
-            <Text fontSize="sm" color="gray.600">
+            <Text fontSize="sm" color="gray.400">
               Your cart is empty.
             </Text>
           ) : (
             <VStack spacing={2} align="start">
-              <Text fontSize="sm" color="gray.600">
+              <Text fontSize="sm" color="gray.400">
                 {cartCount} {cartCount === 1 ? 'Item' : 'Items'} in Your Cart
               </Text>
               {cart.map((item, index) => (
@@ -84,13 +84,13 @@ function Cart() {
                     <Text fontSize="sm" fontWeight="medium" color="white" textTransform="uppercase">
                       {item.brand} {item.title}
                     </Text>
-                    <Text fontSize="xs" color="gray.600" textTransform="uppercase">
+                    <Text fontSize="xs" color="gray.400" textTransform="uppercase">
                       Brand: {item.brand}
                     </Text>
-                    <Text fontSize="xs" color="gray.600">
+                    <Text fontSize="xs" color="gray.400">
                       Size: {item.size}
                     </Text>
-                    <Text fontSize="xs" color="gray.600">
+                    <Text fontSize="xs" color="gray.400">
                       Quantity: {item.quantity}
                     </Text>
                   </VStack>
@@ -137,9 +137,9 @@ function Cart() {
                       <Td color="white" textTransform="uppercase" fontSize="xs">
                         {item.brand} {item.title}
                       </Td>
-                      <Td color="gray.600" fontSize="xs">{item.size}</Td>
-                      <Td color="gray.600" fontSize="xs">{item.quantity}</Td>
-                      <Td color="gray.600" fontSize="xs">
+                      <Td color="gray.400" fontSize="xs">{item.size}</Td>
+                      <Td color="gray.400" fontSize="xs">{item.quantity}</Td>
+                      <Td color="gray.400" fontSize="xs">
                         <Text as="span" color="green.500">{item.price}</Text> / <Text as="span" color="gray.500">{item.full_price}</Text>
                       </Td>
                       <Td color="green.500" fontSize="xs">${calculateItemTotalPrice(item)}</Td>
@@ -150,7 +150,7 @@ function Cart() {
               <Divider borderColor="gray.300" mt={2} />
               <HStack justify="space-between" w="100%" align="center" spacing={2}>
                 <Link to="/terms-and-conditions">
-                  <Text fontSize="xs" color="gray.600" textDecoration="underline">
+                  <Text fontSize="xs" color="gray.400" textDecoration="underline">
                     Terms and Conditions
                   </Text>
                 </Link>
