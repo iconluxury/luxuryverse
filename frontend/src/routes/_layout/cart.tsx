@@ -119,7 +119,7 @@ function Cart() {
   </HStack>
   <Text
                       as="button"
-                      color="green.500"
+                      color="#00ff00"
                       fontSize="xs"
                       textTransform="uppercase"
                       textDecoration="underline"
@@ -155,7 +155,7 @@ function Cart() {
                       <Td color="gray.400" fontSize="xs">{item.size}</Td>
                       <Td color="gray.400" fontSize="xs">{item.quantity}</Td>
                       <Td color="gray.400" fontSize="xs">
-                        <Text as="span" color="green.500">{item.price}</Text> / <Text as="span" color="gray.500">{item.full_price}</Text>
+                        <Text as="span" color="#00ff00">{item.price}</Text> / <Text as="span" color="gray.500">{item.full_price}</Text>
                       </Td>
                       <Td color="green.500" fontSize="xs">${calculateItemTotalPrice(item)}</Td>
                     </Tr>
