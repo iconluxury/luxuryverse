@@ -110,48 +110,12 @@ function RoadmapPage() {
                   </Flex>
                 </VStack>
                 
-                {/* Right Column: Phase 4 and Phase 3 */}
+                {/* Right Column: Phase 3 and Phase 4 */}
                 <VStack spacing={12} align="center">
-                  {/* Phase 4 */}
-                  <Flex direction="column" align="center" position="relative">
-                    <Card variant="outline" bg="gray.900" w="full" minH="250px">
-                      <CardHeader pb={0}>
-                        <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
-                          Phase 4: Digital Expansion
-                        </Heading>
-                      </CardHeader>
-                      <CardBody>
-                        <Text textAlign="left">
-                          - NFT-authenticated digital collectibles<br />
-                          - Virtual luxury items (fashion, art, accessories)<br />
-                          - Retail for cosmetics, home goods, vehicles<br />
-                          - Physical retail stores for luxury goods<br />
-                          - Secure blockchain systems for NFTs
-                        </Text>
-                      </CardBody>
-                    </Card>
-                    <Box
-                      as="svg"
-                      width="40px"
-                      height="60px"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                      display={{ base: "none", md: "block" }}
-                    >
-                      <path
-                        d="M12 4V20M12 20L8 16M12 20L16 16"
-                        stroke="#CBD5E0"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </Box>
-                  </Flex>
-                  
-                  {/* Phase 3 */}
-                  <Flex direction="column" align="center" position="relative">
-                    <Card variant="outline" bg="gray.900" w="full" minH="250px">
+                  {/* Phase 3 and Phase 4 in a horizontal Flex */}
+                  <Flex direction={{ base: "column", md: "row" }} align="center" position="relative" w="full">
+                    {/* Phase 3 */}
+                    <Card variant="outline" bg="gray.900" w="full" minH="250px" mr={{ base: 0, md: 6 }}>
                       <CardHeader pb={0}>
                         <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
                           Phase 3: Ecosystem
@@ -164,6 +128,43 @@ function RoadmapPage() {
                           - Non-downloadable software for crypto management<br />
                           - Multi-brand partnerships for exclusive drops<br />
                           - Global luxury marketplace integration
+                        </Text>
+                      </CardBody>
+                    </Card>
+                    
+                    {/* Horizontal Arrow */}
+                    <Box
+                      as="svg"
+                      width="60px"
+                      height="40px"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      display={{ base: "none", md: "block" }}
+                    >
+                      <path
+                        d="M4 12H20M20 12L16 8M20 12L16 16"
+                        stroke="#CBD5E0"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </Box>
+                    
+                    {/* Phase 4 */}
+                    <Card variant="outline" bg="gray.900" w="full" minH="250px" mt={{ base: 6, md: 0 }}>
+                      <CardHeader pb={0}>
+                        <Heading as="h3" size="md" fontWeight="medium" color="gray.400" text iron="true" textTransform="uppercase">
+                          Phase 4: Digital Expansion
+                        </Heading>
+                      </CardHeader>
+                      <CardBody>
+                        <Text textAlign="left">
+                          - NFT-authenticated digital collectibles<br />
+                          - Virtual luxury items (fashion, art, accessories)<br />
+                          - Retail for cosmetics, home goods, vehicles<br />
+                          - Physical retail stores for luxury goods<br />
+                          - Secure blockchain systems for NFTs
                         </Text>
                       </CardBody>
                     </Card>
