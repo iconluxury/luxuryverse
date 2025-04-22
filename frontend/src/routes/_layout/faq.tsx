@@ -41,7 +41,7 @@ function FaqPage() {
             <Heading as="h2" size="lg" fontWeight="medium" mb={4}>
               Digital Collectibles & Technology
             </Heading>
-            <Text fontSize="md" mb={4">
+            <Text fontSize="md" mb={4}>
               Learn more about our offerings in digital collectibles and technology services.
             </Text>
             <UnorderedList spacing={3}>
