@@ -49,13 +49,17 @@ function RoadmapPage() {
                 From crypto-powered luxury drops to digital collectibles and beyond, our roadmap creates a seamless ecosystem for authentic luxury experiences.
               </Text>
               
-              <SimpleGrid columns={{ base: 1, md: 4 }} spacing={6} alignItems="stretch">
+              <SimpleGrid 
+                columns={{ base: 1, md: 4 }} 
+                spacing={6} 
+                alignItems="stretch"
+                style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'stretch' }}
+              >
                 {/* Phase 1 */}
                 <Card 
                   variant="outline" 
                   bg="gray.900" 
                   w="full" 
-                  height="300px" 
                   display="flex" 
                   flexDirection="column"
                 >
@@ -80,7 +84,6 @@ function RoadmapPage() {
                   variant="outline" 
                   bg="gray.900" 
                   w="full" 
-                  height="300px" 
                   display="flex" 
                   flexDirection="column"
                 >
@@ -104,7 +107,6 @@ function RoadmapPage() {
                   variant="outline" 
                   bg="gray.900" 
                   w="full" 
-                  height="300px" 
                   display="flex" 
                   flexDirection="column"
                 >
@@ -129,7 +131,6 @@ function RoadmapPage() {
                   variant="outline" 
                   bg="gray.900" 
                   w="full" 
-                  height="300px" 
                   display="flex" 
                   flexDirection="column"
                 >
