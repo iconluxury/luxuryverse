@@ -173,12 +173,12 @@ function Cart() {
                         width="100px"
                         bg="transparent"
                         color="white"
-                        borderColor="green.500"
+                        borderColor="orange.200"
                         fontSize="xs"
                         height="24px"
                         mt={1}
-                        _hover={{ borderColor: 'green.400' }}
-                        _focus={{ borderColor: 'green.400', boxShadow: '0 0 0 1px green.400' }}
+                        _hover={{ borderColor: 'orange.300' }}
+                        _focus={{ borderColor: 'orange.300', boxShadow: '0 0 0 1px orange.300' }}
                         sx={{
                           '> option': {
                             background: 'gray.800',
