@@ -193,7 +193,7 @@ function JoinPage() {
       <Container maxW="container.md" px={[4, 6]} py={12}>
         <VStack spacing={10} align="stretch">
           <VStack spacing={4} align="stretch">
-            <Heading as="h1" size={['lg', 'xl']} color="green.400">
+            <Heading as="h1" size={['lg', 'xl']} color="orange.200">
               Join The Waitlist
             </Heading>
             <Text fontSize={['md', 'lg']} color="gray.300">
@@ -234,9 +234,9 @@ function JoinPage() {
             <Tooltip label={isXConnected ? 'X Profile Connected' : 'Connect your X account'}>
               <Button
                 onClick={initiateXAuth}
-                bg="green.400"
+                bg="orange.200"
                 color="gray.900"
-                _hover={{ bg: isXConnected ? 'green.400' : 'green.500' }}
+                _hover={{ bg: isXConnected ? 'orange.200' : 'orange.300' }}
                 px={6}
                 py={3}
                 isDisabled={!isConnected || isXConnected}
@@ -289,9 +289,9 @@ function JoinPage() {
                 </FormControl>
                 <Button
                   type="submit"
-                  bg="green.400"
+                  bg="orange.200"
                   color="gray.900"
-                  _hover={{ bg: 'green.500' }}
+                  _hover={{ bg: 'orange.300' }}
                   px={6}
                   py={3}
                   mt={4}
@@ -306,7 +306,7 @@ function JoinPage() {
 
           <Text fontSize="sm" color="gray.400">
             By joining, you agree to our{' '}
-            <Link href="/privacy" color="green.400" textDecoration="underline">
+            <Link href="/privacy" color="orange.200" textDecoration="underline">
               Privacy Policy
             </Link>
           </Text>
