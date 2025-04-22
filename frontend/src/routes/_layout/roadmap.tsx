@@ -49,15 +49,22 @@ function RoadmapPage() {
                 From crypto-powered luxury drops to digital collectibles and beyond, our roadmap creates a seamless ecosystem for authentic luxury experiences.
               </Text>
               
-              <SimpleGrid columns={{ base: 1, md: 4 }} spacing={6} alignItems="start">
+              <SimpleGrid columns={{ base: 1, md: 4 }} spacing={6} alignItems="stretch">
                 {/* Phase 1 */}
-                <Card variant="outline" bg="gray.900" w="full" minH="250px">
+                <Card 
+                  variant="outline" 
+                  bg="gray.900" 
+                  w="full" 
+                  height="300px" 
+                  display="flex" 
+                  flexDirection="column"
+                >
                   <CardHeader pb={0}>
                     <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
                       Phase 1: Launch Platform
                     </Heading>
                   </CardHeader>
-                  <CardBody>
+                  <CardBody flex="1" display="flex" alignItems="flex-start">
                     <Text textAlign="left">
                       - Weekly drops of in-season luxury products<br />
                       - Crypto payments (BTC, ETH, USDC, etc.)<br />
@@ -69,13 +76,20 @@ function RoadmapPage() {
                 </Card>
                 
                 {/* Phase 2 */}
-                <Card variant="outline" bg="gray.900" w="full" minH="250px">
+                <Card 
+                  variant="outline" 
+                  bg="gray.900" 
+                  w="full" 
+                  height="300px" 
+                  display="flex" 
+                  flexDirection="column"
+                >
                   <CardHeader pb={0}>
                     <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
                       Phase 2: Mobile & Hardware
                     </Heading>
                   </CardHeader>
-                  <CardBody>
+                  <CardBody flex="1" display="flex" alignItems="flex-start">
                     <Text textAlign="left">
                       - Mobile apps for drop access and NFT management<br />
                       - Cryptocurrency hardware wallets<br />
@@ -86,13 +100,20 @@ function RoadmapPage() {
                 </Card>
                 
                 {/* Phase 3 */}
-                <Card variant="outline" bg="gray.900" w="full" minH="250px">
+                <Card 
+                  variant="outline" 
+                  bg="gray.900" 
+                  w="full" 
+                  height="300px" 
+                  display="flex" 
+                  flexDirection="column"
+                >
                   <CardHeader pb={0}>
                     <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
                       Phase 3: Ecosystem
                     </Heading>
                   </CardHeader>
-                  <CardBody>
+                  <CardBody flex="1" display="flex" alignItems="flex-start">
                     <Text textAlign="left">
                       - Platform as a Service (PaaS) for NFTs<br />
                       - Virtual environments for entertainment<br />
@@ -104,13 +125,20 @@ function RoadmapPage() {
                 </Card>
                 
                 {/* Phase 4 */}
-                <Card variant="outline" bg="gray.900" w="full" minH="250px">
+                <Card 
+                  variant="outline" 
+                  bg="gray.900" 
+                  w="full" 
+                  height="300px" 
+                  display="flex" 
+                  flexDirection="column"
+                >
                   <CardHeader pb={0}>
                     <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
                       Phase 4: Digital Expansion
                     </Heading>
                   </CardHeader>
-                  <CardBody>
+                  <CardBody flex="1" display="flex" alignItems="flex-start">
                     <Text textAlign="left">
                       - NFT-authenticated digital collectibles<br />
                       - Virtual luxury items (fashion, art, accessories)<br />
