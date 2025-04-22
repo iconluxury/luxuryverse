@@ -105,7 +105,7 @@ p {
 a {
   color: var(--color-primary);
   text-decoration: none;
-  transition: var(--transition  var(--transition-default);
+  transition: var(--transition-default);
 }
 
 a:hover {
