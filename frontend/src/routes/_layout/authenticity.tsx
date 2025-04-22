@@ -21,9 +21,9 @@ export const Route = createFileRoute('/_layout/authenticity')({
 
 function AuthenticityPage() {
   return (
-    <Box>
-      <Container maxW="1000px" mx="auto" px={4} py={16} color="gray.800">
-        <VStack spacing={8} align="start" w="full">
+    <Box display="flex" justifyContent="center">
+      <Container maxW="1000px" px={4} py={16} color="gray.800" textAlign="center">
+        <VStack spacing={8} align="center" w="full">
           <Heading as="h1" size="xl" fontWeight="medium">
             Authenticity
           </Heading>
@@ -97,7 +97,6 @@ function AuthenticityPage() {
               We are dedicated to building trust through transparency and excellence. Our 
               authentication processes are designed to provide peace of mind, whether you're acquiring 
               a physical luxury item or a digital collectible.
-          
             </Text>
             <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6}>
               <Card variant="outline">
