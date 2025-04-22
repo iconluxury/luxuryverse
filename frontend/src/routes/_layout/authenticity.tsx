@@ -25,11 +25,11 @@ function AuthenticityPage() {
       <Container maxW="1000px" mx="auto" px={4} py={16} color="gray.800">
         <VStack spacing={8} align="start" w="full">
           <Heading as="h1" size="xl" fontWeight="medium">
-            Authenticity at LuxuryVerse
+            Authenticity
           </Heading>
           
           <Text fontSize="lg" mb={4}>
-            At LuxuryVerse, authenticity is the cornerstone of our commitment to delivering unparalleled luxury 
+            Authenticity is the cornerstone of our commitment to delivering unparalleled luxury 
             experiences in both physical and digital realms. We ensure the legitimacy of every item and the 
             security of every digital asset through rigorous processes and cutting-edge technology.
           </Text>
