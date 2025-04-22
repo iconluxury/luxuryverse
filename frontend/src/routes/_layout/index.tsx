@@ -443,7 +443,7 @@ function Home() {
               </Heading>
             </Box>
             <Text fontSize={{ base: "md", md: "2xl" }} color="white">
-              Exclusive access to luxury goods, verified and authenticated on the blockchain.
+            Luxury goods authenticated and secured on the blockchain.
             </Text>
             <Button
               size="3xl"
@@ -539,7 +539,7 @@ function Home() {
             </Heading>
             <Text fontSize="lg" color="gray.400">
               LuxuryVerse has direct access to the world's top luxury brands. We have built our
-              industry relationships over decades, ensuring that we have the best styles at the prices.
+              industry relationships over decades, ensuring that we have the best styles at the best prices.
             </Text>
           </VStack>
           <VStack
@@ -553,12 +553,10 @@ function Home() {
             transition="all 0.3s"
           >
             <Heading as="h3" size="xl" mb={4} color="gray.400" textTransform="uppercase">
-              Exclusive Drops
+            Secure Authentication
             </Heading>
             <Text fontSize="lg" color="gray.400">
-              Each week, LuxuryVerse releases a limited selection of luxury goods to our members. We
-              announce these drops one day in advance on X, releasing goods on a first come first serve
-              basis exclusive to our members.
+            Our platform integrates advanced technology for managing digital currency transactions and secure authentication of luxury goods, ensuring complete verification of every item's provenance and authenticity
             </Text>
           </VStack>
           <VStack
@@ -572,11 +570,10 @@ function Home() {
             transition="all 0.3s"
           >
             <Heading as="h3" size="xl" mb={4} color="gray.400" textTransform="uppercase">
-              Verified Goods
+            Business Partners
             </Heading>
             <Text fontSize="lg" color="gray.400">
-              LuxuryVerse goods are 100% authentic and guaranteed on the blockchain. Our goods and
-              services are also supported by the Authentication Council.
+            We provide wholesale solutions for qualified partners seeking authenticated luxury merchandise. Our blockchain technology ensures complete verification of every item's provenance for your business needs.
             </Text>
           </VStack>
         </Flex>
@@ -595,7 +592,7 @@ function Home() {
     align="center" // Center align the stack
   >
     <Heading as="h2" size="2xl" color="gray.400" textTransform="uppercase" textAlign="center">
-      Trust in Every Purchase
+    Technology-Driven Trust
     </Heading>
     <Text
       textAlign="center"
@@ -603,7 +600,7 @@ function Home() {
       fontSize="lg"
       color="gray.400"
     >
-      LuxuryVerse partners with former members of Interpol, the FBI, and other agencies to guarantee authentic merchandise. All goods are transported, stored, and shipped from secure facilities.
+LuxuryVerse leverages proprietary blockchain systems to validate the authenticity of every luxury item, providing confidence in your purchases through our secure transaction technology
     </Text>
   </VStack>
 </Box>
@@ -637,16 +634,16 @@ function Home() {
           answer: "We offer a wide range of luxury goods, including designer handbags, watches, jewelry, apparel, and accessories from the world’s most prestigious brands.",
         },
         {
-          question: "How often are your drops?",
-          answer: "Drops occur weekly, announced one day in advance on X, with plans to move to daily drops in the future.",
+          question: "How do you ensure product authenticity",
+          answer: "All products are authenticated using our proprietary blockchain technology, providing secure verification of ownership and provenance.",
         },
         {
-          question: "How do I know your products are authentic?",
-          answer: "All products are 100% authentic, verified on the blockchain, and backed by the Authentication Council.",
+          question: "Do you offer wholesale opportunities",
+          answer: "We provide wholesale services for qualified partners seeking authenticated luxury merchandise with complete provenance verification",
         },
         {
-          question: "What payment options do you offer?",
-          answer: "We offer cryptocurrency payments via wallet authentication, with additional methods to be announced.",
+          question: "What payment options do you support?",
+          answer: "We offer secure cryptocurrency transactions protected by our advanced blockchain technology and common cryptocurrencies, including Bitcoin and Ethereum.",
         },
         {
           question: "Do you offer international shipping?",
@@ -657,8 +654,8 @@ function Home() {
           answer: "Once shipped, you’ll receive a tracking link via email to monitor your order’s progress.",
         },
         {
-          question: "How can I contact customer service?",
-          answer: "Reach us at info@example.com, example.mail@hum.com, or call +0989 7876 9865 9 or +(090) 8765 86543 85.",
+          question: "How does your blockchain technology work?",
+          answer: "Our platform uses cutting-edge technology to secure digital currency transactions and verify the authenticity of luxury goods through an immutable digital ledger.",
         },
       ].map(({ question, answer }) => (
         <AccordionItem key={question}>
