@@ -28,7 +28,11 @@ function FaqPage() {
           <Heading as="h1" size="xl" fontWeight="medium" >
             Frequently Asked Questions
           </Heading>
-
+          <Text fontSize="lg" mb={4}>
+            Our FAQ is designed to provide clear and comprehensive answers to your questions about our luxury offerings. 
+            From digital collectibles to retail services, we ensure transparency and excellence in every interaction, 
+            empowering you with the knowledge to explore our physical and virtual experiences confidently.
+          </Text>
          
           {/* Technology Services */}
           <Box w="full" id="technology-services">
