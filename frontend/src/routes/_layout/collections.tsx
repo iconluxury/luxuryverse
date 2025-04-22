@@ -162,7 +162,7 @@ function LatestDropsPage() {
     color="#FF9900"
     fontSize="xl"
     fontWeight="bold"
-            _hover={{ color: "green.400" }}
+            _hover={{ color: "orange.200" }}
             onClick={() => console.log("Notify clicked - no action implemented")}
           >
         NOTIFY
