@@ -344,7 +344,7 @@ const theme = extendTheme({
             bg: "orange.200", // Matches --color-primary-hover
             color: "black.900",
             _hover: {
-              bg: "green.600",
+              bg: "orange.300",
             },
           },
         },
