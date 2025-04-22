@@ -483,7 +483,7 @@ function Home() {
               cursor="pointer"
               tabIndex={0}
               _hover={{ animationPlayState: "paused" }}
-              _focus={{ outline: "2px solid", outlineColor: "green.500" }}
+              _focus={{ outline: "2px solid", outlineColor: "#FF9900" }}
             >
               {brandLogos.map((img, index) => (
                 <Image
@@ -618,7 +618,7 @@ LuxuryVerse leverages proprietary blockchain systems to validate the authenticit
     p={8}
     spacing={8}
     transition="all 0.3s"
-    _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
+    _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "#FF9900" }}
     maxW={{ base: "100%", lg: "100%" }}
     mx="auto"
     px={{ base: 4, md: 8 }}
