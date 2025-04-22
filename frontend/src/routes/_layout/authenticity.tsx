@@ -47,7 +47,7 @@ function AuthenticityPage() {
             <Heading as="h2" size="lg" fontWeight="medium" mb={4}>
               Our Authentication Process
             </Heading>
-            <Text fontSize="md" mb={4}>
+            <Text fontSize="md" mb={12}>
               We employ meticulous authentication procedures to guarantee the authenticity of all products 
               and the integrity of digital assets.
             </Text>
@@ -99,7 +99,7 @@ function AuthenticityPage() {
             <Heading as="h2" size="lg" fontWeight="medium" mb={4}>
               Our Commitment to You
             </Heading>
-            <Text fontSize="md" mb={6}>
+            <Text fontSize="md" mb={12}>
               We are dedicated to building trust through transparency and excellence. Our 
               authentication processes are designed to provide peace of mind, whether you're acquiring 
               a physical luxury item or a digital collectible.
