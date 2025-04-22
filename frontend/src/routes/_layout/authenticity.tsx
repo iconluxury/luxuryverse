@@ -19,6 +19,14 @@ export const Route = createFileRoute('/_layout/authenticity')({
 
 function AuthenticityPage() {
   return (
+       <Box
+          width="100%"
+          minH="100vh"
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          bg="black.900"
+        >
     <Box display="flex" justifyContent="center">
       <Container maxW="1000px" px={4} py={16} color="gray.800" textAlign="center">
         <VStack spacing={8} align="center" w="full">
@@ -138,8 +146,9 @@ function AuthenticityPage() {
           
         </VStack>
       </Container>
-      <Footer />
     </Box>
+      <Footer />
+      </Box>
   );
 }
 
