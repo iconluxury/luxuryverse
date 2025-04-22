@@ -10,7 +10,8 @@ import {
   Divider,
   Card,
   CardHeader,
-  CardBody
+  CardBody,
+  SimpleGrid
 } from "@chakra-ui/react";
 import Footer from '../../components/Common/Footer';
 
@@ -92,29 +93,50 @@ function AuthenticityPage() {
             <Heading as="h2" size="lg" fontWeight="medium" mb={4}>
               Our Commitment to You
             </Heading>
-            <Text fontSize="md" mb={4}>
+            <Text fontSize="md" mb={6}>
               LuxuryVerse is dedicated to building trust through transparency and excellence. Our 
               authentication processes are designed to provide peace of mind, whether you're acquiring 
-              a physical luxury item or a digital collectible. For a detailed overview of our phased 
-              approach to delivering authentic luxury experiences, visit our{' '}
-              <Text as="span" color="blue.600" textDecor="underline">
-                Roadmap
-              </Text>.
+              a physical luxury item or a digital collectible.
+          
             </Text>
-            <UnorderedList spacing={3} pl={4}>
-              <ListItem>
-                <Text fontWeight="medium">Transparency</Text>
-                <Text>We provide clear documentation and blockchain-based records for all items.</Text>
-              </ListItem>
-              <ListItem>
-                <Text fontWeight="medium">Expertise</Text>
-                <Text>Our team of specialists ensures every item meets the highest standards of quality.</Text>
-              </ListItem>
-              <ListItem>
-                <Text fontWeight="medium">Innovation</Text>
-                <Text>We leverage blockchain and NFT technology to pioneer secure digital luxury.</Text>
-              </ListItem>
-            </UnorderedList>
+            <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6}>
+              <Card variant="outline">
+                <CardHeader>
+                  <Heading as="h3" size="md" fontWeight="medium">
+                    Transparency
+                  </Heading>
+                </CardHeader>
+                <CardBody>
+                  <Text>
+                    We provide clear documentation and blockchain-based records for all items to ensure full traceability.
+                  </Text>
+                </CardBody>
+              </Card>
+              <Card variant="outline">
+                <CardHeader>
+                  <Heading as="h3" size="md" fontWeight="medium">
+                    Expertise
+                  </Heading>
+                </CardHeader>
+                <CardBody>
+                  <Text>
+                    Our team of specialists ensures every item meets the highest standards of quality and authenticity.
+                  </Text>
+                </CardBody>
+              </Card>
+              <Card variant="outline">
+                <CardHeader>
+                  <Heading as="h3" size="md" fontWeight="medium">
+                    Innovation
+                  </Heading>
+                </CardHeader>
+                <CardBody>
+                  <Text>
+                    We leverage blockchain and NFT technology to pioneer secure and authentic digital luxury experiences.
+                  </Text>
+                </CardBody>
+              </Card>
+            </SimpleGrid>
           </Box>
           
         </VStack>
