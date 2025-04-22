@@ -174,7 +174,7 @@ function ContactPage() {
                 }}
                 transition="all 0.2s"
               >
-                Send Message
+              Send Message
               </Button>
             </VStack>
           </Box>
