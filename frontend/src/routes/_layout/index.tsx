@@ -553,7 +553,7 @@ function Home() {
             transition="all 0.3s"
           >
             <Heading as="h3" size="xl" mb={4} color="gray.400" textTransform="uppercase">
-            Secure Authentication
+           Authentication
             </Heading>
             <Text fontSize="lg" color="gray.400">
             Our platform integrates advanced technology for managing digital currency transactions and secure authentication of luxury goods, ensuring complete verification of every item's provenance and authenticity
