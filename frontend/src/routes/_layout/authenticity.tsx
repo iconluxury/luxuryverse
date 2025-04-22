@@ -8,10 +8,6 @@ import {
   ListItem, 
   Container,
   Divider,
-  Link,
-  Grid,
-  GridItem,
-  Badge,
   Card,
   CardHeader,
   CardBody
@@ -28,224 +24,95 @@ function AuthenticityPage() {
       <Container maxW="1000px" mx="auto" px={4} py={16} color="gray.800">
         <VStack spacing={8} align="start" w="full">
           <Heading as="h1" size="xl" fontWeight="medium">
-            Authenticity
+            Authenticity at LuxuryVerse
           </Heading>
           
           <Text fontSize="lg" mb={4}>
-            At LuxuryVerse, we are committed to providing authentic luxury experiences both in the physical and digital realms. 
-            Our phased approach ensures quality and authenticity across all our offerings.
+            At LuxuryVerse, authenticity is the cornerstone of our commitment to delivering unparalleled luxury 
+            experiences in both physical and digital realms. We ensure the legitimacy of every item and the 
+            security of every digital asset through rigorous processes and cutting-edge technology.
           </Text>
-          
-          <Divider />
-          
-          {/* Digital Collectibles & Technology */}
-          <Box w="full" id="digital-collectibles">
-            <Heading as="h2" size="lg" fontWeight="medium" mb={4}>
-              Digital Collectibles & Technology
-            </Heading>
-            
-            <Card variant="outline" mb={6}>
-              <CardHeader pb={0}>
-                <Heading as="h3" size="md" fontWeight="medium">
-                  Phase 1
-                </Heading>
-              </CardHeader>
-              <CardBody>
-                <UnorderedList spacing={2}>
-                  <ListItem>Software for trading/managing digital currency</ListItem>
-                </UnorderedList>
-              </CardBody>
-            </Card>
-            
-            <Card variant="outline" mb={6}>
-              <CardHeader pb={0}>
-                <Heading as="h3" size="md" fontWeight="medium">
-                  Phase 2
-                </Heading>
-              </CardHeader>
-              <CardBody>
-                <UnorderedList spacing={2}>
-                  <ListItem>Crypto-collectibles and digital collectibles (downloadable multimedia files)</ListItem>
-                  <ListItem>Autographed sports memorabilia authenticated by NFTs</ListItem>
-                  <ListItem>Trading cards authenticated by NFTs</ListItem>
-                  <ListItem>Downloadable digital media (image, audio, video) featuring artwork and sports memorabilia</ListItem>
-                </UnorderedList>
-              </CardBody>
-            </Card>
-            
-            <Card variant="outline" mb={6}>
-              <CardHeader pb={0}>
-                <Heading as="h3" size="md" fontWeight="medium">
-                  Phase 3
-                </Heading>
-              </CardHeader>
-              <CardBody>
-                <UnorderedList spacing={2}>
-                  <ListItem>Cryptocurrency hardware wallets</ListItem>
-                  <ListItem>Downloadable mobile applications for crypto-collectibles access</ListItem>
-                  <ListItem>Mobile apps for NFT and token access</ListItem>
-                </UnorderedList>
-              </CardBody>
-            </Card>
-          </Box>
-          
-          <Divider />
-          
-          {/* Retail Services */}
-          <Box w="full" id="retail-services">
-            <Heading as="h2" size="lg" fontWeight="medium" mb={4}>
-              Retail Services
-            </Heading>
-            
-            <Card variant="outline" mb={6}>
-              <CardHeader pb={0}>
-                <Heading as="h3" size="md" fontWeight="medium">
-                  Phase 1
-                </Heading>
-              </CardHeader>
-              <CardBody>
-                <Text fontWeight="medium" mb={2}>Online retail store services:</Text>
-                <UnorderedList spacing={2}>
-                  <ListItem>Eyewear</ListItem>
-                  <ListItem>Handbags, purses, luggage</ListItem>
-                  <ListItem>Small leather goods</ListItem>
-                  <ListItem>Clothing, footwear, headwear</ListItem>
-                </UnorderedList>
-                <Text mt={4} fontWeight="medium">Other services:</Text>
-                <UnorderedList spacing={2}>
-                  <ListItem>Wholesale store services for luxury products</ListItem>
-                </UnorderedList>
-              </CardBody>
-            </Card>
-            
-            <Card variant="outline" mb={6}>
-              <CardHeader pb={0}>
-                <Heading as="h3" size="md" fontWeight="medium">
-                  Phase 2
-                </Heading>
-              </CardHeader>
-              <CardBody>
-                <Text fontWeight="medium" mb={2}>Online retail store services:</Text>
-                <UnorderedList spacing={2}>
-                  <ListItem>Cosmetics and fragrances</ListItem>
-                  <ListItem>Personal care products</ListItem>
-                  <ListItem>Virtual versions of luxury items</ListItem>
-                  <ListItem>Home goods and furniture</ListItem>
-                  <ListItem>Vehicles and accessories</ListItem>
-                </UnorderedList>
-                <Text mt={4} fontWeight="medium">Other services:</Text>
-                <UnorderedList spacing={2}>
-                  <ListItem>Physical retail store services for luxury goods</ListItem>
-                </UnorderedList>
-              </CardBody>
-            </Card>
-          </Box>
-          
-          <Divider />
-          
-          {/* Entertainment Services */}
-          <Box w="full" id="entertainment-services">
-            <Heading as="h2" size="lg" fontWeight="medium" mb={4}>
-              Entertainment Services
-            </Heading>
-            
-            <Card variant="outline" mb={6}>
-              <CardHeader pb={0}>
-                <Heading as="h3" size="md" fontWeight="medium">
-                  Phase 2
-                </Heading>
-              </CardHeader>
-              <CardBody>
-                <Text fontWeight="medium" mb={2}>Non-downloadable virtual goods authenticated by NFTs:</Text>
-                <UnorderedList spacing={2}>
-                  <ListItem>Virtual art and collectibles</ListItem>
-                  <ListItem>Virtual luxury items and fashion</ListItem>
-                  <ListItem>Virtual home goods and furniture</ListItem>
-                  <ListItem>Virtual vehicles and accessories</ListItem>
-                  <ListItem>Virtual environments for entertainment purposes</ListItem>
-                </UnorderedList>
-                <Text mt={4} fontWeight="medium">Other services:</Text>
-                <UnorderedList spacing={2}>
-                  <ListItem>Non-downloadable artwork, photographs, videos, and audio</ListItem>
-                </UnorderedList>
-              </CardBody>
-            </Card>
-          </Box>
-          
-          <Divider />
-          
-          {/* Technology Services */}
-          <Box w="full" id="technology-services">
-            <Heading as="h2" size="lg" fontWeight="medium" mb={4}>
-              Technology Services
-            </Heading>
-            
-            <Card variant="outline" mb={6}>
-              <CardHeader pb={0}>
-                <Heading as="h3" size="md" fontWeight="medium">
-                  Phase 1
-                </Heading>
-              </CardHeader>
-              <CardBody>
-                <UnorderedList spacing={2}>
-                  <ListItem>Website technology for blockchain tokens/cryptocurrencies</ListItem>
-                  <ListItem>Technology for purchasing and transferring crypto assets</ListItem>
-                </UnorderedList>
-              </CardBody>
-            </Card>
-            
-            <Card variant="outline" mb={6}>
-              <CardHeader pb={0}>
-                <Heading as="h3" size="md" fontWeight="medium">
-                  Phase 2
-                </Heading>
-              </CardHeader>
-              <CardBody>
-                <UnorderedList spacing={2}>
-                  <ListItem>Secure electronic systems for NFTs and crypto-collectibles</ListItem>
-                  <ListItem>Non-downloadable software for digital currency management</ListItem>
-                </UnorderedList>
-              </CardBody>
-            </Card>
-            
-            <Card variant="outline" mb={6}>
-              <CardHeader pb={0}>
-                <Heading as="h3" size="md" fontWeight="medium">
-                  Phase 3
-                </Heading>
-              </CardHeader>
-              <CardBody>
-                <UnorderedList spacing={2}>
-                  <ListItem>Platform as a Service (PaaS) for virtual currency and NFTs</ListItem>
-                </UnorderedList>
-              </CardBody>
-            </Card>
-          </Box>
           
           <Divider />
           
           {/* Authentication Process */}
           <Box w="full" id="authentication-process">
             <Heading as="h2" size="lg" fontWeight="medium" mb={4}>
-              Authentication Process
+              Our Authentication Process
             </Heading>
             <Text fontSize="md" mb={4}>
-              At LuxuryVerse, we employ rigorous authentication procedures to ensure the legitimacy 
-              of all physical items and the security of all digital assets. Our authentication processes include:
+              We employ meticulous authentication procedures to guarantee the authenticity of all products 
+              and the integrity of digital assets. Our processes include:
+            </Text>
+            <Card variant="outline" mb={6}>
+              <CardHeader pb={0}>
+                <Heading as="h3" size="md" fontWeight="medium">
+                  Physical Goods Authentication
+                </Heading>
+              </CardHeader>
+              <CardBody>
+                <Text>
+                  Every luxury item is thoroughly examined by category experts using advanced techniques 
+                  to verify materials, craftsmanship, and provenance.
+                </Text>
+              </CardBody>
+            </Card>
+            <Card variant="outline" mb={6}>
+              <CardHeader pb={0}>
+                <Heading as="h3" size="md" fontWeight="medium">
+                  Digital Authentication
+                </Heading>
+              </CardHeader>
+              <CardBody>
+                <Text>
+                  Our NFTs and digital collectibles are secured through blockchain technology, ensuring 
+                  immutable proof of ownership and authenticity for every digital asset.
+                </Text>
+              </CardBody>
+            </Card>
+            <Card variant="outline" mb={6}>
+              <CardHeader pb={0}>
+                <Heading as="h3" size="md" fontWeight="medium">
+                  Certificate of Authenticity
+                </Heading>
+              </CardHeader>
+              <CardBody>
+                <Text>
+                  All physical and digital items are accompanied by comprehensive documentation, 
+                  including certificates of authenticity, to verify their legitimacy.
+                </Text>
+              </CardBody>
+            </Card>
+          </Box>
+          
+          <Divider />
+          
+          {/* Commitment to Authenticity */}
+          <Box w="full" id="commitment-to-authenticity">
+            <Heading as="h2" size="lg" fontWeight="medium" mb={4}>
+              Our Commitment to You
+            </Heading>
+            <Text fontSize="md" mb={4}>
+              LuxuryVerse is dedicated to building trust through transparency and excellence. Our 
+              authentication processes are designed to provide peace of mind, whether you're acquiring 
+              a physical luxury item or a digital collectible. For a detailed overview of our phased 
+              approach to delivering authentic luxury experiences, visit our{' '}
+              <Text as="span" color="blue.600" textDecor="underline">
+                Roadmap
+              </Text>.
             </Text>
             <UnorderedList spacing={3} pl={4}>
               <ListItem>
-                <Text fontWeight="medium">Physical Goods Authentication</Text>
-                <Text>Each luxury item undergoes thorough examination by category experts.</Text>
+                <Text fontWeight="medium">Transparency</Text>
+                <Text>We provide clear documentation and blockchain-based records for all items.</Text>
               </ListItem>
               <ListItem>
-                <Text fontWeight="medium">Digital Authentication</Text>
-                <Text>Our NFTs and digital collectibles are secured through blockchain technology, providing 
-                  immutable proof of ownership and authenticity.</Text>
+                <Text fontWeight="medium">Expertise</Text>
+                <Text>Our team of specialists ensures every item meets the highest standards of quality.</Text>
               </ListItem>
               <ListItem>
-                <Text fontWeight="medium">Certificate of Authenticity</Text>
-                <Text>All items come with appropriate documentation verifying their authenticity.</Text>
+                <Text fontWeight="medium">Innovation</Text>
+                <Text>We leverage blockchain and NFT technology to pioneer secure digital luxury.</Text>
               </ListItem>
             </UnorderedList>
           </Box>
