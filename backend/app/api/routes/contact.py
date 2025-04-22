@@ -69,11 +69,9 @@ async def submit_contact_form(form_data: ContactForm) -> Message:
         except Exception as email_error:
             logger.error(f"Error sending user confirmation email: {str(email_error)}")
             # Continue processing even if email fails
-        
-        # Send notification to admin (nik@luxuryverse.com)
         try:
             admin_notification_sent = send_email(
-                email_to="nik@luxuryverse.com",
+                email_to="nik@luxurymarket.com",
                 subject=f"New Contact Form Submission #{contact_ref}",
                 html_content=f"""
                 <html>
