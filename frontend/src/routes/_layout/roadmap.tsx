@@ -51,7 +51,7 @@ function RoadmapPage() {
               </Text>
               
               <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6} alignItems="start">
-                {/* Left Column: Phase 1 and Phase 3 */}
+                {/* Left Column: Phase 1 and Phase 2 */}
                 <VStack spacing={12} align="center">
                   {/* Phase 1 */}
                   <Flex direction="column" align="center" position="relative">
@@ -90,30 +90,29 @@ function RoadmapPage() {
                     </Box>
                   </Flex>
                   
-                  {/* Phase 3 (replacing Phase 4) */}
+                  {/* Phase 2 */}
                   <Flex direction="column" align="center" position="relative">
                     <Card variant="outline" bg="gray.900" w="full" minH="250px">
                       <CardHeader pb={0}>
                         <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
-                          Phase 3: Ecosystem
+                          Phase 2: Mobile & Hardware
                         </Heading>
                       </CardHeader>
                       <CardBody>
                         <Text textAlign="left">
-                          - Platform as a Service (PaaS) for NFTs<br />
-                          - Virtual environments for entertainment<br />
-                          - Non-downloadable software for crypto management<br />
-                          - Multi-brand partnerships for exclusive drops<br />
-                          - Global luxury marketplace integration
+                          - Mobile apps for drop access and NFT management<br />
+                          - Cryptocurrency hardware wallets<br />
+                          - Downloadable apps for crypto-collectibles<br />
+                          - Enhanced user experience for gates and drops
                         </Text>
                       </CardBody>
                     </Card>
                   </Flex>
                 </VStack>
                 
-                {/* Right Column: Phase 4 (replacing Phase 2) and Phase 2 (replacing Phase 3) */}
+                {/* Right Column: Phase 4 and Phase 3 */}
                 <VStack spacing={12} align="center">
-                  {/* Phase 4 (replacing Phase 2) */}
+                  {/* Phase 4 */}
                   <Flex direction="column" align="center" position="relative">
                     <Card variant="outline" bg="gray.900" w="full" minH="250px">
                       <CardHeader pb={0}>
@@ -150,20 +149,21 @@ function RoadmapPage() {
                     </Box>
                   </Flex>
                   
-                  {/* Phase 2 (replacing Phase 3) */}
+                  {/* Phase 3 */}
                   <Flex direction="column" align="center" position="relative">
                     <Card variant="outline" bg="gray.900" w="full" minH="250px">
                       <CardHeader pb={0}>
                         <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
-                          Phase 2: Mobile & Hardware
+                          Phase 3: Ecosystem
                         </Heading>
                       </CardHeader>
                       <CardBody>
                         <Text textAlign="left">
-                          - Mobile apps for drop access and NFT management<br />
-                          - Cryptocurrency hardware wallets<br />
-                          - Downloadable apps for crypto-collectibles<br />
-                          - Enhanced user experience for gates and drops
+                          - Platform as a Service (PaaS) for NFTs<br />
+                          - Virtual environments for entertainment<br />
+                          - Non-downloadable software for crypto management<br />
+                          - Multi-brand partnerships for exclusive drops<br />
+                          - Global luxury marketplace integration
                         </Text>
                       </CardBody>
                     </Card>
