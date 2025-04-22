@@ -31,14 +31,9 @@ const theme = extendTheme({
       600: "#e08700", // Slightly darker for focus/active states
       700: "#cc7a00", // Darker
     },
-    green: {
-      300: "#7bff8cd9",
-      400: "#6afe7dd9",
-      500: "#58fb6cd9", // Green for hover (matches --color-primary-hover)
-      600: "#3cd950d9",
-      700: "#2bb33cd9",
-    },
     orange: {
+      200: "#e08700", // Matches --color-primary-hover
+      300: "#FF9900", // Matches --color-primary
       500: "#fbac58d9", // Orange for glitch
     },
     cyan: {
@@ -146,14 +141,14 @@ const theme = extendTheme({
         logo: {
           fontFamily: "'Special Gothic Expanded One', sans-serif",
           fontWeight: "normal",
-          color: "primary.500", // Updated to blue-grey
+          color: "primary.500", // Updated to orange
           letterSpacing: "2px",
           textTransform: "uppercase",
         },
         glitch: {
           fontFamily: "'Dela Gothic One', sans-serif",
           fontWeight: "normal",
-          color: "primary.500", // Updated to blue-grey
+          color: "orange.300", // Updated to orange
         },
       },
     },
@@ -175,7 +170,7 @@ const theme = extendTheme({
       },
       variants: {
         solid: {
-          bg: "primary.500", // Updated to blue-grey
+          bg: "primary.500", // Updated to orange
           color: "black.900",
           _hover: {
             bg: "orange.200", // Matches --color-primary-hover
@@ -189,7 +184,7 @@ const theme = extendTheme({
         },
         outline: {
           border: "2px solid",
-          borderColor: "primary.500", // Updated to blue-grey
+          borderColor: "primary.500", // Updated to orange
           color: "primary.500",
           bg: "transparent",
           _hover: {
@@ -201,7 +196,7 @@ const theme = extendTheme({
           },
         },
         ghost: {
-          color: "primary.500", // Updated to blue-grey
+          color: "primary.500", // Updated to orange
           bg: "transparent",
           _hover: {
             bg: "gray.800",
@@ -253,8 +248,8 @@ const theme = extendTheme({
               borderColor: "orange.200", // Matches --color-primary-hover
             },
             _focus: {
-              borderColor: "primary.500", // Updated to blue-grey
-              boxShadow: "0 0 0 1px rgba(219, 221, 236, 0.85)",
+              borderColor: "primary.500", // Updated to orange
+              boxShadow: "0 0 0 1px rgba(255, 153, 0, 0.85)",
             },
           },
         },
@@ -280,11 +275,11 @@ const theme = extendTheme({
             boxShadow: "lg",
           },
           title: {
-            color: "primary.500", // Updated to blue-grey
+            color: "primary.500", // Updated to orange
             fontFamily: "'Special Gothic Expanded One', sans-serif",
           },
           description: {
-            color: "primary.500", // Updated to blue-grey
+            color: "primary.500", // Updated to orange
             fontFamily: "'DM Sans', sans-serif",
           },
         },
@@ -293,7 +288,7 @@ const theme = extendTheme({
     Link: {
       baseStyle: {
         fontFamily: "'DM Sans', sans-serif",
-        color: "primary.500", // Updated to blue-grey
+        color: "primary.500", // Updated to orange
         _hover: {
           color: "orange.200", // Matches --color-primary-hover
           textDecoration: "underline",
@@ -304,7 +299,7 @@ const theme = extendTheme({
       baseStyle: {
         container: {
           fontFamily: "'DM Sans', sans-serif",
-          color: "primary.500", // Updated to blue-grey
+          color: "primary.500", // Updated to orange
           lineHeight: "1.5",
           minHeight: "auto",
           paddingY: 0,
@@ -333,7 +328,7 @@ const theme = extendTheme({
         subtle: {
           container: {
             bg: "gray.700",
-            color: "primary.500", // Updated to blue-grey
+            color: "primary.500", // Updated to orange
             _hover: {
               bg: "gray.600",
             },
@@ -355,7 +350,7 @@ const theme = extendTheme({
     global: {
       "html, body": {
         bg: "black.900", // Matches --color-background
-        color: "primary.500", // Updated to blue-grey
+        color: "primary.500", // Updated to orange
         fontFamily: "'DM Sans', sans-serif",
         lineHeight: "base",
         scrollBehavior: "smooth",
@@ -364,7 +359,7 @@ const theme = extendTheme({
         boxSizing: "border-box",
       },
       "a": {
-        color: "primary.500", // Updated to blue-grey
+        color: "primary.500", // Updated to orange
         textDecoration: "none",
         _hover: {
           color: "orange.200", // Matches --color-primary-hover
