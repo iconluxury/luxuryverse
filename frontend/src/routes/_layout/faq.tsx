@@ -57,7 +57,7 @@ function FaqPage() {
                   </Heading>
                 </CardHeader>
                 <CardBody>
-                  <Text fontSize="lg" color="gray.300">
+                  <Text fontSize="lg" color="gray.400">
                     We offer website technology for blockchain tokens and cryptocurrencies, as well as solutions for purchasing and transferring crypto assets.
                   </Text>
                 </CardBody>
@@ -69,7 +69,7 @@ function FaqPage() {
                   </Heading>
                 </CardHeader>
                 <CardBody>
-                  <Text fontSize="lg" color="gray.300">
+                  <Text fontSize="lg" color="gray.400">
                     Secure electronic systems for NFTs and crypto-collectibles will be available in Phase 2.
                   </Text>
                 </CardBody>
@@ -81,7 +81,7 @@ function FaqPage() {
                   </Heading>
                 </CardHeader>
                 <CardBody>
-                  <Text fontSize="lg" color="gray.300">
+                  <Text fontSize="lg" color="gray.400">
                     PaaS for virtual currency and NFTs will be introduced in Phase 3.
                   </Text>
                 </CardBody>
@@ -104,7 +104,7 @@ function FaqPage() {
                   </Heading>
                 </CardHeader>
                 <CardBody>
-                  <Text fontSize="lg" color="gray.300">
+                  <Text fontSize="lg" color="gray.400">
                     These are downloadable multimedia files (e.g., images, audio, videos) authenticated by NFTs. Available in Phase 2.
                   </Text>
                 </CardBody>
@@ -116,7 +116,7 @@ function FaqPage() {
                   </Heading>
                 </CardHeader>
                 <CardBody>
-                  <Text fontSize="lg" color="gray.300">
+                  <Text fontSize="lg" color="gray.400">
                     Yes, we provide NFT-authenticated autographed sports memorabilia and trading cards, available in Phase 2.
                   </Text>
                 </CardBody>
@@ -128,7 +128,7 @@ function FaqPage() {
                   </Heading>
                 </CardHeader>
                 <CardBody>
-                  <Text fontSize="lg" color="gray.300">
+                  <Text fontSize="lg" color="gray.400">
                     Cryptocurrency hardware wallets will be introduced in Phase 3.
                   </Text>
                 </CardBody>
@@ -140,7 +140,7 @@ function FaqPage() {
                   </Heading>
                 </CardHeader>
                 <CardBody>
-                  <Text fontSize="lg" color="gray.300">
+                  <Text fontSize="lg" color="gray.400">
                     Downloadable mobile apps for accessing crypto-collectibles and NFTs will be available in Phase 3.
                   </Text>
                 </CardBody>
@@ -152,7 +152,7 @@ function FaqPage() {
                   </Heading>
                 </CardHeader>
                 <CardBody>
-                  <Text fontSize="lg" color="gray.300">
+                  <Text fontSize="lg" color="gray.400">
                     Software for trading and managing digital currency is available in Phase 1. Non-downloadable software for digital currency management will be available in Phase 2.
                   </Text>
                 </CardBody>
@@ -176,7 +176,7 @@ function FaqPage() {
                   </Heading>
                 </CardHeader>
                 <CardBody>
-                  <Text fontSize="lg" color="gray.300">
+                  <Text fontSize="lg" color="gray.400">
                     Our online store offers eyewear, handbags, purses, luggage, small leather goods, clothing, footwear, and headwear. Cosmetics, fragrances, personal care products, virtual luxury items, home goods, furniture, vehicles, and accessories will be available in Phase 2.
                   </Text>
                 </CardBody>
@@ -188,7 +188,7 @@ function FaqPage() {
                   </Heading>
                 </CardHeader>
                 <CardBody>
-                  <Text fontSize="lg" color="gray.300">
+                  <Text fontSize="lg" color="gray.400">
                     Physical retail stores for luxury goods will be available in Phase 2.
                   </Text>
                 </CardBody>
@@ -200,7 +200,7 @@ function FaqPage() {
                   </Heading>
                 </CardHeader>
                 <CardBody>
-                  <Text fontSize="lg" color="gray.300">
+                  <Text fontSize="lg" color="gray.400">
                     Wholesale store services for luxury products are available to select partners.
                   </Text>
                 </CardBody>
@@ -224,7 +224,7 @@ function FaqPage() {
                   </Heading>
                 </CardHeader>
                 <CardBody>
-                  <Text fontSize="lg" color="gray.300">
+                  <Text fontSize="lg" color="gray.400">
                     These include virtual art, collectibles, luxury items, fashion, home goods, furniture, vehicles, and accessories authenticated by NFTs, available in Phase 2.
                   </Text>
                 </CardBody>
@@ -236,7 +236,7 @@ function FaqPage() {
                   </Heading>
                 </CardHeader>
                 <CardBody>
-                  <Text fontSize="lg" color="gray.300">
+                  <Text fontSize="lg" color="gray.400">
                     Virtual environments for entertainment purposes will be available in Phase 2.
                   </Text>
                 </CardBody>
@@ -248,7 +248,7 @@ function FaqPage() {
                   </Heading>
                 </CardHeader>
                 <CardBody>
-                  <Text fontSize="lg" color="gray.300">
+                  <Text fontSize="lg" color="gray.400">
                     Non-downloadable artwork, photographs, videos, and audio will be available in Phase 2.
                   </Text>
                 </CardBody>
