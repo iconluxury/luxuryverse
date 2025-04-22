@@ -129,19 +129,55 @@ function ContactPage() {
 
               <Button 
                 type="submit" 
-                colorScheme="blue" 
+                size="lg"
                 isLoading={isSubmitting}
                 loadingText="Sending"
+                bg="transparent"
+                color="#FF9900"
+                textTransform="uppercase"
+                fontFamily="'Special Gothic Expanded One', sans-serif"
+                fontWeight="normal"
+                width="100%"
+                px={0}
+                py={2}
+                border="none"
+                borderRadius="0"
+                textDecoration="none"
+                cursor="pointer"
+                display="block"
+                textAlign="center" // Center text
+                justifyContent="center" // Center flex content
+                alignItems="center" // Center vertically
+                sx={{
+                  '& > *': {
+                    textAlign: 'center !important',
+                    justifyContent: 'center !important',
+                  },
+                  paddingInlineStart: 0,
+                }}
+                _hover={{
+                  bg: "transparent",
+                  color: "#00CC00",
+                  textDecoration: "underline",
+                }}
+                _disabled={{
+                  bg: "transparent",
+                  color: "#FF9900",
+                  opacity: 0.7,
+                  cursor: "not-allowed",
+                  textDecoration: "none",
+                  _hover: {
+                    bg: "transparent",
+                    color: "#FF9900",
+                    textDecoration: "none",
+                  },
+                }}
+                transition="all 0.2s"
               >
                 Send Message
               </Button>
             </VStack>
           </Box>
-
-          <Text fontSize="md" mt={4}>
-            Or email us directly at:{' '}
-            <a href="mailto:nik@luxuryverse.com">nik@luxuryverse.com</a>
-          </Text>
         </VStack>
       </Container>
       <Footer />
