@@ -21,7 +21,7 @@ export const Route = createFileRoute('/_layout/faq')({
 
 function FaqPage() {
   return (
-    <Box bg="gray.900" minH="100vh" color="white">
+    <Box bg="transparent" minH="100vh" color="white">
       <Container maxW="1000px" mx="auto" px={4} py={16}>
         <VStack spacing={8} align="start" w="full">
           {/* Page Header */}
