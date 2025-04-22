@@ -94,7 +94,7 @@ function AuthenticityPage() {
               Our Commitment to You
             </Heading>
             <Text fontSize="md" mb={6}>
-              LuxuryVerse is dedicated to building trust through transparency and excellence. Our 
+              We are dedicated to building trust through transparency and excellence. Our 
               authentication processes are designed to provide peace of mind, whether you're acquiring 
               a physical luxury item or a digital collectible.
           
