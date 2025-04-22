@@ -43,7 +43,7 @@ function AuthenticityPage() {
             </Heading>
             <Text fontSize="md" mb={4}>
               We employ meticulous authentication procedures to guarantee the authenticity of all products 
-              and the integrity of digital assets. Our processes include:
+              and the integrity of digital assets.
             </Text>
             <Card variant="outline" mb={6}>
               <CardHeader pb={0}>
