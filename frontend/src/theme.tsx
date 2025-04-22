@@ -178,7 +178,7 @@ const theme = extendTheme({
           bg: "primary.500", // Updated to blue-grey
           color: "black.900",
           _hover: {
-            bg: "green.500", // Matches --color-primary-hover
+            bg: "orange.200", // Matches --color-primary-hover
             _disabled: {
               bg: "primary.500",
             },
@@ -193,7 +193,7 @@ const theme = extendTheme({
           color: "primary.500",
           bg: "transparent",
           _hover: {
-            bg: "green.500",
+            bg: "orange.200",
             color: "black.900",
           },
           _active: {
@@ -250,7 +250,7 @@ const theme = extendTheme({
             border: "1px solid",
             borderColor: "gray.600",
             _hover: {
-              borderColor: "green.500", // Matches --color-primary-hover
+              borderColor: "orange.200", // Matches --color-primary-hover
             },
             _focus: {
               borderColor: "primary.500", // Updated to blue-grey
@@ -295,7 +295,7 @@ const theme = extendTheme({
         fontFamily: "'DM Sans', sans-serif",
         color: "primary.500", // Updated to blue-grey
         _hover: {
-          color: "green.500", // Matches --color-primary-hover
+          color: "orange.200", // Matches --color-primary-hover
           textDecoration: "underline",
         },
       },
@@ -341,7 +341,7 @@ const theme = extendTheme({
         },
         solid: {
           container: {
-            bg: "green.500", // Matches --color-primary-hover
+            bg: "orange.200", // Matches --color-primary-hover
             color: "black.900",
             _hover: {
               bg: "green.600",
@@ -367,7 +367,7 @@ const theme = extendTheme({
         color: "primary.500", // Updated to blue-grey
         textDecoration: "none",
         _hover: {
-          color: "green.500", // Matches --color-primary-hover
+          color: "orange.200", // Matches --color-primary-hover
         },
       },
       "button": {
