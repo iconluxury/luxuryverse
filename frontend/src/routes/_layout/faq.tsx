@@ -29,28 +29,54 @@ function FaqPage() {
             Frequently Asked Questions
           </Heading>
 
-          {/* Contact Information */}
-          <Card bg="gray.800" variant="outline" w="full" borderColor="gray.700">
-            <CardHeader pb={0}>
-              <Heading as="h2" size="lg" fontWeight="medium" color="orange.400">
-                Contact Information
-              </Heading>
-            </CardHeader>
-            <CardBody>
-              <VStack align="start" spacing={4}>
-                <Text fontSize="md" color="gray.300">
-                  Have questions? We're here to help. Reach out to us at:
-                </Text>
-                <Text fontSize="md" color="gray.300">
-                  <strong>Email:</strong>{' '}
-                  <Link href="mailto:support@luxuryverse.com" color="orange.300">
-                    support@luxuryverse.com
-                  </Link>
-                </Text>
-              </VStack>
-            </CardBody>
-          </Card>
-
+         
+          {/* Technology Services */}
+          <Box w="full" id="technology-services">
+            <Heading as="h2" size="lg" fontWeight="medium" mb={4} color="orange.400">
+              Technology Services
+            </Heading>
+            <Text fontSize="md" mb={6} color="gray.300">
+              Learn about our advanced blockchain and cryptocurrency solutions.
+            </Text>
+            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
+              <Card bg="gray.800" variant="outline" borderColor="gray.700">
+                <CardHeader pb={0}>
+                  <Heading as="h3" size="md" fontWeight="medium" color="orange.400">
+                    What technology services are available for blockchain and cryptocurrencies?
+                  </Heading>
+                </CardHeader>
+                <CardBody>
+                  <Text fontSize="md" color="gray.300">
+                    We offer website technology for blockchain tokens and cryptocurrencies, as well as solutions for purchasing and transferring crypto assets.
+                  </Text>
+                </CardBody>
+              </Card>
+              <Card bg="gray.800" variant="outline" borderColor="gray.700">
+                <CardHeader pb={0}>
+                  <Heading as="h3" size="md" fontWeight="medium" color="orange.400">
+                    Are there secure systems for NFTs and crypto-collectibles?
+                  </Heading>
+                </CardHeader>
+                <CardBody>
+                  <Text fontSize="md" color="gray.300">
+                    Secure electronic systems for NFTs and crypto-collectibles will be available in Phase 2.
+                  </Text>
+                </CardBody>
+              </Card>
+              <Card bg="gray.800" variant="outline" borderColor="gray.700">
+                <CardHeader pb={0}>
+                  <Heading as="h3" size="md" fontWeight="medium" color="orange.400">
+                    Will you offer Platform as a Service (PaaS) for virtual currency?
+                  </Heading>
+                </CardHeader>
+                <CardBody>
+                  <Text fontSize="md" color="gray.300">
+                    PaaS for virtual currency and NFTs will be introduced in Phase 3.
+                  </Text>
+                </CardBody>
+              </Card>
+            </SimpleGrid>
+          </Box>
           {/* Digital Collectibles & Technology */}
           <Box w="full" id="digital-collectibles">
             <Heading as="h2" size="lg" fontWeight="medium" mb={4} color="orange.400">
@@ -219,53 +245,30 @@ function FaqPage() {
             </SimpleGrid>
           </Box>
 
-          {/* Technology Services */}
-          <Box w="full" id="technology-services">
-            <Heading as="h2" size="lg" fontWeight="medium" mb={4} color="orange.400">
-              Technology Services
-            </Heading>
-            <Text fontSize="md" mb={6} color="gray.300">
-              Learn about our advanced blockchain and cryptocurrency solutions.
-            </Text>
-            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
-              <Card bg="gray.800" variant="outline" borderColor="gray.700">
-                <CardHeader pb={0}>
-                  <Heading as="h3" size="md" fontWeight="medium" color="orange.400">
-                    What technology services are available for blockchain and cryptocurrencies?
-                  </Heading>
-                </CardHeader>
-                <CardBody>
-                  <Text fontSize="md" color="gray.300">
-                    We offer website technology for blockchain tokens and cryptocurrencies, as well as solutions for purchasing and transferring crypto assets.
-                  </Text>
-                </CardBody>
-              </Card>
-              <Card bg="gray.800" variant="outline" borderColor="gray.700">
-                <CardHeader pb={0}>
-                  <Heading as="h3" size="md" fontWeight="medium" color="orange.400">
-                    Are there secure systems for NFTs and crypto-collectibles?
-                  </Heading>
-                </CardHeader>
-                <CardBody>
-                  <Text fontSize="md" color="gray.300">
-                    Secure electronic systems for NFTs and crypto-collectibles will be available in Phase 2.
-                  </Text>
-                </CardBody>
-              </Card>
-              <Card bg="gray.800" variant="outline" borderColor="gray.700">
-                <CardHeader pb={0}>
-                  <Heading as="h3" size="md" fontWeight="medium" color="orange.400">
-                    Will you offer Platform as a Service (PaaS) for virtual currency?
-                  </Heading>
-                </CardHeader>
-                <CardBody>
-                  <Text fontSize="md" color="gray.300">
-                    PaaS for virtual currency and NFTs will be introduced in Phase 3.
-                  </Text>
-                </CardBody>
-              </Card>
-            </SimpleGrid>
-          </Box>
+
+ {/* Contact Information */}
+ <Card bg="gray.800" variant="outline" w="full" borderColor="gray.700">
+            <CardHeader pb={0}>
+              <Heading as="h2" size="lg" fontWeight="medium" color="orange.400">
+                Contact Information
+              </Heading>
+            </CardHeader>
+            <CardBody>
+              <VStack align="start" spacing={4}>
+                <Text fontSize="md" color="gray.300">
+                  Have questions? We're here to help. Reach out to us at:
+                </Text>
+                <Text fontSize="md" color="gray.300">
+                  <strong>Email:</strong>{' '}
+                  <Link href="mailto:support@luxuryverse.com" color="orange.300">
+                    support@luxuryverse.com
+                  </Link>
+                </Text>
+              </VStack>
+            </CardBody>
+          </Card>
+
+
         </VStack>
       </Container>
       <Footer />
