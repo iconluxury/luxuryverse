@@ -79,7 +79,7 @@ function FaqPage() {
             <UnorderedList spacing={3}>
               <ListItem>
                 <Text><strong>What products are available in your online retail store?</strong></Text>
-                <Text>Our online retail store offers eyewear, handbags, purses, luggage, small leather goods, clothing, footwear, and headwear in Phase 1. Cosmetics, fragrances, personal care products, virtual luxury items, home goods, furniture, vehicles, and accessories will be available in Phase 2.</Text>
+                <Text>Our online retail store offers eyewear, handbags, purses, luggage, small leather goods, clothing, footwear, and headwear. Cosmetics, fragrances, personal care products, virtual luxury items, home goods, furniture, vehicles, and accessories will be available in Phase 2.</Text>
               </ListItem>
               <ListItem>
                 <Text><strong>Do you have physical retail stores?</strong></Text>
@@ -87,7 +87,7 @@ function FaqPage() {
               </ListItem>
               <ListItem>
                 <Text><strong>Are wholesale services offered?</strong></Text>
-                <Text>Wholesale store services for luxury products are available in Phase 1.</Text>
+                <Text>Wholesale store services for luxury products are available to select partners</Text>
               </ListItem>
             </UnorderedList>
           </Box>
@@ -127,7 +127,7 @@ function FaqPage() {
             <UnorderedList spacing={3}>
               <ListItem>
                 <Text><strong>What technology services are available for blockchain and cryptocurrencies?</strong></Text>
-                <Text>Website technology for blockchain tokens and cryptocurrencies, as well as technology for purchasing and transferring crypto assets, are available in Phase 1.</Text>
+                <Text>Website technology for blockchain tokens and cryptocurrencies, as well as technology for purchasing and transferring crypto assets, are available</Text>
               </ListItem>
               <ListItem>
                 <Text><strong>Are there secure systems for NFTs and crypto-collectibles?</strong></Text>
