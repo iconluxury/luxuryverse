@@ -84,16 +84,16 @@ function ContactPage() {
   return (
     <Box>
       <Container maxW="1000px" mx="auto" px={4} py={16} color="gray.800">
-        <VStack spacing={8} align="start" w="full">
-          <Heading as="h1" size="xl" fontWeight="medium">
+        <VStack spacing={8} align="center" w="full"> {/* Changed align to "center" */}
+          <Heading as="h1" size="xl" fontWeight="medium" textAlign="center">
             Contact
           </Heading>
-          <Text fontSize="md">
+          <Text fontSize="md" textAlign="center" maxW="600px">
             Please fill out the form below to send us a message:
           </Text>
           
           <Box as="form" w="full" maxW="600px" onSubmit={handleSubmit}>
-            <VStack spacing={4}>
+            <VStack spacing={4} align="start"> {/* Form fields remain left-aligned */}
               <FormControl isRequired>
                 <FormLabel>Name</FormLabel>
                 <Input 
@@ -145,9 +145,9 @@ function ContactPage() {
                 textDecoration="none"
                 cursor="pointer"
                 display="block"
-                textAlign="center" // Center text
-                justifyContent="center" // Center flex content
-                alignItems="center" // Center vertically
+                textAlign="center"
+                justifyContent="center"
+                alignItems="center"
                 sx={{
                   '& > *': {
                     textAlign: 'center !important',
@@ -174,7 +174,7 @@ function ContactPage() {
                 }}
                 transition="all 0.2s"
               >
-              Send Message
+                Send Message
               </Button>
             </VStack>
           </Box>
