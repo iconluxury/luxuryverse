@@ -106,7 +106,7 @@ function FaqPage() {
                   </CardHeader>
                   <CardBody>
                     <Text fontSize="lg" color="gray.400">
-                      These are downloadable multimedia files (e.g., images, audio, videos) authenticated by NFTs. Available in Phase 2.
+                      These are downloadable multimedia files (e.g., images, audio) authenticated by NFTs. Available in Phase 2.
                     </Text>
                   </CardBody>
                 </Card>
