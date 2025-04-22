@@ -50,9 +50,9 @@ function FaqPage() {
               Learn about our advanced blockchain and cryptocurrency solutions.
             </Text>
             <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
-              <Card variant="outline" borderColor="gray.700">
+              <Card variant="outline" bg="gray.900" >
                 <CardHeader pb={0}>
-                  <Heading as="h3" size="md" fontWeight="medium">
+                   <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
                     What technology services are available for blockchain and cryptocurrencies?
                   </Heading>
                 </CardHeader>
@@ -62,9 +62,9 @@ function FaqPage() {
                   </Text>
                 </CardBody>
               </Card>
-              <Card variant="outline" borderColor="gray.700">
+              <Card variant="outline"  bg="gray.900" >
                 <CardHeader pb={0}>
-                  <Heading as="h3" size="md" fontWeight="medium">
+                   <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
                     Are there secure systems for NFTs and crypto-collectibles?
                   </Heading>
                 </CardHeader>
@@ -74,9 +74,9 @@ function FaqPage() {
                   </Text>
                 </CardBody>
               </Card>
-              <Card variant="outline" borderColor="gray.700">
+              <Card variant="outline"  bg="gray.900" >
                 <CardHeader pb={0}>
-                  <Heading as="h3" size="md" fontWeight="medium">
+                   <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
                     Will you offer Platform as a Service (PaaS) for virtual currency?
                   </Heading>
                 </CardHeader>
@@ -97,9 +97,9 @@ function FaqPage() {
               Discover our innovative digital collectibles and technology services.
             </Text>
             <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
-              <Card variant="outline" borderColor="gray.700">
+              <Card variant="outline"  bg="gray.900" >
                 <CardHeader pb={0}>
-                  <Heading as="h3" size="md" fontWeight="medium">
+                   <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
                     What are crypto-collectibles and digital collectibles?
                   </Heading>
                 </CardHeader>
@@ -109,9 +109,9 @@ function FaqPage() {
                   </Text>
                 </CardBody>
               </Card>
-              <Card variant="outline" borderColor="gray.700">
+              <Card variant="outline"  bg="gray.900" >
                 <CardHeader pb={0}>
-                  <Heading as="h3" size="md" fontWeight="medium">
+                   <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
                     Do you offer autographed sports memorabilia or trading cards?
                   </Heading>
                 </CardHeader>
@@ -121,9 +121,9 @@ function FaqPage() {
                   </Text>
                 </CardBody>
               </Card>
-              <Card variant="outline" borderColor="gray.700">
+              <Card variant="outline"  bg="gray.900" >
                 <CardHeader pb={0}>
-                  <Heading as="h3" size="md" fontWeight="medium">
+                   <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
                     When will cryptocurrency hardware wallets be available?
                   </Heading>
                 </CardHeader>
@@ -133,9 +133,9 @@ function FaqPage() {
                   </Text>
                 </CardBody>
               </Card>
-              <Card variant="outline" borderColor="gray.700">
+              <Card variant="outline"  bg="gray.900" >
                 <CardHeader pb={0}>
-                  <Heading as="h3" size="md" fontWeight="medium">
+                   <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
                     Are there mobile apps for accessing crypto-collectibles?
                   </Heading>
                 </CardHeader>
@@ -145,9 +145,9 @@ function FaqPage() {
                   </Text>
                 </CardBody>
               </Card>
-              <Card variant="outline" borderColor="gray.700">
+              <Card variant="outline"  bg="gray.900" >
                 <CardHeader pb={0}>
-                  <Heading as="h3" size="md" fontWeight="medium">
+                   <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
                     What software is available for digital currency management?
                   </Heading>
                 </CardHeader>
@@ -169,9 +169,9 @@ function FaqPage() {
               Explore our curated selection of physical and virtual luxury goods.
             </Text>
             <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
-              <Card variant="outline" borderColor="gray.700">
+              <Card variant="outline"  bg="gray.900" >
                 <CardHeader pb={0}>
-                  <Heading as="h3" size="md" fontWeight="medium">
+                   <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
                     What products are available in your online retail store?
                   </Heading>
                 </CardHeader>
@@ -181,9 +181,9 @@ function FaqPage() {
                   </Text>
                 </CardBody>
               </Card>
-              <Card variant="outline" borderColor="gray.700">
+              <Card variant="outline"  bg="gray.900" >
                 <CardHeader pb={0}>
-                  <Heading as="h3" size="md" fontWeight="medium">
+                   <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
                     Do you have physical retail stores?
                   </Heading>
                 </CardHeader>
@@ -193,9 +193,9 @@ function FaqPage() {
                   </Text>
                 </CardBody>
               </Card>
-              <Card variant="outline" borderColor="gray.700">
+              <Card variant="outline"  bg="gray.900" >
                 <CardHeader pb={0}>
-                  <Heading as="h3" size="md" fontWeight="medium">
+                   <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
                     Are wholesale services offered?
                   </Heading>
                 </CardHeader>
@@ -217,9 +217,9 @@ function FaqPage() {
               Immerse yourself in our non-downloadable virtual goods and entertainment offerings.
             </Text>
             <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
-              <Card variant="outline" borderColor="gray.700">
+              <Card variant="outline"  bg="gray.900" >
                 <CardHeader pb={0}>
-                  <Heading as="h3" size="md" fontWeight="medium">
+                   <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
                     What are non-downloadable virtual goods?
                   </Heading>
                 </CardHeader>
@@ -229,9 +229,9 @@ function FaqPage() {
                   </Text>
                 </CardBody>
               </Card>
-              <Card variant="outline" borderColor="gray.700">
+              <Card variant="outline"  bg="gray.900" >
                 <CardHeader pb={0}>
-                  <Heading as="h3" size="md" fontWeight="medium">
+                   <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
                     Do you offer virtual environments for entertainment?
                   </Heading>
                 </CardHeader>
@@ -241,9 +241,9 @@ function FaqPage() {
                   </Text>
                 </CardBody>
               </Card>
-              <Card variant="outline" borderColor="gray.700">
+              <Card variant="outline"  bg="gray.900" >
                 <CardHeader pb={0}>
-                  <Heading as="h3" size="md" fontWeight="medium">
+                   <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
                     Are non-downloadable artwork and media available?
                   </Heading>
                 </CardHeader>
@@ -257,7 +257,7 @@ function FaqPage() {
           </Box>
 
           {/* Contact Information */}
-          <Card variant="outline" w="full" borderColor="gray.700">
+          <Card variant="outline" w="full"  bg="gray.900" >
             <CardHeader pb={0}>
               <Heading as="h2" size="lg" fontWeight="medium">
                 Contact Information
