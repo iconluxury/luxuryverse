@@ -32,12 +32,11 @@ function RoadmapPage() {
         <Container maxW="1000px" px={4} py={16} color="gray.800" textAlign="center">
           <VStack spacing={8} align="center" w="full">
             <Heading as="h1" size="xl" fontWeight="medium">
-              Our Roadmap
+              Launch Roadmap
             </Heading>
             
             <Text fontSize="lg" mb={4}>
-              Our phased approach to revolutionizing luxury experiences through physical and digital authenticity. 
-              Explore our strategic roadmap across technology, retail, and entertainment services.
+              Launch delivers exclusive weekly drops of in-season, multi-brand luxury products. Gates open, collections sell out, and payments are made seamlessly with crypto. Our phased roadmap builds a revolutionary platform for luxury retail and digital assets.
             </Text>
             
             <Divider />
@@ -48,105 +47,146 @@ function RoadmapPage() {
                 Development Phases
               </Heading>
               <Text fontSize="md" mb={12}>
-                We are building a seamless ecosystem for authentic luxury goods and digital collectibles, 
-                with each phase introducing new capabilities and offerings.
+                From crypto-powered luxury drops to digital collectibles and beyond, our roadmap creates a seamless ecosystem for authentic luxury experiences.
               </Text>
               
-              {/* Phase 1 */}
-              <Flex direction="column" align="center" position="relative" mb={12}>
-                <Card variant="outline" mb={6} w="full">
-                  <CardHeader pb={0}>
-                    <Heading as="h3" size="md" fontWeight="medium">
-                      Phase 1: Foundation
-                    </Heading>
-                  </CardHeader>
-                  <CardBody>
-                    <Text>
-                      - Software for trading/managing digital currency<br />
-                      - Website technology for blockchain tokens/cryptocurrencies<br />
-                      - Technology for purchasing and transferring crypto assets<br />
-                      - Online retail for eyewear, handbags, purses, luggage, small leather goods, clothing, footwear, headwear<br />
-                      - Wholesale store services for luxury products
-                    </Text>
-                  </CardBody>
-                </Card>
-                <Box
-                  as="svg"
-                  width="40px"
-                  height="60px"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M12 4V20M12 20L8 16M12 20L16 16"
-                    stroke="#CBD5E0"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </Box>
-              </Flex>
-              
-              {/* Phase 2 */}
-              <Flex direction="column" align="center" position="relative" mb={12}>
-                <Card variant="outline" mb={6} w="full">
-                  <CardHeader pb={0}>
-                    <Heading as="h3" size="md" fontWeight="medium">
-                      Phase 2: Expansion
-                    </Heading>
-                  </CardHeader>
-                  <CardBody>
-                    <Text>
-                      - Crypto-collectibles and digital collectibles (downloadable multimedia files)<br />
-                      - Autographed sports memorabilia and trading cards authenticated by NFTs<br />
-                      - Downloadable digital media (image, audio, video) featuring artwork and sports memorabilia<br />
-                      - Online retail for cosmetics, fragrances, personal care products, home goods, furniture, vehicles, and accessories<br />
-                      - Physical retail store services for luxury goods<br />
-                      - Non-downloadable virtual goods authenticated by NFTs (art, collectibles, luxury items, fashion, home goods, vehicles)<br />
-                      - Non-downloadable artwork, photographs, videos, and audio<br />
-                      - Virtual environments for entertainment purposes<br />
-                      - Secure electronic systems for NFTs and crypto-collectibles<br />
-                      - Non-downloadable software for digital currency management
-                    </Text>
-                  </CardBody>
-                </Card>
-                <Box
-                  as="svg"
-                  width="40px"
-                  height="60px"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M12 4V20M12 20L8 16M12 20L16 16"
-                    stroke="#CBD5E0"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </Box>
-              </Flex>
-              
-              {/* Phase 3 */}
-              <Flex direction="column" align="center" position="relative">
-                <Card variant="outline" mb={6} w="full">
-                  <CardHeader pb={0}>
-                    <Heading as="h3" size="md" fontWeight="medium">
-                      Phase 3: Innovation
-                    </Heading>
-                  </CardHeader>
-                  <CardBody>
-                    <Text>
-                      - Cryptocurrency hardware wallets<br />
-                      - Downloadable mobile applications for crypto-collectibles access<br />
-                      - Mobile apps for NFT and token access<br />
-                      - Platform as a Service (PaaS) for virtual currency and NFTs
-                    </Text>
-                  </CardBody>
-                </Card>
-              </Flex>
+              <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6} alignItems="start">
+                {/* Left Column: Phase 1 and Phase 2 */}
+                <VStack spacing={12} align="center">
+                  {/* Phase 1 */}
+                  <Flex direction="column" align="center" position="relative">
+                    <Card variant="outline" w="full">
+                      <CardHeader pb={0}>
+                        <Heading as="h3" size="md" fontWeight="medium">
+                          Phase 1: Launch Platform
+                        </Heading>
+                      </CardHeader>
+                      <CardBody>
+                        <Text textAlign="left">
+                          - Weekly drops of in-season luxury products<br />
+                          - Crypto payments (BTC, ETH, USDC, etc.)<br />
+                          - Global shipping for physical goods<br />
+                          - Website tech for blockchain transactions<br />
+                          - Online retail for eyewear, handbags, clothing
+                        </Text>
+                      </CardBody>
+                    </Card>
+                    <Box
+                      as="svg"
+                      width="40px"
+                      height="60px"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      display={{ base: "none", md: "block" }}
+                    >
+                      <path
+                        d="M12 4V20M12 20L8 16M12 20L16 16"
+                        stroke="#CBD5E0"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </Box>
+                  </Flex>
+                  
+                  {/* Phase 2 */}
+                  <Flex direction="column" align="center" position="relative">
+                    <Card variant="outline" w="full">
+                      <CardHeader pb={0}>
+                        <Heading as="h3" size="md" fontWeight="medium">
+                          Phase 2: Digital Expansion
+                        </Heading>
+                      </CardHeader>
+                      <CardBody>
+                        <Text textAlign="left">
+                          - NFT-authenticated digital collectibles<br />
+                          - Virtual luxury items (fashion, art, accessories)<br />
+                          - Retail for cosmetics, home goods, vehicles<br />
+                          - Physical retail stores for luxury goods<br />
+                          - Secure blockchain systems for NFTs
+                        </Text>
+                      </CardBody>
+                    </Card>
+                    <Box
+                      as="svg"
+                      width="40px"
+                      height="60px"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      display={{ base: "none", md: "block" }}
+                    >
+                      <path
+                        d="M12 4V20M12 20L8 16M12 20L16 16"
+                        stroke="#CBD5E0"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </Box>
+                  </Flex>
+                </VStack>
+                
+                {/* Right Column: Phase 3 and Phase 4 */}
+                <VStack spacing={12} align="center">
+                  {/* Phase 3 */}
+                  <Flex direction="column" align="center" position="relative">
+                    <Card variant="outline" w="full">
+                      <CardHeader pb={0}>
+                        <Heading as="h3" size="md" fontWeight="medium">
+                          Phase 3: Mobile & Hardware
+                        </Heading>
+                      </CardHeader>
+                      <CardBody>
+                        <Text textAlign="left">
+                          - Mobile apps for drop access and NFT management<br />
+                          - Cryptocurrency hardware wallets<br />
+                          - Downloadable apps for crypto-collectibles<br />
+                          - Enhanced user experience for gates and drops
+                        </Text>
+                      </CardBody>
+                    </Card>
+                    <Box
+                      as="svg"
+                      width="40px"
+                      height="60px"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      display={{ base: "none", md: "block" }}
+                    >
+                      <path
+                        d="M12 4V20M12 20L8 16M12 20L16 16"
+                        stroke="#CBD5E0"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </Box>
+                  </Flex>
+                  
+                  {/* Phase 4 */}
+                  <Flex direction="column" align="center" position="relative">
+                    <Card variant="outline" w="full">
+                      <CardHeader pb={0}>
+                        <Heading as="h3" size="md" fontWeight="medium">
+                          Phase 4: Ecosystem
+                        </Heading>
+                      </CardHeader>
+                      <CardBody>
+                        <Text textAlign="left">
+                          - Platform as a Service (PaaS) for NFTs<br />
+                          - Virtual environments for entertainment<br />
+                          - Non-downloadable software for crypto management<br />
+                          - Multi-brand partnerships for exclusive drops<br />
+                          - Global luxury marketplace integration
+                        </Text>
+                      </CardBody>
+                    </Card>
+                  </Flex>
+                </VStack>
+              </SimpleGrid>
             </Box>
             
           </VStack>
