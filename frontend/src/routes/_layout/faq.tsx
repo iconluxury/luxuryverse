@@ -33,7 +33,7 @@ function FaqPage() {
       <Container maxW="1000px" mx="auto" px={4} py={16} textAlign="center">
         <VStack spacing={8} align="center" w="full">
           {/* Page Header */}
-          <Heading as="h1" size="xl" fontWeight="medium">
+          <Heading as="h2" size="xl" fontWeight="medium">
             Frequently Asked Questions
           </Heading>
           <Text fontSize="lg" mb={4}>
@@ -43,7 +43,7 @@ function FaqPage() {
          
           {/* Technology Services */}
           <Box w="full" id="technology-services">
-            <Heading as="h2" size="lg" fontWeight="medium" mb={4}>
+            <Heading as="h2" size="xl" fontWeight="medium" mb={4}>
               Technology Services
             </Heading>
             <Text fontSize="md" mb={6} color="gray.300">
@@ -90,7 +90,7 @@ function FaqPage() {
           </Box>
           {/* Digital Collectibles & Technology */}
           <Box w="full" id="digital-collectibles">
-            <Heading as="h2" size="lg" fontWeight="medium" mb={4}>
+            <Heading as="h2" size="xl" fontWeight="medium" mb={4}>
               Digital Collectibles & Technology
             </Heading>
             <Text fontSize="md" mb={6} color="gray.300">
@@ -162,7 +162,7 @@ function FaqPage() {
 
           {/* Retail Services */}
           <Box w="full" id="retail-services">
-            <Heading as="h2" size="lg" fontWeight="medium" mb={4}>
+            <Heading as="h2" size="xl" fontWeight="medium" mb={4}>
               Retail Services
             </Heading>
             <Text fontSize="md" mb={6} color="gray.300">
@@ -210,7 +210,7 @@ function FaqPage() {
 
           {/* Entertainment Services */}
           <Box w="full" id="entertainment-services">
-            <Heading as="h2" size="lg" fontWeight="medium" mb={4}>
+            <Heading as="h2" size="xl" fontWeight="medium" mb={4}>
               Entertainment Services
             </Heading>
             <Text fontSize="md" mb={6} color="gray.300">
@@ -256,27 +256,7 @@ function FaqPage() {
             </SimpleGrid>
           </Box>
 
-          {/* Contact Information */}
-          <Card variant="outline" w="full"  bg="gray.900" >
-            <CardHeader pb={0}>
-              <Heading as="h2" size="lg" fontWeight="medium">
-                Contact Information
-              </Heading>
-            </CardHeader>
-            <CardBody>
-              <VStack align="center" spacing={4}>
-                <Text fontSize="md" color="gray.300">
-                  Have questions? We're here to help. Reach out to us at:
-                </Text>
-                <Text fontSize="md" color="gray.300">
-                  <strong>Email:</strong>{' '}
-                  <Link href="mailto:support@luxuryverse.com" color="orange.300">
-                    support@luxuryverse.com
-                  </Link>
-                </Text>
-              </VStack>
-            </CardBody>
-          </Card>
+          
         </VStack>
       </Container>
      
