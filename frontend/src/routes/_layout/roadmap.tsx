@@ -10,7 +10,6 @@ import {
   CardHeader,
   CardBody,
   SimpleGrid,
-  Flex,
 } from "@chakra-ui/react";
 import Footer from '../../components/Common/Footer';
 
@@ -50,90 +49,77 @@ function RoadmapPage() {
                 From crypto-powered luxury drops to digital collectibles and beyond, our roadmap creates a seamless ecosystem for authentic luxury experiences.
               </Text>
               
-              <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6} alignItems="start">
-                {/* Left Column: Phase 1 and Phase 2 */}
-                <VStack spacing={12} align="center">
-                  {/* Phase 1 */}
-                  <Flex direction="column" align="center" position="relative">
-                    <Card variant="outline" bg="gray.900" w="full" minH="250px">
-                      <CardHeader pb={0}>
-                        <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
-                          Phase 1: Launch Platform
-                        </Heading>
-                      </CardHeader>
-                      <CardBody>
-                        <Text textAlign="left">
-                          - Weekly drops of in-season luxury products<br />
-                          - Crypto payments (BTC, ETH, USDC, etc.)<br />
-                          - Global shipping for physical goods<br />
-                          - Website tech for blockchain transactions<br />
-                          - Online retail for eyewear, handbags, clothing
-                        </Text>
-                      </CardBody>
-                    </Card>
-                  </Flex>
-                  
-                  {/* Phase 2 */}
-                  <Flex direction="column" align="center" position="relative">
-                    <Card variant="outline" bg="gray.900" w="full" minH="250px">
-                      <CardHeader pb={0}>
-                        <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
-                          Phase 2: Mobile & Hardware
-                        </Heading>
-                      </CardHeader>
-                      <CardBody>
-                        <Text textAlign="left">
-                          - Mobile apps for drop access and NFT management<br />
-                          - Cryptocurrency hardware wallets<br />
-                          - Downloadable apps for crypto-collectibles<br />
-                          - Enhanced user experience for gates and drops
-                        </Text>
-                      </CardBody>
-                    </Card>
-                  </Flex>
-                </VStack>
+              <SimpleGrid columns={{ base: 1, md: 4 }} spacing={6} alignItems="start">
+                {/* Phase 1 */}
+                <Card variant="outline" bg="gray.900" w="full" minH="250px">
+                  <CardHeader pb={0}>
+                    <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
+                      Phase 1: Launch Platform
+                    </Heading>
+                  </CardHeader>
+                  <CardBody>
+                    <Text textAlign="left">
+                      - Weekly drops of in-season luxury products<br />
+                      - Crypto payments (BTC, ETH, USDC, etc.)<br />
+                      - Global shipping for physical goods<br />
+                      - Website tech for blockchain transactions<br />
+                      - Online retail for eyewear, handbags, clothing
+                    </Text>
+                  </CardBody>
+                </Card>
                 
-                {/* Right Column: Phase 3 and Phase 4 */}
-                <VStack spacing={12} align="center">
-                  {/* Phase 3 and Phase 4 in a horizontal Flex */}
-                  <Flex direction={{ base: "column", md: "row" }} align="center" position="relative" w="full">
-                    {/* Phase 3 */}
-                    <Card variant="outline" bg="gray.900" w="full" minH="250px" mr={{ base: 0, md: 6 }}>
-                      <CardHeader pb={0}>
-                        <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
-                          Phase 3: Ecosystem
-                        </Heading>
-                      </CardHeader>
-                      <CardBody>
-                        <Text textAlign="left">
-                          - Platform as a Service (PaaS) for NFTs<br />
-                          - Virtual environments for entertainment<br />
-                          - Non-downloadable software for crypto management<br />
-                          - Multi-brand partnerships for exclusive drops<br />
-                          - Global luxury marketplace integration
-                        </Text>
-                      </CardBody>
-                    </Card>
-                    
-                    {/* Phase 4 */}
-                    <Card variant="outline" bg="gray.900" w="full" minH="250px" mt={{ base: 6, md: 0 }}>
-                      <CardHeader pb={0}>
-                        <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
-                          Phase 4: Digital Expansion
-                        </Heading>
-                      </CardHeader>
-                      <CardBody>
-                        <Text textAlign="left">
-                          - NFT-authenticated digital collectibles<br />
-                          - Virtual luxury items (时尚, art, accessories)<br />
-                          - Retail for cosmetics, home goods, vehicles<br />
-                          - Physical retail stores for luxury goods<br />
-                          - Secure blockchain systems for NFTs
-                        </Text>
-                      </CardBody>
-                    </Card>
-                  </Flex>
-                </VStack>
+                {/* Phase 2 */}
+                <Card variant="outline" bg="gray.900" w="full" minH="250px">
+                  <CardHeader pb={0}>
+                    <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
+                      Phase 2: Mobile & Hardware
+                    </Heading>
+                  </CardHeader>
+                  <CardBody>
+                    <Text textAlign="left">
+                      - Mobile apps for drop access and NFT management<br />
+                      - Cryptocurrency hardware wallets<br />
+                      - Downloadable apps for crypto-collectibles<br />
+                      - Enhanced user experience for gates and drops
+                    </Text>
+                  </CardBody>
+                </Card>
+                
+                {/* Phase 3 */}
+                <Card variant="outline" bg="gray.900" w="full" minH="250px">
+                  <CardHeader pb={0}>
+                    <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
+                      Phase 3: Ecosystem
+                    </Heading>
+                  </CardHeader>
+                  <CardBody>
+                    <Text textAlign="left">
+                      - Platform as a Service (PaaS) for NFTs<br />
+                      - Virtual environments for entertainment<br />
+                      - Non-downloadable software for crypto management<br />
+                      - Multi-brand partnerships for exclusive drops<br />
+                      - Global luxury marketplace integration
+                    </Text>
+                  </CardBody>
+                </Card>
+                
+                {/* Phase 4 */}
+                <Card variant="outline" bg="gray.900" w="full" minH="250px">
+                  <CardHeader pb={0}>
+                    <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
+                      Phase 4: Digital Expansion
+                    </Heading>
+                  </CardHeader>
+                  <CardBody>
+                    <Text textAlign="left">
+                      - NFT-authenticated digital collectibles<br />
+                      - Virtual luxury items (fashion, art, accessories)<br />
+                      - Retail for cosmetics, home goods, vehicles<br />
+                      - Physical retail stores for luxury goods<br />
+                      - Secure blockchain systems for NFTs
+                    </Text>
+                  </CardBody>
+                </Card>
               </SimpleGrid>
             </Box>
             
