@@ -583,98 +583,99 @@ function Home() {
       </Box>
       {/* Authentication Council */}
       <Box
-        py={{ base: 12, md: 16 }}
-        px={{ base: 4, md: 8 }}
-        width="100%"
-      >
-        <VStack
-          spacing={8}
-          maxW={{ base: "100%", lg: "100%" }}
-          mx="auto"
-          px={{ base: 4, md: 8 }}
-        >
-          <Heading as="h2" size="2xl" color="gray.400" textTransform="uppercase">
-            Trust in Every Purchase
-          </Heading>
-          <Text
-            textAlign="center"
-            maxW={{ base: "700px", lg: "900px" }}
-            fontSize="lg"
-            color="gray.400"
-          >
-            LuxuryVerse partners with former members of Interpol, the FBI, and other agencies to guarantee authentic merchandise. All goods are transported, stored, and shipped from secure facilities.
-          </Text>
-        </VStack>
-      </Box>
+  py={{ base: 12, md: 16 }}
+  px={{ base: 4, md: 8 }}
+  width="100%"
+>
+  <VStack
+    spacing={8}
+    maxW={{ base: "100%", lg: "100%" }}
+    mx="auto"
+    px={{ base: 4, md: 8 }}
+    align="center" // Center align the stack
+  >
+    <Heading as="h2" size="2xl" color="gray.400" textTransform="uppercase" textAlign="center">
+      Trust in Every Purchase
+    </Heading>
+    <Text
+      textAlign="center"
+      maxW={{ base: "700px", lg: "900px" }}
+      fontSize="lg"
+      color="gray.400"
+    >
+      LuxuryVerse partners with former members of Interpol, the FBI, and other agencies to guarantee authentic merchandise. All goods are transported, stored, and shipped from secure facilities.
+    </Text>
+  </VStack>
+</Box>
       {/* FAQs Section */}
       <Box
-        py={{ base: 8, md: 12 }}
-        px={{ base: 4, md: 8 }}
-        width="100%"
-      >
-        <VStack
-          bg="gray.900"
-          border="1px solid"
-          borderColor="gray.700"
-          borderRadius="md"
-          p={8}
-          spacing={8}
-          transition="all 0.3s"
-          _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
-          maxW={{ base: "100%", lg: "100%" }}
-          mx="auto"
-          px={{ base: 4, md: 8 }}
-        >
-          <Heading as="h2" size="2xl" color="gray.400" textTransform="uppercase">
-            Frequently Asked Questions
-          </Heading>
-          <Accordion allowToggle w="100%">
-            {[
-              {
-                question: "What types of luxury goods do you offer?",
-                answer: "We offer a wide range of luxury goods, including designer handbags, watches, jewelry, apparel, and accessories from the world’s most prestigious brands.",
-              },
-              {
-                question: "How often are your drops?",
-                answer: "Drops occur weekly, announced one day in advance on X, with plans to move to daily drops in the future.",
-              },
-              {
-                question: "How do I know your products are authentic?",
-                answer: "All products are 100% authentic, verified on the blockchain, and backed by the Authentication Council.",
-              },
-              {
-                question: "What payment options do you offer?",
-                answer: "We offer cryptocurrency payments via wallet authentication, with additional methods to be announced.",
-              },
-              {
-                question: "Do you offer international shipping?",
-                answer: "Yes, we offer international shipping from our secure facilities, with details provided at checkout.",
-              },
-              {
-                question: "How can I track my order?",
-                answer: "Once shipped, you’ll receive a tracking link via email to monitor your order’s progress.",
-              },
-              {
-                question: "How can I contact customer service?",
-                answer: "Reach us at info@example.com, example.mail@hum.com, or call +0989 7876 9865 9 or +(090) 8765 86543 85.",
-              },
-            ].map(({ question, answer }) => (
-              <AccordionItem key={question}>
-                <AccordionButton>
-                  <Box flex="1" textAlign="left" color="gray.400" fontSize="lg">
-                    {question}
-                  </Box>
-                  <AccordionIcon color="gray.400" />
-                </AccordionButton>
-                <AccordionPanel color="gray.400" fontSize="lg">
-                  {answer}
-                </AccordionPanel>
-              </AccordionItem>
-            ))}
-          </Accordion>
-        </VStack>
-      </Box>
-
+  py={{ base: 8, md: 12 }}
+  px={{ base: 4, md: 8 }}
+  width="100%"
+>
+  <VStack
+    bg="gray.900"
+    border="1px solid"
+    borderColor="gray.700"
+    borderRadius="md"
+    p={8}
+    spacing={8}
+    transition="all 0.3s"
+    _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "green.500" }}
+    maxW={{ base: "100%", lg: "100%" }}
+    mx="auto"
+    px={{ base: 4, md: 8 }}
+    align="center" // Center align the stack
+  >
+    <Heading as="h2" size="2xl" color="gray.400" textTransform="uppercase" textAlign="center">
+      Frequently Asked Questions
+    </Heading>
+    <Accordion allowToggle w="100%">
+      {[
+        {
+          question: "What types of luxury goods do you offer?",
+          answer: "We offer a wide range of luxury goods, including designer handbags, watches, jewelry, apparel, and accessories from the world’s most prestigious brands.",
+        },
+        {
+          question: "How often are your drops?",
+          answer: "Drops occur weekly, announced one day in advance on X, with plans to move to daily drops in the future.",
+        },
+        {
+          question: "How do I know your products are authentic?",
+          answer: "All products are 100% authentic, verified on the blockchain, and backed by the Authentication Council.",
+        },
+        {
+          question: "What payment options do you offer?",
+          answer: "We offer cryptocurrency payments via wallet authentication, with additional methods to be announced.",
+        },
+        {
+          question: "Do you offer international shipping?",
+          answer: "Yes, we offer international shipping from our secure facilities, with details provided at checkout.",
+        },
+        {
+          question: "How can I track my order?",
+          answer: "Once shipped, you’ll receive a tracking link via email to monitor your order’s progress.",
+        },
+        {
+          question: "How can I contact customer service?",
+          answer: "Reach us at info@example.com, example.mail@hum.com, or call +0989 7876 9865 9 or +(090) 8765 86543 85.",
+        },
+      ].map(({ question, answer }) => (
+        <AccordionItem key={question}>
+          <AccordionButton>
+            <Box flex="1" textAlign="left" color="gray.400" fontSize="lg">
+              {question}
+            </Box>
+            <AccordionIcon color="gray.400" />
+          </AccordionButton>
+          <AccordionPanel color="gray.400" fontSize="lg">
+            {answer}
+          </AccordionPanel>
+        </AccordionItem>
+      ))}
+    </Accordion>
+  </VStack>
+</Box>
       {/* Footer */}
       <Footer />
     </Box>
