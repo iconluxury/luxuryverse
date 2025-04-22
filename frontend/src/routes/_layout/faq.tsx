@@ -73,7 +73,7 @@ function FaqPage() {
             <Heading as="h2" size="lg" fontWeight="medium" mb={4}>
               Retail Services
             </Heading>
-            <Text fontSize="md" mb={4">
+            <Text fontSize="md" mb={4}>
               Explore our retail offerings for physical and virtual luxury goods.
             </Text>
             <UnorderedList spacing={3}>
@@ -97,7 +97,7 @@ function FaqPage() {
             <Heading as="h2" size="lg" fontWeight="medium" mb={4}>
               Entertainment Services
             </Heading>
-            <Text fontSize="md" mb={4">
+            <Text fontSize="md" mb={4}>
               Discover our non-downloadable virtual goods and entertainment offerings.
             </Text>
             <UnorderedList spacing={3}>
@@ -121,7 +121,7 @@ function FaqPage() {
             <Heading as="h2" size="lg" fontWeight="medium" mb={4}>
               Technology Services
             </Heading>
-            <Text fontSize="md" mb={4">
+            <Text fontSize="md" mb={4}>
               Learn about our blockchain and cryptocurrency technology solutions.
             </Text>
             <UnorderedList spacing={3}>
