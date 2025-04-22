@@ -140,7 +140,7 @@ function ContactPage() {
 
           <Text fontSize="md" mt={4}>
             Or email us directly at:{' '}
-            <a href="mailto:nik@luxurymarket.com">nik@luxuryverse.com</a>
+            <a href="mailto:nik@luxuryverse.com">nik@luxuryverse.com</a>
           </Text>
         </VStack>
       </Container>
