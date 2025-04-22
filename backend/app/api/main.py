@@ -24,7 +24,7 @@ async def health_check(request: Request):
 api_router.include_router(utils.router, prefix="/utils", tags=["utils"])
 api_router.include_router(x_auth_router)
 api_router.include_router(shopify.shopify_router)
-api_router.include_router(contact.router, prefix="/api/contact", tags=["contact"])
+api_router.include_router(contact.router, prefix="/contact", tags=["contact"])
 # Include router in app
 api_router.include_router(crypto_router)
 # Private routes for local environment
