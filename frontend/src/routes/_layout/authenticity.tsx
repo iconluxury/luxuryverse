@@ -250,23 +250,6 @@ function AuthenticityPage() {
             </UnorderedList>
           </Box>
           
-          <Divider />
-          
-          {/* Contact Information */}
-          <Box w="full" id="contact-information">
-            <Heading as="h2" size="lg" fontWeight="medium" mb={4}>
-              Contact
-            </Heading>
-            <Text fontSize="md" mb={4}>
-              If you have any questions about our authenticity procedures or services, please reach out to us:
-            </Text>
-            <VStack align="start" spacing={2}>
-              <Text><strong>Email:</strong> support@luxuryverse.com</Text>
-              <Text><strong>Authentication Inquiries:</strong> authentication@luxuryverse.com</Text>
-              <Text><strong>Phone:</strong> +1 (800) LUXURY-V</Text>
-              <Text><strong>Hours:</strong> Monday-Friday, 9am-6pm EST</Text>
-            </VStack>
-          </Box>
         </VStack>
       </Container>
       <Footer />
