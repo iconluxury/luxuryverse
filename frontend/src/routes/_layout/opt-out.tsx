@@ -37,7 +37,7 @@ function OptOutPage() {
             as="span"
             onClick={handleOptOut}
             bg="transparent"
-            color="#00FF00"
+            color="#FF9900"
             p={0}
             fontSize="lg"
             fontWeight="medium"

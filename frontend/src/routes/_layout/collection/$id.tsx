@@ -204,7 +204,7 @@ function CollectionDetails() {
       <Box bg="transparent" w="100%">
         <Box py={8} px={{ base: 4, md: 8 }} maxW="1200px" mx="auto" bg="transparent" borderRadius="lg">
           <VStack spacing={6} align="start">
-            <Heading as="h1" size="xl" color="#00FF00" textTransform="uppercase">
+            <Heading as="h1" size="xl" color="#FF9900" textTransform="uppercase">
               {collection.title}
             </Heading>
             {collection.description && (
@@ -269,7 +269,7 @@ function CollectionDetails() {
                             {cleanedTitle}
                           </Text>
                           <Flex mt={2} justify="space-between" align="center">
-                            <Text fontWeight="bold" fontSize="2xl" color="#00FF00">
+                            <Text fontWeight="bold" fontSize="2xl" color="#FF9900">
                               {product.sale_price}
                             </Text>
                             <Text fontSize="md" color="gray.400">

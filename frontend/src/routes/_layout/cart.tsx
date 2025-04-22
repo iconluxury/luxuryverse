@@ -242,7 +242,7 @@ function Cart() {
                         {item.quantity}
                       </Td>
                       <Td color="gray.400" fontSize="xs">
-                        <Text as="span" color="#00ff00">
+                        <Text as="span" color="#FF9900">
                           {convertPrice(item.price.replace('$', ''), selectedCurrency)} {selectedCurrency}
                         </Text>{' '}
                         /{' '}
@@ -250,7 +250,7 @@ function Cart() {
                           {item.full_price}
                         </Text>
                       </Td>
-                      <Td color="#00FF00" fontSize="xs">
+                      <Td color="#FF9900" fontSize="xs">
                         {convertPrice(calculateItemTotalPrice(item), selectedCurrency)} 
                         
                       </Td>
@@ -260,7 +260,7 @@ function Cart() {
                       <Td>
                         <Text
                           as="button"
-                          color="#00ff00"
+                          color="#FF9900"
                           fontSize="xs"
                           textTransform="uppercase"
                           textDecoration="underline"
@@ -287,7 +287,7 @@ function Cart() {
                   alignItems="center"
                   px={2}
                 >
-                  <Text as="span" fontSize={{ base: 'md', md: '3xl' }} color="#00FF00">
+                  <Text as="span" fontSize={{ base: 'md', md: '3xl' }} color="#FF9900">
                     {`${convertPrice(calculateSubtotal(), selectedCurrency)} ${selectedCurrency}`}
                   </Text>
                 </Text>
@@ -297,7 +297,7 @@ function Cart() {
                   size="md"
                   onClick={() => navigate({ to: '/collections' })}
                   bg="transparent"
-                  color="#00FF00"
+                  color="#FF9900"
                   textTransform="uppercase"
                   fontFamily="'Special Gothic Expanded One', sans-serif"
                   fontWeight="normal"
@@ -316,12 +316,12 @@ function Cart() {
                   }}
                   _disabled={{
                     bg: 'transparent',
-                    color: '#00FF00',
+                    color: '#FF9900',
                     opacity: 0.7,
                     cursor: 'not-allowed',
                     _hover: {
                       bg: 'transparent',
-                      color: '#00FF00',
+                      color: '#FF9900',
                     },
                   }}
                   transition="all 0.2s"

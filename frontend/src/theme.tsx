@@ -123,7 +123,7 @@ const theme = extendTheme({
       baseStyle: {
         fontFamily: "'Special Gothic Expanded One', sans-serif",
         fontWeight: "normal",
-        color: "#00FF00",
+        color: "#FF9900",
         lineHeight: "short",
         textTransform: "uppercase", // Transforms text to uppercase
       },

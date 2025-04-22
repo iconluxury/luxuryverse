@@ -91,7 +91,7 @@ export default function TopNav() {
                 key={to}
                 to={to}
                 style={{
-                  color: label === text ? '#00FF00' : 'white',
+                  color: label === text ? '#FF9900' : 'white',
                   textDecoration: 'none',
                   fontFamily: "'Special Gothic Expanded One', sans-serif",
                   fontWeight: 'var(--font-weight-normal)',
@@ -140,7 +140,7 @@ export default function TopNav() {
                   key={to}
                   to={to}
                   style={{
-                    color: label === text ? '#00FF00' : 'white',
+                    color: label === text ? '#FF9900' : 'white',
                     textDecoration: 'none',
                     fontFamily: "'Special Gothic Expanded One', sans-serif",
                     fontWeight: 'var(--font-weight-normal)',

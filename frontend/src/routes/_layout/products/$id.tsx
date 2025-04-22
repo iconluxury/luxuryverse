@@ -588,7 +588,7 @@ function ProductDetails() {
                     ))}
                   </Select>
                   <HStack spacing={4} align="center">
-                    <Text fontSize={{ base: '3xl', md: '4xl' }} fontWeight="bold" color="#00FF00">
+                    <Text fontSize={{ base: '3xl', md: '4xl' }} fontWeight="bold" color="#FF9900">
                       {`${convertPrice(product.sale_price, selectedCurrency)} ${selectedCurrency}`}
                     </Text>
                  
@@ -610,7 +610,7 @@ function ProductDetails() {
    !selectedVariant || validatedVariants.find((v) => v.id === selectedVariant)?.inventory_quantity <= 0
  }
  bg="transparent"
- color="#00FF00"
+ color="#FF9900"
  textTransform="uppercase"
  fontFamily="'Special Gothic Expanded One', sans-serif"
  fontWeight="normal"
@@ -639,13 +639,13 @@ function ProductDetails() {
  }}
  _disabled={{
    bg: "transparent",
-   color: "#00FF00",
+   color: "#FF9900",
    opacity: 0.7,
    cursor: "not-allowed",
    textDecoration: "none",
    _hover: {
      bg: "transparent",
-     color: "#00FF00",
+     color: "#FF9900",
      textDecoration: "none",
    },
  }}

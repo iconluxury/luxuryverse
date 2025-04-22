@@ -159,7 +159,7 @@ function LatestDropsPage() {
   <br />
   <ChakraLink
     as="span"
-    color="#00FF00"
+    color="#FF9900"
     fontSize="xl"
     fontWeight="bold"
             _hover={{ color: "green.400" }}
@@ -199,7 +199,7 @@ function LatestDropsPage() {
                     p={6}
                     align="start"
                     transition="all 0.3s"
-                    _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "#00FF00" , color: "white" }}
+                    _hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "#FF9900" , color: "white" }}
                   >
                     <Heading
                       as="h3"

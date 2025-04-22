@@ -80,7 +80,7 @@ function Home() {
     const exclusiveSpans = exclusiveElement.querySelectorAll(".glitch-letter");
     const brandsSpans = brandsElement.querySelectorAll(".glitch-letter");
 
-    gsap.set([exclusiveElement, brandsElement], { opacity: 0, color: "#00ff00" });
+    gsap.set([exclusiveElement, brandsElement], { opacity: 0, color: "#FF9900" });
     gsap.set(exclusiveSpans, { opacity: 0 });
     gsap.set(brandsSpans, { opacity: 0 });
 
@@ -159,7 +159,7 @@ function Home() {
     });
 
     const glitchExclusive = () => {
-      const colors = ["#00FF00", "#ffffff"];
+      const colors = ["#FF9900", "#ffffff"];
       exclusiveSpans.forEach((span) => {
         const timeline = gsap.timeline();
         const duration = gsap.utils.random(0.03, 0.07);
@@ -184,7 +184,7 @@ function Home() {
           });
         }
         timeline.to(span, {
-          color: "#00FF00",
+          color: "#FF9900",
           x: 0,
           duration: duration,
           ease: "power1.out",
@@ -194,7 +194,7 @@ function Home() {
     };
 
     const glitchBrands = () => {
-      const colors = ["#00FF00", "#ffffff"];
+      const colors = ["#FF9900", "#ffffff"];
       brandsSpans.forEach((span) => {
         const timeline = gsap.timeline();
         const duration = gsap.utils.random(0.03, 0.07);
@@ -219,7 +219,7 @@ function Home() {
           });
         }
         timeline.to(span, {
-          color: "#00FF00",
+          color: "#FF9900",
           x: 0,
           duration: duration,
           ease: "power1.out",
@@ -448,7 +448,7 @@ function Home() {
             <Button
               size="3xl"
               bg="transparent"
-              color="#00FF00"
+              color="#FF9900"
               textTransform="uppercase"
               fontFamily="'Special Gothic Expanded One', sans-serif"
               fontWeight="normal"

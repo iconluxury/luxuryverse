@@ -69,7 +69,7 @@ function Layout() {
           }}
           buttonStyle={{
             background: "transparent",
-            color: theme.colors.green[500] || "#00FF00",
+            color: theme.colors.green[500] || "#FF9900",
             fontSize: "12px",
             fontFamily: "'Special Gothic Expanded One', sans-serif",
             textTransform: "uppercase",
@@ -132,7 +132,7 @@ function Layout() {
           <Link
             to="/cookies"
             style={{ 
-              color: theme.colors.green[500] || "#00FF00", 
+              color: theme.colors.green[500] || "#FF9900", 
               textDecoration: "underline",
               fontFamily: "'Special Gothic Expanded One', sans-serif",
               textTransform: "uppercase",
@@ -144,7 +144,7 @@ function Layout() {
           <Link
             to="/privacy-policy"
             style={{ 
-              color: theme.colors.green[500] || "#00FF00", 
+              color: theme.colors.green[500] || "#FF9900", 
               textDecoration: "underline",
               fontFamily: "'Special Gothic Expanded One', sans-serif",
               textTransform: "uppercase",
