@@ -279,8 +279,9 @@ function FaqPage() {
           </Card>
         </VStack>
       </Container>
-      <Footer />
+     
     </Box>
+    <Footer />
     </Box>
   );
 }
