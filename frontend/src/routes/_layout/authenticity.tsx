@@ -51,7 +51,7 @@ function AuthenticityPage() {
               We employ meticulous authentication procedures to guarantee the authenticity of all products 
               and the integrity of digital assets.
             </Text>
-            <Card variant="outline" mb={6}>
+            <Card variant="outline" mb={6}  bg="gray.900" >
               <CardHeader pb={0}>
                 <Heading as="h3" size="md" fontWeight="medium">
                   Physical Goods Authentication
@@ -105,7 +105,7 @@ function AuthenticityPage() {
               a physical luxury item or a digital collectible.
             </Text>
             <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6}>
-              <Card variant="outline">
+              <Card variant="outline" bg="gray.900">
                 <CardHeader>
                   <Heading as="h3" size="md" fontWeight="medium">
                     Transparency
@@ -117,7 +117,7 @@ function AuthenticityPage() {
                   </Text>
                 </CardBody>
               </Card>
-              <Card variant="outline">
+              <Card variant="outline" bg="gray.900">
                 <CardHeader>
                   <Heading as="h3" size="md" fontWeight="medium">
                     Expertise
@@ -129,7 +129,7 @@ function AuthenticityPage() {
                   </Text>
                 </CardBody>
               </Card>
-              <Card variant="outline">
+              <Card variant="outline" bg="gray.900">
                 <CardHeader>
                   <Heading as="h3" size="md" fontWeight="medium">
                     Innovation
