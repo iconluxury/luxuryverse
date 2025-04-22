@@ -1,21 +1,22 @@
 /* Import Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Special+Gothic+Expanded+One&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Dela+Gothic+One&display=swap');
+
 /* Define CSS custom properties */
 :root {
   /* Colors */
-    --color-background: #0A0A0A; /* Deep black */
-    --color-text: #A0A0A0; /* Blue-grey, was #c2a0e5d9 (light purple) */
-    --color-primary: #FF9900; /* orange */
-    --color-muted: #808080; /* Blue-grey, unchanged */
-    --color-primary-hover: #e08700; /* orange */
-    --color-secondary: #1A2526; /* Dark blue-grey */
-    --color-border: #3A4A4F; /* Medium blue-grey */
+  --color-background: #0A0A0A; /* Deep black */
+  --color-text: #A0A0A0; /* Blue-grey */
+  --color-primary: #FF9900; /* orange */
+  --color-muted: #808080; /* Blue-grey, unchanged */
+  --color-primary-hover: #e08700; /* orange */
+  --color-secondary: #1A2526; /* Dark blue-grey */
+  --color-border: #3A4A4F; /* Medium blue-grey */
   /* Typography */
   --font-family-body: 'DM Sans', sans-serif;
   --font-family-heading: 'Special Gothic Expanded One', sans-serif;
   --font-family-logo: 'Special Gothic Expanded One', sans-serif;
-  --font-family-glitch: 'Dela Gothic One', sans-serif; 
+  --font-family-glitch: 'Dela Gothic One', sans-serif;
   --font-size-base: 1rem; /* 16px */
   --font-size-sm: 0.875rem; /* 14px */
   --font-size-lg: 1.125rem; /* 18px */
@@ -104,7 +105,7 @@ p {
 a {
   color: var(--color-primary);
   text-decoration: none;
-  transition: var(--transition-default);
+  transition: var(--transition  var(--transition-default);
 }
 
 a:hover {
@@ -265,6 +266,7 @@ input::placeholder, textarea::placeholder {
 .terminal-cursor {
   display: inline-block;
   font-family: var(--font-family-glitch);
+  color: var(--color-primary); /* Changed from green to orange */
 }
 
 /* Logo Styling */
