@@ -52,36 +52,36 @@ function FaqPage() {
             <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
               <Card variant="outline" bg="gray.900" >
                 <CardHeader pb={0}>
-                   <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
+                   <Heading as="h3" size="xl" fontWeight="medium" color="gray.400" textTransform="uppercase">
                     What technology services are available for blockchain and cryptocurrencies?
                   </Heading>
                 </CardHeader>
                 <CardBody>
-                  <Text fontSize="md" color="gray.300">
+                  <Text fontSize="lg" color="gray.300">
                     We offer website technology for blockchain tokens and cryptocurrencies, as well as solutions for purchasing and transferring crypto assets.
                   </Text>
                 </CardBody>
               </Card>
               <Card variant="outline"  bg="gray.900" >
                 <CardHeader pb={0}>
-                   <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
+                   <Heading as="h3" size="xl" fontWeight="medium" color="gray.400" textTransform="uppercase">
                     Are there secure systems for NFTs and crypto-collectibles?
                   </Heading>
                 </CardHeader>
                 <CardBody>
-                  <Text fontSize="md" color="gray.300">
+                  <Text fontSize="lg" color="gray.300">
                     Secure electronic systems for NFTs and crypto-collectibles will be available in Phase 2.
                   </Text>
                 </CardBody>
               </Card>
               <Card variant="outline"  bg="gray.900" >
                 <CardHeader pb={0}>
-                   <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
+                   <Heading as="h3" size="xl" fontWeight="medium" color="gray.400" textTransform="uppercase">
                     Will you offer Platform as a Service (PaaS) for virtual currency?
                   </Heading>
                 </CardHeader>
                 <CardBody>
-                  <Text fontSize="md" color="gray.300">
+                  <Text fontSize="lg" color="gray.300">
                     PaaS for virtual currency and NFTs will be introduced in Phase 3.
                   </Text>
                 </CardBody>
@@ -99,60 +99,60 @@ function FaqPage() {
             <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
               <Card variant="outline"  bg="gray.900" >
                 <CardHeader pb={0}>
-                   <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
+                   <Heading as="h3" size="xl" fontWeight="medium" color="gray.400" textTransform="uppercase">
                     What are crypto-collectibles and digital collectibles?
                   </Heading>
                 </CardHeader>
                 <CardBody>
-                  <Text fontSize="md" color="gray.300">
+                  <Text fontSize="lg" color="gray.300">
                     These are downloadable multimedia files (e.g., images, audio, videos) authenticated by NFTs. Available in Phase 2.
                   </Text>
                 </CardBody>
               </Card>
               <Card variant="outline"  bg="gray.900" >
                 <CardHeader pb={0}>
-                   <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
+                   <Heading as="h3" size="xl" fontWeight="medium" color="gray.400" textTransform="uppercase">
                     Do you offer autographed sports memorabilia or trading cards?
                   </Heading>
                 </CardHeader>
                 <CardBody>
-                  <Text fontSize="md" color="gray.300">
+                  <Text fontSize="lg" color="gray.300">
                     Yes, we provide NFT-authenticated autographed sports memorabilia and trading cards, available in Phase 2.
                   </Text>
                 </CardBody>
               </Card>
               <Card variant="outline"  bg="gray.900" >
                 <CardHeader pb={0}>
-                   <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
+                   <Heading as="h3" size="xl" fontWeight="medium" color="gray.400" textTransform="uppercase">
                     When will cryptocurrency hardware wallets be available?
                   </Heading>
                 </CardHeader>
                 <CardBody>
-                  <Text fontSize="md" color="gray.300">
+                  <Text fontSize="lg" color="gray.300">
                     Cryptocurrency hardware wallets will be introduced in Phase 3.
                   </Text>
                 </CardBody>
               </Card>
               <Card variant="outline"  bg="gray.900" >
                 <CardHeader pb={0}>
-                   <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
+                   <Heading as="h3" size="xl" fontWeight="medium" color="gray.400" textTransform="uppercase">
                     Are there mobile apps for accessing crypto-collectibles?
                   </Heading>
                 </CardHeader>
                 <CardBody>
-                  <Text fontSize="md" color="gray.300">
+                  <Text fontSize="lg" color="gray.300">
                     Downloadable mobile apps for accessing crypto-collectibles and NFTs will be available in Phase 3.
                   </Text>
                 </CardBody>
               </Card>
               <Card variant="outline"  bg="gray.900" >
                 <CardHeader pb={0}>
-                   <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
+                   <Heading as="h3" size="xl" fontWeight="medium" color="gray.400" textTransform="uppercase">
                     What software is available for digital currency management?
                   </Heading>
                 </CardHeader>
                 <CardBody>
-                  <Text fontSize="md" color="gray.300">
+                  <Text fontSize="lg" color="gray.300">
                     Software for trading and managing digital currency is available in Phase 1. Non-downloadable software for digital currency management will be available in Phase 2.
                   </Text>
                 </CardBody>
@@ -171,36 +171,36 @@ function FaqPage() {
             <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
               <Card variant="outline"  bg="gray.900" >
                 <CardHeader pb={0}>
-                   <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
+                   <Heading as="h3" size="xl" fontWeight="medium" color="gray.400" textTransform="uppercase">
                     What products are available in your online retail store?
                   </Heading>
                 </CardHeader>
                 <CardBody>
-                  <Text fontSize="md" color="gray.300">
+                  <Text fontSize="lg" color="gray.300">
                     Our online store offers eyewear, handbags, purses, luggage, small leather goods, clothing, footwear, and headwear. Cosmetics, fragrances, personal care products, virtual luxury items, home goods, furniture, vehicles, and accessories will be available in Phase 2.
                   </Text>
                 </CardBody>
               </Card>
               <Card variant="outline"  bg="gray.900" >
                 <CardHeader pb={0}>
-                   <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
+                   <Heading as="h3" size="xl" fontWeight="medium" color="gray.400" textTransform="uppercase">
                     Do you have physical retail stores?
                   </Heading>
                 </CardHeader>
                 <CardBody>
-                  <Text fontSize="md" color="gray.300">
+                  <Text fontSize="lg" color="gray.300">
                     Physical retail stores for luxury goods will be available in Phase 2.
                   </Text>
                 </CardBody>
               </Card>
               <Card variant="outline"  bg="gray.900" >
                 <CardHeader pb={0}>
-                   <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
+                   <Heading as="h3" size="xl" fontWeight="medium" color="gray.400" textTransform="uppercase">
                     Are wholesale services offered?
                   </Heading>
                 </CardHeader>
                 <CardBody>
-                  <Text fontSize="md" color="gray.300">
+                  <Text fontSize="lg" color="gray.300">
                     Wholesale store services for luxury products are available to select partners.
                   </Text>
                 </CardBody>
@@ -219,36 +219,36 @@ function FaqPage() {
             <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
               <Card variant="outline"  bg="gray.900" >
                 <CardHeader pb={0}>
-                   <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
+                   <Heading as="h3" size="xl" fontWeight="medium" color="gray.400" textTransform="uppercase">
                     What are non-downloadable virtual goods?
                   </Heading>
                 </CardHeader>
                 <CardBody>
-                  <Text fontSize="md" color="gray.300">
+                  <Text fontSize="lg" color="gray.300">
                     These include virtual art, collectibles, luxury items, fashion, home goods, furniture, vehicles, and accessories authenticated by NFTs, available in Phase 2.
                   </Text>
                 </CardBody>
               </Card>
               <Card variant="outline"  bg="gray.900" >
                 <CardHeader pb={0}>
-                   <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
+                   <Heading as="h3" size="xl" fontWeight="medium" color="gray.400" textTransform="uppercase">
                     Do you offer virtual environments for entertainment?
                   </Heading>
                 </CardHeader>
                 <CardBody>
-                  <Text fontSize="md" color="gray.300">
+                  <Text fontSize="lg" color="gray.300">
                     Virtual environments for entertainment purposes will be available in Phase 2.
                   </Text>
                 </CardBody>
               </Card>
               <Card variant="outline"  bg="gray.900" >
                 <CardHeader pb={0}>
-                   <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
+                   <Heading as="h3" size="xl" fontWeight="medium" color="gray.400" textTransform="uppercase">
                     Are non-downloadable artwork and media available?
                   </Heading>
                 </CardHeader>
                 <CardBody>
-                  <Text fontSize="md" color="gray.300">
+                  <Text fontSize="lg" color="gray.300">
                     Non-downloadable artwork, photographs, videos, and audio will be available in Phase 2.
                   </Text>
                 </CardBody>
