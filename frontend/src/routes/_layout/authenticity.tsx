@@ -107,7 +107,7 @@ function AuthenticityPage() {
             <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6}>
               <Card variant="outline" bg="gray.900">
                 <CardHeader>
-                  <Heading as="h3" size="md" fontWeight="medium">
+                <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
                     Transparency
                   </Heading>
                 </CardHeader>
@@ -119,7 +119,7 @@ function AuthenticityPage() {
               </Card>
               <Card variant="outline" bg="gray.900">
                 <CardHeader>
-                  <Heading as="h3" size="md" fontWeight="medium">
+                <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
                     Expertise
                   </Heading>
                 </CardHeader>
@@ -131,7 +131,7 @@ function AuthenticityPage() {
               </Card>
               <Card variant="outline" bg="gray.900">
                 <CardHeader>
-                  <Heading as="h3" size="md" fontWeight="medium">
+                <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
                     Innovation
                   </Heading>
                 </CardHeader>
