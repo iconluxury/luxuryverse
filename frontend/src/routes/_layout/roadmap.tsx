@@ -35,7 +35,7 @@ function RoadmapPage() {
               Launch Roadmap
             </Heading>
             
-            <Text fontSize="lg" mb={}>
+            <Text fontSize="lg" mb={4}>
               Launch delivers exclusive weekly drops of in-season, multi-brand luxury products. Gates open, collections sell out, and payments are made seamlessly with crypto. Our phased roadmap builds a revolutionary platform for luxury retail and digital assets.
             </Text>
             
@@ -51,13 +51,13 @@ function RoadmapPage() {
               </Text>
               
               <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6} alignItems="start">
-                {/* Left Column: Phase 1 */}
+                {/* Left Column: Phase 1 and Phase 3 */}
                 <VStack spacing={12} align="center">
                   {/* Phase 1 */}
                   <Flex direction="column" align="center" position="relative">
-                    <Card variant="outline" w="full">
+                    <Card variant="outline" bg="gray.900" w="full" minH="250px">
                       <CardHeader pb={0}>
-                        <Heading as="h3" size="md" fontWeight="medium">
+                        <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
                           Phase 1: Launch Platform
                         </Heading>
                       </CardHeader>
@@ -81,7 +81,7 @@ function RoadmapPage() {
                       display={{ base: "none", md: "block" }}
                     >
                       <path
-                        d="M12 4V20M12 20L8 16 stretchesM12 20L16 16"
+                        d="M12 4V20M12 20L8 16M12 20L16 16"
                         stroke="#CBD5E0"
                         strokeWidth="2"
                         strokeLinecap="round"
@@ -92,9 +92,9 @@ function RoadmapPage() {
                   
                   {/* Phase 3 (replacing Phase 4) */}
                   <Flex direction="column" align="center" position="relative">
-                    <Card variant="outline" w="full">
+                    <Card variant="outline" bg="gray.900" w="full" minH="250px">
                       <CardHeader pb={0}>
-                        <Heading as="h3" size="md" fontWeight="medium">
+                        <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
                           Phase 3: Ecosystem
                         </Heading>
                       </CardHeader>
@@ -111,13 +111,13 @@ function RoadmapPage() {
                   </Flex>
                 </VStack>
                 
-                {/* Right Column: Phase 4 (replacing Phase 2) */}
+                {/* Right Column: Phase 4 (replacing Phase 2) and Phase 2 (replacing Phase 3) */}
                 <VStack spacing={12} align="center">
-                  {/* Phase 4 */}
+                  {/* Phase 4 (replacing Phase 2) */}
                   <Flex direction="column" align="center" position="relative">
-                    <Card variant="outline" w="full">
+                    <Card variant="outline" bg="gray.900" w="full" minH="250px">
                       <CardHeader pb={0}>
-                        <Heading as="h3" size="md" fontWeight="medium">
+                        <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
                           Phase 4: Digital Expansion
                         </Heading>
                       </CardHeader>
@@ -152,9 +152,9 @@ function RoadmapPage() {
                   
                   {/* Phase 2 (replacing Phase 3) */}
                   <Flex direction="column" align="center" position="relative">
-                    <Card variant="outline" w="full">
+                    <Card variant="outline" bg="gray.900" w="full" minH="250px">
                       <CardHeader pb={0}>
-                        <Heading as="h3" size="md" fontWeight="medium">
+                        <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
                           Phase 2: Mobile & Hardware
                         </Heading>
                       </CardHeader>
