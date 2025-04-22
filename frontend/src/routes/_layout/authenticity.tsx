@@ -53,7 +53,7 @@ function AuthenticityPage() {
             </Text>
             <Card variant="outline" mb={6}  bg="gray.900" >
               <CardHeader pb={0}>
-                <Heading as="h3" size="md" fontWeight="medium">
+                <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
                   Physical Goods Authentication
                 </Heading>
               </CardHeader>
@@ -64,9 +64,9 @@ function AuthenticityPage() {
                 </Text>
               </CardBody>
             </Card>
-            <Card variant="outline" mb={6}>
+            <Card variant="outline" mb={6}  bg="gray.900" >
               <CardHeader pb={0}>
-                <Heading as="h3" size="md" fontWeight="medium">
+              <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
                   Digital Authentication
                 </Heading>
               </CardHeader>
@@ -77,9 +77,9 @@ function AuthenticityPage() {
                 </Text>
               </CardBody>
             </Card>
-            <Card variant="outline" mb={6}>
+            <Card variant="outline" mb={6}  bg="gray.900" >
               <CardHeader pb={0}>
-                <Heading as="h3" size="md" fontWeight="medium">
+              <Heading as="h3" size="md" fontWeight="medium" color="gray.400" textTransform="uppercase">
                   Certificate of Authenticity
                 </Heading>
               </CardHeader>
