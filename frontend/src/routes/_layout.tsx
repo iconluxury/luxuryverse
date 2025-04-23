@@ -104,7 +104,7 @@ function Layout() {
               console.log("Consent updated, sending page view");
               window.gtag("event", "page_view", {
                 page_path: window.location.pathname,
-                send_to: "G-6KMK7YJL5N",
+                send_to: "G-NZRJ6B7TEQ",
               });
             } else {
               console.error("gtag not loaded yet");
