@@ -46,7 +46,7 @@ function JoinPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isXConnected, setIsXConnected] = useState(false);
 
-  const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://iconluxury.shop/api/v1';
+  const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://luxuryverse.com/api/v1';
 
   const initiateXAuth = useCallback(async () => {
     if (isXAuthLoading) return;
@@ -219,7 +219,7 @@ function JoinPage() {
               </HStack>
             )}
             <Text fontSize="xs" mt={2} color="red.300">
-              Verify you’re on iconluxury.shop before connecting your wallet.
+              Verify you’re on luxuryverse.com before connecting your wallet.
             </Text>
           </Box>
 

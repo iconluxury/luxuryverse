@@ -36,7 +36,7 @@ function Cart() {
   const navigate = useNavigate();
   const [selectedCurrency, setSelectedCurrency] = useState<string>('USD');
   const [cryptoPrices, setCryptoPrices] = useState<CryptoPrice[]>([]);
-  const API_BASE_URL = 'https://iconluxury.shop';
+  const API_BASE_URL = 'https://luxuryverse.com';
 
   // Debug cart state
   useEffect(() => {

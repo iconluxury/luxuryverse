@@ -11,7 +11,7 @@ import { WagmiProvider } from 'wagmi';
 import { AuthProvider } from './components/Common/AuthContext';
 import { wagmiConfig, queryClient } from './client/core/appkit';
 import { CartProvider } from './components/Common/CartContext';
-OpenAPI.BASE = 'https://iconluxury.shop';
+OpenAPI.BASE = 'https://luxuryverse.com';
 OpenAPI.TOKEN = async () => localStorage.getItem('access_token') || '';
 
 const router = createRouter({ routeTree });

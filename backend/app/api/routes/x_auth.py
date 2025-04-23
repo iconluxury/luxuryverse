@@ -34,7 +34,7 @@ async def request_token():
         logger.error("Missing consumer key or secret")
         raise HTTPException(status_code=500, detail="Server configuration error: Missing OAuth credentials")
 
-    callback_uri = "https://iconluxury.shop/api/v1/x-auth/callback"
+    callback_uri = "https://luxuryverse.com/api/v1/x-auth/callback"
     oauth = requests_oauthlib.OAuth1Session(
         client_key=CONSUMER_KEY,
         client_secret=CONSUMER_SECRET,
@@ -67,7 +67,7 @@ async def x_auth_callback(oauth_token: str, oauth_verifier: str):
     token_data = token_storage.get(oauth_token)
     if not token_data or "secret" not in token_data:
         logger.error(f"No stored resource_owner_secret for oauth_token: {oauth_token}")
-        return RedirectResponse(f"https://iconluxury.shop/auth-complete?twitter=0&error=Invalid%20oauth_token")
+        return RedirectResponse(f"https://luxuryverse.com/auth-complete?twitter=0&error=Invalid%20oauth_token")
 
     resource_owner_secret = token_data["secret"]
     oauth = requests_oauthlib.OAuth1Session(
@@ -99,15 +99,15 @@ async def x_auth_callback(oauth_token: str, oauth_verifier: str):
         logger.debug(f"Cleaned up token storage for oauth_token: {oauth_token}")
 
         # Redirect to frontend
-        redirect_url = f"https://iconluxury.shop/auth-complete?twitter=1&user_id={user_id}"
+        redirect_url = f"https://luxuryverse.com/auth-complete?twitter=1&user_id={user_id}"
         logger.info(f"Redirecting to frontend: {redirect_url}")
         return RedirectResponse(redirect_url)
     except requests_oauthlib.oauth1_session.TokenRequestDenied as e:
         logger.error(f"Callback token request denied: {str(e)}")
-        return RedirectResponse(f"https://iconluxury.shop/auth-complete?twitter=0&error=Authentication%20failed")
+        return RedirectResponse(f"https://luxuryverse.com/auth-complete?twitter=0&error=Authentication%20failed")
     except Exception as e:
         logger.error(f"Error in callback: {str(e)}")
-        return RedirectResponse(f"https://iconluxury.shop/auth-complete?twitter=0&error={quote(str(e))}")
+        return RedirectResponse(f"https://luxuryverse.com/auth-complete?twitter=0&error={quote(str(e))}")
 
 @router.get("/user/{user_id}")
 async def get_user_details(user_id: str, include_email: bool = Query(default=True)):

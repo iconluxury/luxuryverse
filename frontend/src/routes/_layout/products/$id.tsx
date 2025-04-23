@@ -75,7 +75,7 @@ function ProductDetails() {
   const [selectedCurrency, setSelectedCurrency] = useState<string>('USD');
   const [cryptoPrices, setCryptoPrices] = useState<CryptoPrice[]>([]);
   const { cartCount, addToCart } = useCart();
-  const API_BASE_URL = 'https://iconluxury.shop';
+  const API_BASE_URL = 'https://luxuryverse.com';
   const { id } = Route.useParams();
   const isMobile = useBreakpointValue({ base: true, md: false });
   const showToast = useCustomToast();

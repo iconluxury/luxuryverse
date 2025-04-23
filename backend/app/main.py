@@ -24,7 +24,7 @@ async def add_path_to_response(request: Request, call_next):
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://iconluxury.shop"],
+    allow_origins=["https://luxuryverse.com"],
     allow_credentials=False,
     allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["Accept", "Content-Type", "Authorization"],

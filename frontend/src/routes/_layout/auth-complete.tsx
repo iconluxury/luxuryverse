@@ -42,7 +42,7 @@ function AuthComplete() {
         try {
           console.log('Fetching user details for user_id:', userId);
           const token = await OpenAPI.TOKEN();
-          const response = await fetch(`https://iconluxury.shop/api/v1/x-auth/user/${userId}`, {
+          const response = await fetch(`https://luxuryverse.com/api/v1/x-auth/user/${userId}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',

@@ -28,7 +28,7 @@ function LatestDropsPage() {
     queryKey: ['drops', selectedDrops],
     queryFn: async () => {
       const dropPromises = selectedDrops.map(id =>
-        fetch(`https://iconluxury.shop/api/v1/collections/${id}`, {
+        fetch(`https://luxuryverse.com/api/v1/collections/${id}`, {
           cache: 'force-cache',
         }).then(res => {
           if (!res.ok) throw new Error(`Failed to fetch drop ${id}`);

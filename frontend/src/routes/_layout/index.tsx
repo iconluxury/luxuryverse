@@ -276,7 +276,7 @@ function Home() {
   // Fetch collections
   useEffect(() => {
     setIsLoading(true);
-    const url = "https://iconluxury.shop/api/v1/collections/";
+    const url = "https://luxuryverse.com/api/v1/collections/";
     console.log("Fetching collections from:", url);
     axios
       .get(url, {
@@ -317,7 +317,7 @@ function Home() {
       if (isConnected && address) {
         const message = `Sign this message to authenticate with LuxuryVerse: ${address}`;
         const signature = await signMessageAsync({ message });
-        const response = await axios.post("https://iconluxury.shop/api/v1/auth/wallet", {
+        const response = await axios.post("https://luxuryverse.com/api/v1/auth/wallet", {
           address,
           signature,
           message,

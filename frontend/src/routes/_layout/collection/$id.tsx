@@ -57,7 +57,7 @@ function ErrorFallback({ error }: { error: Error }) {
 }
 
 function CollectionDetails() {
-  const API_BASE_URL = 'https://iconluxury.shop';
+  const API_BASE_URL = 'https://luxuryverse.com';
   const { id } = Route.useParams();
 
   const { data: collection, isLoading, error, refetch } = useQuery({

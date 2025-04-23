@@ -119,7 +119,7 @@ services:
       - "traefik.docker.network=traefik-public"
       - "traefik.constraint-label=traefik-public"
       # Updated API HTTP Router to use /api path prefix
-      - "traefik.http.routers.api-http.rule=Host(`iconluxury.shop`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.api-http.rule=Host(`luxuryverse.com`) && PathPrefix(`/api`)"
       - "traefik.http.routers.api-http.entrypoints=http"
       - "traefik.http.services.api-service.loadbalancer.server.port=8000"
 
@@ -141,7 +141,7 @@ services:
       - traefik.enable=true
       - traefik.docker.network=traefik-public
       - traefik.constraint-label=traefik-public
-      - traefik.http.routers.dashboard.rule=Host(`iconluxury.shop`) && !PathPrefix(`/api`)
+      - traefik.http.routers.dashboard.rule=Host(`luxuryverse.com`) && !PathPrefix(`/api`)
       - traefik.http.routers.dashboard.entrypoints=http
       - traefik.http.services.dashboard.loadbalancer.server.port=80
 
